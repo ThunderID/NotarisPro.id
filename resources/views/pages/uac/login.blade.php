@@ -4,7 +4,7 @@
 @endpush  
 
 @section('content')			
-	<div class="row" style="padding-top:21vh;">
+	<div class="row login-dialog">
 		<div class="col-4 offset-4">
 			<div class="form-wrap">
 				<h1>{{ Config::get('app.name') }}</h1> 

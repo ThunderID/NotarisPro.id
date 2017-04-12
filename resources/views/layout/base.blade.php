@@ -12,65 +12,11 @@
         <!-- Font -->
         <link href="https://fonts.googleapis.com/css?family=Muli:200,400,600" rel="stylesheet">
 
+        <!-- Themes -->
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
         <!-- Custom Css -->
         <style>
-            /*general*/
-            body{
-                font-family: 'Muli', sans-serif;
-            }
-
-            /*navbar*/
-            .navbar{
-                letter-spacing: 0.5pt;
-            }
-
-            .navbar .dropdown-menu {
-                font-size: 0.8rem;
-                border-radius: 0px;
-                margin-top: 9px;
-                margin-left: -3px;
-                padding: 0px;
-                border-top: transparent;
-            }
-
-            .navbar .dropdown-item {
-                padding-left: 15px;
-                padding-right: 15px;
-                padding-top: 5px;
-                padding-bottom: 5px;
-            }
-
-            .navbar .nav-item .nav-link{
-                padding-right: 0.9rem;
-                padding-left: 0.9rem;
-                font-size: 0.9rem;
-                padding-top: 0.7rem;
-                padding-bottom: 0.3rem;                
-            }
-            .navbar-inverse .navbar-toggler{
-                border-color: transparent;
-                padding-top: 8px;
-            }
-
-            .navbar-inverse .navbar-toggler:focus{
-                outline: none;
-            }            
-
-            .navbar .menu-mobile{
-                padding-top: 30px;
-                height: 100vh;
-            }
-
-            .navbar .menu-mobile .menu-item > div{
-                height: 100px; 
-                background-color: white;
-            }
-
-            .navbar .dropdown-item.active{
-                color: #0275d8;
-                text-decoration: none;
-                background-color: white;
-            } 
 
             @stack('styles')
 
@@ -88,6 +34,9 @@
         <!-- Bootstrap -->
         <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" type="text/javascript"></script>
+
+        <!-- App -->
+        <script src="{{ mix('js/app.js') }}"></script>
 
         <!-- Custom jQuery -->
         <script type="text/javascript">
