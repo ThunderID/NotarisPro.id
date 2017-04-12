@@ -61,10 +61,16 @@
                 height: 100vh;
             }
 
-             .navbar .menu-mobile .menu-item > div{
+            .navbar .menu-mobile .menu-item > div{
                 height: 100px; 
                 background-color: white;
             }
+
+            .navbar .dropdown-item.active{
+                color: #0275d8;
+                text-decoration: none;
+                background-color: white;
+            } 
 
             @stack('styles')
 

@@ -24,22 +24,20 @@
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item">
 				<div class="dropdown">
-					<a class="nav-link" href="#" data-toggle="dropdown" id="dropdownMenuAkta" aria-haspopup="true" aria-expanded="false">Akta</a>
+					<a class="nav-link @yield('akta')" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuAkta" aria-haspopup="true" aria-expanded="false">Akta</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuAkta">
-						<a class="dropdown-item" href="#">Draft Akta</a>
-						<a class="dropdown-item" href="#">Pengajuan Akta</a>
-						<a class="dropdown-item" href="#">Renvoi Akta</a>
-						<a class="dropdown-item" href="#">Akta</a>
-						<a class="dropdown-item" href="#">Minuta Akta</a>
+						<a class="dropdown-item @yield('buat-akta')" href="{{ route('akta.akta.create') }}">Buat Akta</a>
+						<a class="dropdown-item @yield('data-akta')" href="{{ route('akta.akta.index') }}">Data Akta</a>
+						<a class="dropdown-item @yield('template-akta')" href="{{ route('akta.template.index') }}">Template Akta</a>
 					</div>
 				</div>
 			</li>
 			<li class="nav-item">
 				<div class="dropdown">
-					<a class="nav-link" href="#" data-toggle="dropdown" id="dropdownMenuJadwal" aria-haspopup="true" aria-expanded="false">Jadwal</a>
+					<a class="nav-link yield('jadwal')" href="javascript::void(0);" data-toggle="dropdown" id="dropdownMenuJadwal" aria-haspopup="true" aria-expanded="false">Jadwal</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuJadwal">
-						<a class="dropdown-item" href="#">BPN</a>
-						<a class="dropdown-item" href="#">Klien</a>
+						<a class="dropdown-item @yield('jadwal-bpn')" href="{{ route('jadwal.bpn.index') }}">BPN</a>
+						<a class="dropdown-item @yield('jadwal-klien')" href="{{ route('jadwal.klien.index') }}">Klien</a>
 					</div>
 				</div>				
 			</li>	
