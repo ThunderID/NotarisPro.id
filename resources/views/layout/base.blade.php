@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ Config::get('app.name') }} </title>
+        <title>{{ str_replace("_", " ", env('APP_NAME')) }}</title>
 
         <!-- Bootstrap Core CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" />

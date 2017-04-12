@@ -7,7 +7,7 @@
 	<div class="row login-dialog">
 		<div class="col-4 offset-4">
 			<div class="form-wrap">
-				<h1>{{ Config::get('app.name') }}</h1> 
+				<h1>{{ str_replace("_", " ", env('APP_NAME')) }}</h1> 
 				<hr>
 
 				<p>Silahkan masukkan email dan password Anda!</p>
@@ -25,8 +25,8 @@
 						<input type="email" name="email" id="email" class="form-control" placeholder="Email Anda" required>
 					</div>
 					<div class="form-group">
-						<label for="key" class="sr-only">Password</label>
-						<input type="password" name="key" id="key" class="form-control" placeholder="Password" required>
+						<label for="password" class="sr-only">Password</label>
+						<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
 					</div>
 
 					</br>

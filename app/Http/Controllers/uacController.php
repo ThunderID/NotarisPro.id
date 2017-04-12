@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use TAuth, Input, Redirect;
+use TAuth, Redirect, Request;
 
 class uacController extends Controller
 {
@@ -23,8 +22,7 @@ class uacController extends Controller
 
 	public function doLogin(){
 		//get input
-		$credentials				= Input::only('email', 'key');
-		$credentials['password']	= $credentials['key'];
+		$credentials				= Request::only('email', 'password');
 
 		try
 		{
