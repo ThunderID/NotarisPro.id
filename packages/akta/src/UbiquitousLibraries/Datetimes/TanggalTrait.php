@@ -32,6 +32,7 @@ trait TanggalTrait {
 	 */
 	public function formatDateTo($value)
 	{
+		return $value->toDateTime()->format('d/m/Y');
 		return Carbon::parse($value)->format('d/m/Y');
 	}
 }

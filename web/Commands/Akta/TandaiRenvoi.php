@@ -2,6 +2,7 @@
 
 namespace TCommands\Akta;
 
+use TAkta\DokumenKunci\Models\Versi;
 use TAkta\DokumenKunci\Models\Dokumen;
 use TImmigration\Pengguna\Models\Pengguna;
 

@@ -2,6 +2,7 @@
 
 namespace TCommands\Akta;
 
+use TAkta\DokumenKunci\Models\Versi;
 use TAkta\DokumenKunci\Models\Dokumen;
 
 use Exception, DB, TAuth, Carbon\Carbon;
@@ -81,7 +82,12 @@ class DraftingAkta
 			//5. simpan dokumen
 			$akta->save();
 
-			$versi 					= Versi::where('original_id', $akta->id)->firstornew();
+			$versi 					= Versi::where('original_id', $akta->id)->first();
+			if(!$versi)
+			{
+				$versi 				= new Versi;
+			}
+
 			$versi 					= $versi->fill($akta->toArray());
 			$versi->original_id 	= $akta->id;
 			$versi->versi 			= 1;

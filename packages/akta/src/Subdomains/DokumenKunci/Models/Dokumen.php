@@ -25,6 +25,7 @@ use Validator, Exception;
 class Dokumen extends BaseModel
 {
 	use GuidTrait;
+	use TanggalTrait;
 
 	/**
 	 * The database table used by the model.
