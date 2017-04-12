@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class homeController extends Controller
 {
-    //
+
     public function dashboard(){
 		// init
 		$this->page_attributes->title       = 'Data Member';
