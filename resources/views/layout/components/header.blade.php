@@ -13,7 +13,7 @@
 			<i class="fa fa-user-o"></i>
 	</button>
 
-	<a class="navbar-brand text-center text-lg-left text-xl-left" href="#">NotarisPro</a>
+	<a class="navbar-brand text-center text-lg-left text-xl-left" href="#">{{ Config::get('app.name') }} </a>
 	
 	<button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fa fa-align-justify"></i>
