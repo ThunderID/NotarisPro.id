@@ -5,7 +5,7 @@ namespace TQueries\Akta;
 ///////////////
 //   Models  //
 ///////////////
-use TAkta\DokumenKunci\Models\Dokumen as Model;
+use TAkta\DokumenKunci\Models\Template as Model;
 
 use Hash, Exception, Session, TAuth;
 
@@ -18,7 +18,7 @@ use Hash, Exception, Session, TAuth;
  * @subpackage Application
  * @author     C Mooy <chelsy@thunderlab.id>
  */
-class DaftarAkta
+class DaftarTemplateAkta
 {
 	public function __construct()
 	{
@@ -67,8 +67,8 @@ class DaftarAkta
 	 */
 	public function detailed($id)
 	{
-		$model 		= $this->queries([]);
-		$model 		= $model->id($id)->first();
+		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
+		$model 						= $this->model->id($id)->draftOrPublished($queries)->first();
 
 		return $model->toArray();
 	}
@@ -86,65 +86,20 @@ class DaftarAkta
 
 		return 	$model;
 	}
-	
-	/**
-	 * this function mean keep executing
-	 * @param numeric $page
-	 * 
-	 * @return CreditDTODataTransformer $data
-	 */
-	public function statusLists()
-	{
-		$current_user 	= TAuth::activeOffice();
-		switch (strtolower($current_user['role'])) 
-		{
-			case 'notaris':
-				return ['draft', 'pengajuan', 'renvoi', 'akta', 'minuta'];
-				break;
-			case 'drafter':
-				return ['draft', 'renvoi'];
-				break;
-			
-			default:
-				throw new Exception("Forbidden", 1);
-				break;
-		}
-	}
 
 	private function queries($queries)
 	{
 		$model 					= $this->model;
-
-		//1.allow status
-		if(isset($queries['status']))
-		{
-			if(!in_array($queries['status'], $this->statusLists()))
-			{
-				throw new Exception("Forbidden", 1);
-				
-			}
-		}
-		else
-		{
-			$queries['status']	= $this->statusLists();
-		}
-		$model  				= $model->status($queries['status']);
 		
-		//2.allow kantor
+		//1.allow kantor
 		$queries['kantor_id']	= [TAuth::activeOffice()['kantor']['id'], "0"];
 
 		$model  				= $model->kantor($queries['kantor_id']);
 
-		//3.allow owner
-		$queries['pemilik_id']	= TAuth::loggedUser()['id'];
-		$model  				= $model->pemilik($queries['pemilik_id']);
+		//2.smart search status and writer id
+		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
+		$model  					= $model->draftOrPublished($queries);
 
-		//4.allow klien
-		if(isset($queries['klien']))
-		{
-			$model  			= $model->klien($queries['klien']);
-		}
-		
 		return $model;
 	} 
 }
