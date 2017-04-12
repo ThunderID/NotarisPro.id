@@ -11,6 +11,11 @@
 |
 */
 
+// UAC
+Route::get('/login', ['uses' => 'uacController@login', 'as' => 'uac.login']);
+Route::post('/login', ['uses' => 'uacController@doLogin', 'as' => 'uac.login.post']);
+Route::post('/logout', ['uses' => 'uacController@logout', 'as' => 'uac.logout.post']);
+
 // general
 Route::get('/', ['uses' => 'homeController@dashboard', 'as' => 'home.dashboard']);
 
