@@ -81,7 +81,7 @@ class Dokumen extends BaseModel
 											'deleted_at', 
 										];
 
-	protected $appends 				= ['id', 'tanggal'];
+	protected $appends 				= ['id', 'tanggal_pembuatan', 'tanggal_sunting'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
@@ -96,9 +96,14 @@ class Dokumen extends BaseModel
 		return $this->attributes['_id'];
 	}
 	
-	public function getTanggalAttribute($value = NULL)
+	public function getTanggalPembuatanAttribute($value = NULL)
 	{
 		return $this->formatDateTo($this->attributes['created_at']);
+	}
+
+	public function getTanggalSuntingAttribute($value = NULL)
+	{
+		return $this->formatDateTo($this->attributes['updated_at']);
 	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
