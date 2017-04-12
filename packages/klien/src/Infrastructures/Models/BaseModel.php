@@ -1,10 +1,10 @@
 <?php 
 
-namespace Thunderlabid\Appointment\Models;
+namespace TKlien\Infrastructures\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Thunderlabid\Appointment\Models\Traits\IGuidTrait;
+use Jenssegers\Mongodb\Eloquent\Model;
 
+use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Validator, Exception;
 
@@ -13,27 +13,19 @@ use Validator, Exception;
  *
  * Abstract class for mongo models Models
  *
- * @package    Thunderlabid
- * @subpackage Appointment
+ * @package    TKlien
  * @author     C Mooy <chelsymooy1108@gmail.com>
  */
 abstract class BaseModel extends Model 
 {
-	/**
-	 * no direct access for trait
-	 *
-	 */
-	use IGuidTrait;
-
 	/**
 	 * use soft delete trait
 	 *
 	 */
 	use SoftDeletes;
 
-	protected $keyType 		= 'string';
+	protected $keyType 	= 'string';
 
-	public $incrementing 	= false;
 
 	/* ---------------------------------------------------------------------------- ERRORS ----------------------------------------------------------------------------*/
 
@@ -46,7 +38,7 @@ abstract class BaseModel extends Model
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
-	
+		
 	/**
 	 * construct function, iniate error
 	 *
@@ -54,8 +46,6 @@ abstract class BaseModel extends Model
 	function __construct() 
 	{
 		parent::__construct();
-		
-		$this->attributes['id']		= $this->guid();
 	}
 
 	/**
@@ -64,9 +54,9 @@ abstract class BaseModel extends Model
 	 */
 	public static function boot() 
 	{
-		parent::boot();
+        parent::boot();
 
-		static::saving(function($model)
+        static::saving(function($model)
 		{
 			if(isset($model['rules']))
 			{
@@ -79,7 +69,9 @@ abstract class BaseModel extends Model
 
 			}
 		});
-	}
+    }
+
+	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
 
@@ -92,7 +84,7 @@ abstract class BaseModel extends Model
 	{
 		if(is_array($variable))
 		{
-			return 	$query->whereIn('id', $variable);
+			return 	$query->whereIn('_id', $variable);
 		}
 
 		if(is_null($variable))
@@ -100,7 +92,7 @@ abstract class BaseModel extends Model
 			return $query;
 		}
 
-		return 	$query->where('id', $variable);
+		return 	$query->where('_id', $variable);
 	}
 
 	/**
@@ -112,7 +104,7 @@ abstract class BaseModel extends Model
 	{
 		if(is_array($variable))
 		{
-			return 	$query->whereNotIn('id', $variable);
+			return 	$query->whereNotIn('_id', $variable);
 		}
 
 		if(is_null($variable))
@@ -120,6 +112,6 @@ abstract class BaseModel extends Model
 			return $query;
 		}
 
-		return 	$query->where('id', '<>', $variable);
+		return 	$query->where('_id', '<>', $variable);
 	}
 }

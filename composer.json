@@ -24,6 +24,7 @@
             "App\\": "app/",
             "TImmigration\\": "packages/immigration/src/",
             "TAkta\\": "packages/akta/src/",
+            "TKlien\\": "packages/klien/src/",
             "TCommands\\": "web/Commands",
             "TQueries\\": "web/Queries",
             "TFacades\\": "web/Facades",

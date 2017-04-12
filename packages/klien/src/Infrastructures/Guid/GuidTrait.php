@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Billing\Models\Traits;
+namespace TKlien\Infrastructures\Guid;
 
 /**
  * Guid trait to generate id
@@ -8,16 +8,28 @@ namespace Thunderlabid\Billing\Models\Traits;
  * Digunakan untuk always true entity
  *
  * @package    Thunderlabid
- * @subpackage Billing
+ * @subpackage TKlien
  * @author     C Mooy <chelsymooy1108@gmail.com>
  */
-trait IGuidTrait {
+trait GuidTrait {
  	
+ 	/**
+	 * Boot the scope.
+	 * 
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->attributes['_id']		= $this->createID('test');
+	}
+
 	/**
 	 * Add Event_list to queue
 	 * @param [IEvent_list] $event_list 
 	 */
-	public static function guid()
+	public static function createID($value)
 	{
 		if (function_exists('com_create_guid') === true)
 		{

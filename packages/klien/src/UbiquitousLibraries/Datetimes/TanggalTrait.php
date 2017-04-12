@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Appointment\Models\Traits\Policies;
+namespace TKlien\UbiquitousLibraries\Datetimes;
 
 use Carbon\Carbon;
 
@@ -10,7 +10,7 @@ use Carbon\Carbon;
  * Digunakan untuk reformat tanggal sesuai kontrak
  *
  * @package    Thunderlabid
- * @subpackage Appointment
+ * @subpackage Credit
  * @author     C Mooy <chelsy@thunderlab.od>
  */
 trait TanggalTrait {
@@ -32,26 +32,7 @@ trait TanggalTrait {
 	 */
 	public function formatDateTo($value)
 	{
+		return $value->toDateTime()->format('d/m/Y');
 		return Carbon::parse($value)->format('d/m/Y');
-	}
-
- 	/**
-	 * parse input tanggal
-	 * @param d/m/Y $value 
-	 * @return Y-m-d $value 
-	 */
-	public function formatDateTimeFrom($value)
-	{
-		return Carbon::createFromFormat('d/m/Y H:i', $value)->format('Y-m-d H:i:s');
-	}
-
-	/**
-	 * parse output tanggal
-	 * @param Y-m-d $value 
-	 * @return d/m/Y $value 
-	 */
-	public function formatDateTimeTo($value)
-	{
-		return Carbon::parse($value)->format('d/m/Y H:i');
 	}
 }

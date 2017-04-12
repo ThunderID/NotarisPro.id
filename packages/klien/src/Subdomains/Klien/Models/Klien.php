@@ -1,21 +1,30 @@
 <?php
 
-namespace Thunderlabid\Appointment\Models;
+namespace TKlien\Klien\Models;
 
-use Thunderlabid\Appointment\Models\Traits\Policies\TanggalTrait;
+use TKlien\Infrastructures\Guid\GuidTrait;
+
+use TKlien\UbiquitousLibraries\Datetimes\TanggalTrait;
+
+use TKlien\Infrastructures\Models\BaseModel;
+
+use Validator, Exception;
 
 /**
- * Model Reminder
+ * Model Klien
  *
- * Digunakan untuk menyimpan data Reminder.
+ * Digunakan untuk menyimpan data alamat
  * Ketentuan : 
+ * 	- tidak bisa direct changes, tapi harus melalui fungsi tersedia (aggregate)
+ * 	- auto generate id (guid)
  *
- * @package    Thunderlabid
- * @subpackage Appointment
+ * @package    TKlien
+ * @subpackage Klien
  * @author     C Mooy <chelsy@thunderlab.id>
  */
-class Reminder extends BaseModel
+class Klien extends BaseModel
 {
+	use GuidTrait;
 	use TanggalTrait;
 
 	/**
@@ -23,28 +32,44 @@ class Reminder extends BaseModel
 	 *
 	 * @var string
 	 */
-	protected $table				= 'reminder';
+	protected $table				= 'notaris_klien';
 
 	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $fillable				=	[
-											'id'					,
-											'appointment_id'		,
-											'waktu'					,
-										];
 
+	protected $fillable				=	[
+											'_id'					,
+											'nama'					,
+											'tempat_lahir'			,
+											'tanggal_lahir'			,
+											'pekerjaan'				,
+											'alamat'				,
+											'nomor_ktp'				,
+										];
 	/**
 	 * Basic rule of database
 	 *
 	 * @var array
 	 */
 	protected $rules				=	[
-											'appointment_id'		=> 'max:255',
-											'waktu'					=> 'date_format:"Y-m-d H:i:s"',
+											'nama'					=> 'required|max:255',
+											'tempat_lahir'			=> 'required|max:255',
+											'tanggal_lahir'			=> 'required|date_format:"Y-m-d"',
+											'pekerjaan'				=> 'required|max:255',
+											'alamat.alamat'			=> 'max:255',
+											'alamat.rt'				=> 'max:255',
+											'alamat.rw'				=> 'max:255',
+											'alamat.desa'			=> 'max:255',
+											'alamat.distrik'		=> 'max:255',
+											'alamat.regensi'		=> 'max:255',
+											'alamat.provinsi'		=> 'max:255',
+											'alamat.negara'			=> 'max:255',
+											'nomor_ktp'				=> 'required|max:255',
 										];
+
 	/**
 	 * Date will be returned as carbon
 	 *
@@ -53,30 +78,39 @@ class Reminder extends BaseModel
 	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
 	
 	/**
-	 * hidden data
+	 * data hidden
 	 *
 	 * @var array
 	 */
 	protected $hidden				= 	[
+											'_id',
 											'created_at', 
 											'updated_at', 
 											'deleted_at', 
 										];
+
+	protected $appends 				= ['id', 'tanggal'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
-	protected function setWaktuAttribute($value)
+	public function setTanggalLahirAttribute($value)
 	{
-		$this->attributes['waktu']	= $this->formatDateTimeFrom($value);
+		$this->attributes['tanggal_lahir'] = $this->formatDateFrom($value);
 	}
 
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
-	protected function getWaktuAttribute()
+	
+	public function getIdAttribute($value = NULL)
 	{
-		return $this->formatDateTimeTo($this->attributes['waktu']);
+		return $this->attributes['_id'];
+	}
+
+	public function getTanggalLahirAttribute($value = NULL)
+	{
+		return $this->formatDateTo($this->attributes['tanggal_lahir']);
 	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
@@ -92,4 +126,9 @@ class Reminder extends BaseModel
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
+
+	public function scopeNama($query, $value)
+	{
+		return $query->where('nama', 'like', '%'.$value.'%');
+	}
 }
