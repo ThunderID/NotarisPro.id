@@ -79,16 +79,8 @@
 
     </head>
     <body>
-        <!-- Header -->
-        @include('layout.components.header')
-
-        <!-- Content -->
-        <div class="container">
-            @yield('content')           
-        </div>
-
-        <!-- Footer -->
-        @include('layout.components.footer')
+        <!-- template -->
+        @yield('template')           
 
         <!-- Jquery -->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>

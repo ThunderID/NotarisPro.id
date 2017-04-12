@@ -1,4 +1,4 @@
-@extends('layout.base')
+@extends('templates.basic')
 
 @push('styles')  
 @endpush  
