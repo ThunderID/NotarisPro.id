@@ -11,6 +11,18 @@
 |
 */
 
+Route::get('/test', function () 
+{
+	$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
+
+	$login 			= TAuth::login($credentials);
+
+	$akta 			= new TQueries\Akta\DaftarAkta;
+	$akta 			= $akta->get();
+	dD($akta);
+});
+
+
 // UAC
 Route::get('/login', ['uses' => 'uacController@login', 'as' => 'uac.login']);
 Route::post('/login', ['uses' => 'uacController@doLogin', 'as' => 'uac.login.post']);

@@ -114,4 +114,34 @@ class Dokumen extends BaseModel
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
+
+	public function scopeStatus($query, $value)
+	{
+		if(is_array($value))
+		{
+			return $query->whereIn('status', $value);
+		}
+
+		return $query->where('status', $value);
+	}
+
+	public function scopeKantor($query, $value)
+	{
+		if(is_array($value))
+		{
+			return $query->whereIn('pemilik.kantor.id', $value);
+		}
+
+		return $query->where('pemilik.kantor.id', $value);
+	}
+
+	public function scopePemilik($query, $value)
+	{
+		return $query->where('pemilik.orang.id', $value);
+	}
+
+	public function scopeKlien($query, $value)
+	{
+		return $query->where('pemilik.klien.nama', 'like', '%'.$value.'%');
+	}
 }
