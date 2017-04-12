@@ -14,8 +14,13 @@
 
         <!-- Custom Css -->
         <style>
+            /*general*/
             body{
                 font-family: 'Muli', sans-serif;
+            }
+
+            /*navbar*/
+            .navbar{
                 letter-spacing: 0.5pt;
             }
 
@@ -42,8 +47,27 @@
                 padding-top: 0.7rem;
                 padding-bottom: 0.3rem;                
             }
+            .navbar-inverse .navbar-toggler{
+                border-color: transparent;
+                padding-top: 8px;
+            }
 
-            @yield('styles')
+            .navbar-inverse .navbar-toggler:focus{
+                outline: none;
+            }            
+
+            .navbar .menu-mobile{
+                padding-top: 30px;
+                height: 100vh;
+            }
+
+             .navbar .menu-mobile .menu-item > div{
+                height: 100px; 
+                background-color: white;
+            }
+
+            @stack('styles')
+
         </style>
 
 
