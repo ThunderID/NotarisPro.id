@@ -96,8 +96,6 @@ class AjukanAkta
 			$versi->versi 			= ($prev_versi->versi*1) + 1;
 			$versi->save();
 
-
-
 			return true;
 		}
 		catch(Exception $e)

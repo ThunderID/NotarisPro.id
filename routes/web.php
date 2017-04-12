@@ -17,9 +17,13 @@ Route::get('/test', function ()
 
 	$login 			= TAuth::login($credentials);
 
-	// $akta 			= new TQueries\Akta\DaftarAkta;
-	// $akta 			= $akta->get();
-	// dD($akta);
+	$template 		= new TQueries\Akta\DaftarTemplateAkta;
+	$template 		= $template->get();
+	dD($template);
+
+	$akta 			= new TQueries\Akta\DaftarAkta;
+	$akta 			= $akta->get();
+	dD($akta);
 
 	$klien 			= new TQueries\Klien\DaftarKlien;
 	$klien 			= $klien->get();
