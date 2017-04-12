@@ -4,7 +4,7 @@ namespace TCommands\Klien;
 
 use TKlien\Klien\Models\Klien;
 
-use Exception, DB, TAuth, Carbon\Carbon;
+use Exception, TAuth, Carbon\Carbon;
 
 class SimpanKlien
 {
@@ -40,10 +40,13 @@ class SimpanKlien
 				$klien 		= new Klien;
 			}
 
-			//2. fill data
+			//2. parse data kantor
+			$this->klien['kantor']	= TAuth::activeOffice()['kantor'];
+
+			//3. fill data
 			$klien 			= $klien->fill($this->klien);
 
-			//3. simpan klien
+			//4. simpan klien
 			$klien->save();
 
 			return true;

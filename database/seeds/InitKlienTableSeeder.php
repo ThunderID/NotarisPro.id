@@ -16,6 +16,9 @@ class InitKlienTableSeeder extends Seeder
 		
 		$faker			= \Faker\Factory::create();
 		
+		$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
+		$login 			= TAuth::login($credentials);
+		
 		foreach (range(0, 19) as $key) 
 		{
 			$data 	= [

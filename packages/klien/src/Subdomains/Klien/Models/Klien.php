@@ -48,6 +48,7 @@ class Klien extends BaseModel
 											'pekerjaan'				,
 											'alamat'				,
 											'nomor_ktp'				,
+											'kantor'				,
 										];
 	/**
 	 * Basic rule of database
@@ -75,7 +76,7 @@ class Klien extends BaseModel
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'tanggal_lahir'];
 	
 	/**
 	 * data hidden
@@ -89,7 +90,7 @@ class Klien extends BaseModel
 											'deleted_at', 
 										];
 
-	protected $appends 				= ['id', 'tanggal'];
+	protected $appends 				= ['id'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
@@ -130,5 +131,15 @@ class Klien extends BaseModel
 	public function scopeNama($query, $value)
 	{
 		return $query->where('nama', 'like', '%'.$value.'%');
+	}
+
+	public function scopeKantor($query, $value)
+	{
+		if(is_array($value))
+		{
+			return $query->whereIn('kantor.id', $value);
+		}
+
+		return $query->where('kantor.id', $value);
 	}
 }
