@@ -72,12 +72,14 @@ class Controller extends BaseController
 
 	//pagination
 	public function paginate($route = null, $count = null, $take = 15){
-		//README
-		//$route : route current page. $route = route('admin.product.index')
-		//$count : number of data. $count = count($data)
-		//$current : current page. $current = input::get($page)
+		//Page normalizer
+		$page = Request::get('page');
+		if(($count/$take) < $page){
+			$page = 1;
+		}
 
-		$this->page_attributes->paging = new LengthAwarePaginator($count, $count, $take, Request::get('page'));
+		// paging
+		$this->page_attributes->paging = new LengthAwarePaginator($count, $count, $take, $page);
 	    $this->page_attributes->paging->setPath($route);
 	}
 
