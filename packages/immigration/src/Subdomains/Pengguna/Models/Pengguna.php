@@ -156,4 +156,14 @@ class Pengguna extends BaseModel
 	{
 		return $model->where('email', $variable);
 	}
+
+	public function scopeKantor($model, $variable)
+	{
+		if(is_array($variable))
+		{
+			return $model->whereIn('visas.kantor.id', $variable);
+		}
+	
+		return $model->where('visas.kantor.id', $variable);
+	}
 }

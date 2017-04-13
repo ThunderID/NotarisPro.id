@@ -17,6 +17,13 @@ Route::get('/test', function ()
 
 	$login 			= TAuth::login($credentials);
 
+	$pengguna 		= new TQueries\ACL\DaftarPengguna;
+	$pengguna 		= $pengguna->get();
+	dd($pengguna);
+
+	$tags 			= TQueries\Tags\TagService::all();
+	dd($tags);
+
 	$tagihan 		= new TQueries\Tagihan\DaftarTagihan;
 	$tagihan 		= $tagihan->get();
 	dd($tagihan);
