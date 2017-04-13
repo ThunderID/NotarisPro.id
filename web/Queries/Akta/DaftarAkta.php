@@ -149,8 +149,14 @@ class DaftarAkta
 		{
 			$model  			= $model->klien($queries['klien']);
 		}
+
+		//5.allow judul
+		if(isset($queries['judul']))
+		{
+			$model  			= $model->judul($queries['judul']);
+		}
 		
-		//5.sort klien
+		//6.sort klien
 		if(isset($queries['urutkan']))
 		{
 			foreach ($queries['urutkan'] as $key => $value) 

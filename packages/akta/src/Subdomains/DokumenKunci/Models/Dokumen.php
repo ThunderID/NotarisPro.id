@@ -149,4 +149,9 @@ class Dokumen extends BaseModel
 	{
 		return $query->where('pemilik.klien.nama', 'like', '%'.$value.'%');
 	}
+
+	public function scopeJudul($query, $value)
+	{
+		return $query->where('judul', 'like', '%'.$value.'%');
+	}
 }
