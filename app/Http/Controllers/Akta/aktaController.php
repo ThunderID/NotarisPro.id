@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Akta;
 
-use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
 use TQueries\Akta\DaftarAkta as Query;
+
+use Request;
 
 class aktaController extends Controller
 {
