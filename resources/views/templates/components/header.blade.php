@@ -28,6 +28,7 @@
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuAkta">
 						<a class="dropdown-item @yield('buat-akta')" href="{{ route('akta.akta.create') }}">Buat Akta</a>
 						<a class="dropdown-item @yield('data-akta')" href="{{ route('akta.akta.index') }}">Data Akta</a>
+						<a class="dropdown-item @yield('buat-template')" href="{{ route('akta.template.create') }}">Buat Template</a>
 						<a class="dropdown-item @yield('template-akta')" href="{{ route('akta.template.index') }}">Template Akta</a>
 					</div>
 				</div>

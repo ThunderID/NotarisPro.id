@@ -35,7 +35,17 @@ class templateController extends Controller
      */
     public function create()
     {
-        //
+        // init
+        $this->page_attributes->title       = 'Buat Template';
+
+        //get data from database
+        $this->page_datas->datas            = null;
+
+        //initialize view
+        $this->view                         = view('pages.akta.template.create');
+
+        //function from parent to generate view
+        return $this->generateView();  
     }
 
     /**

@@ -7,7 +7,7 @@
 	active
 @stop
 
-@section('template-akta')
+@section('buat-template')
 	active
 @stop
 
