@@ -28,6 +28,9 @@ class aktaController extends Controller
         //get data from database
         $this->page_datas->datas            = $this->query->get();
 
+        //paginate
+        $this->paginate(null,100,10);
+
         //initialize view
         $this->view                         = view('pages.akta.akta.index');
 

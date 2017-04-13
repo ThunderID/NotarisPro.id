@@ -15,20 +15,9 @@
 <div class="row">
 
 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2 sidebar">
-		<h5>Cari Data</h5>
-
-		<div class="search">
-			<form class="form" action="" data-pjax=true data-ajax-submit=false>
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Cari" aria-describedby="basic-addon1" name="q">
-					<span class="input-group-btn">
-				        <button class="btn btn-secondary" type="button">
-							<i class="fa fa-search" aria-hidden="true"></i>
-				        </button>
-					</span>
-				</div>
-			</form>
-		</div>
+		@include('components.search',[
+			'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
+		])
 	</div>
 
 	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
@@ -37,12 +26,13 @@
 			<thead>
 				<tr>
 					<th>Dokumen</th>
-					<th>Status</th>
-					<th>Tanggal Pembuatan</th>
-					<th>Tanggal Sunting</th>
+					<th style="width: 15%;"">Status</th>
+					<th style="width: 20%;">Tanggal Sunting</th>
+					<th style="width: 20%;">Tanggal Pembuatan</th>
 				</tr>
 			</thead>
 			<tbody>
+                @forelse((array)$page_datas->datas as $key => $data)
 				<tr>
 					<td>
 						<i class="fa fa-file"></i>
@@ -59,23 +49,15 @@
 						14 Feb 2017
 					</td>					
 				</tr>
-				<tr>
-					<td>
-						<i class="fa fa-file"></i>
-						&nbsp;
-						Judul Dokumen Perjanjian 1
-					</td>
-					<td>
-						Pengajuan
-					</td>
-					<td>
-						1 Feb 2017
-					</td>
-					<td>
-						14 Feb 2017
-					</td>	
-				</tr>				
+                @empty
+                <tr>
+                    <td colspan="4" class="text-center">
+                        Tidak Ada Data
+                    </td>
+                </tr>
+                @endforelse
 			</tbody>
+            @include('components.paginate')
 		</table>
 	</div>
 
