@@ -20,8 +20,8 @@
 		])
 	</div>
 
-	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
-		<h4 style="padding-top: 2rem; padding-bottom: 1.5rem;">Data Akta</h4>		
+	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-10 scrollable_panel">
+		<h4 class="title">Data Akta</h4>		
 		<table class="table table-hover">
 			<thead>
 				<tr>
