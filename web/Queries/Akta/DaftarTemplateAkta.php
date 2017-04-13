@@ -20,6 +20,9 @@ use Hash, Exception, Session, TAuth;
  */
 class DaftarTemplateAkta
 {
+	public $per_page 	= 15;
+	public $page 		= 1;
+
 	public function __construct()
 	{
 		$this->model 		= new Model;
@@ -39,6 +42,7 @@ class DaftarTemplateAkta
 		if(isset($queries['per_page']))
 		{
 			$queries['take']	= $queries['per_page'];
+			$this->per_page 	= $queries['per_page'];
 		}
 		else
 		{
@@ -48,6 +52,7 @@ class DaftarTemplateAkta
 		if(isset($queries['page']))
 		{
 			$queries['skip']	= (($queries['page'] - 1) * $queries['take']);
+			$this->page 		= $queries['page'];
 		}
 		else
 		{
@@ -99,6 +104,42 @@ class DaftarTemplateAkta
 		//2.smart search status and writer id
 		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
 		$model  					= $model->draftOrPublished($queries);
+
+		//3.allow judul
+		if(isset($queries['judul']))
+		{
+			$model  			= $model->judul($queries['judul']);
+		}
+		
+		//4.sort klien
+		if(isset($queries['urutkan']))
+		{
+			foreach ($queries['urutkan'] as $key => $value) 
+			{
+				switch (strtolower($key)) 
+				{
+					case 'judul':
+						$model  			= $model->orderby('judul', $value);
+						break;
+					case 'status':
+						$model  			= $model->orderby('status', $value);
+						break;
+					case 'tanggal_pembuatan':
+						$model  			= $model->orderby('created_at', $value);
+						break;
+					case 'tanggal_sunting':
+						$model  			= $model->orderby('updated_at', $value);
+						break;
+					default:
+						$model  			= $model->orderby('updated_at', 'desc');
+						break;
+				}
+			}
+		}
+		else
+		{
+			$model  			= $model->orderby('updated_at', 'desc');
+		}
 
 		return $model;
 	} 
