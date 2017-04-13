@@ -145,6 +145,36 @@ class DaftarAkta
 			$model  			= $model->klien($queries['klien']);
 		}
 		
+		//5.sort klien
+		if(isset($queries['urutkan']))
+		{
+			foreach ($queries['urutkan'] as $key => $value) 
+			{
+				switch (strtolower($key)) 
+				{
+					case 'judul':
+						$model  			= $model->orderby('judul', $value);
+						break;
+					case 'status':
+						$model  			= $model->orderby('status', $value);
+						break;
+					case 'tanggal_pembuatan':
+						$model  			= $model->orderby('created_at', $value);
+						break;
+					case 'tanggal_sunting':
+						$model  			= $model->orderby('updated_at', $value);
+						break;
+					default:
+						$model  			= $model->orderby('updated_at', 'desc');
+						break;
+				}
+			}
+		}
+		else
+		{
+			$model  			= $model->orderby('updated_at', 'desc');
+		}
+
 		return $model;
 	} 
 }

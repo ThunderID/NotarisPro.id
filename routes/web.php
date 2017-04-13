@@ -19,19 +19,19 @@ Route::get('/test', function ()
 
 	$jadwal 		= new TQueries\Jadwal\DaftarJadwal;
 	$jadwal 		= $jadwal->get();
-	dD($jadwal);
+	dd($jadwal);
 
 	$template 		= new TQueries\Akta\DaftarTemplateAkta;
 	$template 		= $template->get();
-	dD($template);
+	dd($template);
 
 	$akta 			= new TQueries\Akta\DaftarAkta;
-	$akta 			= $akta->get();
-	dD($akta);
+	$akta 			= $akta->get($filter);
+	dd($akta);
 
 	$klien 			= new TQueries\Klien\DaftarKlien;
 	$klien 			= $klien->get();
-	dD($klien);
+	dd($klien);
 });
 
 
