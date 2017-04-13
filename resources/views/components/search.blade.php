@@ -38,6 +38,7 @@
 
 	$qs = Request::all();
 	unset($qs['q']);
+	unset($qs['page']);
 ?>
 
 <h5>{{ isset($title) ? $title : 'Cari Data' }}</h5>
