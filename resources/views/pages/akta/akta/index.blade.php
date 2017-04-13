@@ -37,16 +37,16 @@
 					<td>
 						<i class="fa fa-file"></i>
 						&nbsp;
-						Akta Jual Beli Rumah</br>
+						{{ $data['judul'] }}
 					</td>
 					<td>
-						Draft
+						{{ $data['status'] }}
 					</td>
 					<td>
-						1 Feb 2017
+						{{ $data['tanggal_sunting'] }}
 					</td>
 					<td>
-						14 Feb 2017
+						{{ $data['tanggal_pembuatan'] }}
 					</td>					
 				</tr>
                 @empty

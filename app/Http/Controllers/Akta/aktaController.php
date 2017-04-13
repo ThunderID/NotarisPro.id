@@ -26,24 +26,33 @@ class aktaController extends Controller
 		$this->page_attributes->title		= 'Data Akta';
 
 		//filter&search
-		$filter								= [];
-		//1. untuk menampilkan data dengan filter status
-		$filter['status']					= 'draft';
+        $filter                             = [];
+        
+        $filter['per_page']                 = (int)env('DATA_PERPAGE');
 
-		//2. untuk menampilkan data dengan pencarian nama klien
-		$filter['klien']					= 'Lili';
 
-		//3. untuk menampilkan data dengan urutan judul
-		$filter['urutkan']					= ['judul' => 'desc'];
-		//4. untuk menampilkan data dengan urutan status
-		$filter['urutkan']					= ['status' => 'desc'];
-		//5. untuk menampilkan data dengan urutan tanggal pembuatan
-		$filter['urutkan']					= ['tanggal_pembuatan' => 'desc'];
-		//6. untuk menampilkan data dengan urutan tanggal sunting
-		$filter['urutkan']					= ['tanggal_sunting' => 'desc'];
+        /*
+        //1. untuk menampilkan data dengan filter status
+        $filter['status']                   = 'draft';
+
+        //2. untuk menampilkan data dengan pencarian nama klien
+        $filter['klien']                    = 'Lili';
+
+        //3. untuk menampilkan data dengan urutan judul
+        $filter['urutkan']                  = ['judul' => 'desc'];
+        //4. untuk menampilkan data dengan urutan status
+        $filter['urutkan']                  = ['status' => 'desc'];
+        //5. untuk menampilkan data dengan urutan tanggal pembuatan
+        $filter['urutkan']                  = ['tanggal_pembuatan' => 'desc'];
+        //6. untuk menampilkan data dengan urutan tanggal sunting
+        $filter['urutkan']                  = ['tanggal_sunting' => 'desc'];
+        */
 
 		//get data from database
 		$this->page_datas->datas			= $this->query->get($filter);
+
+        //paginate
+        $this->paginate(null, $this->query->count($filter), (int)env('DATA_PERPAGE'));        
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.index');
