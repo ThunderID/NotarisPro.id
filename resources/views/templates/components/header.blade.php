@@ -57,10 +57,18 @@
 	<div class="collapse navbar-collapse justify-content-end" id="navbarCollapseAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="#">Organisasi</a>
+				<a class="nav-link" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuKantor" aria-haspopup="true" aria-expanded="false">{{TAuth::activeOffice()['kantor']['nama']}}</a>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuKantor" style="left:66%">
+					@foreach(TAuth::loggedUser()['visas'] as $key => $value)
+						<a class="dropdown-item" href="{{ route('uac.office.activate', $value['id']) }}">{{$value['kantor']['nama']}}</a>
+					@endforeach
+				</div>
+				<!-- <a class="nav-link" href="#">Organisasi</a> -->
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Akun</a>
+				<a class="nav-link" href="{{route('uac.logout.any')}}">
+					<i class="fa fa-power-off" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;Logout
+				</a>
 			</li>			
 		</ul>
 	</div>

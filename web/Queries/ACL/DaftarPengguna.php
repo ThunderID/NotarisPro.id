@@ -1,11 +1,11 @@
 <?php
 
-namespace TQueries\Akta;
+namespace TQueries\ACL;
 
 ///////////////
 //   Models  //
 ///////////////
-use TAkta\DokumenKunci\Models\Template as Model;
+use TImmigration\Pengguna\Models\Pengguna as Model;
 
 use Hash, Exception, Session, TAuth;
 
@@ -18,7 +18,7 @@ use Hash, Exception, Session, TAuth;
  * @subpackage Application
  * @author     C Mooy <chelsy@thunderlab.id>
  */
-class DaftarTemplateAkta
+class DaftarPengguna
 {
 	public $per_page 	= 15;
 	public $page 		= 1;
@@ -59,7 +59,7 @@ class DaftarTemplateAkta
 			$queries['skip']	= 0;
 		}
 		
-		$model  				= $model->skip($queries['skip'])->take($queries['take'])->orderby('created_at', 'desc')->get(['judul', 'status', 'pemilik', 'penulis', 'created_at', 'updated_at'])->toArray();
+		$model  				= $model->skip($queries['skip'])->take($queries['take'])->orderby('created_at', 'desc')->get()->toArray();
 
 		return 	$model;
 	}
@@ -101,34 +101,15 @@ class DaftarTemplateAkta
 
 		$model  				= $model->kantor($queries['kantor_id']);
 
-		//2.smart search status and writer id
-		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-		$model  					= $model->draftOrPublished($queries);
-
-		//3.allow judul
-		if(isset($queries['judul']))
-		{
-			$model  			= $model->judul($queries['judul']);
-		}
-		
-		//4.sort klien
+		//2.sort klien
 		if(isset($queries['urutkan']))
 		{
 			foreach ($queries['urutkan'] as $key => $value) 
 			{
 				switch (strtolower($key)) 
 				{
-					case 'judul':
-						$model  			= $model->orderby('judul', $value);
-						break;
-					case 'status':
-						$model  			= $model->orderby('status', $value);
-						break;
-					case 'tanggal_pembuatan':
-						$model  			= $model->orderby('created_at', $value);
-						break;
-					case 'tanggal_sunting':
-						$model  			= $model->orderby('updated_at', $value);
+					case 'nama':
+						$model  			= $model->orderby('nama', $value);
 						break;
 					default:
 						$model  			= $model->orderby('updated_at', 'desc');

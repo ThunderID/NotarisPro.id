@@ -17,6 +17,13 @@ Route::get('/test', function ()
 
 	$login 			= TAuth::login($credentials);
 
+	$pengguna 		= new TQueries\ACL\DaftarPengguna;
+	$pengguna 		= $pengguna->get();
+	dd($pengguna);
+
+	$tags 			= TQueries\Tags\TagService::all();
+	dd($tags);
+
 	$tagihan 		= new TQueries\Tagihan\DaftarTagihan;
 	$tagihan 		= $tagihan->get();
 	dd($tagihan);
@@ -40,9 +47,10 @@ Route::get('/test', function ()
 
 
 // UAC
-Route::get('/login', ['uses' => 'uacController@login', 'as' => 'uac.login']);
-Route::post('/login', ['uses' => 'uacController@doLogin', 'as' => 'uac.login.post']);
-Route::any('/logout', ['uses' => 'uacController@logout', 'as' => 'uac.logout.post']);
+Route::get('/login',			['uses' => 'uacController@login', 			'as' => 'uac.login']);
+Route::post('/login', 			['uses' => 'uacController@doLogin', 		'as' => 'uac.login.post']);
+Route::any('/logout', 			['uses' => 'uacController@logout', 			'as' => 'uac.logout.any']);
+Route::get('activate/{idx}', 	['uses' => 'uacController@activateOffice', 	'as' => 'uac.office.activate']);
 
 Route::group(['middleware' => ['authenticated']], function()
 {
