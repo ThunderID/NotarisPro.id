@@ -20,6 +20,9 @@ use Hash, Exception, Session, TAuth;
  */
 class DaftarAkta
 {
+	public $per_page 	= 15;
+	public $page 		= 1;
+
 	public function __construct()
 	{
 		$this->model 		= new Model;
@@ -39,6 +42,7 @@ class DaftarAkta
 		if(isset($queries['per_page']))
 		{
 			$queries['take']	= $queries['per_page'];
+			$this->per_page 	= $queries['per_page'];
 		}
 		else
 		{
@@ -48,6 +52,7 @@ class DaftarAkta
 		if(isset($queries['page']))
 		{
 			$queries['skip']	= (($queries['page'] - 1) * $queries['take']);
+			$this->page 		= $queries['page'];
 		}
 		else
 		{
