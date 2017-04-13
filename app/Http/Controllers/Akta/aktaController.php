@@ -5,9 +5,16 @@ namespace App\Http\Controllers\Akta;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use TQueries\Akta\DaftarAkta as Query;
 
 class aktaController extends Controller
 {
+    public function __construct(Query $query)
+    {
+        parent::__construct();
+        
+        $this->query            = $query;
+    }    
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +26,7 @@ class aktaController extends Controller
         $this->page_attributes->title       = 'Data Akta';
 
         //get data from database
-        $this->page_datas->datas            = null;
+        $this->page_datas->datas            = $this->query->get();
 
         //initialize view
         $this->view                         = view('pages.akta.akta.index');
