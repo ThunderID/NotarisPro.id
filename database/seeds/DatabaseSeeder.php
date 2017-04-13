@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(InitKlienTableSeeder::class);
 		$this->call(InitTemplateTableSeeder::class);
 		$this->call(InitJadwalTableSeeder::class);
+		$this->call(InitTagihanTableSeeder::class);
 		// $this->call(UsersTableSeeder::class);
 	}
 }

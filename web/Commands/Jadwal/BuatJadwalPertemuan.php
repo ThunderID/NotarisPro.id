@@ -36,13 +36,7 @@ class BuatJadwalPertemuan
 				//1a. pastikan jadwal exists
 				$jadwal 		= JadwalPertemuan::findorfail($this->jadwal['id']);
 
-				//1b. check status jadwal 
-				if(!str_is($jadwal->status, 'draft'))
-				{
-					throw new Exception("Status Harus Draft", 1);
-				}
-
-				//1c. pastikan jadwal tersebut milik kantor notaris yang sedang aktif 
+				//1b. pastikan jadwal tersebut milik kantor notaris yang sedang aktif 
 				if(!in_array(TAuth::activeOffice()['kantor']['id'], $jadwal->pembuat['kantor']))
 				{
 					throw new Exception("Anda tidak memiliki akses untuk jadwal ini", 1);

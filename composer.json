@@ -25,6 +25,7 @@
             "TAkta\\": "packages/akta/src/",
             "TKlien\\": "packages/klien/src/",
             "TJadwal\\": "packages/jadwal/src/",
+            "TTagihan\\": "packages/tagihan/src/",
             "TCommands\\": "web/Commands",
             "TQueries\\": "web/Queries",
             "TFacades\\": "web/Facades",
