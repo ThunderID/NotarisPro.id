@@ -17,6 +17,10 @@ Route::get('/test', function ()
 
 	$login 			= TAuth::login($credentials);
 
+	$jadwal 		= new TQueries\Jadwal\DaftarJadwal;
+	$jadwal 		= $jadwal->get();
+	dD($jadwal);
+
 	$template 		= new TQueries\Akta\DaftarTemplateAkta;
 	$template 		= $template->get();
 	dD($template);
