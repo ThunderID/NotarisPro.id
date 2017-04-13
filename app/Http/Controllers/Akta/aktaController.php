@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Akta;
 
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\controller;
+use App\Http\Controllers\Controller;
 
 class aktaController extends Controller
 {
