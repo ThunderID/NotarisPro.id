@@ -33,11 +33,19 @@
 		required 	: no
 		value 		: string of placeholder
 		description : this will be the search placeholder
+
+	4. 	qs
+		required 	: no
+		value 		: array of qs
+		description : this will be the search placeholder		
 	===================================================================
 	*/
 
-	$qs = Request::all();
-	unset($qs['q']);
+	if(!isset($qs)){
+		$qs = [];
+	}
+
+	$data_qs = Request::all();
 ?>
 
 <h5>{{ isset($title) ? $title : 'Cari Data' }}</h5>
@@ -46,8 +54,10 @@
 	<form class="form" action="{{ $action_url }}" method="Get">
 		<div class="input-group">
 			<input type="text" class="form-control" placeholder="{{ isset($placehlder) ? $placeholder : 'Cari' }}" aria-describedby="basic-addon1" name="q">
-			@foreach($qs as $key => $value )
-				<input type="hidden" name="{{$key}}" value="{{$value}}">
+			@foreach($data_qs as $key => $value )
+				@if(in_array($key, $qs))
+					<input type="hidden" name="{{$key}}" value="{{$value}}">
+				@endif
 			@endforeach
 			<span class="input-group-btn">
 		        <button class="btn btn-secondary" type="submit">

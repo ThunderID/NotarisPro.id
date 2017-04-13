@@ -3,9 +3,15 @@
 	background-color: rgba(0, 0, 0, 0.075); 
 	margin-left: -15px; 
 	padding-left: 30px;
+	padding-top:1.2rem;
+	overflow-y:scroll;
+
+	.panel{
+		margin-bottom: 1.5rem;
+	}
 
 	h5{
-		padding-top: 2rem; 
+		padding-top: 0.5rem; 
 		padding-bottom: 0.5rem;
 	}
 

@@ -24,9 +24,6 @@ class Controller extends BaseController
 		// sets params
 		$this->page_attributes 			= new \Stdclass;
 		$this->page_datas 				= new \Stdclass;
-
-		// auto getter helper
-		$this->getSearch();
 	}   
 
 	public function generateView(){
@@ -86,6 +83,19 @@ class Controller extends BaseController
 	//search
 	private function getSearch(){
 		// get all input with search input name
-        $this->page_attributes->search    = Request::input('search');
+        $this->page_attributes->search    = Request::input('q');
 	}  
+
+	public static function getQueryString($allowed = []){
+		$qs = Request::all();
+		$result = [];
+
+		foreach ($qs as $key => $value) {
+			if (in_array($key, $allowed)) {
+				$result[$key] = $value; 
+			}
+		}
+
+		return $result;
+	}	
 }
