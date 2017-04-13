@@ -32,8 +32,9 @@ Route::get('/test', function ()
 	$jadwal 		= $jadwal->get();
 	dd($jadwal);
 
+	$filter 		= ['status' => 'publish'];
 	$template 		= new TQueries\Akta\DaftarTemplateAkta;
-	$template 		= $template->get();
+	$template 		= $template->get($filter);
 	dd($template);
 
 	$akta 			= new TQueries\Akta\DaftarAkta;

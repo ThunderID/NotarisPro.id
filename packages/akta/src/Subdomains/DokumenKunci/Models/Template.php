@@ -141,6 +141,11 @@ class Template extends BaseModel
 		return $query->where('pemilik.orang.id', $value);
 	}
 
+	public function scopeDraft($query, $value)
+	{
+		return $query->where(function($query) use ($value){$query->where('status', 'draft')->where('penulis.id', $value);});
+	}
+	
 	public function scopeDraftOrPublished($query, $value)
 	{
 		return $query->where(function($query) use ($value){$query->where('status', 'draft')->where('penulis.id', $value['penulis']['id']);})->orwhere('status', 'publish');

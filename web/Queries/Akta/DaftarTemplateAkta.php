@@ -102,8 +102,28 @@ class DaftarTemplateAkta
 		$model  				= $model->kantor($queries['kantor_id']);
 
 		//2.smart search status and writer id
-		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-		$model  					= $model->draftOrPublished($queries);
+		if(isset($queries['status']))
+		{
+			switch (strtolower($queries['status'])) 
+			{
+				case 'draft':
+					$queries['penulis']['id']	= TAuth::loggedUser()['id'];
+					$model  					= $model->draft($queries['penulis']['id']);
+					break;
+				case 'publish':
+					$model  					= $model->status($queries['status']);
+					break;
+				default:
+					$queries['penulis']['id']	= TAuth::loggedUser()['id'];
+					$model  					= $model->draftOrPublished($queries);
+					break;
+			}
+		}
+		else
+		{
+			$queries['penulis']['id']	= TAuth::loggedUser()['id'];
+			$model  					= $model->draftOrPublished($queries);
+		}
 
 		//3.allow judul
 		if(isset($queries['judul']))
