@@ -15,9 +15,27 @@
 <div class="row">
 
 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2 sidebar">
-		@include('components.search',[
-			'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
-		])
+		<div class="panel">
+			@include('components.search',[
+				'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
+			])
+		</div>
+
+		<div class="panel">
+			@include('components.filter',[
+				'alias' => 'status',
+				'qs'	=> [ 'q','sort' ],
+				'lists' => [
+					'semua status' 	=> null,
+					'draft' 		=> 'draft', 
+					'pengajuan' 	=> 'pengajuan',
+					'renvoi' 		=> 'renvoi',
+					'akta' 			=> 'akta',
+					'minuta akta' 	=> 'minuta',
+				]
+			])
+		</div>
+
 	</div>
 
 	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-10 scrollable_panel">

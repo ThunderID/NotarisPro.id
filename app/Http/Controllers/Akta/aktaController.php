@@ -26,9 +26,12 @@ class aktaController extends Controller
 		$this->page_attributes->title		= 'Data Akta';
 
 		//filter&search
-        $filter                             = [];
-        
-        $filter['per_page']                 = (int)env('DATA_PERPAGE');
+        $query                             	= $this->getQueryString(['q','status', 'page']);
+        $query['per_page']                 	= (int)env('DATA_PERPAGE');
+        if(isset($query['judul'])){
+	        $query['judul']					= $query['q'];
+			unset($query['q']);    	
+        }
 
 
         /*
@@ -49,10 +52,10 @@ class aktaController extends Controller
         */
 
 		//get data from database
-		$this->page_datas->datas			= $this->query->get($filter);
+		$this->page_datas->datas			= $this->query->get($query);
 
         //paginate
-        $this->paginate(null, $this->query->count($filter), (int)env('DATA_PERPAGE'));        
+        $this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));        
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.index');
