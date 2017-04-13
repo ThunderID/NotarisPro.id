@@ -95,7 +95,7 @@ class DaftarTemplateAkta
 	private function queries($queries)
 	{
 		$model 					= $this->model;
-		
+
 		//1.allow kantor
 		$queries['kantor_id']	= [TAuth::activeOffice()['kantor']['id'], "0"];
 
