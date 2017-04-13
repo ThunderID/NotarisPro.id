@@ -7,6 +7,8 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
 use Request, Redirect, App;
 
 class Controller extends BaseController
@@ -69,13 +71,13 @@ class Controller extends BaseController
 	} 
 
 	//pagination
-	public function paginate($route = null, $count = null, $current = null, $take = 15){
+	public function paginate($route = null, $count = null, $take = 15){
 		//README
 		//$route : route current page. $route = route('admin.product.index')
 		//$count : number of data. $count = count($data)
 		//$current : current page. $current = input::get($page)
 
-		$this->page_attributes->paging = new LengthAwarePaginator($count, $count, $take, $current);
+		$this->page_attributes->paging = new LengthAwarePaginator($count, $count, $take, Request::get('page'));
 	    $this->page_attributes->paging->setPath($route);
 	}
 
