@@ -17,6 +17,7 @@
 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2 sidebar">
 		<div class="panel">
 			@include('components.search',[
+				'qs'	=> [ 'status','sort' ],
 				'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
 			])
 		</div>
@@ -34,7 +35,7 @@
 					'minuta akta' 	=> 'minuta',
 				]
 			])
-		</div>
+		</div>	
 
 	</div>
 
