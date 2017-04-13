@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use TAuth, Redirect, Request;
+use TAuth, Redirect, Request, URL;
 
 class uacController extends Controller
 {
@@ -52,7 +52,7 @@ class uacController extends Controller
 		//function from parent to redirecting
 		return Redirect::route('uac.login');
 	}
-	
+
 	/**
 	 * setting which office should be activate
 	 *
