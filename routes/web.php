@@ -17,6 +17,10 @@ Route::get('/test', function ()
 
 	$login 			= TAuth::login($credentials);
 
+	$tagihan 		= new TQueries\Tagihan\DaftarTagihan;
+	$tagihan 		= $tagihan->get();
+	dd($tagihan);
+
 	$jadwal 		= new TQueries\Jadwal\DaftarJadwal;
 	$jadwal 		= $jadwal->get();
 	dd($jadwal);
