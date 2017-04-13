@@ -35,14 +35,20 @@
 		description : this will be the search placeholder
 	===================================================================
 	*/
+
+	$qs = Request::all();
+	unset($qs['q']);
 ?>
 
 <h5>{{ isset($title) ? $title : 'Cari Data' }}</h5>
 
 <div class="search">
-	<form class="form" action="{{ $action_url }}">
+	<form class="form" action="{{ $action_url }}" method="Get">
 		<div class="input-group">
 			<input type="text" class="form-control" placeholder="{{ isset($placehlder) ? $placeholder : 'Cari' }}" aria-describedby="basic-addon1" name="q">
+			@foreach($qs as $key => $value )
+				<input type="hidden" name="{{$key}}" value="{{$value}}">
+			@endforeach
 			<span class="input-group-btn">
 		        <button class="btn btn-secondary" type="submit">
 					<i class="fa fa-search" aria-hidden="true"></i>
