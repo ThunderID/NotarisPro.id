@@ -57,8 +57,8 @@
                 </tr>
                 @endforelse
 			</tbody>
-            @include('components.paginate')
 		</table>
+        @include('components.paginate')
 	</div>
 
 <!-- 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2" style="height: calc(100% - 54px); background-color: #ddd; ">
