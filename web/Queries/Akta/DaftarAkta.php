@@ -54,7 +54,7 @@ class DaftarAkta
 			$queries['skip']	= 0;
 		}
 		
-		$model  				= $model->skip($queries['skip'])->take($queries['take'])->orderby('created_at', 'desc')->get(['judul', 'status', 'pemilik', 'penulis', 'created_at', 'updated_at'])->toArray();
+		$model  				= $model->skip($queries['skip'])->take($queries['take'])->get(['judul', 'status', 'pemilik', 'penulis', 'created_at', 'updated_at'])->toArray();
 
 		return 	$model;
 	}
