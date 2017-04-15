@@ -1,6 +1,3 @@
-<?php
-	// dd(Request::input());
-?>
 <div class="col-md-12">
 	@if(isset($page_attributes->paging))
 		{!! $page_attributes->paging->appends(Request::all())->render() !!}
