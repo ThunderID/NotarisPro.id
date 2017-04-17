@@ -11,6 +11,7 @@
 
         <!-- Font -->
         <link href="https://fonts.googleapis.com/css?family=Muli:200,400,600" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
 
         <!-- Themes -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">

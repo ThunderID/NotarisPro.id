@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Akta;
 
 use Illuminate\Http\Request;
 use TQueries\Akta\DaftarTemplateAkta as Query;
+use TQueries\Tags\TagService;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\helperController;
 
 class templateController extends Controller
 {
@@ -74,6 +76,9 @@ class templateController extends Controller
 		//get data from database
 		$this->page_datas->datas            = null;
 
+		// get list widgets
+		$this->page_datas->list_widgets 	= $this->list_widgets();
+		
 		//initialize view
 		$this->view                         = view('pages.akta.template.create');
 
@@ -135,5 +140,18 @@ class templateController extends Controller
 	public function destroy($id)
 	{
 		//
+	}
+
+	/**
+	 * function get list widgets on template create or edit
+	 */
+	private function list_widgets() 
+	{
+		$call 			= new TagService;
+		$list 			= $call::all();
+
+		$list 			= array_sort_recursive($list);
+
+		return $list;
 	}
 }

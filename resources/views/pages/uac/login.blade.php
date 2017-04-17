@@ -22,7 +22,7 @@
 
 					<div class="form-group">
 						<label for="email" class="sr-only">Email</label>
-						<input type="email" name="email" id="email" class="form-control" placeholder="Email Anda" required>
+						<input type="email" name="email" id="email" class="form-control set-focus" placeholder="Email Anda" required>
 					</div>
 					<div class="form-group">
 						<label for="password" class="sr-only">Password</label>
@@ -41,5 +41,8 @@
 @stop
 
 @push('scripts')  
+	$('document').ready( function() {
+		$('.set-focus').focus();
+	});
 @endpush 
 
