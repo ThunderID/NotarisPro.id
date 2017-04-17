@@ -76,25 +76,32 @@ class klienController extends Controller
      */
     public function store($id = null, Request $request)
     {
-        $input                              = $request->only(
-                                                    'nama', 
-                                                    'tempat_lahir', 
-                                                    'tanggal_lahir', 
-                                                    'pekerjaan', 
-                                                    'nomor_ktp', 
-                                                    'alamat'
-                                                );
+        try {
+            // get data
+            $input                              = $request->only(
+                                                        'nama', 
+                                                        'tempat_lahir', 
+                                                        'tanggal_lahir', 
+                                                        'pekerjaan', 
+                                                        'nomor_ktp', 
+                                                        'alamat'
+                                                    );
 
-        dd($input);
+            // dd($input);
 
-        // edit or new
-
-        // save
-
-        // is error
+            // save
+            $data                               = new \TCommands\Klien\SimpanKlien($input);
+            $data->handle();            
+        } catch (Exception $e) {
+            $this->page_attributes->msg['error']       = $e->getMesssage();
+        }
 
         //return view
-
+        if($id == null){
+            return $this->generateRedirect(route('klien.index'));
+        }else{
+            return $this->generateRedirect(route('klien.show', ['id' => $id]));
+        }
     }
 
     /**
