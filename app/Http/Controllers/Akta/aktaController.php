@@ -26,13 +26,24 @@ class aktaController extends Controller
 		$this->page_attributes->title		= 'Data Akta';
 
 		//filter&search
-        $query                             	= $this->getQueryString(['q','status', 'page']);
+        $query                             	= $this->getQueryString(['q', 'status', 'sort', 'page']);
         $query['per_page']                 	= (int)env('DATA_PERPAGE');
+        
+        // special treat judul
         if(isset($query['judul'])){
 	        $query['judul']					= $query['q'];
 			unset($query['q']);    	
         }
 
+        // special treat sort
+        if(isset($query['urutkan'])){
+	        try{
+				$sort 						= explode("-", $query['urutkan']);
+				$query['urutkan'] 			= [ $sort[0] => $sort[1]]; 
+			} catch (Exception $e) {
+	        	// display error?
+	        }
+        }
 
         /*
         //1. untuk menampilkan data dengan filter status

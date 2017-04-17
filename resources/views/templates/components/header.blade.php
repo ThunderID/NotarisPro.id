@@ -42,8 +42,8 @@
 					</div>
 				</div>				
 			</li>	
-			<li class="nav-item">
-				<a class="nav-link" href="#">Klien</a>
+			<li class="nav-item @yield('klien')">
+				<a class="nav-link" href="{{ route('klien.index') }}">Klien</a>
 			</li>	
 			<li class="nav-item">
 				<a class="nav-link" href="#">Billing</a>
@@ -57,7 +57,12 @@
 	<div class="collapse navbar-collapse justify-content-end" id="navbarCollapseAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuKantor" aria-haspopup="true" aria-expanded="false">{{TAuth::activeOffice()['kantor']['nama']}}</a>
+				<a class="nav-link" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuKantor" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-building" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
+					<span class="hidden-lg-down">
+						{{TAuth::activeOffice()['kantor']['nama']}}
+					</span>
+				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuKantor" style="left:66%">
 					@foreach(TAuth::loggedUser()['visas'] as $key => $value)
 						<a class="dropdown-item" href="{{ route('uac.office.activate', $value['id']) }}">{{$value['kantor']['nama']}}</a>
@@ -67,7 +72,8 @@
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('uac.logout.any')}}">
-					<i class="fa fa-power-off" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;Logout
+					<i class="fa fa-power-off" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
+					<span class="hidden-lg-down">Logout</span>
 				</a>
 			</li>			
 		</ul>

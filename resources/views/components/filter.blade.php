@@ -19,7 +19,7 @@
 		@foreach($lists as $key => $list)
 		<a href="
 			{{ route(Route::currentRouteName(), $data_qs) }}
-			{{ count(Request::all()) > 0 ? '&' : '' }}
+			{{ count(Request::all()) && $list != null> 0 ? '&' : '' }}
 			{{ $list != null ? $alias . '=' . $list : '' }}">
 			<li class="{{ Request::get($alias) == $list ? 'active' : '' }}">
 				{{ ucWords($key) }}

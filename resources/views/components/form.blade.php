@@ -29,21 +29,20 @@
 		required 	: no
 		value 		: string url form post 
 		description : this form will be send patch request to this url
-
 	3. 	data_id
-		required 	: yes
-		value 		: integer of edited data
-		description : id of edited data, if no data set null
+		required 	: no
+		value 		: integer data id 
+		description : this indicate edit operation or create new		
 	===================================================================
 	*/
 ?>
 
 
 @if($data_id != null)
-	<form action="{{ route($update_url, ['id' => $id]) }}" method="post">
+	<form action="{{ $update_url }}" method="post">
 		{{ method_field('PATCH') }}
 @else
-	<form action="{{ route($store_url) }}" method="post">
+	<form action="{{ $store_url }}" method="post">
 @endif
 
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">		

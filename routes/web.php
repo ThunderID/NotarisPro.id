@@ -11,8 +11,15 @@
 |
 */
 
+//paragraph things
+Route::get('/paragraph/buat',		['uses' => 'temporaryParagraphController@form', 		'as' => 'temp.graph.form']);
+Route::post('/paragraph/simpan',	['uses' => 'temporaryParagraphController@post', 		'as' => 'temp.graph.post']);
+Route::get('/paragraph/lihat',		['uses' => 'temporaryParagraphController@get',	 		'as' => 'temp.graph.get']);
+Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mentioning', 	'as' => 'temp.mention']);
+
 Route::get('/test', function () 
 {
+	return view('welcome');
 	$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 
 	$login 			= TAuth::login($credentials);
@@ -106,5 +113,18 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'jadwal.klien.update', //patch
 			'destroy' 	=> 'jadwal.klien.destroy' //post 
 		]]);	
+	});
+
+	//klien
+	Route::group(['namespace' => 'Klien\\'], function(){
+		Route::resource('/klien', 'klienController', ['names' => [
+			'index' 	=> 'klien.index', //get
+			'create'	=> 'klien.create', //get
+			'store' 	=> 'klien.store', //post
+			'show' 		=> 'klien.show', //get
+			'edit' 		=> 'klien.edit', //get
+			'update' 	=> 'klien.update', //patch
+			'destroy' 	=> 'klien.destroy' //post 
+		]]);
 	});
 });

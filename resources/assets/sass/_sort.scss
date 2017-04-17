@@ -1,0 +1,19 @@
+.sort{
+	padding-top: 1.5rem;
+	
+	.caption{
+		padding-right: 0.5rem;
+
+		h5{
+			padding-top: 10px;
+			font-size: 1rem;
+		}
+	}
+
+	.menu-dropdown{
+		.dropdown-item.active{
+			color: #0275d8;
+			background-color: white;
+		}
+	}
+}

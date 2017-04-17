@@ -32,14 +32,27 @@ class templateController extends Controller
         $query                             	= $this->getQueryString(['q','status', 'page']);
         $query['per_page']                 	= (int)env('DATA_PERPAGE');
 
+        // special treat judul
+        if(isset($query['judul'])){
+	        $query['judul']					= $query['q'];
+			unset($query['q']);    	
+        }
+
+        // special treat sort
+        if(isset($query['urutkan'])){
+	        try{
+				$sort 						= explode("-", $query['urutkan']);
+				$query['urutkan'] 			= [ $sort[0] => $sort[1]]; 
+			} catch (Exception $e) {
+	        	// display error?
+	        }
+        }
+
 
 		/*
 		//1. untuk menampilkan data dengan filter status
 		$filter['status']                   = 'draft';
-
-		//2. untuk menampilkan data dengan pencarian nama klien
-		$filter['klien']                    = 'Lili';
-
+		
 		//3. untuk menampilkan data dengan urutan judul
 		$filter['urutkan']                  = ['judul' => 'desc'];
 		//4. untuk menampilkan data dengan urutan status

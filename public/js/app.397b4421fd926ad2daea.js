@@ -8572,8 +8572,13 @@ module.exports = function(module) {
 /***/ "./resources/assets/js/app.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-// plugins
-__webpack_require__("./resources/assets/js/plugins.js");
+// PLUGINS
+// medium-editor
+window.Editor = __webpack_require__("./resources/assets/js/plugins/medium-editor/medium-editor.js");
+// tcmention
+window.Mention = __webpack_require__("./node_modules/medium-editor-tc-mention/lib/index.js").TCMention;
+// clickable table row
+__webpack_require__("./resources/assets/js/plugins/clickableTableRow.js");
 
 // app UI
 __webpack_require__("./resources/assets/js/appUI.js");
@@ -8647,13 +8652,12 @@ __webpack_require__("./resources/assets/js/appUI.js");
 
 /***/ }),
 
-/***/ "./resources/assets/js/plugins.js":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./resources/assets/js/plugins/clickableTableRow.js":
+/***/ (function(module, exports) {
 
-// medium-editor
-window.Editor = __webpack_require__("./resources/assets/js/plugins/medium-editor/medium-editor.js");
-// tcmention
-window.Mention = __webpack_require__("./node_modules/medium-editor-tc-mention/lib/index.js").TCMention;
+$('.clickable-row').click(function () {
+	window.location = $(this).data('href');
+});
 
 /***/ }),
 
