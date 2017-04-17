@@ -53,9 +53,11 @@
 		<body>
 				<form action="{{route('temp.graph.post')}}" method="POST">
 						@if(Session::has('texteddd'))
+							<textarea name="text" class="editable">
 								@foreach(Session::get('texteddd') as $key => $value)
-										<textarea name="text[]" class="editable">{{$value}}</textarea>
+										<p>{{$value}}</p>
 								@endforeach
+							</textarea>
 						@else
 						<textarea name="text" class="editable"></textarea>
 						@endif

@@ -48,32 +48,62 @@ class temporaryParagraphController extends Controller
 	{
 		if(Session::has('texteddd'))
 		{
-			$text 	= Session::get('texteddd');
+			$text 		= Session::get('texteddd');
+
+			$new_text 	= [];
 
 			foreach ($text as $key => $value) 
 			{
-				$new_text[$key] = $value;
 				$text_length 	= strlen($value);
+				$start_point 	= 0;
+				$end_point 		= min(72, strlen($value));
 
-				if($text_length%72!=0)
+				if($end_point < 72)
 				{
-					$minus 	= 72 - $text_length;
-					$left 	= ceil($minus/2);
-					$right 	= floor($minus/2);
+					$dots 				= 72 - $end_point;
+					$chunked 			= $value;
 
-					foreach (range(0, $left-1) as $key2) 
+					foreach (range(0, $dots-1) as $key2) 
 					{
-						$new_text[$key] = '-'.$new_text[$key];
-					}
-					foreach (range(0, $right-1) as $key2) 
-					{
-						$new_text[$key] = $new_text[$key].'-';
+						$chunked 		= $chunked.'-';
 					}
 
+					$new_text[$key][]	= $chunked;
 				}
+				else
+				{
+					//setiap karakter, 
+					do
+					{
+						//jika spasi ketemu, tandai titik akhir
+						if(isset($value[$end_point]) && str_is($value[$end_point], ' '))
+						{
 
-				$new_text[$key]	= str_replace('&nbsp;', '--', $new_text[$key]);
-				$new_text[$key]	= str_replace('<br>', '--', $new_text[$key]);
+							$chunked			=  substr($value, $start_point, $end_point - $start_point);
+							
+							$dots 				= 72 - ($end_point - $start_point);
+
+							if($dots > 0)
+							{
+								foreach (range(0, $dots-1) as $key2) 
+								{
+									$chunked 		= $chunked.'-';
+								}
+							}
+
+							$new_text[$key][]	= $chunked;
+							
+							$start_point 		= $end_point+1;
+							$end_point 			= $start_point + 72;
+						}
+						//jika titik akhir bukan spasi, mundur titik akhir sampai ketemu spasi
+						else
+						{
+							$end_point  = $end_point - 1;
+						}
+					}
+					while ($end_point < $text_length && $end_point >0); 
+				}
 			}
 		}
 
