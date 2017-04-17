@@ -19,6 +19,17 @@
 			])
 		</div>
 
+		<div class="panel">
+			@include('components.sidebarmenu',[
+				'title' => 'Menu',
+				'lists' => [
+					'tambah data' 	=> [
+						'url' 	=> route('klien.create'),
+						'icon' 	=> 'fa-plus'
+					]
+				]
+			])
+		</div>	
 
 	</div>
 
@@ -52,7 +63,7 @@
 					</thead>
 					<tbody>
 		                @forelse((array)$page_datas->datas as $key => $data)
-						<tr>
+						<tr class="clickable-row" data-href="{{ route('klien.show', ['id' => $data['id']]) }}">
 							<td>
 								{{ $data['nomor_ktp'] }}
 							</td>

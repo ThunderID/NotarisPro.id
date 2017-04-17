@@ -44,9 +44,28 @@ class klienController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id = null)
     {
-        //
+        if(!is_null($id)){
+            // init
+            $this->page_attributes->title   = 'Edit Data Klien';
+            $this->page_datas->id           = $id;          
+
+            //get data from database
+            
+        }else{
+            // init
+            $this->page_attributes->title   = 'Tambah Data Klien';
+            $this->page_datas->id           = null;          
+
+            $this->page_datas->datas        = null;
+        }
+
+        //initialize view
+        $this->view                         = view('pages.klien.create');
+
+        //function from parent to generate view
+        return $this->generateView();           
     }
 
     /**
