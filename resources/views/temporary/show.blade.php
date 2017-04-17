@@ -17,7 +17,9 @@
 		</head>
 		<body>
 			@foreach($new_text as $key => $value)
-				{{$value}}
+				@foreach($value as $lek => $text)
+					<p>{{$text}}</p>
+				@endforeach
 			@endforeach
 		</body>
 </html>
