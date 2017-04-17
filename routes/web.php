@@ -114,4 +114,17 @@ Route::group(['middleware' => ['authenticated']], function()
 			'destroy' 	=> 'jadwal.klien.destroy' //post 
 		]]);	
 	});
+
+	//klien
+	Route::group(['namespace' => 'Klien\\'], function(){
+		Route::resource('/klien', 'klienController', ['names' => [
+			'index' 	=> 'klien.index', //get
+			'create'	=> 'klien.create', //get
+			'store' 	=> 'klien.store', //post
+			'show' 		=> 'klien.show', //get
+			'edit' 		=> 'klien.edit', //get
+			'update' 	=> 'klien.update', //patch
+			'destroy' 	=> 'klien.destroy' //post 
+		]]);
+	});
 });
