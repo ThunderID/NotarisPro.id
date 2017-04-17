@@ -100,6 +100,27 @@ class DaftarKlien
 		{
 			$model  			= $model->nama($queries['nama']);
 		}
+
+		//3.sort nama
+		if(isset($queries['urutkan']))
+		{
+			foreach ($queries['urutkan'] as $key => $value) 
+			{
+				switch (strtolower($key)) 
+				{
+					case 'nama':
+						$model  			= $model->orderby('nama', $value);
+						break;
+					default:
+						$model  			= $model->orderby('nama', 'asc');
+						break;
+				}
+			}
+		}
+		else
+		{
+			$model  			= $model->orderby('nama', 'asc');
+		}
 		
 		return $model;
 	} 
