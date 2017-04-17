@@ -74,9 +74,27 @@ class klienController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id = null, Request $request)
     {
-        //
+        $input                              = $request->only(
+                                                    'nama', 
+                                                    'tempat_lahir', 
+                                                    'tanggal_lahir', 
+                                                    'pekerjaan', 
+                                                    'nomor_ktp', 
+                                                    'alamat'
+                                                );
+
+        dd($input);
+
+        // edit or new
+
+        // save
+
+        // is error
+
+        //return view
+
     }
 
     /**
