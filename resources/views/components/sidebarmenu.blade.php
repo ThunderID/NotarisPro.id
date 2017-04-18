@@ -3,7 +3,15 @@
 <div class="filter">
 	<ul>
 		@foreach($lists as $key => $list)
-		<a href="{{ $list['url'] }}">
+		<a 
+			href="{{ is_null($list['url']) ? 'javascript:void(0);' : $list['url'] }}" 
+			class="{{ isset($list['class']) ? $list['class'] : '' }}"
+			@if(isset($list['attr']))
+				@foreach($list['attr'] as $attr => $value)
+					{{$attr}} = {{$value}}
+				@endforeach
+			@endif
+		>
 			<li>
 				{{ ucWords($key) }}
 				<span class="indicator float-right">

@@ -24,8 +24,12 @@
 						'icon' 	=> 'fa-pencil'
 					],
 					'hapus data' 	=> [
-						'url' 	=> route('klien.destroy', ['id' => $page_datas->id]),
-						'icon' 	=> 'fa-trash'
+						'url' 	=>  null,
+						'icon' 	=> 'fa-trash',
+						'attr'	=> 	[
+										'data-toggle' 	=> 'modal',
+										'data-target' 	=> '#deleteModal'
+									]
 					]					
 				]
 			])
@@ -81,7 +85,9 @@
 			</div>
 		</div>
 	</div>	
-@stop
 
-@push('scripts')  
-@endpush 
+	@include('components.deleteModal',[
+		'title' => 'Menghapus Data Klien',
+		'route' => route('klien.destroy', ['id' => $page_datas->id])
+	])
+@stop

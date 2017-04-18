@@ -62,12 +62,16 @@
 					<span class="hidden-lg-down">
 						{{TAuth::activeOffice()['kantor']['nama']}}
 					</span>
+					<span class="hidden-md-up">
+						{{TAuth::activeOffice()['kantor']['nama']}}
+					</span>					
 				</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('uac.logout.any')}}">
 					<i class="fa fa-power-off" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
 					<span class="hidden-lg-down">Logout</span>
+					<span class="hidden-md-up">Logout</span>	
 				</a>
 			</li>			
 		</ul>

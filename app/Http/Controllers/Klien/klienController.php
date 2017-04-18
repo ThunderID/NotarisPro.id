@@ -163,6 +163,17 @@ class klienController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // cek apa password benar
+
+        // hapus
+        try {
+            $klien                                      = new TCommands\Klien\HapusKlien($id);
+            $klien                                      = $klien->handle();
+        } catch (Exception $e) {
+            $this->page_attributes->msg['error']        = $e->getMesssage();
+        }            
+
+        //return view
+        return $this->generateRedirect(route('klien.index'));
     }
 }
