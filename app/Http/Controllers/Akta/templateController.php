@@ -81,13 +81,21 @@ class templateController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
+	public function create($id = null)
 	{
-		// init
-		$this->page_attributes->title       = 'Buat Template';
+		if (!is_null($id)) 
+		{
+			$this->page_attributes->title       = 'Edit Template';
 
-		//get data from database
-		$this->page_datas->datas            = null;
+			$this->page_datas->id 				= $id;
+		}
+		else 
+		{
+			$this->page_attributes->title       = 'Tambah Template';
+
+			$this->page_datas->datas            = null;
+			$this->page_datas->id 				= null;
+		}
 
 		// get list widgets
 		$this->page_datas->list_widgets 	= $this->list_widgets();
