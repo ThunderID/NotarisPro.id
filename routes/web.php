@@ -19,6 +19,11 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
+	$klien 			= new TCommands\Klien\HapusKlien('80B2FA4F-12A4-4947-9059-EDA3C2E47EF1');
+	$klien 			= $klien->handle();
+	dd($klien);
+	$terjemahan 	= TQueries\Helpers\DeskripsiTanggalService::displayHariIni();
+	dd($terjemahan); 
 	return view('welcome');
 	$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 
