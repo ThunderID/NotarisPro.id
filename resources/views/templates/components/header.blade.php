@@ -26,7 +26,7 @@
 				<div class="dropdown">
 					<a class="nav-link @yield('akta')" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuAkta" aria-haspopup="true" aria-expanded="false">Akta</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuAkta">
-						<a class="dropdown-item @yield('buat-akta')" href="{{ route('akta.akta.create') }}">Buat Akta</a>
+						<a class="dropdown-item @yield('buat-akta')" href="{{ route('akta.akta.choose.template') }}">Buat Akta</a>
 						<a class="dropdown-item @yield('data-akta')" href="{{ route('akta.akta.index') }}">Data Akta</a>
 						<a class="dropdown-item @yield('buat-template')" href="{{ route('akta.template.create') }}">Buat Template</a>
 						<a class="dropdown-item @yield('template-akta')" href="{{ route('akta.template.index') }}">Template Akta</a>
