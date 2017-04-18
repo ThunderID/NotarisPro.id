@@ -97,5 +97,5 @@ class Controller extends BaseController
 		}
 
 		return $result;
-	}	
+	}
 }
