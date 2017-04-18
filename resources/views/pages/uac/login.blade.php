@@ -16,7 +16,7 @@
 				@include('components.alertbox')
 				
 				@component('components.form', [
-					'store_url' => 'uac.login.post',
+					'store_url' => route('uac.login.post'),
 					'data_id' 	=> null
 				])
 
