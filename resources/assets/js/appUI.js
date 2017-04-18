@@ -3,9 +3,10 @@
 		list = '';
 
 		for (var i in data) {
-			link = "<a href='#' class='list-group-item list-group-item-action p-1'>" +data[i]+ "</a>";
+			link = "<a href='#' class='list-group-item list-group-item-action p-1 link-mention'>" +data[i]+ "</a>";
 			list += link;
 		}
+
 		return list;
 	},
 	searchMention: function (param) {
@@ -44,14 +45,18 @@
 			targetBlank: true,
 			extensions: {
 				mention: new window.Mention({
-					tagName: "b",
+					extraPanelClassName: 'list-group',
+					tagName: 'b',
 					renderPanelContent: function (panelEl, currentMentionText, selectMentionCallback) {
-						$(panelEl).addClass('text-left').addClass('list-group');
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if ([this.mention].length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
 							$(panelEl).html(listMention);
 						}
+
+						$('.link-mention').on('click', function(el) {
+							selectMentionCallback($(this).html());
+						});
 					},
 					activeTriggerList: ["@"],
 				})
