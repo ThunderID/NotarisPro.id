@@ -32,17 +32,21 @@
 	3. 	data_id
 		required 	: no
 		value 		: integer data id 
-		description : this indicate edit operation or create new		
+		description : this indicate edit operation or create new	
+	4. 	class
+		required 	: no
+		value 		: string of html class 
+		description : html class 				
 	===================================================================
 	*/
 ?>
 
 
 @if($data_id != null)
-	<form action="{{ $update_url }}" method="post">
+	<form action="{{ $update_url }}" class="{{ $class }}" method="post">
 		{{ method_field('PATCH') }}
 @else
-	<form action="{{ $store_url }}" method="post">
+	<form action="{{ $store_url }}" class="{{ $class }}" method="post">
 @endif
 
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">		
