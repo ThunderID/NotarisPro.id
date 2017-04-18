@@ -43,10 +43,10 @@
 
 
 @if($data_id != null)
-	<form action="{{ $update_url }}" class="{{ $class }}" method="post">
+	<form action="{{ $update_url }}" class="{{ isset($class) ? $class : '' }}" method="post">
 		{{ method_field('PATCH') }}
 @else
-	<form action="{{ $store_url }}" class="{{ $class }}" method="post">
+	<form action="{{ $store_url }}" class="{{ isset($class) ? $class : '' }}" method="post">
 @endif
 
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">		
