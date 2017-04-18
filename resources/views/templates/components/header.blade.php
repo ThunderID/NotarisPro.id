@@ -88,9 +88,9 @@
 			'hide_buttons'	=> true
 		]
 	])
-	<div id="list-koperasi">
+	<div id="list-organisasi">
 		<div class="form-group has-feedback">
-			<input type="text" class="search form-control" placeholder="cari nama koperasi">
+			<input type="text" class="search form-control" placeholder="cari nama organisasi">
 			<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
 		</div>
 		<ul class="list-group list">

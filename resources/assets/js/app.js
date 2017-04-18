@@ -5,7 +5,10 @@ window.Editor = require ('./plugins/medium-editor/medium-editor.js');
 window.Mention = require("medium-editor-tc-mention").TCMention;
 // clickable table row
 require('./plugins/clickableTableRow');
+// plugin search list
+window.list = require('./plugins/list-js/list.js');
 
 
 // app UI
 require ('./appUI');
+;window.listSearchUI.init();
