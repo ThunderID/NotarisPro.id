@@ -52,7 +52,7 @@ class klienController extends Controller
             $this->page_datas->id           = $id;          
 
             //get data from database
-            
+            $this->page_datas->datas        = $this->query->detailed($id);
         }else{
             // init
             $this->page_attributes->title   = 'Tambah Data Klien';
@@ -87,8 +87,11 @@ class klienController extends Controller
                                                         'alamat'
                                                     );
 
-            // dd($input);
-
+            //is edit?
+            if(!is_null($id)){
+                $input['id']                     = $id;
+            }
+            
             // save
             $data                               = new \TCommands\Klien\SimpanKlien($input);
             $data->handle();            
@@ -137,7 +140,7 @@ class klienController extends Controller
      */
     public function edit($id)
     {
-        //
+        return $this->create($id);
     }
 
     /**
@@ -149,7 +152,7 @@ class klienController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->store($id, $request);
     }
 
     /**

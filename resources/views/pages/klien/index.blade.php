@@ -68,13 +68,13 @@
 								{{ $data['nomor_ktp'] }}
 							</td>
 							<td>
-								{{ $data['nama'] }}
+								{{ ucWords($data['nama']) }}
 							</td>
 							<td>
-								{{ $data['tempat_lahir'] }} , {{ $data['tanggal_lahir'] }} 
+								{{ ucWords($data['tempat_lahir']) }} , {{ $data['tanggal_lahir'] }} 
 							</td>
 							<td>
-								{{ $data['pekerjaan'] }}
+								{{ ucWords($data['pekerjaan']) }}
 							</td>					
 						</tr>
 		                @empty

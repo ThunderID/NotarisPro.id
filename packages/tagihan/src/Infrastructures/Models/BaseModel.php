@@ -5,7 +5,7 @@ namespace TTagihan\Infrastructures\Models;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 use Illuminate\Support\MessageBag;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Validator, Exception;
 
 /**
