@@ -70,7 +70,7 @@
 					</thead>
 					<tbody>
 		                @forelse((array)$page_datas->datas as $key => $data)
-						<tr>
+						<tr class="clickable-row" data-href="{{ route('akta.template.show', ['id' => $data['id']]) }}">
 							<td>
 								<i class="fa fa-file"></i>
 								&nbsp;
