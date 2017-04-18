@@ -27,7 +27,7 @@
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 						<ul class="nav menu-content justify-content-end">
-							<li class="nav-item">
+							{{-- <li class="nav-item">
 								<span class="nav-link">Zoom</span>
 							</li>
 							<li class="nav-item">
@@ -39,7 +39,7 @@
 									<a class="dropdown-item" href="#">A4</a>
 									<a class="dropdown-item" href="#">F4</a>
 								</div>
-							</li>
+							</li> --}}
 							<li class="nav-item">
 								<a class="nav-link" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
 							</li>
