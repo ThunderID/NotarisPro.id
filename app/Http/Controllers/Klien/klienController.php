@@ -7,6 +7,8 @@ use TQueries\Klien\DaftarKlien as Query;
 
 use App\Http\Controllers\Controller;
 
+use Exception;
+
 class klienController extends Controller
 {
     public function __construct(Query $query)
@@ -91,12 +93,12 @@ class klienController extends Controller
             if(!is_null($id)){
                 $input['id']                     = $id;
             }
-            
+
             // save
-            $data                               = new \TCommands\Klien\SimpanKlien($input);
+            $data                               = new \TCommands\Klien\SimpanKlien([]);
             $data->handle();            
         } catch (Exception $e) {
-            $this->page_attributes->msg['error']       = $e->getMesssage();
+            $this->page_attributes->msg['error']       = $e->getMessage();
         }
 
         //return view
