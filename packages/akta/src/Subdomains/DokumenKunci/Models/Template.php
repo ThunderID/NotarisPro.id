@@ -55,7 +55,7 @@ class Template extends BaseModel
 	 */
 	protected $rules				=	[
 											'judul'					=> 'required',
-											'paragraf.*.konten'		=> 'required',
+											// 'paragraf.*.konten'		=> '',
 											'status'				=> 'in:draft,publish',
 										];
 	/**

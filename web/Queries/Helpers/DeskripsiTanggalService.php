@@ -18,25 +18,55 @@ class DeskripsiTanggalService
 	 *
 	 * @return array $nav
 	 */
-	public static function displayHariIni()
+	public static function displayHariIni($tanggal = null)
 	{
+		if(is_null($tanggal))
+		{
+			$tanggal 	= date('d/m/Y');
+		}
+		
 		//===================================
 		//Buat daftar nama bulan
-		$bulan 	= ["January","Pebruary","Maret","April","Mei","Juni","Juli","Agustus","September","Okotober","Nopember","Desember"];
+		$bulan 		= ["January","Pebruary","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"];
 
 		//Buat daftar nama hari dalam bahasa indonesia
-		$hari  	= ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+		$hari  		= ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
 
-		$today	= Carbon::now();
-		$month 	= intval(date('m')) - 1;
+		$today		= Carbon::createFromFormat('d/m/Y', $tanggal);
+		$month 		= intval($today->format('m')) - 1;
 
-		$days  	= date('w');
+		$days  		= $today->format('w');
 
-		$tg_angka 	= date('d');
+		$tg_angka 	= $today->format('d');
 
-		$year  		= date('Y');
+		$year  		= $today->format('Y');
 
 		return $hari[$days].' Tanggal '.$tg_angka.' ('.self::terbilang($tg_angka).' ) '.$bulan[$month].' '.$year. ' ('.self::terbilang($year).' )';
+		//===================================
+	}
+
+	/**
+	 * Membuat object asset baru dari data array
+	 *
+	 * @return array $nav
+	 */
+	public static function convertBulan($tanggal = null)
+	{
+		if(is_null($tanggal))
+		{
+			$tanggal 	= date('d/m/Y');
+		}
+		
+		//===================================
+		//Buat daftar nama bulan
+		$bulan 	= ["January","Pebruary","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"];
+
+		$date	= Carbon::createFromFormat('d/m/Y', $tanggal);
+		$month 		= intval($today->format('m')) - 1;
+		$tg_angka 	= $today->format('d');
+		$year  		= $today->format('Y');
+
+		return $tg_angka.' '.$bulan[$month].' '.$year;
 		//===================================
 	}
 
