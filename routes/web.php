@@ -93,6 +93,8 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.akta.update', //patch
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
+		// choose template for akta
+		Route::get('/akta/akta/pilih/template', ['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 	});
 
 	// Jadwal

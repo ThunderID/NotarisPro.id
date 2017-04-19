@@ -24,8 +24,12 @@
 						'icon' 	=> 'fa-pencil'
 					],
 					'hapus data' 	=> [
-						'url' 	=> route('klien.destroy', ['id' => $page_datas->id]),
-						'icon' 	=> 'fa-trash'
+						'url' 	=>  null,
+						'icon' 	=> 'fa-trash',
+						'attr'	=> 	[
+										'data-toggle' 	=> 'modal',
+										'data-target' 	=> '#deleteModal'
+									]
 					]					
 				]
 			])
@@ -37,6 +41,11 @@
 				<h4 class="title">{{$page_attributes->title}}</h4>		
 			</div>
 		</div>	
+		<div class="row">
+			<div class="col-12">
+				@include('components.alertbox')
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-12">
 				<table class="table">
@@ -81,7 +90,9 @@
 			</div>
 		</div>
 	</div>	
-@stop
 
-@push('scripts')  
-@endpush 
+	@include('components.deleteModal',[
+		'title' => 'Menghapus Data Klien',
+		'route' => route('klien.destroy', ['id' => $page_datas->id])
+	])
+@stop

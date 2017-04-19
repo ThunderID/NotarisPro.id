@@ -26,7 +26,7 @@
 				<div class="dropdown">
 					<a class="nav-link @yield('akta')" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuAkta" aria-haspopup="true" aria-expanded="false">Akta</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuAkta">
-						<a class="dropdown-item @yield('buat-akta')" href="{{ route('akta.akta.create') }}">Buat Akta</a>
+						<a class="dropdown-item @yield('buat-akta')" href="{{ route('akta.akta.choose.template') }}">Buat Akta</a>
 						<a class="dropdown-item @yield('data-akta')" href="{{ route('akta.akta.index') }}">Data Akta</a>
 						<a class="dropdown-item @yield('buat-template')" href="{{ route('akta.template.create') }}">Buat Template</a>
 						<a class="dropdown-item @yield('template-akta')" href="{{ route('akta.template.index') }}">Template Akta</a>
@@ -57,26 +57,59 @@
 	<div class="collapse navbar-collapse justify-content-end" id="navbarCollapseAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuKantor" aria-haspopup="true" aria-expanded="false">
+				<a class="nav-link" href="javascript:void(0);"  data-toggle="modal" data-target="#modal-change-org">
 					<i class="fa fa-building" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
 					<span class="hidden-lg-down">
 						{{TAuth::activeOffice()['kantor']['nama']}}
 					</span>
+					<span class="hidden-md-up">
+						{{TAuth::activeOffice()['kantor']['nama']}}
+					</span>					
 				</a>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuKantor" style="left:66%">
-					@foreach(TAuth::loggedUser()['visas'] as $key => $value)
-						<a class="dropdown-item" href="{{ route('uac.office.activate', $value['id']) }}">{{$value['kantor']['nama']}}</a>
-					@endforeach
-				</div>
-				<!-- <a class="nav-link" href="#">Organisasi</a> -->
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('uac.logout.any')}}">
 					<i class="fa fa-power-off" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
 					<span class="hidden-lg-down">Logout</span>
+					<span class="hidden-md-up">Logout</span>	
 				</a>
 			</li>			
 		</ul>
 	</div>
 
 </nav>
+
+
+{{-- modal change org --}}
+@component('components.modal', [
+		'id'			=> 'modal-change-org',
+		'title'			=> 'Pilih Organisasi',
+		'settings'		=> [
+			'hide_buttons'	=> true
+		]
+	])
+	<div id="list-organisasi">
+		<div class="form-group has-feedback">
+			<input type="text" class="search form-control" placeholder="cari nama organisasi">
+			<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+		</div>
+		<ul class="list-group list">
+			@foreach(TAuth::loggedUser()['visas'] as $key => $value)			
+				<li class="list-group-item">
+					<a class="name" href="{{ route('uac.office.activate', $value['id']) }}" ><i class="fa fa-building"></i>&nbsp;&nbsp; {{ $value['kantor']['nama'] }}</a>
+				</li>
+			@endforeach
+		</ul>
+
+		<hr/>
+
+		<div style="float: left;">
+			<p class="text-left">
+				<span class="label">Aktif : &nbsp;&nbsp;{{ TAuth::activeOffice()['kantor']['nama'] }}
+				</span>
+			</p>
+		</div>		
+	</div>
+	
+@endcomponent
+
