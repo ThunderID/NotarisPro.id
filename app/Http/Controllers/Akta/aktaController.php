@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Akta;
 
 use App\Http\Controllers\Controller;
+
 use TQueries\Akta\DaftarAkta as Query;
+use TQueries\Akta\DaftarTemplateAkta;
+use TQueries\Tags\TagService;
 
 use Request;
 
@@ -88,6 +91,23 @@ class aktaController extends Controller
 		//get data from database
 		$this->page_datas->datas            = null;
 
+		if (Request::has('template_id'))
+		{
+			$template_id 					= Request::get('template_id'); 
+		}
+		else 
+		{
+			$template_id 					= null;
+		}
+
+		$call 								= new DaftarTemplateAkta;
+
+		$filter         					= ['status' => 'publish'];
+		$list_template 						= $call->get($filter);
+
+		$this->page_datas->list_widgets 	= $this->list_widgets();
+		$this->page_datas->template_id 		= $template_id;
+
 		//initialize view
 		$this->view                         = view('pages.akta.akta.create');
 
@@ -149,5 +169,41 @@ class aktaController extends Controller
 	public function destroy($id)
 	{
 		//
+	}
+
+	/**
+	 * Function to choose template from new akta
+	 */
+	public function choose_template()
+	{
+		// init
+		$this->page_attributes->title       = 'Pilih Template';
+
+		$call 								= new DaftarTemplateAkta;
+
+		$filter         					= ['status' => 'publish'];
+		$list_template 						= $call->get($filter);
+
+		//get data from database
+		$this->page_datas->datas            = $list_template;
+
+		//initialize view
+		$this->view                         = view('pages.akta.akta.choosetemplate');
+
+		//function from parent to generate view
+		return $this->generateView();  
+	}
+
+	/**
+	 * function get list widgets on template create or edit
+	 */
+	private function list_widgets() 
+	{
+		$call 			= new TagService;
+		$list 			= $call::all();
+
+		$list 			= array_sort_recursive($list);
+
+		return $list;
 	}
 }

@@ -48,7 +48,6 @@ class templateController extends Controller
 	        }
         }
 
-
 		/*
 		//1. untuk menampilkan data dengan filter status
 		$filter['status']                   = 'draft';
