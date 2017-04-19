@@ -26,6 +26,8 @@
             "TKlien\\": "packages/klien/src/",
             "TJadwal\\": "packages/jadwal/src/",
             "TTagihan\\": "packages/tagihan/src/",
+            "TTerritorial\\": "packages/territorial/src/",
+            "TKantor\\": "packages/kantor/src/",
             "TCommands\\": "web/Commands",
             "TQueries\\": "web/Queries",
             "TFacades\\": "web/Facades",
