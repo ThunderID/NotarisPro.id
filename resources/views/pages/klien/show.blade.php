@@ -43,6 +43,11 @@
 		</div>	
 		<div class="row">
 			<div class="col-12">
+				@include('components.alertbox')
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
 				<table class="table">
 					<tbody>
 						<tr>

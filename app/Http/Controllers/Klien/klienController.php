@@ -101,8 +101,10 @@ class klienController extends Controller
 
         //return view
         if($id == null){
+            $this->page_attributes->msg['success']         = ['Data klien telah ditambahkan'];
             return $this->generateRedirect(route('klien.index'));
         }else{
+            $this->page_attributes->msg['success']         = ['Data klien telah diperbarui'];
             return $this->generateRedirect(route('klien.show', ['id' => $id]));
         }
     }
@@ -167,11 +169,13 @@ class klienController extends Controller
 
         // hapus
         try {
-            $klien                                      = new TCommands\Klien\HapusKlien($id);
+            $klien                                      = new \TCommands\Klien\HapusKlien($id);
             $klien                                      = $klien->handle();
         } catch (Exception $e) {
             $this->page_attributes->msg['error']        = $e->getMesssage();
         }            
+
+        $this->page_attributes->msg['success']         = ['Data klien telah dihapus'];
 
         //return view
         return $this->generateRedirect(route('klien.index'));

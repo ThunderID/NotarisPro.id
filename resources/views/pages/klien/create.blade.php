@@ -26,6 +26,11 @@
 							<h4 class="title" style="margin-left: 0px;">{{$page_attributes->title}}</h4>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-12">
+							@include('components.alertbox')
+						</div>
+					</div>					
 
 					<fieldset class="form-group">
 						<div class="row">
