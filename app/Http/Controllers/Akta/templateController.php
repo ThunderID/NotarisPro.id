@@ -84,15 +84,15 @@ class templateController extends Controller
 	{
 		if (!is_null($id)) 
 		{
-			$this->page_attributes->title       = 'Edit Template';
+			$this->page_attributes->title		= 'Edit Template';
 
 			$this->page_datas->id 				= $id;
 		}
 		else 
 		{
-			$this->page_attributes->title       = 'Tambah Template';
+			$this->page_attributes->title		= 'Tambah Template';
 
-			$this->page_datas->datas            = null;
+			$this->page_datas->datas			= null;
 			$this->page_datas->id 				= null;
 		}
 
@@ -100,7 +100,7 @@ class templateController extends Controller
 		$this->page_datas->list_widgets 	= $this->list_widgets();
 		
 		//initialize view
-		$this->view                         = view('pages.akta.template.create');
+		$this->view							= view('pages.akta.template.create');
 
 		//function from parent to generate view
 		return $this->generateView();  
@@ -159,7 +159,7 @@ class templateController extends Controller
 			}
 
 			$input['judul']							= $input['title'];
-
+DD($input);
 			// save
 			$data                               	= new \TCommands\Akta\DraftingTemplateAkta($input);
 			$data->handle();
@@ -176,7 +176,18 @@ class templateController extends Controller
 	 */
 	public function show($id)
 	{
-		//
+		$template         = new \TQueries\Akta\DaftarTemplateAkta;
+		$template         = $template->detailed($id);
+
+		$this->page_attributes->title			= $template['judul'];
+
+		$this->page_datas->datas['template']	= $template;
+
+		//initialize view
+		$this->view							= view('pages.akta.template.show');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 
 	/**
