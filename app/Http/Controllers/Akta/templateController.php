@@ -131,7 +131,8 @@ class templateController extends Controller
 				$input['paragraf'][$key]['konten']	= $value;
 				
 				$pattern_2 = '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
-				if(preg_match($pattern_2, $value, $matches)) 
+		
+				if(preg_match_all($pattern_2, $value, $matches)) 
 				{
 					if(!isset($input['mentionable']))
 					{
@@ -144,22 +145,24 @@ class templateController extends Controller
 							$input['mentionable'][]	= $matches[1];
 						}
 					}
-					elseif(!in_array($matches[1], $input['mentionable']))
+					elseif(!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
 					{
-						if(is_array($matches[1]))
-						{
-							$input['mentionable']	= array_merge($input['mentionable'], $matches[1]);
-						}
-						else
-						{
-							$input['mentionable'][]	= $matches[1];
-						}
+						$input['mentionable'][]	= $matches[1];
+					}
+					elseif(is_array($matches['1']))
+					{
+						$input['mentionable']	= 
+						array_merge(
+							array_intersect($input['mentionable'], $matches[1]),	//         2   4
+							array_diff($input['mentionable'], $matches[1]),			//       1   3
+							array_diff($matches[1], $input['mentionable'])			//               5 6
+						);															//  $u = 1 2 3 4 5 6
 					}
 				}
 			}
 
 			$input['judul']							= $input['title'];
-DD($input);
+
 			// save
 			$data                               	= new \TCommands\Akta\DraftingTemplateAkta($input);
 			$data->handle();
