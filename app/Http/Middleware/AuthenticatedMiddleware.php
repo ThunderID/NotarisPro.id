@@ -8,9 +8,11 @@ class AuthenticatedMiddleware
 {
 	public function handle($request, Closure $next)
 	{
-		$e 		= TAuth::isLogged();
-
-		if($e instanceOf Exception)
+		try 
+		{
+			TAuth::isLogged();
+		} 
+		catch (Exception $e) 
 		{
 			if(is_array($e->getMessage()))
 			{

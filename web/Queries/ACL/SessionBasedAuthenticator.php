@@ -62,7 +62,7 @@ class SessionBasedAuthenticator
 	 */
 	public function isLogged()
 	{
-		$user 	= $this->model->findorfail(Session::get('logged.id'));
+		$user 	= $this->model->id(Session::get('logged.id'))->first();
 
 		if(!$user)
 		{
