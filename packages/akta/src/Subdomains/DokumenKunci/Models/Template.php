@@ -47,6 +47,7 @@ class Template extends BaseModel
 											'pemilik'				,
 											'penulis'				,
 											'status'				,
+											'mentionable'			,
 										];
 	/**
 	 * Basic rule of database
