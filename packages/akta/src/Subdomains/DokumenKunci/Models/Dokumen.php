@@ -48,6 +48,7 @@ class Dokumen extends BaseModel
 											// 'versi'					,
 											'pemilik'				,
 											'penulis'				,
+											'mentionable'			,
 										];
 	/**
 	 * Basic rule of database

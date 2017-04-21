@@ -138,11 +138,21 @@ class templateController extends Controller
 					{
 						if(is_array($matches[1]))
 						{
-							$input['mentionable']	= $matches[1];
+							foreach ($matches[1] as $keyx => $valuex) 
+							{
+								if(str_is('@*', $valuex))
+								{
+									$input['mentionable'][]	= $valuex;
+								}
+							}
 						}
 						else
 						{
-							$input['mentionable'][]	= $matches[1];
+							if(str_is('@*', $valuex))
+							{
+								$input['mentionable'][]	= $matches[1];
+							}
+								
 						}
 					}
 					elseif(!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
@@ -151,11 +161,19 @@ class templateController extends Controller
 					}
 					elseif(is_array($matches['1']))
 					{
+						$new_array 				= [];
+						foreach ($matches[1] as $keyx => $valuex) 
+						{
+							if(str_is('@*', $valuex))
+							{
+								$new_array[]	= $valuex;
+							}
+						}
 						$input['mentionable']	= 
 						array_merge(
-							array_intersect($input['mentionable'], $matches[1]),	//         2   4
-							array_diff($input['mentionable'], $matches[1]),			//       1   3
-							array_diff($matches[1], $input['mentionable'])			//               5 6
+							array_intersect($input['mentionable'], $new_array),		//         2   4
+							array_diff($input['mentionable'], $new_array),			//       1   3
+							array_diff($new_array, $input['mentionable'])			//               5 6
 						);															//  $u = 1 2 3 4 5 6
 					}
 				}
@@ -169,6 +187,15 @@ class templateController extends Controller
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
+
+		//return view
+        if($id == null){
+            $this->page_attributes->msg['success']         = ['Data template telah ditambahkan'];
+            return $this->generateRedirect(route('akta.template.index'));
+        }else{
+            $this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
+            return $this->generateRedirect(route('akta.template.show', ['id' => $id]));
+        }
 	}
 
 	/**

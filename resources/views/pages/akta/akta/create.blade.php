@@ -14,9 +14,9 @@
 
 @section('content')
 	@component('components.form', [ 
-		'data_id'		=> $page_datas->id,
-		'store_url' 	=> route('akta.akta.store'), 
-		'update_url' 	=> route('akta.akta.update', ['id', $page_datas->id]), 
+		'data_id'		=> $page_datas->akta_id,
+		'store_url' 	=> route('akta.akta.store', ['template_id' => $page_datas->template_id]), 
+		'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 		'class'			=> 'mb-0'
 	])
 		<div class="row bg-faded">

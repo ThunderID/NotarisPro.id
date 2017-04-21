@@ -74,10 +74,10 @@ class DraftingAkta
 			$this->akta['penulis']['nama'] 				= TAuth::loggedUser()['nama'];
 
 			//3. simpan value yang ada
-			$akta 			= $akta->fill($this->akta);
+			$akta 					= $akta->fill($this->akta);
 
 			//4. set status dokumen
-			$akta->status 	= 'draft';
+			$akta->status 			= 'draft';
 
 			//5. simpan dokumen
 			$akta->save();
