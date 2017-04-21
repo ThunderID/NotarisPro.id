@@ -83,14 +83,22 @@ class aktaController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
+	public function create($id = null)
 	{
 		// init
 		$this->page_attributes->title       = 'Buat Akta';
 
-		//get data from database
-		$this->page_datas->datas            = null;
+		// check id
+		if (!is_null($id)) 
+		{
+			$this->page_datas->id 				= $id;
+		}
+		else 
+		{
+			$this->page_datas->id 				= null;
+		}
 
+		// check template id
 		if (Request::has('template_id'))
 		{
 			$template_id 					= Request::get('template_id'); 
@@ -100,13 +108,15 @@ class aktaController extends Controller
 			$template_id 					= null;
 		}
 
-		$call 								= new DaftarTemplateAkta;
+		//get data from database
+		$this->page_datas->datas            = null;
 
+		$call 								= new DaftarTemplateAkta;
 		$filter         					= ['status' => 'publish'];
 		$list_template 						= $call->get($filter);
 
-		$this->page_datas->list_widgets 	= $this->list_widgets();
 		$this->page_datas->template_id 		= $template_id;
+		$this->page_datas->datas			= $call->detailed($template_id);
 
 		//initialize view
 		$this->view                         = view('pages.akta.akta.create');
@@ -134,7 +144,18 @@ class aktaController extends Controller
 	 */
 	public function show($id)
 	{
-		//
+		$akta        					 	= new Query;
+		$akta         						= $akta->detailed($id);
+
+		$this->page_attributes->title		= $akta['judul'];
+
+		$this->page_datas->datas['akta']	= $akta;
+
+		//initialize view
+		$this->view							= view('pages.akta.akta.show');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 
 	/**

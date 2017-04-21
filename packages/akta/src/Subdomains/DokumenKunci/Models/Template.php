@@ -47,6 +47,7 @@ class Template extends BaseModel
 											'pemilik'				,
 											'penulis'				,
 											'status'				,
+											'mentionable'			,
 										];
 	/**
 	 * Basic rule of database
@@ -55,7 +56,7 @@ class Template extends BaseModel
 	 */
 	protected $rules				=	[
 											'judul'					=> 'required',
-											'paragraf.*.konten'		=> 'required',
+											// 'paragraf.*.konten'		=> '',
 											'status'				=> 'in:draft,publish',
 										];
 	/**

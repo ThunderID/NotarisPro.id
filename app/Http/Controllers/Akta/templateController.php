@@ -29,24 +29,24 @@ class templateController extends Controller
 		$this->page_attributes->title       = 'Template Akta';
 
 		//filter&search
-        $query                             	= $this->getQueryString(['q','status', 'page']);
-        $query['per_page']                 	= (int)env('DATA_PERPAGE');
+		$query                             	= $this->getQueryString(['q','status', 'page']);
+		$query['per_page']                 	= (int)env('DATA_PERPAGE');
 
-        // special treat judul
-        if(isset($query['judul'])){
-	        $query['judul']					= $query['q'];
+		// special treat judul
+		if(isset($query['judul'])){
+			$query['judul']					= $query['q'];
 			unset($query['q']);    	
-        }
+		}
 
-        // special treat sort
-        if(isset($query['urutkan'])){
-	        try{
+		// special treat sort
+		if(isset($query['urutkan'])){
+			try{
 				$sort 						= explode("-", $query['urutkan']);
 				$query['urutkan'] 			= [ $sort[0] => $sort[1]]; 
 			} catch (Exception $e) {
-	        	// display error?
-	        }
-        }
+				// display error?
+			}
+		}
 
 		/*
 		//1. untuk menampilkan data dengan filter status
@@ -84,15 +84,15 @@ class templateController extends Controller
 	{
 		if (!is_null($id)) 
 		{
-			$this->page_attributes->title       = 'Edit Template';
+			$this->page_attributes->title		= 'Edit Template';
 
 			$this->page_datas->id 				= $id;
 		}
 		else 
 		{
-			$this->page_attributes->title       = 'Tambah Template';
+			$this->page_attributes->title		= 'Tambah Template';
 
-			$this->page_datas->datas            = null;
+			$this->page_datas->datas			= null;
 			$this->page_datas->id 				= null;
 		}
 
@@ -100,7 +100,7 @@ class templateController extends Controller
 		$this->page_datas->list_widgets 	= $this->list_widgets();
 		
 		//initialize view
-		$this->view                         = view('pages.akta.template.create');
+		$this->view							= view('pages.akta.template.create');
 
 		//function from parent to generate view
 		return $this->generateView();  
@@ -115,6 +115,60 @@ class templateController extends Controller
 	public function store(Request $request)
 	{
 		//
+		 try {
+			// get data
+			$input		= $request->only(
+									'title', 
+									'template'
+								);
+
+			$pattern = "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
+			// change key index like 'paragraph[*]'
+
+			foreach ($out[0] as $key => $value) 
+			{
+				$input['paragraf'][$key]['konten']	= $value;
+				
+				$pattern_2 = '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
+		
+				if(preg_match_all($pattern_2, $value, $matches)) 
+				{
+					if(!isset($input['mentionable']))
+					{
+						if(is_array($matches[1]))
+						{
+							$input['mentionable']	= $matches[1];
+						}
+						else
+						{
+							$input['mentionable'][]	= $matches[1];
+						}
+					}
+					elseif(!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
+					{
+						$input['mentionable'][]	= $matches[1];
+					}
+					elseif(is_array($matches['1']))
+					{
+						$input['mentionable']	= 
+						array_merge(
+							array_intersect($input['mentionable'], $matches[1]),	//         2   4
+							array_diff($input['mentionable'], $matches[1]),			//       1   3
+							array_diff($matches[1], $input['mentionable'])			//               5 6
+						);															//  $u = 1 2 3 4 5 6
+					}
+				}
+			}
+
+			$input['judul']							= $input['title'];
+
+			// save
+			$data                               	= new \TCommands\Akta\DraftingTemplateAkta($input);
+			$data->handle();
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']	= $e->getMessage();
+		}
 	}
 
 	/**
@@ -125,7 +179,18 @@ class templateController extends Controller
 	 */
 	public function show($id)
 	{
-		//
+		$template         = new \TQueries\Akta\DaftarTemplateAkta;
+		$template         = $template->detailed($id);
+
+		$this->page_attributes->title			= $template['judul'];
+
+		$this->page_datas->datas['template']	= $template;
+
+		//initialize view
+		$this->view							= view('pages.akta.template.show');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 
 	/**
