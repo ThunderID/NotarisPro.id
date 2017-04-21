@@ -8593,8 +8593,12 @@ __webpack_require__("./resources/assets/js/appUI.js");
 
 // module editor UI
 __webpack_require__("./resources/assets/js/moduleUI/editorUI.js");
-
+// search list
 __webpack_require__("./resources/assets/js/moduleUI/listSearchUI.js");
+// param form widgets to editor
+__webpack_require__("./resources/assets/js/moduleUI/widgetEditorUI.js");
+// module modal UI
+__webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 
 /***/ }),
 
@@ -8632,7 +8636,7 @@ __webpack_require__("./resources/assets/js/moduleUI/listSearchUI.js");
 		var editor = new window.Editor(".editor", {
 			// button on toolbar medium-editor
 			toolbar: {
-				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist"]
+				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -8658,6 +8662,7 @@ __webpack_require__("./resources/assets/js/moduleUI/listSearchUI.js");
 						}
 
 						$('.link-mention').on('click', function (el) {
+							el.preventDefault();
 							selectMentionCallback($(this).html());
 						});
 					},
@@ -8679,6 +8684,72 @@ __webpack_require__("./resources/assets/js/moduleUI/listSearchUI.js");
 			valueNames: ['name']
 		};
 		var search = new List('list-organisasi', options);
+	}
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/moduleUI/modalUI.js":
+/***/ (function(module, exports) {
+
+;window.modalUI = {
+	init: function init() {
+		$('body').on('shown.bs.modal', '#list-widgets', function (el) {
+			field = $(el.relatedTarget).attr('data-widget');
+			$(this).find('*[data-save=true]').attr('data-parsing', field);
+			$(this).find('input').attr('name', field);
+			window.widgetEditorUI.checkContentWidget(field);
+		});
+		window.modalUI.resetInputDefault();
+	},
+	resetInputDefault: function resetInputDefault() {
+		$('body').on('hidden.bs.modal', '.modal', function (el) {
+			$('input').val('');
+			$(this).find('*[data-save=true]').attr('data-parsing', '');
+		});
+	}
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/moduleUI/widgetEditorUI.js":
+/***/ (function(module, exports) {
+
+;window.widgetEditorUI = {
+	init: function init() {
+		$('.modal').on('click', "button[data-save=true]", function (e) {
+			e.preventDefault();
+			field = $(this).attr('data-parsing');
+			value = $('#list-widgets').find('input').val();
+			window.widgetEditorUI.replaceContentWithData(field, value);
+			$('#list-widgets').modal('hide');
+			window.widgetEditorUI.isActive(field);
+			// $('.editor').find(field).replace(field, value);
+		});
+	},
+	replaceContentWithData: function replaceContentWithData(param, data) {
+		mention = $('div.editor').find('b.medium-editor-mention-at');
+		$.each(mention, function (k, v) {
+			if ($(v).html() == param || $(v).attr('data-content') == param) {
+				$(v).attr('data-content', param);
+				$(v).html(data);
+			}
+		});
+	},
+	checkContentWidget: function checkContentWidget(param) {
+		listMention = $('div.editor').find('b.medium-editor-mention-at');
+		$.each(listMention, function (k, v) {
+			dataContent = $(v).attr('data-content');
+			if ($(v).html() == param || $(v).attr('data-content') == param) {
+				if (typeof $(v).attr('data-content') != 'undefined') {
+					$('#list-widgets').find('input').val($(v).html());
+				}
+			}
+		});
+	},
+	isActive: function isActive(param) {
+		list = $('.list-widgets').find('*[data-widget="' + param + '"]');
+		list.find('span').addClass('active');
 	}
 };
 

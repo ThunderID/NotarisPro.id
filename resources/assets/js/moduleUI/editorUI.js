@@ -29,7 +29,7 @@
 		var editor = new window.Editor(".editor", {
 	    	// button on toolbar medium-editor
 			toolbar: {
-				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist"]
+				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -55,6 +55,7 @@
 						}
 
 						$('.link-mention').on('click', function(el) {
+							el.preventDefault();
 							selectMentionCallback($(this).html());
 						});
 					},

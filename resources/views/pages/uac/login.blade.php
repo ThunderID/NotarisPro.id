@@ -17,7 +17,8 @@
 				
 				@component('components.form', [
 					'store_url' => route('uac.login.post'),
-					'data_id' 	=> null
+					'data_id' 	=> null,
+					'class'		=> 'mt-3'
 				])
 
 					<div class="form-group">

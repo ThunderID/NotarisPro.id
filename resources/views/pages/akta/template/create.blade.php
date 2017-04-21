@@ -51,8 +51,8 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<div class="row">
 					<div class="col">&nbsp;</div>
-					<div class="col-9 d-flex justify-content-center">
-						<div class="form mt-3 mb-3 font-editor" style="width: 21cm; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
+					<div class="col-11 d-flex justify-content-center">
+						<div class="form mt-3 mb-3 font-editor" style="width: 21cm !important; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group p-3">
 								<textarea name="template" class="editor"></textarea>
 							</div>

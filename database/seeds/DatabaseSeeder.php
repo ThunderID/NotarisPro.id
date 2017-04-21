@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(InitTemplateTableSeeder::class);
 		// $this->call(InitJadwalTableSeeder::class);
 		// $this->call(InitTagihanTableSeeder::class);
-		$this->call(IndonesiaTableSeeder::class);
+		// $this->call(IndonesiaTableSeeder::class);
 		// $this->call(UsersTableSeeder::class);
 	}
 }

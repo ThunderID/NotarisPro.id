@@ -105,8 +105,8 @@ class aktaController extends Controller
 		$filter         					= ['status' => 'publish'];
 		$list_template 						= $call->get($filter);
 
-		$this->page_datas->list_widgets 	= $this->list_widgets();
 		$this->page_datas->template_id 		= $template_id;
+		$this->page_datas->datas			= $call->detailed($template_id);
 
 		//initialize view
 		$this->view                         = view('pages.akta.akta.create');
