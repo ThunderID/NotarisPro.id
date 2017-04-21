@@ -1,6 +1,32 @@
 @extends('templates.basic')
 
 @push('styles')  
+.page-breaker{
+	position: absolute; 
+	height: 1.52px; 
+	background-color: #ececec; 
+	width: 100%;
+}
+
+.margin{
+	position: absolute;
+    z-index: 2;
+}
+
+.margin-v{
+    height: calc(100% - 2rem);
+    width: 2px;
+    border-left: 2px dashed #ececec;
+    margin-top: 1.1rem;
+}
+
+.margin-h{
+    height: 2px;
+    width: 100%;
+    border-top: 2px dashed #ececec;
+    dislay:none;
+}
+
 @endpush  
 
 @section('akta')
@@ -48,14 +74,16 @@
 				</div>
 				{{-- END COMPONENT MENUBAR --}}
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div id="page" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div id="page-breaker" class="row page-breaker"></div>
+				<div id="l-margin" class="margin margin-v"></div>
+				<div id="r-margin" class="margin margin-v"></div>
+				<div id="h-margin"></div>
 				<div class="row">
 					<div class="col">&nbsp;</div>
 					<div class="col-9 d-flex justify-content-center">
-						<div class="form mt-3 mb-3 font-editor" style="width: 21cm; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
-							<div class="form-group p-3">
-								<textarea name="template" class="editor"></textarea>
-							</div>
+						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
+							<textarea name="template" class="editor"></textarea>
 						</div>
 					</div>
 					<div class="col">&nbsp;</div>	
@@ -100,37 +128,214 @@
 	var dataListWidgets = {!! json_encode($page_datas->list_widgets) !!};
 	window.editorUI.init();
 
-	$(".editor").keyup(function(){
 
-		var cursorPosition = $('#myTextarea').prop("selectionStart");
-		console.log(cursorPOsition);
+	function drawMargin(){
+		// init
+		var pivot_pos = $('.page-editor').offset();
+		var pivot_h = $('.page-editor').outerHeight();
+		var pivot_w = $('.page-editor').outerWidth();
+		var template_h = Margin.convertPX(29.7);
+
+		var margin = Margin;
+		var ml = Margin.convertPX(5) + pivot_pos.left - 2;
+		var mr = pivot_pos.left + pivot_w - margin.convertPX(1) + 2;
+		var mt = 16 + margin.convertPX(2) - 2;
+		var mb = template_h - (margin.convertPX(2) + margin.convertPX(3) - 16);
+
+		margin.docLeft = pivot_pos.left - 15;
+		margin.docWidth = pivot_w;
+		margin.docHeight = pivot_h;
+		margin.pageHeight = template_h;
+
+		margin.displayMargin(ml,mt,mr,mb);
+	}
 
 
-		/*
-		var h = $(this).height();
-
-		if(h > 904 * (h/904)){
-			console.log(h);
-		}
-		*/
+	$(document).ready(function(){
+		drawMargin();
 	});
 
-(function ($) {
-    $.fn.getCursorPosition = function () {
-        var input = this.get(0);
-        if (!input) return; // No (input) element found
-        if ('selectionStart' in input) {
-            // Standard-compliant browsers
-            return input.selectionStart;
-        } else if (document.selection) {
-            // IE
-            input.focus();
-            var sel = document.selection.createRange();
-            var selLen = document.selection.createRange().text.length;
-            sel.moveStart('character', -input.value.length);
-            return sel.text.length - selLen;
-        }
-    }
-})(jQuery);
+	/*
+		Editor
+		-----------
+	*/
 
+	/* Adapter */
+	var editor = $('.editor');
+	var page_editor = $('.page-editor');
+
+	/* Event Handlers */
+	editor.keyup(function(){
+		var ep = editorPaging;
+		ep.pageHeight =  editorPaging.convertPX(29.7);
+		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
+
+		drawMargin()
+	});
+
+
+
+
+
+
+
+
+	/*
+		Editor Paging
+		-------------
+	*/
+	var editorPaging = new function() {
+
+		/* Adapter */
+		this.pageHeight = 29.7;
+		this.pagePadd = 5;
+
+		/* Binded to class page, which is the element holder of your text editor. */ 
+	    this.getOuterHeight = function(){
+		    return parseFloat($('.page-editor').height().toFixed(2));
+	    }
+
+		/* editor pages */ 
+	    this.getEditorHeight = function() {
+	    	return Math.floor(this.getOuterHeight()/this.pageHeight);
+    	}	    
+
+	    /* Function */
+
+	    // Converter
+
+	    this.convertCM = function(px){
+	    	return parseFloat((px/37.795276).toFixed(2));
+	    }
+
+	    this.convertPX = function(cm){
+	    	return parseFloat((cm*37.795276).toFixed(2));
+	    }	    
+
+
+	    // Page Adjuster
+
+	    this.autoAdjustHeight = function (target, target_padding, editor, editor_padding) {
+
+	    	/* init */
+	    	var inner_h = editor.height() + editor_padding  + target_padding;
+	    	var outer_h = this.pageHeight;
+	    	var gap = outer_h - inner_h;
+
+	    	/* measure ideal height */
+			do {
+				if(gap < 0){
+					this.autoPageBreak(outer_h);
+
+				    /* add new page */
+				    outer_h = outer_h + this.pageHeight;
+				    gap = outer_h - inner_h;
+				}
+			}
+			while (gap < 0);
+
+			/* apply height */
+	    	target.css('min-height', outer_h);
+
+	    };
+
+
+	    // Page Break
+	    // require html binded : [id] page-breaker. This will be your page break html.
+	    // require html binded : [id] page. This will be your base canvas.
+
+	    this.autoPageBreak = function(h){
+			// append page break
+			temp = $('#page-breaker').clone();
+			temp.addClass('page-break');
+			temp.css('top', (h - 1 + 16) + 'px' );
+			$('#page').append(temp);
+	    }
+	}	
+
+
+
+	var Margin = new function(){
+
+		this.docLeft = 0;
+		this.docTop = 0;
+		this.docWidth = 0;
+		this.docHeight = 0;
+		this.pageHeight = 0;
+		this.pageWidth = 0;
+
+	    this.convertCM = function(px){
+	    	return parseFloat((px/37.795276).toFixed(2));
+	    }
+
+	    this.convertPX = function(cm){
+	    	return parseFloat((cm*37.795276).toFixed(2));
+	    }
+
+		this.toggleOff = function(){
+			$('.margin').css('display', 'none');
+		}
+
+		this.toggleOn = function(){
+			$('.margin').css('display', 'block');
+		}
+
+		this.displayMargin = function(left,top,right,bottom){
+			// left & right margin
+			$('#l-margin').css('left', left);
+			$('#r-margin').css('left', right);
+
+			// Top & Bottom
+	    	/* init */
+	    	var inner_h = this.docHeight;
+	    	var outer_h = this.pageHeight;
+	    	var gap = outer_h;
+
+	    	/* clean */
+	    	$(".margin-h").remove();
+
+	    	/* top draw */
+	    	var ctr_top = 0;
+	    	ctr_top = this.docHeight /this.pageHeight;
+
+	    	for(i = 0; i < ctr_top; i++){
+
+				temp = $('#h-margin').clone();
+				temp.addClass('margin');
+				temp.addClass('margin-h');
+				temp.css('top', top + 'px');
+				temp.css('display', 'block');
+				temp.css('width', this.docWidth + 'px');
+				temp.css('margin-left', this.docLeft);
+				$('#page').append(temp);
+
+				//set new top
+				console.log(this.pageHeight);
+			 	top = top + this.pageHeight;
+	    	}
+
+	    	/* bottom draw */
+	    	var ctr_bottom = 0;
+	    	ctr_bottom = this.docHeight /this.pageHeight;
+	    	for(i = 0; i < ctr_bottom; i++){
+
+				temp = $('#h-margin').clone();
+				temp.addClass('margin');
+				temp.addClass('margin-h');
+				temp.css('top', bottom + 'px');
+				temp.css('display', 'block');
+				temp.css('width', this.docWidth + 'px');
+				temp.css('margin-left', this.docLeft);
+				$('#page').append(temp);
+
+				//set new top
+				console.log(bottom);
+				console.log(this.pageHeight);
+			 	bottom = bottom + this.pageHeight;
+	    	}	    	
+
+		}
+
+
+	}
 @endpush 
