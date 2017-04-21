@@ -54,7 +54,7 @@
 
 							@component('components.modal', [
 								'id'		=> 'list-widgets',
-								'title'		=> 'Form ' .str_replace('@', '', str_replace('.', ' ', str_replace('_', ' ', $v))),
+								'title'		=> '',
 								'settings'	=> [
 									'modal_class'	=> '',
 									'hide_buttons'	=> 'true',

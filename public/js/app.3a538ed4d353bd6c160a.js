@@ -8591,6 +8591,8 @@ __webpack_require__("./resources/assets/js/appUI.js");
 /***/ "./resources/assets/js/appUI.js":
 /***/ (function(module, exports, __webpack_require__) {
 
+// module typography
+__webpack_require__("./resources/assets/js/moduleUI/typographyUI.js");
 // module editor UI
 __webpack_require__("./resources/assets/js/moduleUI/editorUI.js");
 // search list
@@ -8694,11 +8696,15 @@ __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 
 ;window.modalUI = {
 	init: function init() {
+		window.modalUI.listWidgets();
+	},
+	listWidgets: function listWidgets() {
 		$('body').on('shown.bs.modal', '#list-widgets', function (el) {
 			field = $(el.relatedTarget).attr('data-widget');
 			$(this).find('*[data-save=true]').attr('data-parsing', field);
 			$(this).find('input').attr('name', field);
 			window.widgetEditorUI.checkContentWidget(field);
+			window.modalUI.changeNameModal($(this), 'Form ' + field.replace('@', '').replace('.', ' ').replace('_', ' '));
 		});
 		window.modalUI.resetInputDefault();
 	},
@@ -8707,6 +8713,23 @@ __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 			$('input').val('');
 			$(this).find('*[data-save=true]').attr('data-parsing', '');
 		});
+	},
+	changeNameModal: function changeNameModal(el, param) {
+		el.find('.modal-title').html(window.typographyUI.ucwords(param));
+	}
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/moduleUI/typographyUI.js":
+/***/ (function(module, exports) {
+
+;window.typographyUI = {
+	ucwords: function ucwords(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	},
+	upperCase: function upperCase(string) {
+		return string.toUpperCase();
 	}
 };
 
@@ -8721,9 +8744,10 @@ __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 			e.preventDefault();
 			field = $(this).attr('data-parsing');
 			value = $('#list-widgets').find('input').val();
+
 			window.widgetEditorUI.replaceContentWithData(field, value);
-			$('#list-widgets').modal('hide');
 			window.widgetEditorUI.isActive(field);
+			$('#list-widgets').modal('hide');
 			// $('.editor').find(field).replace(field, value);
 		});
 	},

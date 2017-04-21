@@ -4,9 +4,10 @@
 			e.preventDefault();
 			field = $(this).attr('data-parsing');
 			value = $('#list-widgets').find('input').val();
+			
 			window.widgetEditorUI.replaceContentWithData(field, value);
-			$('#list-widgets').modal('hide');
 			window.widgetEditorUI.isActive(field);
+			$('#list-widgets').modal('hide');
 			// $('.editor').find(field).replace(field, value);
 		});
 	},
@@ -34,5 +35,5 @@
 	isActive: function (param) {
 		list = $('.list-widgets').find('*[data-widget="' +param+ '"]');
 		list.find('span').addClass('active');
-	}
+	},
 }

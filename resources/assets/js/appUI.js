@@ -1,3 +1,5 @@
+// module typography
+require ('./moduleUI/typographyUI');
 // module editor UI
 require ('./moduleUI/editorUI');
 // search list

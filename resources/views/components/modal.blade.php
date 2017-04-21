@@ -116,7 +116,7 @@
 					<span aria-hidden="true">&times;</span>
 					<span class="sr-only">Close</span>
 				</button>
-				<h4 class="modal-title">
+				<h4 class="modal-title text-capitalize">
 					{{$title}}
 				</h4>
 			</div>
