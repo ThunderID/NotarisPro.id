@@ -82,13 +82,20 @@
 				<div class="col">&nbsp;</div>
 				<div class="col-11 d-flex justify-content-center">
 					<div class="form mt-3 mb-3 font-editor" style="width: 21cm !important; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
-						<textarea name="template" class="editor">
-							<h4 class="text-center">{{ isset($page_datas->datas['judul']) ? $page_datas->datas['judul'] : '' }}</h4>
-							@forelse ($page_datas->datas['paragraf'] as $k => $v)
-								<p>{!! $v['konten'] !!}</p>
-							@empty
-							@endforelse
-						</textarea>
+						@component('components.form', [ 
+							'data_id'		=> $page_datas->id,
+							'store_url' 	=> route('akta.akta.store'), 
+							'update_url' 	=> route('akta.akta.update', ['id', $page_datas->id]), 
+							'class'			=> 'mb-0'
+						])
+							<textarea name="template" class="editor">
+								<h4 class="text-center">{{ isset($page_datas->datas['judul']) ? $page_datas->datas['judul'] : '' }}</h4>
+								@forelse ($page_datas->datas['paragraf'] as $k => $v)
+									<p>{!! $v['konten'] !!}</p>
+								@empty
+								@endforelse
+							</textarea>
+						@endcomponent
 					</div>
 				</div>
 				<div class="col">&nbsp;</div>	
