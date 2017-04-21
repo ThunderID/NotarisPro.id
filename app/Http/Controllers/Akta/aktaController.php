@@ -144,7 +144,18 @@ class aktaController extends Controller
 	 */
 	public function show($id)
 	{
-		//
+		$akta        					 	= new Query;
+		$akta         						= $akta->detailed($id);
+
+		$this->page_attributes->title		= $akta['judul'];
+
+		$this->page_datas->datas['akta']	= $akta;
+
+		//initialize view
+		$this->view							= view('pages.akta.akta.show');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 
 	/**
