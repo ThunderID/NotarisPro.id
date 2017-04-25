@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar">
+			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar" style="height:calc(100% - 94px);">
 				<div class="panel">
 					<h5>List Widgets</h5>
 					<div class="list-group list-widgets">
@@ -77,7 +77,11 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel">
+			<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel" style="height:calc(100% - 94px);">
+				<div id="page-breaker" class="row page-breaker"></div>
+				<div id="l-margin" class="margin margin-v"></div>
+				<div id="r-margin" class="margin margin-v"></div>
+				<div id="h-margin"></div>				
 				<div class="row">
 					<div class="col">&nbsp;</div>
 					<div class="col-11 d-flex justify-content-center">
@@ -87,7 +91,7 @@
 							'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 							'class'			=> 'form-akta mb-0'
 						])
-						<div class="form mt-3 mb-3 font-editor" style="width: 21cm !important; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
+						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<textarea name="template" class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									{!! $v['konten'] !!}
@@ -124,4 +128,60 @@
 		el.preventDefault();
 		$('form.form-akta').submit();
 	});
+
+
+	// Functions
+
+	/* Margin Drawer */
+	function drawMargin(){
+		// init
+		var pivot_pos = $('.page-editor').offset();
+		var pivot_h = $('.page-editor').outerHeight();
+		var pivot_w = $('.page-editor').outerWidth();
+		var template_h = window.Margin.convertPX(29.7);
+
+		var margin = window.Margin;
+		var ml = margin.convertPX(5) + pivot_pos.left - 45  - $('.sidebar').width() - 4;
+		var mr = pivot_pos.left + pivot_w - margin.convertPX(1) - 45  - $('.sidebar').width() + 2;
+		var mt = 16 + margin.convertPX(2) - 2;
+		var mb = template_h - (margin.convertPX(2) + margin.convertPX(3) - 16);
+
+		console.log(pivot_pos.left);
+
+		margin.docLeft = pivot_pos.left - 45 - $('.sidebar').width();
+		margin.docWidth = pivot_w;
+		margin.docHeight = pivot_h;
+		margin.pageHeight = template_h;
+
+		margin.displayMargin(ml,mt,mr,mb);
+	}
+
+	/* Auto page break */
+	function pageBreak(){
+		var ep = editorPaging;
+		ep.pageHeight =  editorPaging.convertPX(29.7);
+		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
+	}
+
+
+	// Adapter 
+	var editor = $('.editor');
+	var page_editor = $('.page-editor');
+
+
+	// Handlers 
+	editor.keyup(function(){
+		pageBreak();
+		drawMargin();
+	});	
+
+	$(document).ready(function(){
+		pageBreak();
+		drawMargin();
+	});	
+
+	$( window ).resize(function() {
+		drawMargin();
+	});
+
 @endpush 

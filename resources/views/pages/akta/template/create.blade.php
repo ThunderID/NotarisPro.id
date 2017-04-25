@@ -1,32 +1,6 @@
 @extends('templates.basic')
 
 @push('styles')  
-.page-breaker{
-	position: absolute; 
-	height: 1.52px; 
-	background-color: #ececec; 
-	width: 100%;
-}
-
-.margin{
-	position: absolute;
-    z-index: 2;
-}
-
-.margin-v{
-    height: calc(100% - 2rem);
-    width: 2px;
-    border-left: 2px dashed #ececec;
-    margin-top: 1.1rem;
-}
-
-.margin-h{
-    height: 2px;
-    width: 100%;
-    border-top: 2px dashed #ececec;
-    dislay:none;
-}
-
 @endpush  
 
 @section('akta')
@@ -128,6 +102,9 @@
 	var dataListWidgets = {!! json_encode($page_datas->list_widgets) !!};
 	window.editorUI.init();
 
+
+	//	functions
+
 	/* Margin Drawer */
 	function drawMargin(){
 		// init
@@ -150,7 +127,20 @@
 		margin.displayMargin(ml,mt,mr,mb);
 	}
 
+	/* Page Break */
+	function pageBreak(){
+		var ep = editorPaging;
+		ep.pageHeight =  editorPaging.convertPX(29.7);
+		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
+	}
+
+	// adapter
+	var editor = $('.editor');
+	var page_editor = $('.page-editor');
+
+	// handlers
 	$(document).ready(function(){
+		pageBreak();
 		drawMargin();
 	});
 
@@ -158,18 +148,8 @@
 		drawMargin();
 	});
 
-
-	/* Auto page break */
-	/* Adapter */
-	var editor = $('.editor');
-	var page_editor = $('.page-editor');
-
-	/* Event Handlers */
 	editor.keyup(function(){
-		var ep = editorPaging;
-		ep.pageHeight =  editorPaging.convertPX(29.7);
-		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
-
+		pageBreak();
 		drawMargin()
 	});
 

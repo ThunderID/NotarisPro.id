@@ -46,12 +46,13 @@
 				</div>
 				{{-- END COMPONENT MENUBAR --}}
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div id="page" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
 					<div class="col">&nbsp;</div>
 					<div class="col-9 d-flex justify-content-center">
-						<div class="form mt-3 mb-3 font-editor" style="width: 21cm; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
-							<div class="form-group p-3">
+						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
+							<div class="form-group p-3 editor">
 								@foreach($page_datas->datas['akta']['paragraf'] as $key => $value)
 									{!!$value['konten']!!}
 								@endforeach
@@ -66,4 +67,16 @@
 @stop
 
 @push('scripts')
+
+	/* Auto Page Break */
+	$(document).ready(function(){
+		/* Adapter */
+		var editor = $('.editor');
+		var page_editor = $('.page-editor');
+
+		var ep = editorPaging;
+		ep.pageHeight =  editorPaging.convertPX(29.7);
+		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
+	});
+
 @endpush 
