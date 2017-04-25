@@ -1,3 +1,8 @@
+@php 
+	$logged_user 	= TAuth::loggedUser();
+	$active_office 	= TAuth::activeOffice();
+@endphp
+
 <!-- first layer -->
 <!-- <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
 	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,10 +65,10 @@
 				<a class="nav-link" href="javascript:void(0);"  data-toggle="modal" data-target="#modal-change-org">
 					<i class="fa fa-building" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
 					<span class="hidden-lg-down">
-						{{TAuth::activeOffice()['kantor']['nama']}}
+						{{$active_office['kantor']['nama']}}
 					</span>
 					<span class="hidden-md-up">
-						{{TAuth::activeOffice()['kantor']['nama']}}
+						{{$active_office['kantor']['nama']}}
 					</span>					
 				</a>
 			</li>
@@ -94,9 +99,9 @@
 			<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
 		</div>
 		<ul class="list-group list">
-			@foreach(TAuth::loggedUser()['visas'] as $key => $value)			
+			@foreach($logged_user['visas'] as $key => $value)			
 				<li class="list-group-item">
-					<a class="name" href="{{ route('uac.office.activate', $value['id']) }}" ><i class="fa fa-building"></i>&nbsp;&nbsp; {{ $value['kantor']['nama'] }}</a>
+					<a class="name" href="{{ route('uac.office.activate', $value['id']) }}" ><i class="fa fa-building"></i>&nbsp;&nbsp; {{ $value['kantor']['nama'] }}</a> 
 				</li>
 			@endforeach
 		</ul>
@@ -105,10 +110,13 @@
 
 		<div style="float: left;">
 			<p class="text-left">
-				<span class="label">Aktif : &nbsp;&nbsp;{{ TAuth::activeOffice()['kantor']['nama'] }}
+				<span class="label">Aktif : &nbsp;&nbsp;{{ $active_office['kantor']['nama'] }}
+					@if(str_is($active_office['role'], 'notaris'))
+						<a href="{{ route('notaris.kantor.edit', $active_office['kantor']['id']) }}"><i class="fa fa-pencil"></i> Edit</a>
+					@endif
 				</span>
 			</p>
-		</div>		
+		</div>
 	</div>
 	
 @endcomponent
