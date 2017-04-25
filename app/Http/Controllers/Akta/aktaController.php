@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Akta;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use TQueries\Helpers\JSend;
 
 use TQueries\Akta\DaftarAkta as Query;
 use TQueries\Akta\DaftarTemplateAkta;
@@ -229,14 +230,37 @@ class aktaController extends Controller
 		}
 
 		//return view
-        if($id == null){
-            $this->page_attributes->msg['success']         = ['Data akta telah ditambahkan'];
-            return $this->generateRedirect(route('akta.akta.index'));
-        }else{
-            $this->page_attributes->msg['success']         = ['Data akta telah diperbarui'];
-            return $this->generateRedirect(route('akta.akta.show', ['id' => $id]));
-        }
+		if($id == null){
+			$this->page_attributes->msg['success']         = ['Data akta telah ditambahkan'];
+			return $this->generateRedirect(route('akta.akta.index'));
+		}else{
+			$this->page_attributes->msg['success']         = ['Data akta telah diperbarui'];
+			return $this->generateRedirect(route('akta.akta.show', ['id' => $id]));
+		}
 
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ajax_akta($akta_id, Request $request)
+	{
+		 try {
+			// get data
+			$input			= $request->only('mention', 'isi_mention');
+			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
+			$content['id']	= $akta_id;
+			// save
+			$data			= new \TCommands\Akta\DraftingAkta($content);
+			$data 			= $data->handle();
+		} catch (Exception $e) {
+			return JSend::error($e->getMessage())->asArray();
+		}
+
+		return JSend::success(['data' => $data['fill_mention']])->asArray();
 	}
 
 	/**

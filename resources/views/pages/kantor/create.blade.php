@@ -3,11 +3,6 @@
 @push('styles')  
 @endpush  
 
-@section('klien')
-	active
-@stop
-
-
 @section('content')
 	<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 

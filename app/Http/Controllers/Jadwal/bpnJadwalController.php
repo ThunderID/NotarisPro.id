@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Jadwal;
 
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\controller;
+use App\Http\Controllers\Controller;
 
 class bpnJadwalController extends Controller
 {

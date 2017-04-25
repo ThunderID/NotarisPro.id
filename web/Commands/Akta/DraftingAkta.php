@@ -73,6 +73,20 @@ class DraftingAkta
 			$this->akta['penulis']['id'] 				= TAuth::loggedUser()['id'];
 			$this->akta['penulis']['nama'] 				= TAuth::loggedUser()['nama'];
 
+			if(isset($this->akta['fill_mention']) && isset($akta->fill_mention))
+			{
+				$this->akta['fill_mention']	= array_merge($this->akta['fill_mention'], $akta->fill_mention);
+			}
+
+			if(isset($this->akta['fill_mention']))
+			{
+				foreach ($this->akta['fill_mention'] as $key => $value) 
+				{
+					$this->akta['fill_mention'][str_replace('.','_',str_replace('@','', $key))] = $value;
+					unset($this->akta['fill_mention'][$key]);
+				}
+			}
+
 			//3. simpan value yang ada
 			$akta 					= $akta->fill($this->akta);
 
@@ -93,7 +107,7 @@ class DraftingAkta
 			$versi->versi 			= 1;
 			$versi->save();
 
-			return true;
+			return $akta->toArray();
 		}
 		catch(Exception $e)
 		{

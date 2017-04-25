@@ -75,7 +75,14 @@ class DaftarAkta
 		$model 		= $this->queries([]);
 		$model 		= $model->id($id)->first();
 
-		return $model->toArray();
+		$akta 		= $model->toArray();
+		foreach ((array)$akta['fill_mention'] as $key => $value) 
+		{
+			$akta['fill_mention']['@'.str_replace('_','.',$key)] = $value;
+			unset($akta['fill_mention'][$key]);
+		}
+
+		return $akta;
 	}
 
 	/**
@@ -134,7 +141,7 @@ class DaftarAkta
 			$queries['status']	= $this->statusLists();
 		}
 		$model  				= $model->status($queries['status']);
-		
+
 		//2.allow kantor
 		$queries['kantor_id']	= [TAuth::activeOffice()['kantor']['id'], "0"];
 
