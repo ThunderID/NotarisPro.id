@@ -128,16 +128,16 @@
 	var dataListWidgets = {!! json_encode($page_datas->list_widgets) !!};
 	window.editorUI.init();
 
-
+	/* Margin Drawer */
 	function drawMargin(){
 		// init
 		var pivot_pos = $('.page-editor').offset();
 		var pivot_h = $('.page-editor').outerHeight();
 		var pivot_w = $('.page-editor').outerWidth();
-		var template_h = Margin.convertPX(29.7);
+		var template_h = window.Margin.convertPX(29.7);
 
-		var margin = Margin;
-		var ml = Margin.convertPX(5) + pivot_pos.left - 2;
+		var margin = window.Margin;
+		var ml = margin.convertPX(5) + pivot_pos.left - 2;
 		var mr = pivot_pos.left + pivot_w - margin.convertPX(1) + 2;
 		var mt = 16 + margin.convertPX(2) - 2;
 		var mb = template_h - (margin.convertPX(2) + margin.convertPX(3) - 16);
@@ -150,16 +150,16 @@
 		margin.displayMargin(ml,mt,mr,mb);
 	}
 
-
 	$(document).ready(function(){
 		drawMargin();
 	});
 
-	/*
-		Editor
-		-----------
-	*/
+	$( window ).resize(function() {
+		drawMargin();
+	});
 
+
+	/* Auto page break */
 	/* Adapter */
 	var editor = $('.editor');
 	var page_editor = $('.page-editor');
@@ -173,169 +173,4 @@
 		drawMargin()
 	});
 
-
-
-
-
-
-
-
-	/*
-		Editor Paging
-		-------------
-	*/
-	var editorPaging = new function() {
-
-		/* Adapter */
-		this.pageHeight = 29.7;
-		this.pagePadd = 5;
-
-		/* Binded to class page, which is the element holder of your text editor. */ 
-	    this.getOuterHeight = function(){
-		    return parseFloat($('.page-editor').height().toFixed(2));
-	    }
-
-		/* editor pages */ 
-	    this.getEditorHeight = function() {
-	    	return Math.floor(this.getOuterHeight()/this.pageHeight);
-    	}	    
-
-	    /* Function */
-
-	    // Converter
-
-	    this.convertCM = function(px){
-	    	return parseFloat((px/37.795276).toFixed(2));
-	    }
-
-	    this.convertPX = function(cm){
-	    	return parseFloat((cm*37.795276).toFixed(2));
-	    }	    
-
-
-	    // Page Adjuster
-
-	    this.autoAdjustHeight = function (target, target_padding, editor, editor_padding) {
-
-	    	/* init */
-	    	var inner_h = editor.height() + editor_padding  + target_padding;
-	    	var outer_h = this.pageHeight;
-	    	var gap = outer_h - inner_h;
-
-	    	/* measure ideal height */
-			do {
-				if(gap < 0){
-					this.autoPageBreak(outer_h);
-
-				    /* add new page */
-				    outer_h = outer_h + this.pageHeight;
-				    gap = outer_h - inner_h;
-				}
-			}
-			while (gap < 0);
-
-			/* apply height */
-	    	target.css('min-height', outer_h);
-
-	    };
-
-
-	    // Page Break
-	    // require html binded : [id] page-breaker. This will be your page break html.
-	    // require html binded : [id] page. This will be your base canvas.
-
-	    this.autoPageBreak = function(h){
-			// append page break
-			temp = $('#page-breaker').clone();
-			temp.addClass('page-break');
-			temp.css('top', (h - 1 + 16) + 'px' );
-			$('#page').append(temp);
-	    }
-	}	
-
-
-
-	var Margin = new function(){
-
-		this.docLeft = 0;
-		this.docTop = 0;
-		this.docWidth = 0;
-		this.docHeight = 0;
-		this.pageHeight = 0;
-		this.pageWidth = 0;
-
-	    this.convertCM = function(px){
-	    	return parseFloat((px/37.795276).toFixed(2));
-	    }
-
-	    this.convertPX = function(cm){
-	    	return parseFloat((cm*37.795276).toFixed(2));
-	    }
-
-		this.toggleOff = function(){
-			$('.margin').css('display', 'none');
-		}
-
-		this.toggleOn = function(){
-			$('.margin').css('display', 'block');
-		}
-
-		this.displayMargin = function(left,top,right,bottom){
-			// left & right margin
-			$('#l-margin').css('left', left);
-			$('#r-margin').css('left', right);
-
-			// Top & Bottom
-	    	/* init */
-	    	var inner_h = this.docHeight;
-	    	var outer_h = this.pageHeight;
-	    	var gap = outer_h;
-
-	    	/* clean */
-	    	$(".margin-h").remove();
-
-	    	/* top draw */
-	    	var ctr_top = 0;
-	    	ctr_top = this.docHeight /this.pageHeight;
-
-	    	for(i = 0; i < ctr_top; i++){
-
-				temp = $('#h-margin').clone();
-				temp.addClass('margin');
-				temp.addClass('margin-h');
-				temp.css('top', top + 'px');
-				temp.css('display', 'block');
-				temp.css('width', this.docWidth + 'px');
-				temp.css('margin-left', this.docLeft);
-				$('#page').append(temp);
-
-				//set new top
-				console.log(this.pageHeight);
-			 	top = top + this.pageHeight;
-	    	}
-
-	    	/* bottom draw */
-	    	var ctr_bottom = 0;
-	    	ctr_bottom = this.docHeight /this.pageHeight;
-	    	for(i = 0; i < ctr_bottom; i++){
-
-				temp = $('#h-margin').clone();
-				temp.addClass('margin');
-				temp.addClass('margin-h');
-				temp.css('top', bottom + 'px');
-				temp.css('display', 'block');
-				temp.css('width', this.docWidth + 'px');
-				temp.css('margin-left', this.docLeft);
-				$('#page').append(temp);
-
-				//set new top
-				console.log(bottom);
-				console.log(this.pageHeight);
-			 	bottom = bottom + this.pageHeight;
-	    	}	    	
-
-		}
-
-
-	}
 @endpush 
