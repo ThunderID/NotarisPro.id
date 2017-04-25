@@ -9,6 +9,8 @@ use TQueries\Helpers\JSend;
 use TQueries\Akta\DaftarAkta as Query;
 use TQueries\Akta\DaftarTemplateAkta;
 use TQueries\Tags\TagService;
+use TQueries\Kantor\DaftarNotaris;
+use TAuth;
 
 class aktaController extends Controller
 {
@@ -85,35 +87,69 @@ class aktaController extends Controller
 	 */
 	public function create(Request $request)
 	{
-		// init
-		$this->page_attributes->title       = 'Buat Akta';
+		try {
+			$template_id 			= $request->get('template_id'); 
 
-		//get data from database
-		$this->page_datas->datas            = null;
+			$call					= new DaftarTemplateAkta;
+			$template 				= $call->detailed($template_id);
 
-		if ($request->has('template_id'))
-		{
-			$template_id 					= $request->get('template_id'); 
+			// $akta['id']				= '';
+			$akta['judul']			= $template['judul'];
+			$akta['paragraf']		= $template['paragraf'];
+			$akta['mentionable']	= $template['mentionable'];
+
+			$notaris 				= new DaftarNotaris;
+			$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
+
+			foreach ($akta['mentionable'] as $key => $value) 
+			{
+				if(str_is($value, '@notaris.nama'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['nama']; 
+				}
+
+				if(str_is($value, '@notaris.daerah_kerja'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['daerah_kerja']; 
+				}
+
+				if(str_is($value, '@notaris.nomor_sk'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['nomor_sk']; 
+				}
+
+				if(str_is($value, '@notaris.tanggal_pengangkatan'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['tanggal_pengangkatan']; 
+				}
+
+				if(str_is($value, '@notaris.alamat'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['alamat']; 
+				}
+
+				if(str_is($value, '@notaris.telepon'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['telepon']; 
+				}
+
+				if(str_is($value, '@notaris.fax'))
+				{
+					$akta['fill_mention'][$value] 	= $notaris['notaris']['fax']; 
+				}
+			}
+
+			// save
+			$data			= new \TCommands\Akta\DraftingAkta($akta);
+			$data 			= $data->handle();
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']	= $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.choose.template'));
 		}
-		else 
-		{
-			$template_id 					= null;
-		}
 
-		$call 								= new DaftarTemplateAkta;
+		$this->page_attributes->msg['success']         = ['Data akta telah di generate'];
 
-		$filter         					= ['status' => 'publish'];
-		$list_template 						= $call->get($filter);
-
-		$this->page_datas->akta_id 			= '';
-		$this->page_datas->template_id 		= $template_id;
-		$this->page_datas->datas			= $call->detailed($template_id);
-
-		//initialize view
-		$this->view                         = view('pages.akta.akta.create');
-
-		//function from parent to generate view
-		return $this->generateView();  
+		return $this->generateRedirect(route('akta.akta.edit', $data['id']));
 	}
 
 	/**
@@ -124,7 +160,7 @@ class aktaController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		 try {
+		try {
 			// get data
 			$input		= $request->only('template', 'template_id');
 			$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
