@@ -19,32 +19,46 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
-	$klien 			= new TCommands\Klien\HapusKlien('80B2FA4F-12A4-4947-9059-EDA3C2E47EF1');
-	$klien 			= $klien->handle();
-	dd($klien);
-	$terjemahan 	= TQueries\Helpers\DeskripsiTanggalService::displayHariIni();
-	dd($terjemahan); 
-	return view('welcome');
+	$ip = '158.140.172.5';
+$details = json_decode(file_get_contents("http://api.ipinfodb.com/v3/ip-city?ip=158.140.172.5
+"));
+	// $klien 			= new TCommands\Klien\HapusKlien('80B2FA4F-12A4-4947-9059-EDA3C2E47EF1');
+	// $klien 			= $klien->handle();
+	// dd($klien);
+	// $terjemahan 	= TQueries\Helpers\DeskripsiTanggalService::displayHariIni();
+	// dd($terjemahan); 
 	$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 
 	$login 			= TAuth::login($credentials);
+	// $kantor_id 		= TAuth::activeOffice()['kantor']['id'];
 
-	$pengguna 		= new TQueries\ACL\DaftarPengguna;
-	$pengguna 		= $pengguna->get();
-	dd($pengguna);
+	// $kantor 		= TKantor\Notaris\Models\Notaris::id($kantor_id)->first();
 
-	$tags 			= TQueries\Tags\TagService::all();
-	dd($tags);
+	// $pengguna 		= new TQueries\ACL\DaftarPengguna;
+	// $pengguna 		= $pengguna->get();
+	// dd($pengguna);
 
-	$tagihan 		= new TQueries\Tagihan\DaftarTagihan;
-	$tagihan 		= $tagihan->get();
-	dd($tagihan);
+	// $tags 			= TQueries\Tags\TagService::all();
+	// dd($tags);
 
-	$jadwal 		= new TQueries\Jadwal\DaftarJadwal;
-	$jadwal 		= $jadwal->get();
-	dd($jadwal);
+	// $tagihan 		= new TQueries\Tagihan\DaftarTagihan;
+	// $tagihan 		= $tagihan->get();
+	// dd($tagihan);
 
-	$filter 		= ['status' => 'publish'];
+	// $jadwal 		= new TQueries\Jadwal\DaftarJadwal;
+	// $jadwal 		= $jadwal->get();
+	// dd($jadwal);
+
+	$filter 		= [];
+
+	// $filter 		= ['status' => 'publish'];
+	$kantor 		= new TQueries\Kantor\DaftarNotaris;
+	$kantor 		= $kantor->get($filter);
+	dd($kantor);
+
+	$filter 		= [];
+
+	// $filter 		= ['status' => 'publish'];
 	$template 		= new TQueries\Akta\DaftarTemplateAkta;
 	$template 		= $template->get($filter);
 	dd($template);
@@ -62,11 +76,23 @@ Route::get('/test', function ()
 // UAC
 Route::get('/login',			['uses' => 'uacController@login', 			'as' => 'uac.login']);
 Route::post('/login', 			['uses' => 'uacController@doLogin', 		'as' => 'uac.login.post']);
-Route::any('/logout', 			['uses' => 'uacController@logout', 			'as' => 'uac.logout.any']);
-Route::get('activate/{idx}', 	['uses' => 'uacController@activateOffice', 	'as' => 'uac.office.activate']);
 
 Route::group(['middleware' => ['authenticated']], function()
 {
+	//uac after logged in
+	Route::any('/logout', 					['uses' => 'uacController@logout', 			'as' => 'uac.logout.any']);
+	Route::get('activate/{idx}', 			['uses' => 'uacController@activateOffice', 	'as' => 'uac.office.activate']);
+	
+	Route::resource('/notaris/kantor', 'KantorController', ['names' => [
+			'index' 	=> 'notaris.kantor.index', //get
+			'create'	=> 'notaris.kantor.create', //get
+			'store' 	=> 'notaris.kantor.store', //post
+			'show' 		=> 'notaris.kantor.show', //get
+			'edit' 		=> 'notaris.kantor.edit', //get
+			'update' 	=> 'notaris.kantor.update', //patch
+			'destroy' 	=> 'notaris.kantor.destroy' //post 
+		]]);
+
 	// general
 	Route::get('/', ['uses' => 'homeController@dashboard', 'as' => 'home.dashboard']);
 
