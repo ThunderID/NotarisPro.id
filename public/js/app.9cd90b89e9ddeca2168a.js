@@ -8738,7 +8738,7 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 	},
 	resetInputDefault: function resetInputDefault() {
 		$('body').on('hidden.bs.modal', '.modal', function (el) {
-			$('input').val('');
+			$(this).find('input').val('');
 			$(this).find('*[data-save=true]').attr('data-parsing', '');
 		});
 	},

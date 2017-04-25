@@ -89,7 +89,6 @@
 						])
 						<div class="form mt-3 mb-3 font-editor" style="width: 21cm !important; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 							<textarea name="template" class="editor">
-								<h4 class="text-center">{{ isset($page_datas->datas['judul']) ? $page_datas->datas['judul'] : '' }}</h4>
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									{!! $v['konten'] !!}
 								@empty

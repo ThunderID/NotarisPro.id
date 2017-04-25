@@ -14,7 +14,7 @@
 	},
 	resetInputDefault: function () {
 		$('body').on('hidden.bs.modal', '.modal', function(el) {
-			$('input').val('');
+			$(this).find('input').val('');
 			$(this).find('*[data-save=true]').attr('data-parsing', '');
 		});
 	},
