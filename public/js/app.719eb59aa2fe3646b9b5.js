@@ -8601,6 +8601,8 @@ __webpack_require__("./resources/assets/js/moduleUI/listSearchUI.js");
 __webpack_require__("./resources/assets/js/moduleUI/widgetEditorUI.js");
 // module modal UI
 __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
+// module form disable enter
+__webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 
 /***/ }),
 
@@ -8670,6 +8672,22 @@ __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 					},
 					activeTriggerList: ["@"]
 				})
+			}
+		});
+	}
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/moduleUI/formUI.js":
+/***/ (function(module, exports) {
+
+;window.formUI = {
+	disableEnter: function disableEnter() {
+		$('body').on('keydown', 'form', function (e) {
+			if (e.keyCode == 13) {
+				e.preventDefault();
+				return false;
 			}
 		});
 	}
@@ -8754,18 +8772,19 @@ __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 	replaceContentWithData: function replaceContentWithData(param, data) {
 		mention = $('div.editor').find('b.medium-editor-mention-at');
 		$.each(mention, function (k, v) {
-			if ($(v).html() == param || $(v).attr('data-content') == param) {
-				$(v).attr('data-content', param);
+			if ($(v).html() == param || $(v).attr('data-mention') == param) {
+				$(v).attr('data-mention', param);
 				$(v).html(data);
 			}
 		});
+		$('textarea.editor').html($('.editor').html());
 	},
 	checkContentWidget: function checkContentWidget(param) {
 		listMention = $('div.editor').find('b.medium-editor-mention-at');
 		$.each(listMention, function (k, v) {
-			dataContent = $(v).attr('data-content');
-			if ($(v).html() == param || $(v).attr('data-content') == param) {
-				if (typeof $(v).attr('data-content') != 'undefined') {
+			dataContent = $(v).attr('data-mention');
+			if ($(v).html() == param || $(v).attr('data-mention') == param) {
+				if (typeof $(v).attr('data-mention') != 'undefined') {
 					$('#list-widgets').find('input').val($(v).html());
 				}
 			}

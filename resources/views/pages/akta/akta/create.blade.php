@@ -13,12 +13,6 @@
 @stop
 
 @section('content')
-	@component('components.form', [ 
-		'data_id'		=> $page_datas->akta_id,
-		'store_url' 	=> route('akta.akta.store', ['template_id' => $page_datas->template_id]), 
-		'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
-		'class'			=> 'mb-0'
-	])
 		<div class="row bg-faded">
 			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 				&nbsp;
@@ -87,21 +81,27 @@
 				<div class="row">
 					<div class="col">&nbsp;</div>
 					<div class="col-11 d-flex justify-content-center">
+						@component('components.form', [ 
+							'data_id'		=> $page_datas->akta_id,
+							'store_url' 	=> route('akta.akta.store', ['template_id' => $page_datas->template_id]), 
+							'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
+							'class'			=> 'form-akta mb-0'
+						])
 						<div class="form mt-3 mb-3 font-editor" style="width: 21cm !important; height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 							<textarea name="template" class="editor">
 								<h4 class="text-center">{{ isset($page_datas->datas['judul']) ? $page_datas->datas['judul'] : '' }}</h4>
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
-									<p>{!! $v['konten'] !!}</p>
+									{!! $v['konten'] !!}
 								@empty
 								@endforelse
 							</textarea>
 						</div>
+						@endcomponent
 					</div>
 					<div class="col">&nbsp;</div>	
 				</div>
 			</div>
 		</div>
-@endcomponent
 	@component('components.modal', [
 		'id'		=> 'widget',
 		'title'		=> 'Form Widgets',
@@ -119,9 +119,10 @@
 	window.editorUI.init();
 	window.widgetEditorUI.init();
 	window.modalUI.init();
+	window.formUI.disableEnter();
 
 	$('.input-submit').on('click', function(el) {
 		el.preventDefault();
-		$('form').submit();
+		$('form.form-akta').submit();
 	});
 @endpush 

@@ -8,3 +8,5 @@ require ('./moduleUI/listSearchUI');
 require ('./moduleUI/widgetEditorUI');
 // module modal UI
 require ('./moduleUI/modalUI');
+// module form disable enter
+require ('./moduleUI/formUI');
