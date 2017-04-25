@@ -71,7 +71,7 @@ class Controller extends BaseController
 	public function paginate($route = null, $count = null, $take = 15){
 		//Page normalizer
 		$page = Request::get('page');
-		if(($count/$take) < $page){
+		if(ceil($count/$take) < $page){
 			$page = 1;
 		}
 
