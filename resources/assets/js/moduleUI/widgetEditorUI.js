@@ -14,7 +14,7 @@
 		mention = $('div.editor').find('b.medium-editor-mention-at');
 		$.each(mention, function(k, v) {
 			if (($(v).html() == param) || ($(v).attr('data-mention') == param)) {
-				$(v).attr('data-mention', param).addClass('active');
+				$(v).attr('data-mention', param);
 				$(v).html(data);
 			}
 		});
