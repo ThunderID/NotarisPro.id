@@ -21,6 +21,9 @@
 						@if(str_is($page_datas->datas['status'], 'pengajuan'))
 							<ul class="nav menu-content justify-content-start">
 								<li class="nav-item">
+									<a class="nav-link" href="{{ route('akta.akta.index') }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
+								</li>
+								<li class="nav-item">
 									<span class="nav-link">Status : Menunggu Renvoi</span>
 								</li>	
 							</ul>
