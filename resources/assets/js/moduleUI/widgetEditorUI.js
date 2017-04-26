@@ -8,7 +8,6 @@
 			window.widgetEditorUI.replaceContentWithData(field, value);
 			window.widgetEditorUI.isActive(field);
 			$('#list-widgets').modal('hide');
-			// $('.editor').find(field).replace(field, value);
 		});
 	},
 	replaceContentWithData: function (param, data) {

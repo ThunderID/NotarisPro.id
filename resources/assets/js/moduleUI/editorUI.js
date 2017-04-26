@@ -2,11 +2,15 @@
 	renderListMention: function (data, callBack) {
 		list = '';
 
+		var count = 1;
 		for (var i in data) {
-			link = "<a href='#' class='list-group-item list-group-item-action p-1 link-mention'>" +data[i]+ "</a>";
+			link = "<a href='#' class='dropdown-item link-mention' role='option'>" +data[i]+ "</a>";
 			list += link;
+			if (count < Object.keys(data).length) {
+				list += "<div class='dropdown-divider m-0'></div>"; 
+			}
+			count++;
 		}
-
 		return list;
 	},
 	searchMention: function (param) {
@@ -25,7 +29,23 @@
 
 		return result;
 	},
-	init: function () {
+	autoSave: function (el, url, form) {
+		var triggerAutoSave = function (event, editable) {
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: form.serialize(),
+				success: function (data){
+
+				}
+			});
+		};
+
+		var throttledAutoSave = widow.Editor.util.throttle(triggerAutoSave, 3000);
+		el.subscribe('editableInput', throttledAutoSave);
+		console.log('automatic-save..');
+	},
+	init: function (url, form) {
 		var editor = new window.Editor(".editor", {
 	    	// button on toolbar medium-editor
 			toolbar: {
@@ -45,15 +65,15 @@
 			targetBlank: true,
 			extensions: {
 				mention: new window.Mention({
-					extraPanelClassName: 'list-group',
+					extraPanelClassName: 'dropdown-menu',
 					tagName: 'b',
 					renderPanelContent: function (panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if ([this.mention].length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
+							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('p-0').addClass('m-0').addClass('menu-mention');
 							$(panelEl).html(listMention);
 						}
-
 						$('.link-mention').on('click', function(el) {
 							el.preventDefault();
 							selectMentionCallback($(this).html());
@@ -63,5 +83,14 @@
 				})
 			}
 		});
+
+		try {
+			if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
+				window.editorUI.autosave(editor, url, form);
+			}
+		}
+		catch (err) {
+			console.log('data tidak tersimpan secara otomatis');
+		}
 	}
 }
