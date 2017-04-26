@@ -23,3 +23,6 @@ require('./plugins/marginDrawer');
 
 // editor auto page break
 require('./plugins/editorAutoPage');
+
+// plugin equal height
+require('./plugins/equalHeight.js');
