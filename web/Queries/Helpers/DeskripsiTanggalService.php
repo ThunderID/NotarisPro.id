@@ -72,6 +72,8 @@ class DeskripsiTanggalService
 
 	private static function terbilang($x)
 	{
+		$x 		= $x*1;
+		
 		$abil = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
 		if ($x < 12)
 		return " " . $abil[$x];

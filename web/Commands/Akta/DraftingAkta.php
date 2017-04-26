@@ -81,8 +81,6 @@ class DraftingAkta
 				$this->akta['fill_mention']	= array_merge($this->akta['fill_mention'], $akta->fill_mention);
 			}
 
-			$this->akta['fill_mention']		= ['@klien.1.nama' => 'Chelsy', '@klien.1.nomor_ktp' => '123'];
-
 			if(isset($this->akta['fill_mention']))
 			{
 
