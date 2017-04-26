@@ -74,6 +74,9 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.akta.update', //patch
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
+
+		Route::get('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
+		
 		// choose template for akta
 		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 
