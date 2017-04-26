@@ -48,7 +48,7 @@
 				</div>				
 			</li>	
 			<li class="nav-item @yield('klien')">
-				<a class="nav-link" href="{{ route('klien.index') }}">Klien</a>
+				<a class="nav-link" href="#">Klien</a>
 			</li>	
 			<li class="nav-item">
 				<a class="nav-link" href="#">Billing</a>
@@ -108,14 +108,16 @@
 
 		<hr/>
 
-		<div style="float: left;">
-			<p class="text-left">
+		<div class="row">
+			<div class="col-sm-10 text-left">
 				<span class="label">Aktif : &nbsp;&nbsp;{{ $active_office['kantor']['nama'] }}
-					@if(str_is($active_office['role'], 'notaris'))
-						<a href="{{ route('notaris.kantor.edit', $active_office['kantor']['id']) }}"><i class="fa fa-pencil"></i> Edit</a>
-					@endif
 				</span>
-			</p>
+			</div>
+			<div class="col-sm-2 text-right">
+				@if(str_is($active_office['role'], 'notaris'))
+					<a href="{{ route('notaris.kantor.edit', $active_office['kantor']['id']) }}"> Edit</a>
+				@endif
+			</div>
 		</div>
 	</div>
 	

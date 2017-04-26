@@ -15,8 +15,8 @@
 	@component('components.form', [ 
 		'data_id'		=> $page_datas->id,
 		'store_url' 	=> route('akta.template.store'), 
-		'update_url' 	=> route('akta.template.update', ['id', $page_datas->id]), 
-		'class'			=> 'mb-0'
+		'update_url' 	=> route('akta.template.update', ['id' => $page_datas->id]), 
+		'class'			=> 'form-template mb-0'
 	])
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -100,7 +100,8 @@
 
 @push('scripts')
 	var dataListWidgets = {!! json_encode($page_datas->list_widgets) !!};
-	window.editorUI.init();
+	var url = "{{ route('akta.template.automatic.store') }}";
+	window.editorUI.init(url, $('.form-template'));
 
 
 	//	functions

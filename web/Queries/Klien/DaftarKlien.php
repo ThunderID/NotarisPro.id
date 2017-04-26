@@ -53,7 +53,7 @@ class DaftarKlien
 		{
 			$queries['skip']	= 0;
 		}
-		
+
 		$model  				= $model->skip($queries['skip'])->take($queries['take'])->orderby('created_at', 'desc')->get()->toArray();
 
 		return 	$model;

@@ -8,14 +8,13 @@
 			window.widgetEditorUI.replaceContentWithData(field, value);
 			window.widgetEditorUI.isActive(field);
 			$('#list-widgets').modal('hide');
-			// $('.editor').find(field).replace(field, value);
 		});
 	},
 	replaceContentWithData: function (param, data) {
 		mention = $('div.editor').find('b.medium-editor-mention-at');
 		$.each(mention, function(k, v) {
 			if (($(v).html() == param) || ($(v).attr('data-mention') == param)) {
-				$(v).attr('data-mention', param);
+				$(v).attr('data-mention', param).addClass('active');
 				$(v).html(data);
 			}
 		});

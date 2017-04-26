@@ -75,7 +75,7 @@ class DraftingTemplateAkta
 			//5. simpan dokumen
 			$akta->save();
 
-			return true;
+			return $akta->toArray();
 		}
 		catch(Exception $e)
 		{

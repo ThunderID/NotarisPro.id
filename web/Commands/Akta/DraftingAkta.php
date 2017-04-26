@@ -4,6 +4,9 @@ namespace TCommands\Akta;
 
 use TAkta\DokumenKunci\Models\Versi;
 use TAkta\DokumenKunci\Models\Dokumen;
+use TKlien\Klien\Models\Klien;
+
+use TCommands\Klien\SimpanKlien;
 
 use Exception, DB, TAuth, Carbon\Carbon;
 
@@ -78,8 +81,43 @@ class DraftingAkta
 				$this->akta['fill_mention']	= array_merge($this->akta['fill_mention'], $akta->fill_mention);
 			}
 
+			$this->akta['fill_mention']		= ['@klien.1.nama' => 'Chelsy', '@klien.1.nomor_ktp' => '123'];
+
 			if(isset($this->akta['fill_mention']))
 			{
+
+				//simpan klien
+				foreach ($this->akta['fill_mention'] as $key => $value) 
+				{
+					if(str_is('@klien.*.nomor_ktp', $key))
+					{
+						//check klien
+						$klien 			= Klien::where('nomor_ktp', $value)->first();
+
+						$klien_data 	= [];
+
+						if($klien)
+						{
+							$klien 		= $klien->toArray();
+							$klien_data['id']	= $klien['id'];
+						}
+						$middle_number	= explode('.', $key);
+
+						foreach ($this->akta['fill_mention'] as $key2 => $value2) 
+						{
+							if(str_is('@klien.'.$middle_number[1].'.*', $key2))
+							{
+								$indexing 					= explode('@klien.'.$middle_number[1].'.', $key2);
+								$klien_data[$indexing[1]] 	= $value2;
+							}
+						}
+
+						$save_klien 	= new SimpanKlien($klien_data);
+						$save_klien 	= $save_klien->handle();
+					}
+				}
+
+				//rename mention
 				foreach ($this->akta['fill_mention'] as $key => $value) 
 				{
 					$this->akta['fill_mention'][str_replace('.','_',str_replace('@','', $key))] = $value;

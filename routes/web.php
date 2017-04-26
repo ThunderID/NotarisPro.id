@@ -60,6 +60,9 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.template.update', //patch
 			'destroy' 	=> 'akta.template.destroy' //post 
 		]]);
+		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
+
+		Route::any('/akta/template/auto/save', 				['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
 
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
@@ -71,6 +74,9 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.akta.update', //patch
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
+
+		Route::get('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
+		
 		// choose template for akta
 		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 
