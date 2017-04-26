@@ -81,29 +81,22 @@ class templateController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create($id = null)
-	{
-		if (!is_null($id)) 
-		{
-			$this->page_attributes->title       = 'Edit Template';
+	{	
+		try {
+			$input['judul']		= 'Tidak ada judul [Untitled]';
 
-			$this->page_datas->id               = $id;
-		}
-		else 
-		{
-			$this->page_attributes->title       = 'Tambah Template';
-
-			$this->page_datas->datas            = null;
-			$this->page_datas->id               = null;
+			// save
+			$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
+			$data				= $data->handle();
+		// save
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']	= $e->getMessage();
+			return $this->generateRedirect(route('akta.template.index'));
 		}
 
-		// get list widgets
-		$this->page_datas->list_widgets     = $this->list_widgets();
-		
-		//initialize view
-		$this->view                         = view('pages.akta.template.create');
+		$this->page_attributes->msg['success']         = ['Data template telah di generate'];
 
-		//function from parent to generate view
-		return $this->generateView();  
+		return $this->generateRedirect(route('akta.template.edit', $data['id']));
 	}
 
 	/**
@@ -117,10 +110,14 @@ class templateController extends Controller
 		//
 		 try {
 			// get data
-			$input      = $request->only(
+			$input				= $request->only(
 									'title', 
 									'template'
 								);
+			if(!is_null($id))
+			{
+				$input['id']	= $id;
+			}
 
 			$pattern = "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
 			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
@@ -179,11 +176,11 @@ class templateController extends Controller
 				}
 			}
 
-			$input['judul']                         = $input['title'];
+			$input['judul']						= $input['title'];
 
 			// save
-			$data                                   = new \TCommands\Akta\DraftingTemplateAkta($input);
-			$data->handle();
+			$data								= new \TCommands\Akta\DraftingTemplateAkta($input);
+			$data 								= $data->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']    = $e->getMessage();
 		}
@@ -206,12 +203,8 @@ class templateController extends Controller
 	 */
 	public function show($id)
 	{
-		$template         = new \TQueries\Akta\DaftarTemplateAkta;
-		$template         = $template->detailed($id);
-
-		$this->page_attributes->title           = $template['judul'];
-
-		$this->page_datas->datas['template']    = $template;
+		$this->page_datas->datas			= $this->query->detailed($id);
+		$this->page_attributes->title       = $this->page_datas->datas['judul'];
 
 		//initialize view
 		$this->view                         = view('pages.akta.template.show');
@@ -228,7 +221,18 @@ class templateController extends Controller
 	 */
 	public function edit($id)
 	{
-		//
+		$this->page_attributes->title       = 'Edit Template';
+		$this->page_datas->id               = $id;
+		$this->page_datas->datas			= $this->query->detailed($id);
+
+		// get list widgets
+		$this->page_datas->list_widgets     = $this->list_widgets();
+		
+		//initialize view
+		$this->view                         = view('pages.akta.template.create');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 
 	/**
@@ -238,9 +242,9 @@ class templateController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id)
+	public function update($id, Request $request)
 	{
-		//
+		return $this->store($id, $request);
 	}
 
 

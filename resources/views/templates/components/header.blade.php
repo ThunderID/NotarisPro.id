@@ -109,13 +109,14 @@
 		<hr/>
 
 		<div class="row">
-			<div class="col-12">
-				<p>
-					Aktif : &nbsp;&nbsp;{{ $active_office['kantor']['nama'] }}
-					@if(str_is($active_office['role'], 'notaris'))
-						<a class="float-right" href="{{ route('notaris.kantor.edit', $active_office['kantor']['id']) }}"><i class="fa fa-pencil"></i> Edit</a>
-					@endif
-				</p>
+			<div class="col-sm-10 text-left">
+				<span class="label">Aktif : &nbsp;&nbsp;{{ $active_office['kantor']['nama'] }}
+				</span>
+			</div>
+			<div class="col-sm-2 text-right">
+				@if(str_is($active_office['role'], 'notaris'))
+					<a href="{{ route('notaris.kantor.edit', $active_office['kantor']['id']) }}"> Edit</a>
+				@endif
 			</div>
 		</div>
 	</div>

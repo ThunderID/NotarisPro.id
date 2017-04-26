@@ -74,8 +74,14 @@ class DaftarTemplateAkta
 	{
 		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
 		$model 						= $this->model->id($id)->draftOrPublished($queries)->first();
+		$model 						= $model->toArray();
 
-		return $model->toArray();
+		if(!isset($model['paragraf']))
+		{
+			$model['paragraf']		= null;
+		}
+
+		return $model;
 	}
 
 	/**

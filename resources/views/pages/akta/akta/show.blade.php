@@ -22,25 +22,23 @@
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 						<ul class="nav menu-content justify-content-end">
+							@if(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
-								<span class="nav-link">&nbsp;</span>
+								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
 							</li>
-							<!--<li class="nav-item">
-								<span class="nav-link">Zoom</span>
-							</li>
+						
 							<li class="nav-item">
-								<span class="nav-link">Halaman</span>
+								<a class="nav-link" href="{{route('akta.akta.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
 							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">A4</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">A4</a>
-									<a class="dropdown-item" href="#">F4</a>
-								</div>
-							</li> -->
-							<!-- <li class="nav-item">
-								<a class="nav-link" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
-							</li> -->
+
+							<li class="nav-item">
+								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
+							</li>
+							@elseif(str_is($page_datas->datas['status'], 'pengajuan'))
+							<li class="nav-item">
+								<span class="nav-link">Menunggu Renvoi</span>
+							</li>
+							@endif
 						</ul>
 					</div>
 				</div>
@@ -53,7 +51,7 @@
 					<div class="col-9 d-flex justify-content-center">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group p-3 editor">
-								@foreach($page_datas->datas['akta']['paragraf'] as $key => $value)
+								@foreach($page_datas->datas['paragraf'] as $key => $value)
 									{!!$value['konten']!!}
 								@endforeach
 							</div>
@@ -64,6 +62,11 @@
 			</div>
 			<div class="clearfix">&nbsp;</div>
 		</div>
+
+	@include('components.deleteModal',[
+		'title' => 'Menghapus Draft Akta',
+		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])
+	])
 @stop
 
 @push('scripts')

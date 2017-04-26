@@ -199,11 +199,8 @@ class aktaController extends Controller
 	 */
 	public function show($id)
 	{
-		$akta         = $this->query->detailed($id);
-
-		$this->page_attributes->title		= $akta['judul'];
-
-		$this->page_datas->datas['akta']	= $akta;
+		$this->page_datas->datas			= $this->query->detailed($id);
+		$this->page_attributes->title		= $this->page_datas->datas['judul'];
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.show');
@@ -307,7 +304,52 @@ class aktaController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
+		// cek apa password benar
+
+		// hapus
+		try {
+			$akta									= new \TCommands\Akta\HapusAkta($id);
+			$akta									= $akta->handle();
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']	= $e->getMesssage();
+		}            
+
+		$this->page_attributes->msg['success']		= ['Data akta telah dihapus'];
+
+		//return view
+		return $this->generateRedirect(route('akta.akta.index'));
+	}
+
+	/**
+	 * update status akta
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function status($id, $status)
+	{	
+		try {
+			switch (strtolower($status)) 
+			{
+				case 'pengajuan':
+					$data		= new \TCommands\Akta\AjukanAkta($id);
+					break;
+				
+				default:
+					throw new Exception("Status invalid", 1);
+					break;
+			}
+
+			// save
+			$data				= $data->handle();
+
+		// save
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']	= $e->getMessage();
+		}
+
+		$this->page_attributes->msg['success']         = ['Data akta telah di simpan'];
+
+		return $this->generateRedirect(route('akta.akta.show', $id));
 	}
 
 	/**
