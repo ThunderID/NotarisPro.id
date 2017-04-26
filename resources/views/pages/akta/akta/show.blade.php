@@ -17,10 +17,18 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				{{-- COMPONENT MENUBAR --}}
 				<div class="row bg-faded">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-						&nbsp;
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-left: -15px;">
+						@if(str_is($page_datas->datas['status'], 'pengajuan'))
+							<ul class="nav menu-content justify-content-start">
+								<li class="nav-item">
+									<span class="nav-link">Status : Menunggu Renvoi</span>
+								</li>	
+							</ul>
+						@else
+							&nbsp;
+						@endif					
 					</div>
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" style="padding-right: 0px;">
 						<ul class="nav menu-content justify-content-end">
 							@if(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
@@ -35,9 +43,10 @@
 								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
 							</li>
 							@elseif(str_is($page_datas->datas['status'], 'pengajuan'))
+
 							<li class="nav-item">
-								<span class="nav-link">Menunggu Renvoi</span>
-							</li>
+								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
+							</li>							
 							@endif
 						</ul>
 					</div>

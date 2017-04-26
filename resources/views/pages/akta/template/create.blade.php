@@ -57,7 +57,16 @@
 					<div class="col">&nbsp;</div>
 					<div class="col-9 d-flex justify-content-center">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-							<textarea name="template" class="editor"></textarea>
+							<textarea name="template" class="editor">
+								@if (!is_null($page_datas->id))
+									@if (!empty($page_datas->datas['paragraf']))
+										@forelse ($page_datas->datas['paragraf'] as $k => $v)
+											{!! $v['konten'] !!}
+										@empty
+										@endforelse
+									@endif
+								@endif
+							</textarea>
 						</div>
 					</div>
 					<div class="col">&nbsp;</div>	
@@ -100,8 +109,9 @@
 
 @push('scripts')
 	var dataListWidgets = {!! json_encode($page_datas->list_widgets) !!};
-	var url = "{{ route('akta.template.automatic.store') }}";
-	window.editorUI.init(url, $('.form-template'));
+	var url = "{{ (!is_null($page_datas->id)) ? route('akta.template.automatic.store', ['id' => $page_datas->id]) : route('akta.template.automatic.store')  }}";
+	var form = $('.form-template');
+	window.editorUI.init(url, form);
 
 
 	//	functions

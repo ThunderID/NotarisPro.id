@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Akta;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use TQueries\Akta\DaftarTemplateAkta as Query;
 use TQueries\Tags\TagService;
 
@@ -309,7 +310,7 @@ class templateController extends Controller
 	/**
 	 * function automatic save
 	 */
-	public function automatic_store ($id = null)
+	public function automatic_store ($id = null, Request $request)
 	{
 		 try {
 			// get data
@@ -317,7 +318,7 @@ class templateController extends Controller
 																'title', 
 																'template'
 														);
-
+			$input['title']							= ($request->has('title') && !is_null($request->input('title'))) ? $request->input('title') : 'Tidak ada judul [Untitled]';
 			$pattern 								= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
 			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
 
@@ -378,16 +379,16 @@ class templateController extends Controller
 			$data                               			= new \TCommands\Akta\DraftingTemplateAkta($input);
 			$data->handle();
 		} catch (Exception $e) {
-			return Response::json(['status'	=> $e->getMessage()], 200);
+			return response()->json(['status'	=> $e->getMessage()], 200);
 		}
 
 		// return value json
 		if ($id == null) {
 		    $this->page_attributes->msg['success']         = ['Data template telah ditambahkan'];
-		    return Response::json(['status'	=> 'success'], 200);
+		    return response()->json(['status'	=> 'success'], 200);
 		} else {
 		    $this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
-		    return Response::json(['status'	=> 'success'], 200);
+		    return response()->json(['status'	=> 'success'], 200);
 		}
 	}
 }

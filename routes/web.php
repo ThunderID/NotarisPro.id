@@ -62,7 +62,7 @@ Route::group(['middleware' => ['authenticated']], function()
 		]]);
 		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
 
-		Route::any('/akta/template/auto/save', 				['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
+		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
 
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
@@ -81,6 +81,10 @@ Route::group(['middleware' => ['authenticated']], function()
 		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 
 		Route::any('/akta/akta/simpan/mention/{akta_id}', 	['uses' => 'aktaController@ajax_akta', 'as' => 'akta.akta.simpan.mention']);
+
+		// versioning akta
+		Route::get('/akta/akta/{akta_id}/versioning', 			['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
+
 	});
 
 	// Jadwal
