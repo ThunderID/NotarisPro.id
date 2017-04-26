@@ -47,6 +47,11 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
 							</li>							
+							@elseif(str_is($page_datas->datas['status'], 'renvoi'))
+
+							<li class="nav-item">
+								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
+							</li>							
 							@endif
 						</ul>
 					</div>
