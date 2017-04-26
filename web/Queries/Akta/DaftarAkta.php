@@ -7,6 +7,8 @@ namespace TQueries\Akta;
 ///////////////
 use TAkta\DokumenKunci\Models\Dokumen as Model;
 
+use TAkta\DokumenKunci\Models\Versi;
+
 use Hash, Exception, Session, TAuth;
 
 /**
@@ -83,6 +85,25 @@ class DaftarAkta
 		}
 
 		return $akta;
+	}
+
+
+	public function versioning($id)
+	{
+		$model 		= $this->queries([]);
+		$model 		= $model->id($id)->first();
+
+		$original 	= $model->toArray();
+
+		unset($original['mentionable']);
+		unset($original['fill_mention']);
+
+		$prev_version 	= Versi::where('original_id', $original['id'])->orderby('versi', 'desc')->skip(1)->first()->toArray();
+
+		unset($prev_version['mentionable']);
+		unset($prev_version['fill_mention']);
+
+		return ['id' => $id, 'terbaru' => $original, 'original' => $prev_version];
 	}
 
 	/**

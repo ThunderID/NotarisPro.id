@@ -2,6 +2,11 @@
 
 @push('styles')  
 	body {background-color: rgba(0, 0, 0, 0.075) !important;}
+
+}
+
+@media screen and (min-width: 800px) {
+  
 @endpush  
 
 @section('akta')
@@ -22,6 +27,7 @@
 					</div>
 				</div>
 				<div class="row p-3">
+
 					@foreach ($page_datas->datas as $k => $v)
 						<div class="col-md-4 mb-3">
 							<div class="card">
@@ -33,6 +39,7 @@
 							</div>
 						</div>
 					@endforeach
+
 				</div>
 				<div class="clearfix">&nbsp;</div>
 			</div>
@@ -41,4 +48,26 @@
 @stop
 
 @push('scripts')  
+	/* functions */
+
+	// equal height
+	var eh = window.equalHeight;
+	eh.target = $('.card-block');
+
+	function alignHeight(){
+		eh.do();	
+	}
+
+	function alignHeightReset(){
+		eh.reset();
+	}
+
+	/* Handlers */
+	$(document).ready(function(){
+	    alignHeight();
+	});
+	$( window ).resize(function() {
+		alignHeightReset();
+	    alignHeight();
+	});	
 @endpush 
