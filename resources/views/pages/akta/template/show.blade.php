@@ -44,15 +44,19 @@
 								<a class="dropdown-item" href="#">F4</a>
 							</div>
 						</li> -->
-						@if(str_is($page_datas->datas['template']['status'], 'draft'))
+						@if(str_is($page_datas->datas['status'], 'draft'))
 						<li class="nav-item">
 							<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
 						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
+						</li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['template']['id']])}}" ><i class="fa fa-check"></i> Publish</a>
+							<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-check"></i> Publish</a>
 						</li>
-						@elseif(str_is($page_datas->datas['template']['status'], 'publish'))
+						@elseif(str_is($page_datas->datas['status'], 'publish'))
 						<li class="nav-item">
 							<span class="nav-link">Published</span>
 						</li>
@@ -69,7 +73,7 @@
 				<div class="col-9 d-flex justify-content-center">
 					<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 						<div class="form-group p-3 editor">
-							@foreach($page_datas->datas['template']['paragraf'] as $key => $value)
+							@foreach((array)$page_datas->datas['paragraf'] as $key => $value)
 								{!!$value['konten']!!}
 							@endforeach
 						</div>
@@ -84,7 +88,7 @@
 
 	@include('components.deleteModal',[
 		'title' => 'Menghapus Draft Template',
-		'route' => route('akta.template.destroy', ['id' => $page_datas->datas['template']['id']])
+		'route' => route('akta.template.destroy', ['id' => $page_datas->datas['id']])
 	])
 @stop
 
