@@ -82,6 +82,8 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::any('/akta/akta/simpan/mention/{akta_id}', 	['uses' => 'aktaController@ajax_akta', 'as' => 'akta.akta.simpan.mention']);
 
+		Route::any('/akta/akta/auto/save/{id}',				['uses'	=> 'aktaController@automatic_store', 'as' => 'akta.akta.automatic.store']);
+
 		// versioning akta
 		Route::get('/akta/akta/{akta_id}/versioning', 			['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
 

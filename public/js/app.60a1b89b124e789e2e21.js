@@ -8654,8 +8654,8 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 		return result;
 	},
 	autoSave: function autoSave(el, url, form) {
+		console.log('autosave');
 		var triggerAutoSave = function triggerAutoSave(event, editable) {
-			console.log(form.serialize());
 			$.ajax({
 				url: url,
 				type: 'POST',
@@ -8665,7 +8665,9 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 		};
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 3000);
-		el.subscribe('editableInput', throttledAutoSave);
+		el.subscribe('editableInput', function (event, editable) {
+			console.log('tes');
+		});
 	},
 	init: function init(url, form) {
 		var editor = new window.Editor(".editor", {
@@ -8812,7 +8814,7 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 		mention = $('div.editor').find('b.medium-editor-mention-at');
 		$.each(mention, function (k, v) {
 			if ($(v).html() == param || $(v).attr('data-mention') == param) {
-				$(v).attr('data-mention', param).addClass('active');
+				$(v).attr('data-mention', param);
 				$(v).html(data);
 			}
 		});
