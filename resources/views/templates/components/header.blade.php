@@ -48,7 +48,7 @@
 				</div>				
 			</li>	
 			<li class="nav-item @yield('klien')">
-				<a class="nav-link" href="{{ route('klien.index') }}">Klien</a>
+				<a class="nav-link" href="#">Klien</a>
 			</li>	
 			<li class="nav-item">
 				<a class="nav-link" href="#">Billing</a>
