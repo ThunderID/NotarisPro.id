@@ -48,6 +48,8 @@ class Versi extends BaseModel
 											'versi'					,
 											'pemilik'				,
 											'penulis'				,
+											'mentionable'			,
+											'fill_mention'			,
 										];
 	/**
 	 * Basic rule of database
