@@ -30,8 +30,8 @@
 		return result;
 	},
 	autoSave: function (el, url, form) {
+		console.log('autosave');
 		var triggerAutoSave = function (event, editable) {
-			console.log(form.serialize());
 			$.ajax({
 				url: url,
 				type: 'POST',
@@ -43,7 +43,10 @@
 		};
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 3000);
-		el.subscribe('editableInput', throttledAutoSave);
+		el.subscribe('editableInput', function(event, editable) {
+			console.log('tes');
+		});
+
 	},
 	init: function (url, form) {
 		var editor = new window.Editor(".editor", {

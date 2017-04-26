@@ -81,6 +81,8 @@ Route::group(['middleware' => ['authenticated']], function()
 		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 
 		Route::any('/akta/akta/simpan/mention/{akta_id}', 	['uses' => 'aktaController@ajax_akta', 'as' => 'akta.akta.simpan.mention']);
+
+		Route::any('/akta/akta/auto/save/{id}',				['uses'	=> 'aktaController@automatic_store', 'as' => 'akta.akta.automatic.store']);
 	});
 
 	// Jadwal

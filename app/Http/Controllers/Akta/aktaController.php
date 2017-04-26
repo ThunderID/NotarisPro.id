@@ -387,4 +387,40 @@ class aktaController extends Controller
 
 		return $list;
 	}
+
+	/**
+	 * function automatic save
+	 */
+	public function automatic_store ($id = null, Request $request)
+	{
+		try {
+			// get data
+			$input		= $request->only('template', 'template_id');
+			$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
+			// change key index like 'paragraph[*]'
+
+			foreach ($out[0] as $key => $value) 
+			{
+				$input['paragraf'][$key]['konten']	= $value;
+			}
+
+			$call 									= new DaftarTemplateAkta;
+			$template_id 							= $input['template_id'];
+			$template								= $call->detailed($template_id);
+
+			$input['mentionable']					= $template['mentionable'];
+			$input['judul']							= $template['judul'];
+
+			// save
+			$data                               	= new \TCommands\Akta\DraftingAkta($input);
+			$data->handle();
+		} catch (Exception $e) {
+			return response()->json(['status'	=> $e->getMessage()], 200);
+		}
+
+		//return view
+		$this->page_attributes->msg['success']         = ['Data akta telah ditambahkan'];
+		return response()->json(['status'	=> 'success'], 200);
+	}
 }
