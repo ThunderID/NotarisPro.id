@@ -305,4 +305,89 @@ class templateController extends Controller
 
 		return $list;
 	}
+
+	/**
+	 * function automatic save
+	 */
+	public function automatic_store ($id = null)
+	{
+		 try {
+			// get data
+			$input									= $request->only(
+																'title', 
+																'template'
+														);
+
+			$pattern 								= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
+
+			foreach ($out[0] as $key => $value) 
+			{
+				$input['paragraf'][$key]['konten']	= $value;
+				$pattern_2 							= '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
+
+				if (preg_match_all($pattern_2, $value, $matches)) 
+				{
+					if (!isset($input['mentionable']))
+					{
+						if (is_array($matches[1]))
+						{
+							foreach ($matches[1] as $keyx => $valuex) 
+							{
+								if (str_is('@*', $valuex))
+								{
+									$input['mentionable'][]	= $valuex;
+								}
+							}
+						}
+						else
+						{
+							if (str_is('@*', $valuex))
+							{
+								$input['mentionable'][]		= $matches[1];
+							}
+								
+						}
+					}
+					elseif (!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
+					{
+						$input['mentionable'][]				= $matches[1];
+					}
+					elseif (is_array($matches['1']))
+					{
+						$new_array 							= [];
+						foreach ($matches[1] as $keyx => $valuex) 
+						{
+							if (str_is('@*', $valuex))
+							{
+								$new_array[]				= $valuex;
+							}
+						}
+						$input['mentionable']				= array_merge(
+																	array_intersect($input['mentionable'], $new_array),		//         2   4
+																	array_diff($input['mentionable'], $new_array),			//       1   3
+																	array_diff($new_array, $input['mentionable'])			//               5 6
+																);															//  $u = 1 2 3 4 5 6
+					}
+				}
+			}
+
+			$input['judul']									= $input['title'];
+
+			// save
+			$data                               			= new \TCommands\Akta\DraftingTemplateAkta($input);
+			$data->handle();
+		} catch (Exception $e) {
+			return Response::json(['status'	=> $e->getMessage()], 200);
+		}
+
+		// return value json
+		if ($id == null) {
+		    $this->page_attributes->msg['success']         = ['Data template telah ditambahkan'];
+		    return Response::json(['status'	=> 'success'], 200);
+		} else {
+		    $this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
+		    return Response::json(['status'	=> 'success'], 200);
+		}
+	}
 }
