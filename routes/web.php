@@ -60,6 +60,7 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.template.update', //patch
 			'destroy' 	=> 'akta.template.destroy' //post 
 		]]);
+		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
 
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
