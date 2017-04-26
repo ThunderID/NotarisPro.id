@@ -8652,6 +8652,7 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 	},
 	autoSave: function autoSave(el, url, form) {
 		var triggerAutoSave = function triggerAutoSave(event, editable) {
+			console.log(form.serialize());
 			$.ajax({
 				url: url,
 				type: 'POST',
@@ -8660,9 +8661,8 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 			});
 		};
 
-		var throttledAutoSave = widow.Editor.util.throttle(triggerAutoSave, 3000);
+		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 3000);
 		el.subscribe('editableInput', throttledAutoSave);
-		console.log('automatic-save..');
 	},
 	init: function init(url, form) {
 		var editor = new window.Editor(".editor", {
@@ -8703,13 +8703,14 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 			}
 		});
 
-		try {
-			if (typeof url != 'undefined' || typeof form != 'undefined') {
-				window.editorUI.autosave(editor, url, form);
-			}
-		} catch (err) {
-			console.log('data tidak tersimpan secara otomatis');
-		}
+		window.editorUI.autoSave(editor, url, form);
+		// try {
+		// 	if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
+		// 	}
+		// }
+		// catch (err) {
+		// 	console.log('data tidak tersimpan secara otomatis');
+		// }
 	}
 };
 

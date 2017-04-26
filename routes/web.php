@@ -62,7 +62,7 @@ Route::group(['middleware' => ['authenticated']], function()
 		]]);
 		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
 
-		Route::any('/akta/template/auto/save', 				['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
+		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
 
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
