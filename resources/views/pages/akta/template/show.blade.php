@@ -44,9 +44,19 @@
 								<a class="dropdown-item" href="#">F4</a>
 							</div>
 						</li> -->
-						<!-- <li class="nav-item">
-							<a class="nav-link" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
-						</li> -->
+						@if(str_is($page_datas->datas['template']['status'], 'draft'))
+						<li class="nav-item">
+							<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['template']['id']])}}" ><i class="fa fa-check"></i> Publish</a>
+						</li>
+						@elseif(str_is($page_datas->datas['template']['status'], 'publish'))
+						<li class="nav-item">
+							<span class="nav-link">Published</span>
+						</li>
+						@endif
 					</ul>
 				</div>
 			</div>
@@ -71,6 +81,11 @@
 		<div class="clearfix">&nbsp;</div>
 	</div>
 
+
+	@include('components.deleteModal',[
+		'title' => 'Menghapus Draft Template',
+		'route' => route('akta.template.destroy', ['id' => $page_datas->datas['template']['id']])
+	])
 @stop
 
 @push('scripts')

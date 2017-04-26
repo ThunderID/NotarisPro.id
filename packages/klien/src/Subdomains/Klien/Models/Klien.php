@@ -56,10 +56,10 @@ class Klien extends BaseModel
 	 * @var array
 	 */
 	protected $rules				=	[
-											'nama'					=> 'required|max:255',
-											'tempat_lahir'			=> 'required|max:255',
-											'tanggal_lahir'			=> 'required|date_format:"Y-m-d"',
-											'pekerjaan'				=> 'required|max:255',
+											'nama'					=> 'max:255',
+											'tempat_lahir'			=> 'max:255',
+											'tanggal_lahir'			=> 'date_format:"Y-m-d"',
+											'pekerjaan'				=> 'max:255',
 											'alamat.alamat'			=> 'max:255',
 											'alamat.rt'				=> 'max:255',
 											'alamat.rw'				=> 'max:255',
@@ -68,7 +68,7 @@ class Klien extends BaseModel
 											'alamat.regensi'		=> 'max:255',
 											'alamat.provinsi'		=> 'max:255',
 											'alamat.negara'			=> 'max:255',
-											'nomor_ktp'				=> 'required|max:255',
+											'nomor_ktp'				=> 'max:255',
 										];
 
 	/**
