@@ -376,6 +376,23 @@ class aktaController extends Controller
 	}
 
 	/**
+	 * Function show versioning
+	 */
+	public function versioning($akta_id)
+	{	
+		$versioning         				= new \TQueries\Akta\DaftarAkta;
+
+		$this->page_datas->datas			= $versioning->versioning('E812D880-0708-4AB5-9E84-6BEF5714AFB4');
+		$this->page_attributes->title		= 'Histori Revisi ' . $this->page_datas->datas['terbaru']['judul'];
+
+		//initialize view
+		$this->view							= view('pages.akta.akta.versioning');
+
+		//function from parent to generate view
+		return $this->generateView();		
+	}
+
+	/**
 	 * function get list widgets on template create or edit
 	 */
 	private function list_widgets() 
