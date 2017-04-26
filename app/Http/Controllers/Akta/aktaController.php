@@ -158,7 +158,7 @@ class aktaController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request)
+	public function store($id = null, Request $request)
 	{
 		try {
 			// get data
@@ -242,22 +242,7 @@ class aktaController extends Controller
 	{
 		//
 		try {
-			// get data
-			$input		= $request->only('template');
-			$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-			// change key index like 'paragraph[*]'
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$input['paragraf'][$key]['konten']	= $value;
-			}
-
-			$input['id']							= $id;
-
-			// save
-			$data                               	= new \TCommands\Akta\DraftingAkta($input);
-			$data->handle();
+			$this->parse_store($id, $request);
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -405,39 +390,41 @@ class aktaController extends Controller
 		return $list;
 	}
 
+	private function parse_store($id, $request)
+	{
+		// get data
+		$input		= $request->only('template');
+		$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
+		// change key index like 'paragraph[*]'
+
+		foreach ($out[0] as $key => $value) 
+		{
+			$input['paragraf'][$key]['konten']	= $value;
+		}
+
+		$input['id']							= $id;
+
+		// save
+		$data                               	= new \TCommands\Akta\DraftingAkta($input);
+		$data 									= $data->handle();
+
+		return $data;
+	}
+
 	/**
 	 * function automatic save
 	 */
 	public function automatic_store ($id = null, Request $request)
 	{
 		try {
-			// get data
-			$input		= $request->only('template', 'template_id');
-			$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-			// change key index like 'paragraph[*]'
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$input['paragraf'][$key]['konten']	= $value;
-			}
-
-			$call 									= new DaftarTemplateAkta;
-			$template_id 							= $input['template_id'];
-			$template								= $call->detailed($template_id);
-
-			$input['mentionable']					= $template['mentionable'];
-			$input['judul']							= $template['judul'];
-
-			// save
-			$data                               	= new \TCommands\Akta\DraftingAkta($input);
-			$data->handle();
+			$this->parse_store($id, $request);
 		} catch (Exception $e) {
 			return response()->json(['status'	=> $e->getMessage()], 200);
 		}
 
 		//return view
-		$this->page_attributes->msg['success']         = ['Data akta telah ditambahkan'];
+		$this->page_attributes->msg['success']         = ['Data template tersimpan'];
 		return response()->json(['status'	=> 'success'], 200);
 	}
 }

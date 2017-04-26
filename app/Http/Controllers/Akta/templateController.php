@@ -109,79 +109,8 @@ class templateController extends Controller
 	public function store($id = null, Request $request)
 	{
 		//
-		 try {
-			// get data
-			$input				= $request->only(
-									'title', 
-									'template'
-								);
-			if(!is_null($id))
-			{
-				$input['id']	= $id;
-			}
-
-			$pattern = "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-			// change key index like 'paragraph[*]'
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$input['paragraf'][$key]['konten']  = $value;
-				
-				$pattern_2 = '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
-		
-				if(preg_match_all($pattern_2, $value, $matches)) 
-				{
-					if(!isset($input['mentionable']))
-					{
-						if(is_array($matches[1]))
-						{
-							foreach ($matches[1] as $keyx => $valuex) 
-							{
-								if(str_is('@*', $valuex))
-								{
-									$input['mentionable'][] = $valuex;
-								}
-							}
-						}
-						else
-						{
-							if(str_is('@*', $valuex))
-							{
-								$input['mentionable'][] = $matches[1];
-							}
-								
-						}
-					}
-					elseif(!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
-					{
-						$input['mentionable'][] = $matches[1];
-					}
-					elseif(is_array($matches['1']))
-					{
-						$new_array              = [];
-						foreach ($matches[1] as $keyx => $valuex) 
-						{
-							if(str_is('@*', $valuex))
-							{
-								$new_array[]    = $valuex;
-							}
-						}
-						$input['mentionable']   = 
-						array_merge(
-							array_intersect($input['mentionable'], $new_array),     //         2   4
-							array_diff($input['mentionable'], $new_array),          //       1   3
-							array_diff($new_array, $input['mentionable'])           //               5 6
-						);                                                          //  $u = 1 2 3 4 5 6
-					}
-				}
-			}
-
-			$input['judul']						= $input['title'];
-
-			// save
-			$data								= new \TCommands\Akta\DraftingTemplateAkta($input);
-			$data 								= $data->handle();
+		try {
+			$this->parse_store($id, $request);
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']    = $e->getMessage();
 		}
@@ -312,72 +241,9 @@ class templateController extends Controller
 	 */
 	public function automatic_store ($id = null, Request $request)
 	{
-		 try {
-			// get data
-			$input									= $request->only(
-																'title', 
-																'template'
-														);
-			$input['title']							= ($request->has('title') && !is_null($request->input('title'))) ? $request->input('title') : 'Tidak ada judul [Untitled]';
-			$pattern 								= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$input['paragraf'][$key]['konten']	= $value;
-				$pattern_2 							= '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
-
-				if (preg_match_all($pattern_2, $value, $matches)) 
-				{
-					if (!isset($input['mentionable']))
-					{
-						if (is_array($matches[1]))
-						{
-							foreach ($matches[1] as $keyx => $valuex) 
-							{
-								if (str_is('@*', $valuex))
-								{
-									$input['mentionable'][]	= $valuex;
-								}
-							}
-						}
-						else
-						{
-							if (str_is('@*', $valuex))
-							{
-								$input['mentionable'][]		= $matches[1];
-							}
-								
-						}
-					}
-					elseif (!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
-					{
-						$input['mentionable'][]				= $matches[1];
-					}
-					elseif (is_array($matches['1']))
-					{
-						$new_array 							= [];
-						foreach ($matches[1] as $keyx => $valuex) 
-						{
-							if (str_is('@*', $valuex))
-							{
-								$new_array[]				= $valuex;
-							}
-						}
-						$input['mentionable']				= array_merge(
-																	array_intersect($input['mentionable'], $new_array),		//         2   4
-																	array_diff($input['mentionable'], $new_array),			//       1   3
-																	array_diff($new_array, $input['mentionable'])			//               5 6
-																);															//  $u = 1 2 3 4 5 6
-					}
-				}
-			}
-
-			$input['judul']									= $input['title'];
-
-			// save
-			$data                               			= new \TCommands\Akta\DraftingTemplateAkta($input);
-			$data->handle();
+		try {
+			$this->parse_store($id, $request);
+			
 		} catch (Exception $e) {
 			return response()->json(['status'	=> $e->getMessage()], 200);
 		}
@@ -390,5 +256,81 @@ class templateController extends Controller
 		    $this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
 		    return response()->json(['status'	=> 'success'], 200);
 		}
+	}
+
+
+	private function parse_store($id, $request)
+	{
+		// get data
+		$input									= $request->only(
+															'title', 
+															'template'
+													);
+		$input['judul']							= ($request->has('title') && !is_null($request->input('title'))) ? $request->input('title') : 'Tidak ada judul [Untitled]';
+
+		if(!is_null($id))
+		{
+			$input['id']						= $id;
+		}
+
+		$pattern 								= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
+
+		foreach ($out[0] as $key => $value) 
+		{
+			$input['paragraf'][$key]['konten']	= $value;
+			$pattern_2 							= '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
+
+			if (preg_match_all($pattern_2, $value, $matches)) 
+			{
+				if (!isset($input['mentionable']))
+				{
+					if (is_array($matches[1]))
+					{
+						foreach ($matches[1] as $keyx => $valuex) 
+						{
+							if (str_is('@*', $valuex))
+							{
+								$input['mentionable'][]	= $valuex;
+							}
+						}
+					}
+					else
+					{
+						if (str_is('@*', $valuex))
+						{
+							$input['mentionable'][]		= $matches[1];
+						}
+							
+					}
+				}
+				elseif (!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
+				{
+					$input['mentionable'][]				= $matches[1];
+				}
+				elseif (is_array($matches['1']))
+				{
+					$new_array 							= [];
+					foreach ($matches[1] as $keyx => $valuex) 
+					{
+						if (str_is('@*', $valuex))
+						{
+							$new_array[]				= $valuex;
+						}
+					}
+					$input['mentionable']				= array_merge(
+																array_intersect($input['mentionable'], $new_array),		//         2   4
+																array_diff($input['mentionable'], $new_array),			//       1   3
+																array_diff($new_array, $input['mentionable'])			//               5 6
+															);															//  $u = 1 2 3 4 5 6
+				}
+			}
+		}
+
+		// save
+		$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
+		$data 				= $data->handle();
+
+		return $data;
 	}
 }
