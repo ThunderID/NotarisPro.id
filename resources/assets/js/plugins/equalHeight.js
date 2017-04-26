@@ -1,3 +1,9 @@
+/*
+	Equal height
+	Thunderlab 2017
+	created : Budi 
+	-------------
+*/
 window.equalHeight = new function() {
 
 	/* Adapter */
