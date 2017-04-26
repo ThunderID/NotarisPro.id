@@ -19,8 +19,12 @@
 
 //Plugins
 @import "plugins/clickableTableRow";
+@import "plugins/marginDrawer";
+@import "plugins/editorAutoPage";
+
 // plugin Medium-Editor
 @import "plugins/medium-editor/themes/bootstrap.scss";
 @import "plugins/medium-editor/medium-editor";
 // plugin TCMention using extension for plugin Medium-Editor
 @import "plugins/tcmention/mention-panel";
+

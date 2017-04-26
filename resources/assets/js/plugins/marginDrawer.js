@@ -33,7 +33,11 @@ window.Margin = new function(){
 	this.displayMargin = function(left,top,right,bottom){
 		// left & right margin
 		$('#l-margin').css('left', left);
+		$('#l-margin').css('height', this.docHeight + 'px');
+
 		$('#r-margin').css('left', right);
+		$('#r-margin').css('height', this.docHeight + 'px');
+
 
 		// Top & Bottom
     	/* init */
@@ -60,7 +64,7 @@ window.Margin = new function(){
 			$('#page').append(temp);
 
 			//set new top
-			console.log(this.pageHeight);
+			// console.log(this.pageHeight);
 		 	top = top + this.pageHeight;
     	}
 
@@ -79,8 +83,8 @@ window.Margin = new function(){
 			$('#page').append(temp);
 
 			//set new top
-			console.log(bottom);
-			console.log(this.pageHeight);
+			// console.log(bottom);
+			// console.log(this.pageHeight);
 		 	bottom = bottom + this.pageHeight;
     	}	    	
 	}
