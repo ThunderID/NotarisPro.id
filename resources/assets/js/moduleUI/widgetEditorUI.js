@@ -6,22 +6,36 @@
 			value = $('#list-widgets').find('input').val();
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
+
+			$.ajax({
+				url: urlFillMention,
+				type: 'POST',
+				data: {mention: field, isi_mention: value},
+				dataType: 'json',
+				success: function (data) {
+					console.log(data);
+					// return data;
+				}
+			});
+
 			window.widgetEditorUI.isActive(field);
+
 			$('#list-widgets').modal('hide');
 		});
 	},
 	replaceContentWithData: function (param, data) {
-		mention = $('div.editor').find('b.medium-editor-mention-at');
+		mention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(mention, function(k, v) {
 			if (($(v).html() == param) || ($(v).attr('data-mention') == param)) {
 				$(v).attr('data-mention', param);
+				$(v).removeClass('text-danger').addClass('text-primary');
 				$(v).html(data);
 			}
 		});
 		$('textarea.editor').html($('.editor').html());
 	},
 	checkContentWidget: function (param) {
-		listMention = $('div.editor').find('b.medium-editor-mention-at');
+		listMention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(listMention, function(k, v) {
 			dataContent  = $(v).attr('data-mention');
 			if (($(v).html() == param) || ($(v).attr('data-mention') == param)) {

@@ -16,7 +16,7 @@ class homeController extends Controller
 
 		//initialize view
 		$this->view                         = view('pages.dashboard.dashboard');
-
+		
 		//function from parent to generate view
 		return $this->generateView();  
     }
