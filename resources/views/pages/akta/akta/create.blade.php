@@ -19,9 +19,6 @@
 		'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 		'class'			=> 'form-akta mb-0'
 	])
-	@php
-		dd($page_datas);
-	@endphp
 		<div class="row bg-faded">
 			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
 				<ul class="nav menu-content justify-content-start">
