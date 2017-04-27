@@ -386,11 +386,24 @@ class aktaController extends Controller
 			$input['paragraf'][$key]['konten']	= $value;
 		}
 
+		$check_status 							= $this->query->detailed($id);
 		$input['id']							= $id;
 
-		// save
-		$data                               	= new \TCommands\Akta\DraftingAkta($input);
-		$data 									= $data->handle();
+		switch (strtolower($check_status['status'])) 
+		{
+			case 'draft':
+				$data		= new \TCommands\Akta\DraftingAkta($input);
+				$data 		= $data->handle();
+				break;
+			case 'renvoi':
+				$data		= new \TCommands\Akta\SimpanAkta($input);
+				$data 		= $data->handle();
+				break;
+			
+			default:
+				throw new Exception("Status invalid", 1);
+				break;
+		}
 
 		return $data;
 	}

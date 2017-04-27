@@ -152,12 +152,12 @@ class InitAktaTableSeeder extends Seeder
 
 			if(is_null($edited['paragraf'][0]['lock']))
 			{
-				$edited['paragraf'][0]['konten'] 	= 'revisi '.$edited['paragraf'][0]['konten'];
+				$edited['paragraf'][0]['konten'] 	= '<p>revisi</p>';
 			}
 
 			if(is_null($edited['paragraf'][1]['lock']))
 			{
-				$edited['paragraf'][1]['konten'] 	= 'revisi '.$edited['paragraf'][1]['konten'];
+				$edited['paragraf'][1]['konten'] 	= '<p>revisi</p>';
 			}
 
 			$akta 		= new \TCommands\Akta\SimpanAkta($edited);
