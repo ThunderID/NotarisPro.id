@@ -74,12 +74,13 @@
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if ([this.mention].length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
-							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('p-0').addClass('m-0').addClass('menu-mention');
+							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
 							$(panelEl).html(listMention);
 						}
 						$('.link-mention').on('click', function(el) {
 							el.preventDefault();
 							selectMentionCallback($(this).html());
+							$('b.medium-editor-mention-at').addClass('text-danger');
 						});
 					},
 					activeTriggerList: ["@"],
