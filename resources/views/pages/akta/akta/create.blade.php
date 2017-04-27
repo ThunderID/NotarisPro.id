@@ -99,34 +99,32 @@
 							<textarea name="template" class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									@php
-										$pattern = "/<span class=\"medium-editor-mention-at?.*\">(.*?)<\/span>/";
-										preg_match($pattern, $v['konten'], $matches);
+										$temp = explode('<span class="medium-editor-mention-at', $v['konten']);
 									@endphp
-									@if (!empty($matches))
-										@if (isset($matches[1]) && !empty($matches[1]))
-											@if (isset($matches[1]) && !empty($matches[1]))
-												@php
-													if (array_get($page_datas->datas['fill_mention'], $matches[1]) != null)
-													{
-														$data_mention = array_get($page_datas->datas['fill_mention'], $matches[1]);
-														$new_konten = preg_replace('/<span class=\"medium-editor-mention-at?.*\">(.*?)<\/span>/', '<span class="medium-editor-mention-at text-primary">'.$data_mention.'</span>', $v['konten']);
-													}
-													else
-													{
-														$data_mention = array_get($page_datas->datas['fill_mention'], $matches[1], $matches[1]);
-														if (strpos($data_mention, '@') !== false) {
-															$color_text = 'text-danger';
-														}
-														else
-														{
-															$color_text = 'text-primary';
-														}
-														$new_konten = preg_replace('/<span class=\"medium-editor-mention-at?.*\">(.*?)<\/span>/', '<span class="medium-editor-mention-at ' .$color_text. '">'.$data_mention.'</span>', $v['konten']);
-													}
-												@endphp
-												{!! $new_konten !!}
+									@if (!is_null($temp) && !empty($temp))
+										@foreach ($temp as $i => $j)
+											@php
+												$pattern = "/@(.*?)<\/span>/";
+												preg_match($pattern, $j, $match);
+											@endphp
+											@if (!empty($match))
+												@if (isset($match[1]) && !empty($match[1]))
+													@if (array_get($page_datas->datas['fill_mention'], '@'.$match[1]) != null)
+														@php
+															$data_mention 	= array_get($page_datas->datas['fill_mention'], '@'.$match[1]);
+															if (strpos($data_mention, '@') !== false) {
+																$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
+																dd($temp[$i]);
+															} else {
+																$pattern = '/text-danger">@(.*?)<\/span>/';
+																$temp[$i] = ' text-primary">'.preg_replace($pattern, $data_mention. '</span>', $j);
+															}
+														@endphp
+													@endif
+												@endif
 											@endif
-										@endif
+										@endforeach
+										{!! implode('<span class="medium-editor-mention-at', $temp) !!}
 									@else
 										{!! $v['konten'] !!}
 									@endif

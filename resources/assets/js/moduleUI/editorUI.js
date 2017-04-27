@@ -41,11 +41,8 @@
 			});
 		};
 
-		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 3000);
-		el.subscribe('editableInput', function(event, editable) {
-			console.log('tes');
-		});
-
+		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
+		el.subscribe('editableInput', throttledAutoSave);
 	},
 	init: function (url, form) {
 		var editor = new window.Editor(".editor", {
@@ -87,13 +84,13 @@
 			}
 		});
 
-		window.editorUI.autoSave(editor, url, form);
-		// try {
+		try {
+			window.editorUI.autoSave(editor, url, form);
 		// 	if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
-		// 	}
+		}
 		// }
-		// catch (err) {
-		// 	console.log('data tidak tersimpan secara otomatis');
-		// }
+		catch (err) {
+			console.log('data tidak tersimpan secara otomatis');
+		}
 	}
 }

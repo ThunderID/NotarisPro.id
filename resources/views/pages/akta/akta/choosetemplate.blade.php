@@ -19,7 +19,7 @@
 
 @section('content')
 	<div class="row">
-		<div class="container">
+		<div class="container" id="list-template">
 			<div class="col-12 col-sm-10 col-md-8 col-xl-8 offset-sm-1 offset-md-2 offset-xl-2 input_panel">
 				<div class="row">
 					<div class="col-12">

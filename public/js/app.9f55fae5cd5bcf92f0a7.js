@@ -8663,10 +8663,8 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 			});
 		};
 
-		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 3000);
-		el.subscribe('editableInput', function (event, editable) {
-			console.log('tes');
-		});
+		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
+		el.subscribe('editableInput', throttledAutoSave);
 	},
 	init: function init(url, form) {
 		var editor = new window.Editor(".editor", {
@@ -8708,14 +8706,14 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 			}
 		});
 
-		window.editorUI.autoSave(editor, url, form);
-		// try {
-		// 	if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
-		// 	}
+		try {
+			window.editorUI.autoSave(editor, url, form);
+			// 	if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
+		}
 		// }
-		// catch (err) {
-		// 	console.log('data tidak tersimpan secara otomatis');
-		// }
+		catch (err) {
+			console.log('data tidak tersimpan secara otomatis');
+		}
 	}
 };
 
@@ -8748,11 +8746,21 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 /***/ (function(module, exports) {
 
 ;window.listSearchUI = {
-	init: function init() {
+	searchOrganisasi: function searchOrganisasi() {
 		options = {
 			valueNames: ['name']
 		};
 		var search = new List('list-organisasi', options);
+	},
+	searchTemplate: function searchTemplate() {
+		options = {
+			valueNames: ['name']
+		};
+		var search = new List('list-template', options);
+	},
+	init: function init() {
+		window.listSearchUI.searchOrganisasi();
+		// window.listSearchUI.searchTemplate();
 	}
 };
 
