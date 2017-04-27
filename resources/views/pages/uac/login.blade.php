@@ -5,7 +5,7 @@
 
 @section('content')			
 	<div class="row login-dialog">
-		<div class="col-4 offset-4">
+		<div class="col-12 col-sm-8 col-md-6 col-lg-4 offset-sm-2 offset-md-3 offset-lg-4">
 			<div class="form-wrap">
 				<h1>{{ str_replace("_", " ", env('APP_NAME')) }}</h1> 
 				<hr>
