@@ -118,7 +118,7 @@ class DraftingAkta
 				//rename mention
 				foreach ($this->akta['fill_mention'] as $key => $value) 
 				{
-					$this->akta['fill_mention'][str_replace('.','_',str_replace('@','', $key))] = $value;
+					$this->akta['fill_mention'][str_replace('.','-+',str_replace('@','', $key))] = $value;
 					unset($this->akta['fill_mention'][$key]);
 				}
 			}
