@@ -84,8 +84,18 @@ class AjukanAkta
 				$akta->pemilik 			= $owner;
 			}
 
+			//4a. check status renvoi
+			if(str_is($akta->status, 'renvoi'))
+			{
+				$akta->total_perubahan	= ($akta->total_perubahan*1) + 1;
+			}
+			else
+			{
+				$akta->total_perubahan	= 0;
+			}
+
 			//4. set status
-			$akta->status 				= 'pengajuan';
+			$akta->status 			= 'pengajuan';
 
 			$akta->save();
 
