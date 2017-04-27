@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar" style="height:calc(100% - 94px);">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar subset-2menu">
 				<div class="panel">
 					<h5>Info List Widgets</h5>
 					<div class="list-widgets">
@@ -67,7 +67,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel" style="height:calc(100% - 94px);">
+			<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu" style="margin-left: 15px;">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div id="l-margin" class="margin margin-v"></div>
 				<div id="r-margin" class="margin margin-v"></div>
