@@ -1,7 +1,3 @@
-@php 
-	$logged_user 	= TAuth::loggedUser();
-	$active_office 	= TAuth::activeOffice();
-@endphp
 
 <!-- first layer -->
 <!-- <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
@@ -65,10 +61,10 @@
 				<a class="nav-link" href="javascript:void(0);"  data-toggle="modal" data-target="#modal-change-org">
 					<i class="fa fa-building" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
 					<span class="hidden-lg-down">
-						{{$active_office['kantor']['nama']}}
+						{{$acl_active_office['kantor']['nama']}}
 					</span>
 					<span class="hidden-md-up">
-						{{$active_office['kantor']['nama']}}
+						{{$acl_active_office['kantor']['nama']}}
 					</span>					
 				</a>
 			</li>
@@ -99,7 +95,7 @@
 			<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
 		</div>
 		<ul class="list-group list">
-			@foreach($logged_user['visas'] as $key => $value)			
+			@foreach($acl_logged_user['visas'] as $key => $value)			
 				<li class="list-group-item">
 					<a class="name" href="{{ route('uac.office.activate', $value['id']) }}" ><i class="fa fa-building"></i>&nbsp;&nbsp; {{ $value['kantor']['nama'] }}</a> 
 				</li>
@@ -110,12 +106,12 @@
 
 		<div class="row">
 			<div class="col-sm-10 text-left">
-				<span class="label">Aktif : &nbsp;&nbsp;{{ $active_office['kantor']['nama'] }}
+				<span class="label">Aktif : &nbsp;&nbsp;{{ $acl_active_office['kantor']['nama'] }}
 				</span>
 			</div>
 			<div class="col-sm-2 text-right">
-				@if(str_is($active_office['role'], 'notaris'))
-					<a href="{{ route('notaris.kantor.edit', $active_office['kantor']['id']) }}"> Edit</a>
+				@if(str_is($acl_active_office['role'], 'notaris'))
+					<a href="{{ route('notaris.kantor.edit', $acl_active_office['kantor']['id']) }}"> Edit</a>
 				@endif
 			</div>
 		</div>

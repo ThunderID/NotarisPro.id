@@ -40,26 +40,21 @@
 	// generate URL
 	function generateUrl($key){
 		// get current url
-		$qs = Request::fullUrl();
-
-		// stripe off qs and remove this key 
-		$url	 	= parse_url($qs);
-		parse_str($url['query'], $arr_qs);
-		unset($arr_qs[$key]);
+		$qs = Request::except([$key]);
 
 		//rebuild qs and return 
-		return  $url['scheme'] . "://" . $url['host'] . $url['path'] . "?" . http_build_query($arr_qs, '', '&amp;');
+		return  Request::url().'?'.http_build_query($qs);
 	}
 ?>
 
-<div style="margin-top: -1.3rem;">
+<div style="margin-top: -1.3rem;color:inherit;">
 	@foreach ($qs as $key => $value)
 		@if($strict_mode == true)
 			@if(array_key_exists($key, $lists))
-				<span class="badge badge-notif">{{$lists[$key]}} : {{$value}} <a href="{{ generateUrl($key) }}">x</a></span>
+				<span class="badge badge-notif" style="color:inherit;">{{$lists[$key]}} : {{$value}} <a href="{{ generateUrl($key) }}">x</a></span>
 			@endif
 		@else
-			<span class="badge badge-notif">{{$key}} : {{$value}} <a href="{{ generateUrl($key) }}">x</a></span>
+			<span class="badge badge-notif" style="color:inherit;">{{$key}} : {{$value}} <a href="{{ generateUrl($key) }}">x</a></span>
 		@endif
 	@endforeach
 </div>

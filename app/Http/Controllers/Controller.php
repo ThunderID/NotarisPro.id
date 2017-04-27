@@ -21,6 +21,14 @@ class Controller extends BaseController
 
 	function __construct() 
 	{
+		\DB::connection('mongodb')->enableQueryLog();
+
+		$logged_user 					= \TAuth::loggedUser();
+		$active_office 					= \TAuth::activeOffice();
+		
+		\View::share('acl_logged_user', $logged_user);
+		\View::share('acl_active_office', $active_office);
+
 		// sets params
 		$this->page_attributes 			= new \Stdclass;
 		$this->page_datas 				= new \Stdclass;

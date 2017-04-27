@@ -35,7 +35,7 @@ class aktaController extends Controller
 		$query['per_page']                 	= (int)env('DATA_PERPAGE');
 		
 		// special treat judul
-		if(isset($query['judul'])){
+		if(isset($query['q'])){
 			$query['judul']					= $query['q'];
 			unset($query['q']);    	
 		}
