@@ -8599,6 +8599,9 @@ __webpack_require__("./resources/assets/js/plugins/editorAutoPage.js");
 // plugin equal height
 __webpack_require__("./resources/assets/js/plugins/equalHeight.js");
 
+//toggle menu
+__webpack_require__("./resources/assets/js/plugins/toggleMenu.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -18164,6 +18167,38 @@ if (!("classList" in document.createElement("_"))) {
     return MediumEditor;
 }());
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module), __webpack_require__("./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/toggleMenu.js":
+/***/ (function(module, exports) {
+
+// adapter
+var toggle_on = $('.btn-toggle-menu-on');
+var toggle_off = $('.btn-toggle-menu-off');
+var menu = $('.target-menu');
+var panel = $('.target-panel');
+
+// functions
+toggle_on.on("click", function () {
+	menu.slideDown();
+	panel.hide();
+});
+
+toggle_off.on("click", function () {
+	panel.show();
+	menu.slideUp();
+});
+
+// custom
+$(window).resize(function () {
+	if ($(window).width() > 768) {
+		menu.show();
+	} else {
+		menu.hide();
+		panel.show();
+	}
+});
 
 /***/ }),
 
