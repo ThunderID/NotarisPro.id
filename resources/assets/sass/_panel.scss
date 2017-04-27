@@ -1,6 +1,5 @@
 .scrollable_panel{
-	height: calc(100% - 54px);
-	margin-left:15px;
+	height: 100%;
 	padding-left:0px; 
 	overflow-y: scroll;
 }
@@ -10,4 +9,13 @@
 	margin-top:2rem;
 	margin-bottom:2rem;
 	padding-bottom:2rem;
+}
+
+// custom
+.subset-menu{
+	height: calc(100% - 54px);
+}
+
+.subset-2menu{
+	height: calc(100% - 94px);
 }

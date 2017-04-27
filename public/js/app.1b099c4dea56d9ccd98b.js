@@ -8654,7 +8654,6 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 		return result;
 	},
 	autoSave: function autoSave(el, url, form) {
-		console.log('autosave');
 		var triggerAutoSave = function triggerAutoSave(event, editable) {
 			$.ajax({
 				url: url,
@@ -8690,7 +8689,7 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 			extensions: {
 				mention: new window.Mention({
 					extraPanelClassName: 'dropdown-menu',
-					tagName: 'b',
+					tagName: 'span',
 					renderPanelContent: function renderPanelContent(panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if ([this.mention].length != 0) {
@@ -8701,8 +8700,8 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 						$('.link-mention').on('click', function (el) {
 							el.preventDefault();
 							selectMentionCallback($(this).html());
-							$('b.medium-editor-mention-at').addClass('text-danger');
 						});
+						$('span.medium-editor-mention-at').addClass('text-danger');
 					},
 					activeTriggerList: ["@"]
 				})
@@ -8733,6 +8732,13 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 				return false;
 			}
 		});
+	},
+	setFocus: function setFocus() {
+		$('.set-focus').focus();
+	},
+	init: function init() {
+		window.formUI.setFocus();
+		window.formUI.disableEnter();
 	}
 };
 
@@ -8825,17 +8831,18 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 		});
 	},
 	replaceContentWithData: function replaceContentWithData(param, data) {
-		mention = $('div.editor').find('b.medium-editor-mention-at');
+		mention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(mention, function (k, v) {
 			if ($(v).html() == param || $(v).attr('data-mention') == param) {
 				$(v).attr('data-mention', param);
+				$(v).removeClass('text-danger').addClass('text-primary');
 				$(v).html(data);
 			}
 		});
 		$('textarea.editor').html($('.editor').html());
 	},
 	checkContentWidget: function checkContentWidget(param) {
-		listMention = $('div.editor').find('b.medium-editor-mention-at');
+		listMention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(listMention, function (k, v) {
 			dataContent = $(v).attr('data-mention');
 			if ($(v).html() == param || $(v).attr('data-mention') == param) {

@@ -26,6 +26,12 @@
 						<h4 class="title ml-3">{{ $page_attributes->title }}</h4>
 					</div>
 				</div>
+				<div class="col-12">
+					<div class="form-group has-feedback">
+						<input type="text" class="search form-control" placeholder="cari nama template">
+						<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+					</div>
+				</div>
 				<div class="row p-3">
 
 					@foreach ($page_datas->datas as $k => $v)

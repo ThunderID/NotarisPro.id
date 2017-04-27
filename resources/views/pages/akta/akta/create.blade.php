@@ -19,15 +19,15 @@
 		'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 		'class'			=> 'form-akta mb-0'
 	])
-	@php
-		// dd($page_datas);
-			// dd($page_datas->datas);
-	@endphp
 		<div class="row bg-faded">
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				&nbsp;
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
+				<ul class="nav menu-content justify-content-start">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('akta.akta.show', ['id' => $page_datas->akta_id]) }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
+					</li>
+				</ul>
 			</div>
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 				<ul class="nav menu-content justify-content-end">
 					{{-- <li class="nav-item">
 						<span class="nav-link">Zoom</span>
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar" style="height:calc(100% - 94px);">
+			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar subset-2menu">
 				<div class="panel">
 					<h5>List Widgets</h5>
 					<div class="list-group list-widgets">
@@ -87,7 +87,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel" style="height:calc(100% - 94px);">
+			<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu" style="margin-left: 15px;">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div id="l-margin" class="margin margin-v"></div>
 				<div id="r-margin" class="margin margin-v"></div>
@@ -96,6 +96,9 @@
 					<div class="col">&nbsp;</div>
 					<div class="col-11 d-flex justify-content-center">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
+						@php
+							// dd($page_datas);
+						@endphp
 							<textarea name="template" class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									@php
@@ -113,6 +116,7 @@
 											@endif
 										@endif
 									@endif
+									{!! $v['konten'] !!}
 								@empty
 								@endforelse
 							</textarea>
@@ -144,7 +148,7 @@
 
 	window.widgetEditorUI.init();
 	window.modalUI.init();
-	window.formUI.disableEnter();
+	window.formUI.init();
 
 	$('.input-submit').on('click', function(el) {
 		el.preventDefault();

@@ -12,7 +12,7 @@
 </nav> -->
 
 <!-- second layer -->
-<nav class="navbar navbar-toggleable-sm navbar-inverse bg-primary text">
+<nav class="navbar navbar-toggleable-sm navbar-inverse bg-primary text fixed-top">
 
 	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapseAccount" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<i class="fa fa-user-o"></i>

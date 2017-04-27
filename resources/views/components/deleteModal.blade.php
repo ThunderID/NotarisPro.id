@@ -15,13 +15,13 @@
 			'hide_buttons'	=> true
 		]
 	])
-	<div id="list-koperasi">
+	<div>
 		<form action="{{ $route }}" method="post">
 
 			{{ method_field('DELETE') }}
 			<div class="form-group has-feedback">
 				<label for="password">Masukkan password Anda untuk konfirmasi</label>
-				<input type="password" name="password" class="form-control" placeholder="Password Anda" required>
+				<input type="password" name="password" class="form-control set-focus" placeholder="Password Anda" required>
 			</div>
 
 			<hr/>	

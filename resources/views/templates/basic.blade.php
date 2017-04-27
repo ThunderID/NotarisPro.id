@@ -4,7 +4,7 @@
 @include('templates.components.header')
 
 <!-- Content -->
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 54px;">
     @yield('content')           
 </div>
 
