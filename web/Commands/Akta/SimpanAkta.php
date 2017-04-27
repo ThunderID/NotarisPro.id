@@ -75,7 +75,7 @@ class SimpanAkta
 			//4. simpan dokumen
 			$akta->save();
 
-			return true;
+			return $akta->toArray();
 		}
 		catch(Exception $e)
 		{
