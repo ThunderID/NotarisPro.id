@@ -1,8 +1,12 @@
 .sidebar{
 	height: calc(100% - 54px); 
 	background-color: rgba(0, 0, 0, 0.075); 
-	margin-left: -15px; 
-	padding-left: 30px;
+	
+	@media screen and (min-width: 767px) {
+		margin-left: -15px; 
+		padding-left: 30px;
+	}
+	
 	padding-top:1.2rem;
 	overflow-y:scroll;
 

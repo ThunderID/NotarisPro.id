@@ -26,3 +26,6 @@ require('./plugins/editorAutoPage');
 
 // plugin equal height
 require('./plugins/equalHeight.js');
+
+//toggle menu
+require('./plugins/toggleMenu.js');

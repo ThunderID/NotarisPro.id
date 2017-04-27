@@ -1,0 +1,10 @@
+.mobile-toggle-search{
+	padding-right:15px;
+	padding-top: 25px;
+}
+
+.hide-mobile{
+	@media screen and (max-width: 768px) {
+		display: none;
+	} 
+} 

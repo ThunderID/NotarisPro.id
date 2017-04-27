@@ -53,7 +53,7 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
 							</li>
-								@if(str_is(TAuth::activeOffice()['role'], 'notaris'))
+								@if(str_is(acl_active_office['role'], 'notaris'))
 								<li class="nav-item">
 									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'renvoi'])}}" ><i class="fa fa-check"></i> Renvoi</a>
 								</li>
@@ -80,15 +80,17 @@
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group p-3 editor">
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
-									@if(str_is(TAuth::activeOffice()['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
+									@if(str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
 										@if(isset($value['unlock']) && $value['unlock'])
 											<div style="background:#EAFFEA">
 												<i class="fa fa-unlock-alt" style="float:right;color:green"></i>
 												{!!$value['konten']!!}
 											</div>
 										@else
-											<i class="fa fa-lock" style="float:right;"></i>
-											{!!$value['konten']!!}
+											<a href="#javascript(0);" style="text-decoration:none; color:inherit;" class="unlock" data-lock="{{$value['lock']}}">
+												<i class="fa fa-lock" style="float:right;"></i>
+												{!!$value['konten']!!}
+											</a>
 										@endif
 									@else
 										{!!$value['konten']!!}
