@@ -1,13 +1,6 @@
 @extends('templates.basic')
 
 @push('styles')  
-	.version-prev{
-		background-color: #FFECEC !important;
-	}
-	.version-current{
-		margin-top: -5px;
-		background-color: #EAFFEA !important;
-v	}	
 @endpush  
 
 @section('akta')
@@ -60,7 +53,7 @@ v	}
 										<div class="version-prev">
 											{!!$page_datas->datas['original']['paragraf'][$key]['konten']!!}
 										</div>
-										<div class="version-current">
+										<div class="version-current" style="margin-top: -5px;">
 											{!!$value['konten']!!}
 										</div>
 									@endif

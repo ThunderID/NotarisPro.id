@@ -259,29 +259,6 @@ class aktaController extends Controller
 	}
 
 	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function mention($akta_id, Request $request)
-	{
-		 try {
-			// get data
-			$input			= $request->only('mention', 'isi_mention');
-			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
-			$content['id']	= $akta_id;
-			// save
-			$data			= new \TCommands\Akta\DraftingAkta($content);
-			$data 			= $data->handle();
-		} catch (Exception $e) {
-			return JSend::error($e->getMessage())->asArray();
-		}
-
-		return JSend::success(['data' => $data['fill_mention']])->asArray();
-	}
-
-	/**
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
@@ -317,6 +294,9 @@ class aktaController extends Controller
 			{
 				case 'pengajuan':
 					$data		= new \TCommands\Akta\AjukanAkta($id);
+					break;
+				case 'renvoi':
+					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
 				
 				default:
@@ -429,5 +409,49 @@ class aktaController extends Controller
 		//return view
 		$this->page_attributes->msg['success']         = ['Data template tersimpan'];
 		return response()->json(['status'	=> 'success'], 200);
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function mention($akta_id, Request $request)
+	{
+		 try {
+			// get data
+			$input			= $request->only('mention', 'isi_mention');
+			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
+			$content['id']	= $akta_id;
+			// save
+			$data			= new \TCommands\Akta\DraftingAkta($content);
+			$data 			= $data->handle();
+		} catch (Exception $e) {
+			return JSend::error($e->getMessage())->asArray();
+		}
+
+		return JSend::success(['data' => $data['fill_mention']])->asArray();
+	}
+
+
+	/**
+	 * menandai renvoi akta
+	 *
+	 */
+	public function tandai_renvoi($akta_id, Request $request)
+	{
+		 try {
+			// get data
+			$input			= $request->get('lock');
+
+			// save
+			$data			= new \TCommands\Akta\TandaiRenvoi($akta_id, [$input]);
+			$data 			= $data->handle();
+		} catch (Exception $e) {
+			return JSend::error($e->getMessage())->asArray();
+		}
+
+		return JSend::success(['data' => $input])->asArray();
 	}
 }
