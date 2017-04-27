@@ -19,10 +19,14 @@
 		'class'			=> 'form-template mb-0'
 	])
 		<div class="row bg-faded">
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				&nbsp;
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
+				<ul class="nav menu-content justify-content-start">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('akta.template.show', ['id' => $page_datas->id]) }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
+					</li>
+				</ul>
 			</div>
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 				<ul class="nav menu-content justify-content-end">
 					{{-- <li class="nav-item">
 						<span class="nav-link">Zoom</span>

@@ -6,5 +6,12 @@
 				return false;
 			}
 		});
+	},
+	setFocus : function () {
+		$('.set-focus').focus();
+	},
+	init : function () {
+		window.formUI.setFocus();
+		window.formUI.disableEnter();
 	}
 }
