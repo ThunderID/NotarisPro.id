@@ -82,10 +82,13 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::any('/akta/akta/simpan/mention/{akta_id}', 	['uses' => 'aktaController@mention', 'as' => 'akta.akta.simpan.mention']);
 
+		// tandai renvoi
+		Route::any('/akta/akta/tandai/renvoi/{akta_id}', 	['uses' => 'aktaController@tandai_renvoi', 'as' => 'akta.akta.tandai.renvoi']);
+		
 		Route::any('/akta/akta/auto/save/{id}',				['uses'	=> 'aktaController@automatic_store', 'as' => 'akta.akta.automatic.store']);
 
 		// versioning akta
-		Route::get('/akta/akta/{akta_id}/versioning', 			['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
+		Route::get('/akta/akta/{akta_id}/versioning', 		['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
 
 	});
 

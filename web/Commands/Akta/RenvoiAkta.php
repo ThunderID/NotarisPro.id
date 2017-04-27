@@ -8,7 +8,7 @@ use TImmigration\Pengguna\Models\Pengguna;
 
 use Exception, DB, TAuth, Carbon\Carbon;
 
-class TandaiRenvoi
+class RenvoiAkta
 {
 	protected $akta_id;
 
@@ -18,10 +18,9 @@ class TandaiRenvoi
 	 * @param  $akta_id
 	 * @return void
 	 */
-	public function __construct($akta_id, $renvoi_ids)
+	public function __construct($akta_id)
 	{
 		$this->akta_id		= $akta_id;
-		$this->renvoi_ids	= $renvoi_ids;
 	}
 
 	/**
@@ -54,28 +53,36 @@ class TandaiRenvoi
 				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
 			}
 
-			//2. Lock semua paragraf
+			//unlock
 			$paragraf 					= $akta->paragraf;
 
 			foreach ($akta->paragraf as $key => $value) 
 			{
-				if(in_array($value['lock'], $this->renvoi_ids))
+				if(isset($paragraf[$key]['unlock']) && $paragraf[$key]['unlock'])
 				{
 					$paragraf[$key] 			= $value;
-
-					if(isset($paragraf[$key]['unlock']) && $paragraf[$key]['unlock'])
-					{
-						$paragraf[$key]['unlock']	= false;
-					}
-					else
-					{
-						$paragraf[$key]['unlock']	= true;
-					}
+					$paragraf[$key]['lock']		= null;
+					unset($paragraf[$key]['unlock']);
 				}
 			}
 			$akta->paragraf 			= $paragraf;
 
+			//2. Ganti kepemilikan
+			$owner 					= $akta->pemilik;
+			$owner['orang'][] 		= ['id' => $akta->penulis['id'], 'nama' => $akta->penulis['nama']];
+			$akta->pemilik 			= $owner;
+
+			//3. Ganti Status
+			$akta->status 			= 'renvoi';
+			
 			$akta->save();
+
+			$prev_versi 			= Versi::where('original_id', $akta->id)->orderby('created_at', 'desc')->first();
+			$versi 					= new Versi;
+			$versi 					= $versi->fill($akta->toArray());
+			$versi->original_id 	= $akta->id;
+			$versi->versi 			= ($prev_versi->versi*1) + 1;
+			$versi->save();
 
 			return true;
 		}
