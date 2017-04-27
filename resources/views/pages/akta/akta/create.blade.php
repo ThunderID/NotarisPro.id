@@ -96,27 +96,40 @@
 					<div class="col">&nbsp;</div>
 					<div class="col-11 d-flex justify-content-center">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-						@php
-							// dd($page_datas);
-						@endphp
 							<textarea name="template" class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									@php
-										$pattern = "/<b class=\"medium-editor-mention-at?.*\">(.*)<\/b>/";
+										$pattern = "/<span class=\"medium-editor-mention-at?.*\">(.*?)<\/span>/";
 										preg_match($pattern, $v['konten'], $matches);
 									@endphp
 									@if (!empty($matches))
 										@if (isset($matches[1]) && !empty($matches[1]))
 											@if (isset($matches[1]) && !empty($matches[1]))
 												@php
-													$data_mention = array_get($page_datas->datas['fill_mention'], $matches[1], $matches[1]);
-													$new_konten = preg_replace('/<b (.*?)>(.*?)<\/b>/i', '<b $1>'.$data_mention.'</b>', $v['konten']);
+													if (array_get($page_datas->datas['fill_mention'], $matches[1]) != null)
+													{
+														$data_mention = array_get($page_datas->datas['fill_mention'], $matches[1]);
+														$new_konten = preg_replace('/<span class=\"medium-editor-mention-at?.*\">(.*?)<\/span>/', '<span class="medium-editor-mention-at text-primary">'.$data_mention.'</span>', $v['konten']);
+													}
+													else
+													{
+														$data_mention = array_get($page_datas->datas['fill_mention'], $matches[1], $matches[1]);
+														if (strpos($data_mention, '@') !== false) {
+															$color_text = 'text-danger';
+														}
+														else
+														{
+															$color_text = 'text-primary';
+														}
+														$new_konten = preg_replace('/<span class=\"medium-editor-mention-at?.*\">(.*?)<\/span>/', '<span class="medium-editor-mention-at ' .$color_text. '">'.$data_mention.'</span>', $v['konten']);
+													}
 												@endphp
 												{!! $new_konten !!}
 											@endif
 										@endif
+									@else
+										{!! $v['konten'] !!}
 									@endif
-									{!! $v['konten'] !!}
 								@empty
 								@endforelse
 							</textarea>
