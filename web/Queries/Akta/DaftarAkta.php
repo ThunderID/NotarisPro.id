@@ -77,7 +77,7 @@ class DaftarAkta
 		$model 		= $this->queries([]);
 		$model 		= $model->id($id)->first();
 
-		$akta 		= $model->toArray();]
+		$akta 		= $model->toArray();
 
 		if(!isset($akta['fill_mention']))
 		{
