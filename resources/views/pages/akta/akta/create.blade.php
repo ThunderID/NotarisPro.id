@@ -19,6 +19,10 @@
 		'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 		'class'			=> 'form-akta mb-0'
 	])
+	@php
+		// dd($page_datas);
+			// dd($page_datas->datas);
+	@endphp
 		<div class="row bg-faded">
 			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 				&nbsp;
@@ -53,7 +57,7 @@
 							@forelse ($page_datas->datas['mentionable'] as $k => $v)
 								<a class="list-group-item list-group-item-action justify-content-between p-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
 									{{ $v }}
-									<span><i class="fa fa-check"></i></span>
+									<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
 								</a>
 							@empty
 							@endforelse
@@ -94,7 +98,21 @@
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<textarea name="template" class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
-									{!! $v['konten'] !!}
+									@php
+										$pattern = "/<b class=\"medium-editor-mention-at?.*\">(.*)<\/b>/";
+										preg_match($pattern, $v['konten'], $matches);
+									@endphp
+									@if (!empty($matches))
+										@if (isset($matches[1]) && !empty($matches[1]))
+											@if (isset($matches[1]) && !empty($matches[1]))
+												@php
+													$data_mention = array_get($page_datas->datas['fill_mention'], $matches[1], $matches[1]);
+													$new_konten = preg_replace('/<b (.*?)>(.*?)<\/b>/i', '<b $1>'.$data_mention.'</b>', $v['konten']);
+												@endphp
+												{!! $new_konten !!}
+											@endif
+										@endif
+									@endif
 								@empty
 								@endforelse
 							</textarea>
@@ -121,6 +139,7 @@
 	var dataListWidgets = {};
 	var url = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.automatic.store', ['id' => $page_datas->akta_id]) : route('akta.akta.automatic.store')  }}";
 	var form = $('.form-akta');
+	var urlFillMention = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.simpan.mention', ['akta_id' => $page_datas->akta_id]) : route('akta.akta.simpan.mention')  }}";
 	window.editorUI.init(url, form);
 
 	window.widgetEditorUI.init();
@@ -132,13 +151,13 @@
 		$('form.form-akta').submit();
 	});
 
-	var widget = $('.form-akta').find('b.medium-editor-mention-at');
-	$.each(widget, function(k, v) {
-		widgetMention = $(v).html();
-		if (widgetMention.search('@') != -1) {
-			$(v).css('color', '#d9534f');
-		}
-	});
+//	var widget = $('.form-akta').find('b.medium-editor-mention-at');
+//	$.each(widget, function(k, v) {
+//		widgetMention = $(v).html();
+//		if (widgetMention.search('@') != -1) {
+//			$(v).css('color', '#d9534f');
+//		}
+//	});
 
 
 	// Functions

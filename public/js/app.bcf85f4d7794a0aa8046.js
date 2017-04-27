@@ -8695,12 +8695,13 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if ([this.mention].length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
-							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('p-0').addClass('m-0').addClass('menu-mention');
+							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
 							$(panelEl).html(listMention);
 						}
 						$('.link-mention').on('click', function (el) {
 							el.preventDefault();
 							selectMentionCallback($(this).html());
+							$('b.medium-editor-mention-at').addClass('text-danger');
 						});
 					},
 					activeTriggerList: ["@"]
@@ -8806,7 +8807,20 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 			value = $('#list-widgets').find('input').val();
 
 			window.widgetEditorUI.replaceContentWithData(field, value);
+
+			$.ajax({
+				url: urlFillMention,
+				type: 'POST',
+				data: { mention: field, isi_mention: value },
+				dataType: 'json',
+				success: function success(data) {
+					console.log(data);
+					// return data;
+				}
+			});
+
 			window.widgetEditorUI.isActive(field);
+
 			$('#list-widgets').modal('hide');
 		});
 	},
@@ -8941,6 +8955,12 @@ window.editorPaging = new function () {
 /***/ "./resources/assets/js/plugins/equalHeight.js":
 /***/ (function(module, exports) {
 
+/*
+	Equal height
+	Thunderlab 2017
+	created : Budi 
+	-------------
+*/
 window.equalHeight = new function () {
 
 	/* Adapter */

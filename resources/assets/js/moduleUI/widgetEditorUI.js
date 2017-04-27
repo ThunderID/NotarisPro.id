@@ -6,7 +6,20 @@
 			value = $('#list-widgets').find('input').val();
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
+
+			$.ajax({
+				url: urlFillMention,
+				type: 'POST',
+				data: {mention: field, isi_mention: value},
+				dataType: 'json',
+				success: function (data) {
+					console.log(data);
+					// return data;
+				}
+			});
+
 			window.widgetEditorUI.isActive(field);
+
 			$('#list-widgets').modal('hide');
 		});
 	},
