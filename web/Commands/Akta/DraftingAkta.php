@@ -83,7 +83,6 @@ class DraftingAkta
 
 			if(isset($this->akta['fill_mention']))
 			{
-
 				//simpan klien
 				foreach ($this->akta['fill_mention'] as $key => $value) 
 				{
@@ -119,7 +118,11 @@ class DraftingAkta
 				foreach ($this->akta['fill_mention'] as $key => $value) 
 				{
 					$this->akta['fill_mention'][str_replace('.','-+',str_replace('@','', $key))] = $value;
-					unset($this->akta['fill_mention'][$key]);
+					
+					if(!str_is('*-+*', $key))
+					{
+						unset($this->akta['fill_mention'][$key]);
+					}
 				}
 			}
 

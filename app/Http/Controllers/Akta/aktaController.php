@@ -264,7 +264,7 @@ class aktaController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function ajax_akta($akta_id, Request $request)
+	public function mention($akta_id, Request $request)
 	{
 		 try {
 			// get data

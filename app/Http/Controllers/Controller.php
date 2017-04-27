@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use Request, Redirect, App;
+use Request, Redirect, App, Route;
 
 class Controller extends BaseController
 {
@@ -27,6 +27,10 @@ class Controller extends BaseController
 	}   
 
 	public function generateView(){
+		//temporary line can be removed anytime
+		//this one to display underconstruction
+		$this->underConstruction();
+
 		return $this->view
             ->with('page_attributes', $this->page_attributes)
 			->with('page_datas', $this->page_datas)
@@ -97,5 +101,16 @@ class Controller extends BaseController
 		}
 
 		return $result;
+	}
+
+
+	//this is temporary function
+	//only for displaying construction site. cool?
+	private function underConstruction()
+	{
+		if(in_array(Route::currentRouteName(), ['home.dashboard']) || str_is('jadwal.*', Route::currentRouteName()) || str_is('klien.*', Route::currentRouteName()))
+		{
+			$this->view 				= view('pages.developer.under_construction');
+		}
 	}
 }

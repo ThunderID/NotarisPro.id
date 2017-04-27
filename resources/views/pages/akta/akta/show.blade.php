@@ -23,9 +23,15 @@
 								<a class="nav-link" href="{{ route('akta.akta.index') }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
 							</li>
 							@if(str_is($page_datas->datas['status'], 'pengajuan'))
-								<li class="nav-item">
-									<span class="nav-link">Status : Menunggu Renvoi</span>
-								</li>
+								@if($page_datas->datas['total_perubahan'] * 1 == 0)
+									<li class="nav-item">
+										<span class="nav-link">Status : Menunggu Renvoi</span>
+									</li>
+								@else
+									<li class="nav-item">
+										<span class="nav-link">Status : Renvoi ke - {{$page_datas->datas['total_perubahan']}}</span>
+									</li>
+								@endif
 							@endif
 						</ul>
 					</div>

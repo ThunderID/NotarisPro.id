@@ -18,7 +18,7 @@
 			<i class="fa fa-user-o"></i>
 	</button>
 
-	<a class="navbar-brand text-center text-lg-left text-xl-left" href="#">{{ str_replace("_", " ", env('APP_NAME')) }}</a>
+	<a class="navbar-brand text-center text-lg-left text-xl-left" href="{{route('home.dashboard')}}">{{ str_replace("_", " ", env('APP_NAME')) }}</a>
 	
 	<button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fa fa-align-justify"></i>
@@ -48,13 +48,13 @@
 				</div>				
 			</li>	
 			<li class="nav-item @yield('klien')">
-				<a class="nav-link" href="#">Klien</a>
+				<a class="nav-link" href="{{route('klien.index')}}">Klien</a>
 			</li>	
 			<li class="nav-item">
-				<a class="nav-link" href="#">Billing</a>
+				<a class="nav-link" href="{{route('klien.index')}}">Billing</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Employee</a>
+				<a class="nav-link" href="{{route('klien.index')}}">Employee</a>
 			</li>											
 		</ul>
 	</div>
