@@ -14,7 +14,14 @@
 @section('content')
 <div class="row">
 
-	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar">
+	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 hide-mobile sidebar subset-menu target-menu">
+
+		<div class="panel hidden-md-up text-right">
+			<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-off">
+				<i class="fa fa-times" aria-hidden="true"></i>
+			</a>
+		</div>
+
 		<div class="panel">
 			@include('components.search',[
 				'qs'	=> [ 'status','sort' ],
@@ -33,14 +40,32 @@
 				]
 			])
 		</div>
+
+		<div class="panel hidden-md-up">
+			@include('components.filter',[
+				'title'	=> 'Urutkan',
+				'alias' => 'urutkan',
+				'qs'	=> [ 'q','status' ],
+				'lists' => [
+					'tanggal sunting terbaru' 	=> null,
+					'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
+					'tanggal pembuatan terbaru' => 'tanggal_pembuatan-desc',
+					'tanggal pembuatan terlama' => 'tanggal_pembuatan-asc',
+					'judul a - z' 	=> 'judul-asc',
+					'judul z - a' 	=> 'judul-desc',
+					'status a - z'	=> 'status-asc',
+					'status z - a'	=> 'status-desc',
+				]
+			])
+		</div>		
 	</div>
 
-	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-menu" style="margin-left: 15px;">
+	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel">
 		<div class="row">
 			<div class="col-6">
 				<h4 class="title">Data Template</h4>		
 			</div>
-			<div class="col-6 text-right">
+			<div class="col-6 hidden-sm-down text-right">
 				@include('components.sort',[
 					'alias' => 'urutkan',
 					'qs'	=> [ 'q','status' ],
@@ -56,6 +81,12 @@
 					]
 				])
 			</div>	
+			<div class="col-6 hidden-md-up text-right mobile-toggle-search">
+				<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-on">
+					<!-- <i class="fa fa-binoculars" aria-hidden="true"></i> -->
+					<i class="fa fa-search" aria-hidden="true"></i>
+				</a>
+			</div>		
 		</div>
 		<div class="col-12 mb-2">
 			@include('components.filterIndicator',[

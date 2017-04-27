@@ -19,3 +19,12 @@
 .subset-2menu{
 	height: calc(100% - 94px);
 }
+
+.subset-sidebar{
+	@media screen and (min-width: 767px) {
+		margin-left: 15px;
+	}
+	@media screen and (max-width: 768px) {
+		padding-left: 15px;
+	}
+}
