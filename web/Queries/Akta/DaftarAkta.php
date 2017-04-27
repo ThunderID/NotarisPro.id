@@ -131,10 +131,9 @@ class DaftarAkta
 	 * 
 	 * @return CreditDTODataTransformer $data
 	 */
-	public function statusLists()
+	private function statusLists($role)
 	{
-		$current_user 	= TAuth::activeOffice();
-		switch (strtolower($current_user['role'])) 
+		switch (strtolower($role)) 
 		{
 			case 'notaris':
 				return ['draft', 'pengajuan', 'renvoi', 'akta', 'minuta'];
@@ -151,12 +150,14 @@ class DaftarAkta
 
 	private function queries($queries)
 	{
+		$active_office 			= TAuth::activeOffice();
+
 		$model 					= $this->model;
 
 		//1.allow status
 		if(isset($queries['status']))
 		{
-			if(!in_array($queries['status'], $this->statusLists()))
+			if(!in_array($queries['status'], $this->statusLists($active_office['role'])))
 			{
 				throw new Exception("Forbidden", 1);
 				
@@ -164,12 +165,12 @@ class DaftarAkta
 		}
 		else
 		{
-			$queries['status']	= $this->statusLists();
+			$queries['status']	= $this->statusLists($active_office['role']);
 		}
 		$model  				= $model->status($queries['status']);
 
 		//2.allow kantor
-		$queries['kantor_id']	= [TAuth::activeOffice()['kantor']['id'], "0"];
+		$queries['kantor_id']	= [$active_office['kantor']['id'], "0"];
 
 		$model  				= $model->kantor($queries['kantor_id']);
 

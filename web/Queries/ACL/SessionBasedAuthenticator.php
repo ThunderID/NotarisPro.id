@@ -86,7 +86,11 @@ class SessionBasedAuthenticator
 			throw new Exception("Invalid Login!", 1);
 		}
 
-		return $user->toArray();
+		$user 	= $user->toArray();
+
+		Session::put('activating', $user);
+
+		return $user;
 	}
 
 	/**
@@ -96,7 +100,8 @@ class SessionBasedAuthenticator
 	 */
 	public function activeOffice()
 	{
-		$user 	= $this->loggedUser();
+		$user 		= Session::get('activating');
+		// $user 	= $this->loggedUser();
 
 		$visas 	= collect($user['visas']);
 
