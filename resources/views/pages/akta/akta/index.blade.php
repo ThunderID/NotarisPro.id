@@ -14,7 +14,7 @@
 @section('content')
 <div class="row">
 
-	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar">
+	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar subset-menu">
 		<div class="panel">
 			@include('components.search',[
 				'qs'	=> [ 'status','urutkan' ],
@@ -39,7 +39,7 @@
 
 	</div>
 
-	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel">
+	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-menu" style="margin-left: 15px;">
 		<div class="row">
 			<div class="col-6">
 				<h4 class="title">Data Akta</h4>		

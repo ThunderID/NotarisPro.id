@@ -61,7 +61,7 @@
 				</div>
 				{{-- END COMPONENT MENUBAR --}}
 			</div>
-			<div id="page" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div id="page" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 scrollable_panel subset-2menu">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
 					<div class="col">&nbsp;</div>
@@ -77,7 +77,6 @@
 					<div class="col">&nbsp;</div>	
 				</div>
 			</div>
-			<div class="clearfix">&nbsp;</div>
 		</div>
 
 	@include('components.deleteModal',[
