@@ -77,7 +77,12 @@ class DaftarAkta
 		$model 		= $this->queries([]);
 		$model 		= $model->id($id)->first();
 
-		$akta 		= $model->toArray();
+		$akta 		= $model->toArray();]
+
+		if(!isset($akta['fill_mention']))
+		{
+			$akta['fill_mention']	= null;
+		}
 		foreach ((array)$akta['fill_mention'] as $key => $value) 
 		{
 			$akta['fill_mention']['@'.str_replace('-+','.',$key)] = $value;
