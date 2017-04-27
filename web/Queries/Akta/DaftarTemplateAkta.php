@@ -134,7 +134,7 @@ class DaftarTemplateAkta
 		//3.allow judul
 		if(isset($queries['judul']))
 		{
-			$model  			= $model->judul($queries['judul']);
+			$model  					= $model->where('judul', $queries['judul']);
 		}
 		
 		//4.sort klien

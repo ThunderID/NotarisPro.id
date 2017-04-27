@@ -84,7 +84,7 @@ class RenvoiAkta
 			$versi->versi 			= ($prev_versi->versi*1) + 1;
 			$versi->save();
 
-			return true;
+			return $akta->toArray();
 		}
 		catch(Exception $e)
 		{

@@ -133,31 +133,34 @@ class InitAktaTableSeeder extends Seeder
 		}
 
 		//init renvoi
-		$dokumen 		= TAkta\DokumenKunci\Models\Dokumen::skip(0)->take(3)->get();
+		$dokumen 			= TAkta\DokumenKunci\Models\Dokumen::skip(0)->take(3)->get();
 
 		foreach ($dokumen as $key => $value) 
 		{
-			$paragraf_ids 	= [$value->paragraf[rand(0,1)]['lock']];
+			$paragraf_ids 	= [$value->paragraf[rand(8,9)]['lock']];
 
 			$akta 			= new \TCommands\Akta\TandaiRenvoi($value->id, $paragraf_ids);
 			$akta->handle();
 		}
-
 		//init update
 		$dokumen 		= TAkta\DokumenKunci\Models\Dokumen::skip(0)->take(3)->get();
 
 		foreach ($dokumen as $key => $value) 
 		{
 			$edited 	= $value->toArray();
+			
+			//1. set as renvoi
+			$akta 		= new \TCommands\Akta\RenvoiAkta($edited['id']);
+			$edited 	= $akta->handle();
 
-			if(is_null($edited['paragraf'][0]['lock']))
+			if(is_null($edited['paragraf'][8]['lock']))
 			{
-				$edited['paragraf'][0]['konten'] 	= '<p>revisi</p>';
+				$edited['paragraf'][8]['konten'] 	= '<p style="text-align: center; color:red"><b>REVISI</b></p>';
 			}
 
-			if(is_null($edited['paragraf'][1]['lock']))
+			if(is_null($edited['paragraf'][9]['lock']))
 			{
-				$edited['paragraf'][1]['konten'] 	= '<p>revisi</p>';
+				$edited['paragraf'][9]['konten'] 	= '<p style="text-align: center; color:red"><b>REVISI</b></p>';
 			}
 
 			$akta 		= new \TCommands\Akta\SimpanAkta($edited);
