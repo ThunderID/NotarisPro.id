@@ -8817,30 +8817,31 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 /***/ (function(module, exports) {
 
 ;window.widgetEditorUI = {
-	init: function init() {
-		$('.modal').on('click', "button[data-save=true]", function (e) {
-			e.preventDefault();
-			field = $(this).attr('data-parsing');
-			value = $('#list-widgets').find('input').val();
+	init: function () {
+    $('.modal').on('click', "button[data-save=true]" , function(e) {
+      e.preventDefault();
+      field       = $(this).attr('data-parsing');
+      value       = $('#list-widgets').find('input').val();
+      isi_template  = document.getElementById("doc-content-mention").value;
 
-			window.widgetEditorUI.replaceContentWithData(field, value);
+      window.widgetEditorUI.replaceContentWithData(field, value);
 
-			$.ajax({
-				url: urlFillMention,
-				type: 'POST',
-				data: { mention: field, isi_mention: value },
-				dataType: 'json',
-				success: function success(data) {
-					console.log(data);
-					// return data;
-				}
-			});
+      $.ajax({
+        url: urlFillMention,
+        type: 'POST',
+        data: {mention: field, isi_mention: value, template: isi_template},
+        dataType: 'json',
+        success: function (data) {
+          console.log(data);
+          // return data;
+        }
+      });
 
-			window.widgetEditorUI.isActive(field);
+      window.widgetEditorUI.isActive(field);
 
-			$('#list-widgets').modal('hide');
-		});
-	},
+      $('#list-widgets').modal('hide');
+    });
+  },
 	replaceContentWithData: function replaceContentWithData(param, data) {
 		mention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(mention, function (k, v) {

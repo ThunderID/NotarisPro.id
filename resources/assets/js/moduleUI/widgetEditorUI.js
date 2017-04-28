@@ -2,15 +2,16 @@
 	init: function () {
 		$('.modal').on('click', "button[data-save=true]" , function(e) {
 			e.preventDefault();
-			field = $(this).attr('data-parsing');
-			value = $('#list-widgets').find('input').val();
+			field 			= $(this).attr('data-parsing');
+			value 			= $('#list-widgets').find('input').val();
+			isi_template  	= document.getElementById("doc-content-mention").value;
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
 
 			$.ajax({
 				url: urlFillMention,
 				type: 'POST',
-				data: {mention: field, isi_mention: value},
+				data: {mention: field, isi_mention: value, template: isi_template},
 				dataType: 'json',
 				success: function (data) {
 					console.log(data);
