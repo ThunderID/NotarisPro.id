@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Kantor;
 
 use TQueries\Kantor\DaftarNotaris as Query;
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
 
 use TAuth, Redirect, URL;
 

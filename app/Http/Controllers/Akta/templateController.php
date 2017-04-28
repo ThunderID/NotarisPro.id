@@ -279,7 +279,7 @@ class templateController extends Controller
 		foreach ($out[0] as $key => $value) 
 		{
 			$input['paragraf'][$key]['konten']	= $value;
-			$pattern_2 							= '/<b class="medium-editor-mention-at.*?>(.*?)<\/b>/i';
+			$pattern_2 							= '/<span class="medium-editor-mention-at.*?>(.*?)<\/span>/i';
 
 			if (preg_match_all($pattern_2, $value, $matches)) 
 			{

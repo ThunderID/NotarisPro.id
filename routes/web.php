@@ -19,9 +19,15 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
-	$klien 			= new TQueries\Klien\DaftarKlien;
-	$klien 			= $klien->get();
-	dd($klien);
+	$akta 			= '<span class="medium-editor-mention-at text-danger">@notaris.nama</span> Notaris di <span class="medium-editor-mention-at medium-editor-mention-at-active text-danger">@notaris.alamat</span>. Dengan dihadiri saksi-saksi yang saya, Notaris kenal dan akan disebut bagian akhir akta ini.</span>';
+
+	$pattern3 		= "/<span.*?>|<\/span>/i";
+ 
+	$replace 		= preg_replace($pattern3, '', $akta);
+
+// 	$klien 			= new TQueries\Klien\DaftarKlien;
+// 	$klien 			= $klien->get();
+// 	dd($klien);
 });
 
 
@@ -35,15 +41,17 @@ Route::group(['middleware' => ['authenticated']], function()
 	Route::any('/logout', 					['uses' => 'uacController@logout', 			'as' => 'uac.logout.any']);
 	Route::get('activate/{idx}', 			['uses' => 'uacController@activateOffice', 	'as' => 'uac.office.activate']);
 	
-	Route::resource('/notaris/kantor', 'KantorController', ['names' => [
-			'index' 	=> 'notaris.kantor.index', //get
-			'create'	=> 'notaris.kantor.create', //get
-			'store' 	=> 'notaris.kantor.store', //post
-			'show' 		=> 'notaris.kantor.show', //get
-			'edit' 		=> 'notaris.kantor.edit', //get
-			'update' 	=> 'notaris.kantor.update', //patch
-			'destroy' 	=> 'notaris.kantor.destroy' //post 
-		]]);
+	Route::group(['namespace' => 'Kantor\\'], function(){
+		Route::resource('/notaris/kantor', 'KantorController', ['names' => [
+				'index' 	=> 'notaris.kantor.index', //get
+				'create'	=> 'notaris.kantor.create', //get
+				'store' 	=> 'notaris.kantor.store', //post
+				'show' 		=> 'notaris.kantor.show', //get
+				'edit' 		=> 'notaris.kantor.edit', //get
+				'update' 	=> 'notaris.kantor.update', //patch
+				'destroy' 	=> 'notaris.kantor.destroy' //post 
+			]]);
+	});
 
 	// general
 	Route::get('/', ['uses' => 'homeController@dashboard', 'as' => 'home.dashboard']);

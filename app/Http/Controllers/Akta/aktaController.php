@@ -96,7 +96,14 @@ class aktaController extends Controller
 			// $akta['id']				= '';
 			$akta['judul']			= $template['judul'];
 			$akta['paragraf']		= $template['paragraf'];
-			$akta['mentionable']	= $template['mentionable'];
+			if(!isset($template['mentionable']))
+			{
+				$akta['mentionable']	= [];
+			}
+			else
+			{
+				$akta['mentionable']	= $template['mentionable'];
+			}
 
 			$notaris 				= new DaftarNotaris;
 			$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
@@ -136,6 +143,14 @@ class aktaController extends Controller
 				if(str_is($value, '@notaris.fax'))
 				{
 					$akta['fill_mention'][$value] 	= $notaris['notaris']['fax']; 
+				}
+			}
+
+			foreach ($akta['paragraf'] as $key => $value) 
+			{
+				foreach ($akta['fill_mention'] as $key2 => $value2) 
+				{
+					$akta['paragraf'][$key]['konten'] = str_replace('">'.$key2, '" data-mention="'.$key2.'">'.$value2, $akta['paragraf'][$key]['konten']);
 				}
 			}
 
@@ -328,7 +343,7 @@ class aktaController extends Controller
 		$call 								= new DaftarTemplateAkta;
 
 		$filter         					= ['status' => 'publish'];
-		$list_template 						= $call->get($filter);
+		$list_template 						= $call->all($filter);
 
 		//get data from database
 		$this->page_datas->datas            = $list_template;
