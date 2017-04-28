@@ -257,7 +257,7 @@ class aktaController extends Controller
 	{
 		//
 		try {
-			$this->parse_store($id, $request);
+			$this->parse_store($id, $request->only('template'));
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -388,10 +388,10 @@ class aktaController extends Controller
 		return $list;
 	}
 
-	private function parse_store($id, $request)
+	private function parse_store($id, $template)
 	{
 		// get data
-		$input		= $request->only('template');
+		$input		= $template;
 		$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
 		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
 		// change key index like 'paragraph[*]'
@@ -429,7 +429,7 @@ class aktaController extends Controller
 	public function automatic_store ($id = null, Request $request)
 	{
 		try {
-			$this->parse_store($id, $request);
+			$this->parse_store($id, $request->only('template'));
 		} catch (Exception $e) {
 			return response()->json(['status'	=> $e->getMessage()], 200);
 		}
@@ -452,9 +452,12 @@ class aktaController extends Controller
 			$input			= $request->only('mention', 'isi_mention');
 			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
 			$content['id']	= $akta_id;
+
 			// save
 			$data			= new \TCommands\Akta\DraftingAkta($content);
 			$data 			= $data->handle();
+
+			$this->parse_store($akta_id, $request->only('template'));
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}

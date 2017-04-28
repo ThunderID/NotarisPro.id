@@ -273,7 +273,8 @@ class templateController extends Controller
 			$input['id']						= $id;
 		}
 
-		$pattern 								= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+		$pattern		= "/.*?<h4.*?>(.*?)<\/h4>|.*?<p.*?>(.*?)<\/p>|.*?(<(ol|ul).*?><li>(.*?)<\/li>)|.*?(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+
 		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
 
 		foreach ($out[0] as $key => $value) 
