@@ -93,8 +93,7 @@
 				<div id="r-margin" class="margin margin-v"></div>
 				<div id="h-margin"></div>				
 				<div class="row">
-					<div class="col">&nbsp;</div>
-					<div class="col-11 d-flex justify-content-center">
+					<div class="d-flex justify-content-center" style="margin: 0 auto;">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<textarea name="template" class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
@@ -133,7 +132,6 @@
 							</textarea>
 						</div>
 					</div>
-					<div class="col">&nbsp;</div>	
 				</div>
 			</div>
 		</div>
@@ -184,10 +182,11 @@
 		var pivot_h = $('.page-editor').outerHeight();
 		var pivot_w = $('.page-editor').outerWidth();
 		var template_h = window.Margin.convertPX(29.7);
+		var margin_document = 47;
 
 		var margin = window.Margin;
-		var ml = margin.convertPX(5) + pivot_pos.left - 45  - $('.sidebar').width() - 4;
-		var mr = pivot_pos.left + pivot_w - margin.convertPX(1) - 45  - $('.sidebar').width() + 2;
+		var ml = margin.convertPX(5) + pivot_pos.left - margin_document  - $('.sidebar').width() - 4;
+		var mr = pivot_pos.left + pivot_w - margin.convertPX(1) - margin_document  - $('.sidebar').width() + 2;
 		var mt = 16 + margin.convertPX(2) - 2;
 		var mb = template_h - (margin.convertPX(2) + margin.convertPX(3) - 16);
 
