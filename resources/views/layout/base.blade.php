@@ -19,30 +19,7 @@
         <!-- Custom Css -->
         <style>
 
-            @stack('styles')
-
-            /*table*/
-            .table {
-                font-size: 0.8rem;
-            }
-
-            .table ul{
-                padding-left: 20px;
-            }
-
-
-            /*typografi*/
-            h4{
-                font-size: 1.4rem;
-                font-weight: 300;
-                color:gray;
-            }
-
-            h5{
-                font-size: 1.1rem;
-                font-weight: 300;
-                color:gray;
-            }            
+            @stack('styles')         
 
         </style>
 
