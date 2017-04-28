@@ -49,11 +49,14 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
 							</li>
-							@elseif(str_is($page_datas->datas['status'], 'pengajuan'))
+							@elseif(in_array($page_datas->datas['status'], ['pengajuan', 'akta']))
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
 							</li>
-								@if(str_is(acl_active_office['role'], 'notaris'))
+								@if(str_is(acl_active_office['role'], 'notaris') && str_is($page_datas->datas['status'], 'pengajuan'))
+								<li class="nav-item">
+									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'akta'])}}" ><i class="fa fa-file"></i> Final</a>
+								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'renvoi'])}}" ><i class="fa fa-check"></i> Renvoi</a>
 								</li>

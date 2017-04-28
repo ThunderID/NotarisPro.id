@@ -313,7 +313,9 @@ class aktaController extends Controller
 				case 'renvoi':
 					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
-				
+				case 'akta':
+					$data		= new \TCommands\Akta\FinalisasiAkta($id);
+					break;
 				default:
 					throw new Exception("Status invalid", 1);
 					break;
