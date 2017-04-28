@@ -49,11 +49,11 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
 							</li>
-							@elseif(in_array($page_datas->datas['status'], ['pengajuan', 'akta']))
+							@elseif(str_is($page_datas->datas['status'], 'pengajuan'))
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
 							</li>
-								@if(str_is(acl_active_office['role'], 'notaris') && str_is($page_datas->datas['status'], 'pengajuan'))
+								@if(str_is(acl_active_office['role'], 'notaris'))
 								<li class="nav-item">
 									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'akta'])}}" ><i class="fa fa-file"></i> Final</a>
 								</li>
@@ -84,15 +84,19 @@
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
 									@if(str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
 										@if(isset($value['unlock']) && $value['unlock'])
-											<div style="background:#EAFFEA">
-												<i class="fa fa-unlock-alt" style="float:right;color:green"></i>
+											<div id="lock-div-{{$value['lock']}}" class="bg-success-shade">
+												<a href="#" style="text-decoration:none; color:inherit;" class="lock" data-lock="{{$value['lock']}}">
+												<i id="{{$value['lock']}}" class="fa fa-unlock-alt text-success" style="float:right;"></i>
 												{!!$value['konten']!!}
+												</a>
 											</div>
 										@else
-											<a href="#javascript(0);" style="text-decoration:none; color:inherit;" class="unlock" data-lock="{{$value['lock']}}">
-												<i class="fa fa-lock" style="float:right;"></i>
-												{!!$value['konten']!!}
-											</a>
+											<div id="lock-div-{{$value['lock']}}" >
+												<a href="#" style="text-decoration:none; color:inherit;" class="lock" data-lock="{{$value['lock']}}">
+													<i id="{{$value['lock']}}" class="fa fa-lock" style="float:right;"></i>
+													{!!$value['konten']!!}
+												</a>
+											</div>
 										@endif
 									@else
 										{!!$value['konten']!!}
@@ -111,7 +115,44 @@
 	])
 @stop
 
+@push('styles')
+	.bg-success-shade {
+		background-color: #EAFFEA;
+	}
+@endpush 
+
 @push('scripts')
+	/*	Start Lock */
+	$(function () {
+	    $('.lock').on('click', function () {
+	        var lock = $(this).attr("data-lock");
+	        $.ajax({
+	            url: "{{route('akta.akta.tandai.renvoi', $page_datas->datas['id'])}}",
+	            data: {
+	                lock: lock
+	            },
+	            dataType : 'json'
+	        });
+
+		    if ( document.getElementById(lock).classList.contains('fa-lock') )
+		    {
+			    document.getElementById(lock).classList.remove('fa-lock');
+				document.getElementById(lock).classList.add('fa-unlock-alt');
+				document.getElementById(lock).classList.add('text-success');
+				document.getElementById('lock-div-'+lock).classList.add('bg-success-shade');
+		    }
+			else	    
+		    {
+				document.getElementById(lock).classList.remove('fa-unlock-alt');
+				document.getElementById(lock).classList.remove('text-success');
+			    document.getElementById(lock).classList.add('fa-lock');
+				document.getElementById('lock-div-'+lock).classList.remove('bg-success-shade');
+		    }
+	    });
+
+	});
+	/*	End Lock */
+
 	/*	Call plugin */
 	window.formUI.init();
 
