@@ -8602,9 +8602,6 @@ __webpack_require__("./resources/assets/js/plugins/equalHeight.js");
 //toggle menu
 __webpack_require__("./resources/assets/js/plugins/toggleMenu.js");
 
-//searchList
-__webpack_require__("./resources/assets/js/plugins/searchList.js");
-
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -8820,31 +8817,37 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 /***/ (function(module, exports) {
 
 ;window.widgetEditorUI = {
-	init: function () {
-    $('.modal').on('click', "button[data-save=true]" , function(e) {
-      e.preventDefault();
-      field       = $(this).attr('data-parsing');
-      value       = $('#list-widgets').find('input').val();
-      isi_template  = document.getElementById("doc-content-mention").value;
+	init: function init() {
+		$('.modal').on('click', "button[data-save=true]", function (e) {
+			e.preventDefault();
+			field = $(this).attr('data-parsing');
+			value = $('#list-widgets').find('input').val();
 
-      window.widgetEditorUI.replaceContentWithData(field, value);
+			window.widgetEditorUI.replaceContentWithData(field, value);
 
-      $.ajax({
-        url: urlFillMention,
-        type: 'POST',
-        data: {mention: field, isi_mention: value, template: isi_template},
-        dataType: 'json',
-        success: function (data) {
-          console.log(data);
-          // return data;
-        }
-      });
+			$.ajax({
+				url: urlFillMention,
+				type: 'POST',
+				data: { mention: field, isi_mention: value },
+				dataType: 'json',
+				success: function success(data) {}
+			});
+			window.widgetEditorUI.isActive(field);
 
-      window.widgetEditorUI.isActive(field);
+			try {
+				$.ajax({
+					url: url,
+					type: 'POST',
+					data: form.serialize(),
+					success: function success(data) {}
+				});
+			} catch (err) {
+				console.log('data tidak tersimpan secara otomatis');
+			}
 
-      $('#list-widgets').modal('hide');
-    });
-  },
+			$('#list-widgets').modal('hide');
+		});
+	},
 	replaceContentWithData: function replaceContentWithData(param, data) {
 		mention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(mention, function (k, v) {
@@ -18179,50 +18182,6 @@ if (!("classList" in document.createElement("_"))) {
     return MediumEditor;
 }());
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module), __webpack_require__("./node_modules/process/browser.js")))
-
-/***/ }),
-
-/***/ "./resources/assets/js/plugins/searchList.js":
-/***/ (function(module, exports) {
-
-/* List Search */
-window.searchList = new function () {
-	// adapter
-	input = $('.search-input');
-	list = $('.search-list');
-
-	//events
-	input.keyup(function () {
-		getSearch();
-	});
-
-	// functions
-	function getSearch() {
-		//reset
-		reset();
-
-		// get search text
-		var q = input.val();
-
-		// find needle from stack
-		$.each(list, function (index, value) {
-
-			var txt = $(value).text();
-
-			if (txt.indexOf(q) < 0) {
-				hide($(this).parent().parent().parent());
-			}
-		});
-	}
-
-	// ui
-	reset = function reset() {
-		list.parent().parent().parent().show();
-	};
-	hide = function hide(e) {
-		e.hide();
-	};
-}();
 
 /***/ }),
 

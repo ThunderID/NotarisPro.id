@@ -109,6 +109,39 @@
 			</div>
 		</div>
 
+		{{-- simpanan untuk kedepan --}}
+		{{-- <div style="background:transparent;">
+			<div class="dropdown float-right" style="margin-right: -1.5rem;">
+				<a href="#" class="dropdown-toggle unlock" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-lock="{{ $value['lock'] }}" style="text-decoration: none;">
+					<i class="fa fa-lock" style=""></i>
+				</a>
+				<ul class="dropdown-menu pt-0 dropdown-menu-right" style="width: 340px;">
+					<li class="dropdown-header pl-3 pr-3" style="font-size: 1em;">Employee</li>
+					<li class="dropdown-item pl-3 pr-3">
+						<input type="text" class="form-control form-control-sm" placeholder="search employee">
+					</li>
+					<li class="dropdown-divider"></li>
+					<li class="dropdown-item pl-3 pr-3">
+						Anna Wong, SH (Me) <a href="#" class="float-right mt-1"><i class="fa fa-square"></i></a>
+					</li>
+					<li class="dropdown-divider"></li>
+					<li class="dropdown-item pl-3 pr-3">
+						Sholeh Parwoto, SH <a href="#" class="float-right mt-1"><i class="fa fa-square"></i></a>
+					</li> 
+					<li class="dropdown-item pl-3 pr-3">
+						Anton Muhammad Kalkun, SH <a href="#" class="float-right mt-1"><i class="fa fa-square"></i></a>
+					</li> 
+					<li class="dropdown-item pl-3 pr-3">
+						Suberi Hebaton, SH <a href="#" class="float-right mt-1"><i class="fa fa-square"></i></a>
+					</li> 
+					<li class="dropdown-item pl-3 pr-3">
+						Ahmaoo Eh Mahmed, SH <a href="#" class="float-right mt-1"><i class="fa fa-square"></i></a>
+					</li> 
+				</ul>
+			</div>
+			{!!$value['konten']!!}
+		</div> --}}
+
 	@include('components.deleteModal',[
 		'title' => 'Menghapus Draft Akta',
 		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])

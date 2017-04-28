@@ -42,7 +42,10 @@
 						</div>
 					</li> --}}
 					<li class="nav-item">
-						<a class="nav-link" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
+						<a class="nav-link input-submit" href="#"><i class="fa fa-save"></i> Simpan</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan Sebagai</a>
 					</li>
 				</ul>
 			</div>
@@ -107,7 +110,7 @@
 								<label class="text-capitalize">judul template</label>
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<input type="text" name="title" class="form-control">
+										<input type="text" name="title" class="form-control" value="{{ isset($page_datas->datas['judul']) ? $page_datas->datas['judul'] : 'Tidak ada judul [Untitled]' }}">
 									</div>
 								</div>
 							</fieldset>
@@ -128,6 +131,11 @@
 	var url = "{{ (!is_null($page_datas->id)) ? route('akta.template.automatic.store', ['id' => $page_datas->id]) : route('akta.template.automatic.store')  }}";
 	var form = $('.form-template');
 	window.editorUI.init(url, form);
+
+	$('.input-submit').on('click', function(el) {
+		el.preventDefault();
+		$('form.form-template').submit();
+	});
 
 
 	//	functions

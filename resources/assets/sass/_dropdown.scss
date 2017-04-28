@@ -50,3 +50,17 @@
 		text-align:right;
 	}	
 }
+
+// menu lock or unlock renvoi
+.dropdown-toggle {
+	&.lock {
+		&::after {
+			display: none;
+		}
+	}
+	&.unlock {
+		&::after {
+			display: none;
+		}
+	}
+}

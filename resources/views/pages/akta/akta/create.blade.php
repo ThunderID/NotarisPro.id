@@ -54,7 +54,10 @@
 					<h5>List Widgets</h5>
 					<div class="list-group list-widgets">
 						@if (isset($page_datas->datas['mentionable']))
-							@forelse ($page_datas->datas['mentionable'] as $k => $v)
+							@php
+								$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
+							@endphp
+							@forelse ($sort_mentionable as $k => $v)
 								<a class="list-group-item list-group-item-action justify-content-between p-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
 									{{ $v }}
 									<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
