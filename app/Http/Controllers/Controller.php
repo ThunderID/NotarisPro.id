@@ -23,18 +23,19 @@ class Controller extends BaseController
 	{
 		\DB::connection('mongodb')->enableQueryLog();
 
+		// sets params
+		$this->page_attributes 			= new \Stdclass;
+		$this->page_datas 				= new \Stdclass;
+	}   
+
+	public function generateView()
+	{
 		$logged_user 					= \TAuth::loggedUser();
 		$active_office 					= \TAuth::activeOffice();
 		
 		\View::share('acl_logged_user', $logged_user);
 		\View::share('acl_active_office', $active_office);
 
-		// sets params
-		$this->page_attributes 			= new \Stdclass;
-		$this->page_datas 				= new \Stdclass;
-	}   
-
-	public function generateView(){
 		//temporary line can be removed anytime
 		//this one to display underconstruction
 		$this->underConstruction();
