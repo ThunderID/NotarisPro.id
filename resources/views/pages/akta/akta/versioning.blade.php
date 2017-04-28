@@ -42,7 +42,7 @@
 				<div class="row">
 					<div class="d-flex justify-content-center" style="margin: 0 auto;">
 						<div class="form mt-3 mb-3 font-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-							<div class="form-group p-3">
+							<div class="form-group">
 								<?php $revisi_ctr = 0; ?>
 								@foreach($page_datas->datas['terbaru']['paragraf'] as $key => $value)
 									@if($value['konten'] == $page_datas->datas['original']['paragraf'][$key]['konten'])

@@ -77,7 +77,7 @@
 				<div class="row">
 					<div class="d-flex justify-content-center" style="margin: 0 auto;">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-							<div class="form-group p-3 editor">
+							<div class="form-group editor">
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
 									@if(str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
 										@if(isset($value['unlock']) && $value['unlock'])
