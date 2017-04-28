@@ -116,7 +116,7 @@
 																dd($temp[$i]);
 															} else {
 																$pattern = '/text-danger">@(.*?)<\/span>/';
-																$temp[$i] = ' text-primary">'.preg_replace($pattern, $data_mention. '</span>', $j);
+																$temp[$i] = ' text-primary'.preg_replace($pattern, $data_mention. '</span>', $j);
 															}
 														@endphp
 													@endif

@@ -70,6 +70,21 @@ class DaftarTemplateAkta
 	 * 
 	 * @return UserDTODataTransformer $data
 	 */
+	public function all($queries = [])
+	{
+		$model 		= $this->queries($queries);
+		
+		$model		= $model->orderby('created_at', 'desc')->get(['judul', 'status', 'pemilik', 'penulis', 'created_at', 'updated_at'])->toArray();
+
+		return 	$model;
+	}
+
+	/**
+	 * this function mean keep executing
+	 * @param array $data
+	 * 
+	 * @return UserDTODataTransformer $data
+	 */
 	public function detailed($id)
 	{
 		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
