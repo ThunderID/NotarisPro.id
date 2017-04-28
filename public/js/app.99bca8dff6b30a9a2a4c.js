@@ -8602,6 +8602,9 @@ __webpack_require__("./resources/assets/js/plugins/equalHeight.js");
 //toggle menu
 __webpack_require__("./resources/assets/js/plugins/toggleMenu.js");
 
+//searchList
+__webpack_require__("./resources/assets/js/plugins/searchList.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -18176,6 +18179,50 @@ if (!("classList" in document.createElement("_"))) {
     return MediumEditor;
 }());
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module), __webpack_require__("./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/searchList.js":
+/***/ (function(module, exports) {
+
+/* List Search */
+window.searchList = new function () {
+	// adapter
+	input = $('.search-input');
+	list = $('.search-list');
+
+	//events
+	input.keyup(function () {
+		getSearch();
+	});
+
+	// functions
+	function getSearch() {
+		//reset
+		reset();
+
+		// get search text
+		var q = input.val();
+
+		// find needle from stack
+		$.each(list, function (index, value) {
+
+			var txt = $(value).text();
+
+			if (txt.indexOf(q) < 0) {
+				hide($(this).parent().parent().parent());
+			}
+		});
+	}
+
+	// ui
+	reset = function reset() {
+		list.parent().parent().parent().show();
+	};
+	hide = function hide(e) {
+		e.hide();
+	};
+}();
 
 /***/ }),
 

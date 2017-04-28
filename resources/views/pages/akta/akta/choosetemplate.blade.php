@@ -28,7 +28,7 @@
 				</div>
 				<div class="col-12">
 					<div class="form-group has-feedback">
-						<input type="text" class="search form-control" placeholder="cari nama template">
+						<input type="text" class="search search-input form-control" placeholder="cari nama template">
 						<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
 					</div>
 				</div>
@@ -39,7 +39,7 @@
 							<div class="card">
 								<div class="card-block">
 									<h4 class="card-title text-center pb-3"><i class="fa fa-file-text fa-2x"></i></h4>
-									<p class="card-text"><small>{{ !is_null($v['judul']) ? $v['judul'] : '' }}</small></p>
+									<p class="card-text"><small class="search-list">{{ !is_null($v['judul']) ? $v['judul'] : '' }}</small></p>
 								</div>
 								<a href="{{ route('akta.akta.create', ['template_id' => $v['id']]) }}" class="btn btn-primary btn-sm btn-block">Pilih</a>
 							</div>
@@ -76,4 +76,8 @@
 		alignHeightReset();
 	    alignHeight();
 	});	
+
+
+	searchList = searchList;
+
 @endpush 

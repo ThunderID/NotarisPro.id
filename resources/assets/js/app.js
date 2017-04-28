@@ -29,3 +29,6 @@ require('./plugins/equalHeight.js');
 
 //toggle menu
 require('./plugins/toggleMenu.js');
+
+//searchList
+require('./plugins/searchList.js');
