@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class homeController extends Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+	}    
 
     public function dashboard(){
 		// init
