@@ -192,5 +192,4 @@
 		pageBreak();
 		drawMargin()
 	});
-
 @endpush 

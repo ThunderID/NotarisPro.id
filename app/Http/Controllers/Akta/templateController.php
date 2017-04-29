@@ -279,6 +279,7 @@ class templateController extends Controller
 
 		foreach ($out[0] as $key => $value) 
 		{
+			$value 								= str_replace('&nbsp;', ' ', $value);
 			$input['paragraf'][$key]['konten']	= $value;
 			$pattern_2 							= '/<span class="medium-editor-mention-at.*?>(.*?)<\/span>/i';
 

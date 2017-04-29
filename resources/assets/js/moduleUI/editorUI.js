@@ -77,12 +77,16 @@
 				})
 			}
 		});
+		// editor.subscribe('editableKeyup', function(el) {
+		// 	var element = document.getElementsByClassName('editor');
+		// 	// element.innerHTML.replace('&nbps;', ' ');
+			
 
+		// 	console.log(element.innerHTML);
+		// })
 		try {
 			window.editorUI.autoSave(editor, url, form);
-		// 	if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
 		}
-		// }
 		catch (err) {
 			console.log('data tidak tersimpan secara otomatis');
 		}

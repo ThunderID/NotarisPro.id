@@ -8734,13 +8734,16 @@ __webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
 				})
 			}
 		});
+		// editor.subscribe('editableKeyup', function(el) {
+		// 	var element = document.getElementsByClassName('editor');
+		// 	// element.innerHTML.replace('&nbps;', ' ');
 
+
+		// 	console.log(element.innerHTML);
+		// })
 		try {
 			window.editorUI.autoSave(editor, url, form);
-			// 	if ((typeof (url) != 'undefined') || (typeof (form) != 'undefined' )) {
-		}
-		// }
-		catch (err) {
+		} catch (err) {
 			console.log('data tidak tersimpan secara otomatis');
 		}
 	}

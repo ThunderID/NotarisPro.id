@@ -80,7 +80,7 @@
 							])
 								<form class="form-widgets text-right form" action="#">
 									<fieldset class="from-group">
-										<input type="text" name="" class="form-control parsing" />
+										<input type="text" name="" class="form-control parsing set-focus" />
 									</fieldset>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -168,6 +168,11 @@
 	$('.input-submit').on('click', function(el) {
 		el.preventDefault();
 		$('form.form-akta').submit();
+	});
+
+	/* Script call modal widget */
+	$('.modal').on('shown.bs.modal', function(e) {
+		window.formUI.setFocus();
 	});
 
 

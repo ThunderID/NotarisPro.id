@@ -1,5 +1,9 @@
 @extends('templates.basic')
 
+@push('fonts')
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+@endpush
+
 @push('styles')
 .page-breaker{
 	position: absolute; 
