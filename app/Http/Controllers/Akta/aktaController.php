@@ -488,4 +488,26 @@ class aktaController extends Controller
 
 		return JSend::success(['data' => $input])->asArray();
 	}
+
+	/**
+	 * Show the form for editing the specified resource with status renvoi.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function renvoi($id)
+	{
+		// init
+		$this->page_attributes->title       = 'Edit Akta';
+
+		$this->page_datas->akta_id 			= $id;
+		$this->page_datas->template_id 		= '';
+		$this->page_datas->datas			= $this->query->detailed($id);
+
+		//initialize view
+		$this->view                         = view('pages.akta.akta.renvoi');
+
+		//function from parent to generate view
+		return $this->generateView();  
+	}
 }

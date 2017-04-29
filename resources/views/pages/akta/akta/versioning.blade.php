@@ -40,7 +40,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 scrollable_panel subset-2menu">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
-					<div class="d-flex justify-content-center" style="margin: 0 auto;">
+					<div class="d-flex justify-content-center mx-auto">
 						<div class="form mt-3 mb-3 font-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group">
 								<?php $revisi_ctr = 0; ?>

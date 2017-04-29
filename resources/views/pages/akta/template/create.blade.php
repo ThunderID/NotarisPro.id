@@ -1,5 +1,9 @@
 @extends('templates.basic')
 
+@push('fonts')
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+@endpush
+
 @push('styles')  
 @endpush  
 
@@ -76,7 +80,7 @@
 				<div id="r-margin" class="margin margin-v"></div>
 				<div id="h-margin"></div>
 				<div class="row">
-					<div class="d-flex justify-content-center" style="margin: 0 auto;">
+					<div class="d-flex justify-content-center mx-auto">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<textarea name="template" class="editor">
 								@if (!is_null($page_datas->id))

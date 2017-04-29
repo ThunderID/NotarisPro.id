@@ -8,16 +8,8 @@
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
 
-			$.ajax({
-				url: urlFillMention,
-				type: 'POST',
-				data: {mention: field, isi_mention: value, template: isi_template},
-				dataType: 'json',
-				success: function (data) {
-					console.log(data);
-					// return data;
-				}
-			});
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(urlFillMention, 'POST', {mention: field, isi_mention: value, template: isi_template});
 
 			window.widgetEditorUI.isActive(field);
 

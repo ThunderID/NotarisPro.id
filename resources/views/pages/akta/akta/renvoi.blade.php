@@ -101,8 +101,8 @@
 				<div id="h-margin"></div>				
 				<div class="row">
 					<div class="d-flex justify-content-center mx-auto">
-						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-							<textarea name="template" class="editor" id="doc-content-mention">
+						<div class="form mt-3 mb-3 font-editor page-editor bg-white" style="width: 21cm; min-height: 29.7cm; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
+							<div class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									@php
 										$temp = explode('<span class="medium-editor-mention-at', $v['konten']);
@@ -130,13 +130,37 @@
 												@endif
 											@endif
 										@endforeach
-										{!! implode('<span class="medium-editor-mention-at', $temp) !!}
+										@if (is_null($v['lock']))
+											<div>
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+												<textarea name="template" class="editor" id="doc-content-mention">
+													{!! implode('<span class="medium-editor-mention-at', $temp) !!}
+												</textarea>
+											</div>
+										@else
+											<div class="bg-faded text-muted">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+												{!! implode('<span class="medium-editor-mention-at', $temp) !!}
+											</div>
+										@endif
 									@else
-										{!! $v['konten'] !!}
+										@if (is_null($v['lock']))
+											<div>
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+												<textarea name="template" class="editor" id="doc-content-mention">
+													{!! $v['konten'] !!}
+												</textarea>
+											</div>
+										@else
+											<div class="bg-faded text-muted">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+												{!! $v['konten'] !!}
+											</div>
+										@endif
 									@endif
 								@empty
 								@endforelse
-							</textarea>
+							</div>
 						</div>
 					</div>
 				</div>
