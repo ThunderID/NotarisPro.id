@@ -120,10 +120,9 @@
 															$data_mention 	= array_get($page_datas->datas['fill_mention'], '@'.$match[1]);
 															if (strpos($data_mention, '@') !== false) {
 																$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
-																dd($temp[$i]);
 															} else {
-																$pattern = '/text-danger">@(.*?)<\/span>/';
-																$temp[$i] = ' text-primary'.preg_replace($pattern, $data_mention. '</span>', $j);
+																$pattern = '/@(.*?)<\/span>/';
+																$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
 															}
 														@endphp
 													@endif
@@ -157,10 +156,10 @@
 
 @push('scripts')  
 	var dataListWidgets = {};
-	var url = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.automatic.store', ['id' => $page_datas->akta_id]) : route('akta.akta.automatic.store')  }}";
+	var urlAutoSave = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.automatic.store', ['id' => $page_datas->akta_id]) : route('akta.akta.automatic.store')  }}";
 	var form = $('.form-akta');
 	var urlFillMention = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.simpan.mention', ['akta_id' => $page_datas->akta_id]) : route('akta.akta.simpan.mention')  }}";
-	window.editorUI.init(url, form);
+	window.editorUI.init(urlAutoSave, form);
 
 	window.widgetEditorUI.init();
 	window.modalUI.init();

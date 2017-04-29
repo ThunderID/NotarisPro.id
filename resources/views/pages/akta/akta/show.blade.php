@@ -91,7 +91,7 @@
 										@if(isset($value['unlock']) && $value['unlock'])
 											{{-- UNCLOKED --}}
 											<div class="bg-unlocked">
-												<a href="#" style="text-decoration:none; color:inherit;" class="lock mt-2" data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
+												<a href="#" style="text-decoration:none; color:inherit;cursor:pointer;" class="lock mt-2" data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
 												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
 													{!!$value['konten']!!}
 												</a>
@@ -99,7 +99,7 @@
 										@else
 											{{-- LOCKED --}}
 											<div>
-												<a href="#" style="text-decoration:none; color:inherit;" class="lock mt-2" data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+												<a href="#" style="text-decoration:none; color:inherit;cursor:pointer;" class="lock mt-2" data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 													<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
 													{!!$value['konten']!!}
 												</a>
@@ -109,14 +109,14 @@
 										{{-- RENVOI --}}
 										@if (is_null($value['lock']))
 											{{-- UNLOCKED --}}
-											<div>
-												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+											<div >
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												{!!$value['konten']!!}
 											</div>
 										@else
 											{{-- LOCKED --}}
-											<div class="bg-faded text-muted">
-												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+											<div class="bg-faded text-muted" style="cursor:not-allowed;">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												{!!$value['konten']!!}
 											</div>
 										@endif

@@ -8,12 +8,17 @@
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
 
+			// call ajax add fill mention
 			/* function ajax required url, type method, data */
 			window.ajaxCall.withoutSuccess(urlFillMention, 'POST', {mention: field, isi_mention: value, template: isi_template});
 
 			window.widgetEditorUI.isActive(field);
 
 			$('#list-widgets').modal('hide');
+
+			// call ajax auto save editor
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(urlAutoSave, 'POST', form.serialize());
 		});
 	},
 	replaceContentWithData: function (param, data) {

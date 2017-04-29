@@ -8688,19 +8688,15 @@ __webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
 	},
 	autoSave: function autoSave(el, url, form) {
 		var triggerAutoSave = function triggerAutoSave(event, editable) {
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: form.serialize(),
-				success: function success(data) {}
-			});
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(url, 'POST', form.serialize());
 		};
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
 	},
 	init: function init(url, form) {
-		var editor = new window.Editor(".editor", {
+		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
 				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
@@ -8882,12 +8878,17 @@ __webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
 
 			window.widgetEditorUI.replaceContentWithData(field, value);
 
+			// call ajax add fill mention
 			/* function ajax required url, type method, data */
 			window.ajaxCall.withoutSuccess(urlFillMention, 'POST', { mention: field, isi_mention: value, template: isi_template });
 
 			window.widgetEditorUI.isActive(field);
 
 			$('#list-widgets').modal('hide');
+
+			// call ajax auto save editor
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(urlAutoSave, 'POST', form.serialize());
 		});
 	},
 	replaceContentWithData: function replaceContentWithData(param, data) {

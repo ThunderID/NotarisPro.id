@@ -132,28 +132,28 @@
 										@endforeach
 										@if (is_null($v['lock']))
 											<div>
-												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
-												<textarea name="template" class="editor" id="doc-content-mention">
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
+												<textarea name="template" class="editor">
 													{!! implode('<span class="medium-editor-mention-at', $temp) !!}
 												</textarea>
 											</div>
 										@else
-											<div class="bg-faded text-muted">
-												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+											<div class="bg-faded text-muted" style="cursor:not-allowed;">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												{!! implode('<span class="medium-editor-mention-at', $temp) !!}
 											</div>
 										@endif
 									@else
 										@if (is_null($v['lock']))
 											<div>
-												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
-												<textarea name="template" class="editor" id="doc-content-mention">
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
+												<textarea name="template" class="editor">
 													{!! $v['konten'] !!}
 												</textarea>
 											</div>
 										@else
-											<div class="bg-faded text-muted">
-												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+											<div class="bg-faded text-muted" style="cursor:not-allowed;">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												{!! $v['konten'] !!}
 											</div>
 										@endif
