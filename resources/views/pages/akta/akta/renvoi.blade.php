@@ -33,19 +33,6 @@
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 				<ul class="nav menu-content justify-content-end">
-					{{-- <li class="nav-item">
-						<span class="nav-link">Zoom</span>
-					</li>
-					<li class="nav-item">
-						<span class="nav-link">Halaman</span>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">A4</a>
-						<div class="dropdown-menu dropdown-menu-right">
-							<a class="dropdown-item" href="#">A4</a>
-							<a class="dropdown-item" href="#">F4</a>
-						</div>
-					</li> --}}
 					<li class="nav-item">
 						<a class="nav-link input-submit" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
 					</li>
@@ -53,56 +40,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar subset-2menu">
-				<div class="panel">
-					<h5>List Widgets</h5>
-					<div class="list-group list-widgets">
-						@if (isset($page_datas->datas['mentionable']))
-							@php
-								$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
-							@endphp
-							@forelse ($sort_mentionable as $k => $v)
-								<a class="list-group-item list-group-item-action justify-content-between p-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
-									{{ $v }}
-									<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
-								</a>
-							@empty
-							@endforelse
-
-							@component('components.modal', [
-								'id'		=> 'list-widgets',
-								'title'		=> '',
-								'settings'	=> [
-									'modal_class'	=> '',
-									'hide_buttons'	=> 'true',
-									'hide_title'	=> 'true',
-								]
-							])
-								<form class="form-widgets text-right form" action="#">
-									<fieldset class="from-group">
-										<input type="text" name="" class="form-control parsing" />
-									</fieldset>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-										<button type="button" class="btn btn-primary" data-save="true">Simpan</button>
-									</div>
-								</form>
-							@endcomponent
-						@else
-							<p>Tidak ada widget</p>
-						@endif
-					</div>
-				</div>
-			</div>
-			<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu" style="margin-left: 15px;">
+			<div id="page" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 scrollable_panel subset-2menu">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div id="l-margin" class="margin margin-v"></div>
 				<div id="r-margin" class="margin margin-v"></div>
 				<div id="h-margin"></div>				
 				<div class="row">
 					<div class="d-flex justify-content-center mx-auto">
-						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-							<textarea name="template" class="editor" id="doc-content-mention">
+						<div class="form mt-3 mb-3 font-editor page-editor bg-white" style="width: 21cm; min-height: 29.7cm; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
+							<div class="editor">
 								@forelse ($page_datas->datas['paragraf'] as $k => $v)
 									@php
 										$temp = explode('<span class="medium-editor-mention-at', $v['konten']);
@@ -120,22 +66,47 @@
 															$data_mention 	= array_get($page_datas->datas['fill_mention'], '@'.$match[1]);
 															if (strpos($data_mention, '@') !== false) {
 																$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
+																dd($temp[$i]);
 															} else {
-																$pattern = '/@(.*?)<\/span>/';
-																$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
+																$pattern = '/text-danger">@(.*?)<\/span>/';
+																$temp[$i] = ' text-primary'.preg_replace($pattern, $data_mention. '</span>', $j);
 															}
 														@endphp
 													@endif
 												@endif
 											@endif
 										@endforeach
-										{!! implode('<span class="medium-editor-mention-at', $temp) !!}
+										@if (is_null($v['lock']))
+											<div>
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
+												<textarea name="template[{{ $k }}]" class="editor">
+													{!! implode('<span class="medium-editor-mention-at', $temp) !!}
+												</textarea>
+											</div>
+										@else
+											<div class="bg-faded text-muted" style="cursor:not-allowed;">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
+												{!! implode('<span class="medium-editor-mention-at', $temp) !!}
+											</div>
+										@endif
 									@else
-										{!! $v['konten'] !!}
+										@if (is_null($v['lock']))
+											<div>
+												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
+												<textarea name="template[{{ $k }}]" class="editor">
+													{!! $v['konten'] !!}
+												</textarea>
+											</div>
+										@else
+											<div class="bg-faded text-muted" style="cursor:not-allowed;">
+												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
+												{!! $v['konten'] !!}
+											</div>
+										@endif
 									@endif
 								@empty
 								@endforelse
-							</textarea>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -156,10 +127,10 @@
 
 @push('scripts')  
 	var dataListWidgets = {};
-	var urlAutoSave = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.automatic.store', ['id' => $page_datas->akta_id]) : route('akta.akta.automatic.store')  }}";
+	var url = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.automatic.store', ['id' => $page_datas->akta_id]) : route('akta.akta.automatic.store')  }}";
 	var form = $('.form-akta');
 	var urlFillMention = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.simpan.mention', ['akta_id' => $page_datas->akta_id]) : route('akta.akta.simpan.mention')  }}";
-	window.editorUI.init(urlAutoSave, form);
+	window.editorUI.init(url, form);
 
 	window.widgetEditorUI.init();
 	window.modalUI.init();

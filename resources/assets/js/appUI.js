@@ -10,3 +10,7 @@ require ('./moduleUI/widgetEditorUI');
 require ('./moduleUI/modalUI');
 // module form disable enter
 require ('./moduleUI/formUI');
+// module ajax
+require ('./moduleUI/ajaxUI');
+// module locked unlocked paragraph
+require ('./moduleUI/lockUnlockParagraphUI');

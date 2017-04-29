@@ -257,7 +257,7 @@ class aktaController extends Controller
 	{
 		//
 		try {
-			$this->parse_store($id, $request);
+			$this->parse_store($id, $request->only('template'));
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -313,7 +313,9 @@ class aktaController extends Controller
 				case 'renvoi':
 					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
-				
+				case 'akta':
+					$data		= new \TCommands\Akta\FinalisasiAkta($id);
+					break;
 				default:
 					throw new Exception("Status invalid", 1);
 					break;
@@ -388,36 +390,43 @@ class aktaController extends Controller
 		return $list;
 	}
 
-	private function parse_store($id, $request)
+	private function parse_store($id, $template)
 	{
-		// get data
-		$input		= $request->only('template');
-		$pattern 	= "/<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-		// change key index like 'paragraph[*]'
-
-		foreach ($out[0] as $key => $value) 
+		$check_status 								= $this->query->detailed($id);
+		$input['id']								= $id;
+		
+		if(is_array($template['template']) && $check_status['status']=='renvoi')
 		{
-			$input['paragraf'][$key]['konten']	= $value;
+			$input['paragraf']						= $check_status['paragraf'];
+
+			foreach ($template['template'] as $key => $value) 
+			{
+				$input['paragraf'][$key]['konten']	= $value;
+
+			}
+
+			$data			= new \TCommands\Akta\SimpanAkta($input);
+			$data 			= $data->handle();
 		}
-
-		$check_status 							= $this->query->detailed($id);
-		$input['id']							= $id;
-
-		switch (strtolower($check_status['status'])) 
+		elseif($check_status['status']=='draft')
 		{
-			case 'draft':
-				$data		= new \TCommands\Akta\DraftingAkta($input);
-				$data 		= $data->handle();
-				break;
-			case 'renvoi':
-				$data		= new \TCommands\Akta\SimpanAkta($input);
-				$data 		= $data->handle();
-				break;
+			// get data
+			$pattern		= "/\/t.*?<h4.*?>(.*?)<\/h4>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
 			
-			default:
-				throw new Exception("Status invalid", 1);
-				break;
+			preg_match_all($pattern, $template['template'], $out, PREG_PATTERN_ORDER);
+			// change key index like 'paragraph[*]'
+
+			foreach ($out[0] as $key => $value) 
+			{
+				$input['paragraf'][$key]['konten']	= $value;
+			}
+
+			$data			= new \TCommands\Akta\DraftingAkta($input);
+			$data 			= $data->handle();
+		}
+		else
+		{
+			throw new Exception("Status invalid", 1);
 		}
 
 		return $data;
@@ -429,7 +438,7 @@ class aktaController extends Controller
 	public function automatic_store ($id = null, Request $request)
 	{
 		try {
-			$this->parse_store($id, $request);
+			$this->parse_store($id, $request->only('template'));
 		} catch (Exception $e) {
 			return response()->json(['status'	=> $e->getMessage()], 200);
 		}
@@ -452,9 +461,12 @@ class aktaController extends Controller
 			$input			= $request->only('mention', 'isi_mention');
 			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
 			$content['id']	= $akta_id;
+
 			// save
 			$data			= new \TCommands\Akta\DraftingAkta($content);
 			$data 			= $data->handle();
+
+			$this->parse_store($akta_id, $request->only('template'));
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}
@@ -481,5 +493,27 @@ class aktaController extends Controller
 		}
 
 		return JSend::success(['data' => $input])->asArray();
+	}
+
+	/**
+	 * Show the form for editing the specified resource with status renvoi.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function renvoi($id)
+	{
+		// init
+		$this->page_attributes->title       = 'Edit Akta';
+
+		$this->page_datas->akta_id 			= $id;
+		$this->page_datas->template_id 		= '';
+		$this->page_datas->datas			= $this->query->detailed($id);
+
+		//initialize view
+		$this->view                         = view('pages.akta.akta.renvoi');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 }

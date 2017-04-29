@@ -31,21 +31,15 @@
 	},
 	autoSave: function (el, url, form) {
 		var triggerAutoSave = function (event, editable) {
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: form.serialize(),
-				success: function (data){
-
-				}
-			});
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(url, 'POST', form.serialize());
 		};
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
 	},
 	init: function (url, form) {
-		var editor = new window.Editor(".editor", {
+		var editor = new window.Editor("textarea.editor", {
 	    	// button on toolbar medium-editor
 			toolbar: {
 				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]

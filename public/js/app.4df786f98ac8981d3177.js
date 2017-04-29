@@ -8622,6 +8622,33 @@ __webpack_require__("./resources/assets/js/moduleUI/widgetEditorUI.js");
 __webpack_require__("./resources/assets/js/moduleUI/modalUI.js");
 // module form disable enter
 __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
+// module ajax
+__webpack_require__("./resources/assets/js/moduleUI/ajaxUI.js");
+// module locked unlocked paragraph
+__webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
+
+/***/ }),
+
+/***/ "./resources/assets/js/moduleUI/ajaxUI.js":
+/***/ (function(module, exports) {
+
+;window.ajaxCall = {
+	withoutSuccess: function withoutSuccess(ajaxUrl) {
+		var ajaxType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'GET';
+		var ajaxData = arguments[2];
+
+		try {
+			$.ajax({
+				url: ajaxUrl,
+				type: ajaxType,
+				data: ajaxData,
+				dataType: 'json'
+			});
+		} catch (err) {
+			console.log('call post ajax error ' + err);
+		}
+	}
+};
 
 /***/ }),
 
@@ -8661,19 +8688,15 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 	},
 	autoSave: function autoSave(el, url, form) {
 		var triggerAutoSave = function triggerAutoSave(event, editable) {
-			$.ajax({
-				url: url,
-				type: 'POST',
-				data: form.serialize(),
-				success: function success(data) {}
-			});
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(url, 'POST', form.serialize());
 		};
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
 	},
 	init: function init(url, form) {
-		var editor = new window.Editor(".editor", {
+		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
 				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
@@ -8772,6 +8795,32 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 
 /***/ }),
 
+/***/ "./resources/assets/js/moduleUI/lockUnlockParagraphUI.js":
+/***/ (function(module, exports) {
+
+;window.lockedUnlockedParagraphUI = {
+	init: function init() {
+		$('.lock').on('click', function () {
+			var lock = $(this).attr("data-lock");
+			var url = $(this).data('url');
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(url, 'POST', { lock: lock });
+
+			if ($(this).attr('unlocked') != 'true') {
+				$(this).attr('unlocked', 'true');
+				$(this).parent().addClass('bg-unlocked');
+				$(this).find('i').removeClass('fa-lock').addClass('fa-unlock-alt text-success');
+			} else {
+				$(this).attr('unlocked', 'false');
+				$(this).parent().removeClass('bg-unlocked');
+				$(this).find('i').removeClass('fa-unlock-alt text-success').addClass('fa-lock');
+			}
+		});
+	}
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/moduleUI/modalUI.js":
 /***/ (function(module, exports) {
 
@@ -8820,31 +8869,28 @@ __webpack_require__("./resources/assets/js/moduleUI/formUI.js");
 /***/ (function(module, exports) {
 
 ;window.widgetEditorUI = {
-	init: function () {
-    $('.modal').on('click', "button[data-save=true]" , function(e) {
-      e.preventDefault();
-      field       = $(this).attr('data-parsing');
-      value       = $('#list-widgets').find('input').val();
-      isi_template  = document.getElementById("doc-content-mention").value;
+	init: function init() {
+		$('.modal').on('click', "button[data-save=true]", function (e) {
+			e.preventDefault();
+			field = $(this).attr('data-parsing');
+			value = $('#list-widgets').find('input').val();
+			isi_template = document.getElementById("doc-content-mention").value;
 
-      window.widgetEditorUI.replaceContentWithData(field, value);
+			window.widgetEditorUI.replaceContentWithData(field, value);
 
-      $.ajax({
-        url: urlFillMention,
-        type: 'POST',
-        data: {mention: field, isi_mention: value, template: isi_template},
-        dataType: 'json',
-        success: function (data) {
-          console.log(data);
-          // return data;
-        }
-      });
+			// call ajax add fill mention
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(urlFillMention, 'POST', { mention: field, isi_mention: value, template: isi_template });
 
-      window.widgetEditorUI.isActive(field);
+			window.widgetEditorUI.isActive(field);
 
-      $('#list-widgets').modal('hide');
-    });
-  },
+			$('#list-widgets').modal('hide');
+
+			// call ajax auto save editor
+			/* function ajax required url, type method, data */
+			window.ajaxCall.withoutSuccess(urlAutoSave, 'POST', form.serialize());
+		});
+	},
 	replaceContentWithData: function replaceContentWithData(param, data) {
 		mention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(mention, function (k, v) {

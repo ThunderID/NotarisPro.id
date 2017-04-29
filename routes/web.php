@@ -93,6 +93,10 @@ Route::group(['middleware' => ['authenticated']], function()
 		// tandai renvoi
 		Route::any('/akta/akta/tandai/renvoi/{akta_id}', 	['uses' => 'aktaController@tandai_renvoi', 'as' => 'akta.akta.tandai.renvoi']);
 		
+		Route::any('/akta/akta/{id}/edit/renvoi',			['uses'	=> 'aktaController@renvoi', 'as' => 'akta.akta.edit.renvoi']);
+
+
+		// auto save
 		Route::any('/akta/akta/auto/save/{id}',				['uses'	=> 'aktaController@automatic_store', 'as' => 'akta.akta.automatic.store']);
 
 		// versioning akta
