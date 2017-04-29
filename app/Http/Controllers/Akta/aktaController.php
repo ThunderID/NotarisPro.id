@@ -401,7 +401,7 @@ class aktaController extends Controller
 
 			foreach ($template['template'] as $key => $value) 
 			{
-				$input['paragraf'][$key]['konten']	= $value['konten'];
+				$input['paragraf'][$key]['konten']	= $value;
 
 			}
 
