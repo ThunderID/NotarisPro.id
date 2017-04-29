@@ -15,12 +15,12 @@ window.searchList = new function(){
 		reset();
 
 		// get search text
-		var q = input.val();
+		var q = input.val().toLowerCase();;
 
 		// find needle from stack
 		$.each(list, function( index, value ) {
 
-			var txt = $(value).text();
+			var txt = $(value).text().toLowerCase();;
 
 			if (txt.indexOf(q) < 0){
 				hide($(this).parent().parent().parent());		

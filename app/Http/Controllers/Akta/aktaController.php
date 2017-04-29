@@ -392,36 +392,42 @@ class aktaController extends Controller
 
 	private function parse_store($id, $template)
 	{
-		// get data
-		$input		= $template;
-		$pattern		= "/\/t.*?<h4.*?>(.*?)<\/h4>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+		$check_status 								= $this->query->detailed($id);
+		$input['id']								= $id;
 		
-		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-		// change key index like 'paragraph[*]'
-
-		foreach ($out[0] as $key => $value) 
+		if(is_array($template['template']) && $check_status['status']=='renvoi')
 		{
-			$value 								= str_replace('&nbsp;', ' ', $value);
-			$input['paragraf'][$key]['konten']	= $value;
-		}
+			$input['paragraf']						= $check_status['paragraf'];
 
-		$check_status 							= $this->query->detailed($id);
-		$input['id']							= $id;
+			foreach ($template['template'] as $key => $value) 
+			{
+				$value 								= str_replace('&nbsp;', ' ', $value);
+				$input['paragraf'][$key]['konten']	= $value;
 
-		switch (strtolower($check_status['status'])) 
-		{
-			case 'draft':
-				$data		= new \TCommands\Akta\DraftingAkta($input);
-				$data 		= $data->handle();
-				break;
-			case 'renvoi':
-				$data		= new \TCommands\Akta\SimpanAkta($input);
-				$data 		= $data->handle();
-				break;
+			}
 			
-			default:
-				throw new Exception("Status invalid", 1);
-				break;
+			$data			= new \TCommands\Akta\SimpanAkta($input);
+			$data 			= $data->handle();
+		}
+		elseif($check_status['status']=='draft')
+		{
+			// get data
+			$pattern		= "/\/t.*?<h4.*?>(.*?)<\/h4>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h4.*?>(.*?)<\/h4>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
+			
+			preg_match_all($pattern, $template['template'], $out, PREG_PATTERN_ORDER);
+			// change key index like 'paragraph[*]'
+
+			foreach ($out[0] as $key => $value) 
+			{
+				$input['paragraf'][$key]['konten']	= $value;
+			}
+
+			$data			= new \TCommands\Akta\DraftingAkta($input);
+			$data 			= $data->handle();
+		}
+		else
+		{
+			throw new Exception("Status invalid", 1);
 		}
 
 		return $data;
