@@ -293,7 +293,7 @@ class templateController extends Controller
 						{
 							if (str_is('@*', $valuex))
 							{
-								$input['mentionable'][]	= $valuex;
+								$input['mentionable'][]	= strip_tags($valuex);
 							}
 						}
 					}
@@ -301,14 +301,14 @@ class templateController extends Controller
 					{
 						if (str_is('@*', $valuex))
 						{
-							$input['mentionable'][]		= $matches[1];
+							$input['mentionable'][]		= strip_tags($matches[1]);
 						}
 							
 					}
 				}
 				elseif (!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
 				{
-					$input['mentionable'][]				= $matches[1];
+					$input['mentionable'][]				= strip_tags($matches[1]);
 				}
 				elseif (is_array($matches['1']))
 				{
