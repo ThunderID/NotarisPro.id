@@ -171,6 +171,11 @@
 @stop
 
 @push('scripts')
+
+	/* Load Stripe Generator Here */ 
+    window.stripeGenerator;
+
+
 	/*	Start Lock */
 	    window.lockedUnlockedParagraphUI.init();
 	/*	End Lock */
