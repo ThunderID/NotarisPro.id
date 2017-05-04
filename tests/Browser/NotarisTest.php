@@ -18,17 +18,19 @@ class NotarisTest extends DuskTestCase
 	{
 		$this->browse(function ($browser)
 		{
-			// $browser->visit('/login')
-			// 		->value('#email', 'admin@notaris.id')
-			// 		->value('#password', 'admin')
-			// 		->click('#btn-login');
+			$browser->visit('/login')
+					->value('#email', 'admin@notaris.id')
+					->value('#password', 'admin')
+					->click('#btn-login');
 			// $browser->visit('/akta/template/create')
 			// 		->click('div.editor')
 			// 		->pause(240000);
-				// $browser->visit('/akta/template')
-				// 		->type('q', 'Akta Baru')
-				// 		->pause('2000')
-				// 		->keys('input.search', ['{enter}']);
+			// click search
+				$browser->visit('/akta/template')
+						->type('q', 'Akta Baru')
+						->pause('2000')
+						->keys('input.search', ['{enter}']);
+			// click filter
 				$browser->visit('/akta/template')
 					->assertSee('Draft')
 					->clickLink('Draft')

@@ -8735,6 +8735,14 @@ __webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
 			}
 		});
 
+		// in input able remove color and style color
+		editor.subscribe('editableInput', function (event, editable) {
+			$(editable).children().each(function (k, v) {
+				$(v).css('color', '');
+				$(v).find('*').removeAttr('color').css('color', '');
+			});
+		});
+
 		try {
 			window.editorUI.autoSave(editor, url, form);
 		} catch (err) {

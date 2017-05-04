@@ -37,7 +37,6 @@
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
-
 	},
 	init: function (url, form) {
 		var editor = new window.Editor("textarea.editor", {
@@ -79,6 +78,13 @@
 			}
 		});
 
+		// in input able remove color and style color
+		editor.subscribe('editableInput', function (event, editable) {
+			$(editable).children().each( function(k, v){
+				$(v).css('color', '');
+				$(v).find('*').removeAttr('color').css('color', '');
+			});
+		});
 
 
 		try {
