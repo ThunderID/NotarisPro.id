@@ -37,10 +37,11 @@
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
+
 	},
 	init: function (url, form) {
 		var editor = new window.Editor("textarea.editor", {
-	    	// button on toolbar medium-editor
+			// button on toolbar medium-editor
 			toolbar: {
 				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
 			},
@@ -50,8 +51,8 @@
 			},
 			buttonLabels: "fontawesome",
 			paste: {
-				cleanPastedHTML: true,
-				forcePlainText: false,
+				cleanPastedHTML: false,
+				forcePlainText: true,
 			},
 			spellcheck: false,
 			disableExtraSpaces: true,
@@ -77,13 +78,9 @@
 				})
 			}
 		});
-		// editor.subscribe('editableKeyup', function(el) {
-		// 	var element = document.getElementsByClassName('editor');
-		// 	// element.innerHTML.replace('&nbps;', ' ');
-			
 
-		// 	console.log(element.innerHTML);
-		// })
+
+
 		try {
 			window.editorUI.autoSave(editor, url, form);
 		}

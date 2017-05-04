@@ -8707,8 +8707,8 @@ __webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
 			},
 			buttonLabels: "fontawesome",
 			paste: {
-				cleanPastedHTML: true,
-				forcePlainText: false
+				cleanPastedHTML: false,
+				forcePlainText: true
 			},
 			spellcheck: false,
 			disableExtraSpaces: true,
@@ -8734,13 +8734,7 @@ __webpack_require__("./resources/assets/js/moduleUI/lockUnlockParagraphUI.js");
 				})
 			}
 		});
-		// editor.subscribe('editableKeyup', function(el) {
-		// 	var element = document.getElementsByClassName('editor');
-		// 	// element.innerHTML.replace('&nbps;', ' ');
 
-
-		// 	console.log(element.innerHTML);
-		// })
 		try {
 			window.editorUI.autoSave(editor, url, form);
 		} catch (err) {

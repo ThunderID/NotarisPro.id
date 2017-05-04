@@ -163,7 +163,6 @@
 
 	window.widgetEditorUI.init();
 	window.modalUI.init();
-	window.formUI.init();
 
 	$('.input-submit').on('click', function(el) {
 		el.preventDefault();
@@ -172,7 +171,7 @@
 
 	/* Script call modal widget */
 	$('.modal').on('shown.bs.modal', function(e) {
-		window.formUI.setFocus();
+		window.formUI.init();
 	});
 
 
