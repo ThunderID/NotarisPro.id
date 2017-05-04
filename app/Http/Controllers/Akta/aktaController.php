@@ -184,7 +184,9 @@ class aktaController extends Controller
 
 			foreach ($out[0] as $key => $value) 
 			{
-				$input['paragraf'][$key]['konten']	= $value;
+				$input['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/li>/i', '</li>', $out[0][$key]);
+				$input['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/span>/i', '</span><br>', $out[0][$key]);
+				$input['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/b>/i', '</b><br>', $out[0][$key]);
 			}
 
 			$call 									= new DaftarTemplateAkta;
@@ -392,6 +394,7 @@ class aktaController extends Controller
 
 	private function parse_store($id, $template)
 	{
+
 		$check_status 								= $this->query->detailed($id);
 		$input['id']								= $id;
 		
@@ -401,11 +404,14 @@ class aktaController extends Controller
 
 			foreach ($template['template'] as $key => $value) 
 			{
-				$value 								= str_replace('&nbsp;', ' ', $value);
-				$input['paragraf'][$key]['konten']	= $value;
+				$value 		= str_replace('&nbsp;', ' ', $value);
+				$value		= preg_replace('/<br.*?><\/li>/i', '</li>', $value);
+				$value		= preg_replace('/<br.*?><\/span>/i', '</span><br>', $value);
+				$value		= preg_replace('/<br.*?><\/b>/i', '</b><br>', $value);
 
+				$input['paragraf'][$key]['konten']	= $value;
 			}
-			
+
 			$data			= new \TCommands\Akta\SimpanAkta($input);
 			$data 			= $data->handle();
 		}
@@ -419,6 +425,10 @@ class aktaController extends Controller
 
 			foreach ($out[0] as $key => $value) 
 			{
+				$value		= preg_replace('/<br.*?><\/li>/i', '</li>', $value);
+				$value		= preg_replace('/<br.*?><\/span>/i', '</span><br>', $value);
+				$value		= preg_replace('/<br.*?><\/b>/i', '</b><br>', $value);
+
 				$input['paragraf'][$key]['konten']	= $value;
 			}
 
