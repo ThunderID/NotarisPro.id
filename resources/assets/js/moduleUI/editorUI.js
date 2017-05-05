@@ -51,7 +51,9 @@
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
-				buttons: ["bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
+				buttons: [{name: 'h4', contentFA: '<i class="fa fa-header"></i>1'}, {name: 'h5', contentFA: '<i class="fa fa-header"></i>2'},
+					"bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"
+				]
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -63,7 +65,7 @@
 				forcePlainText: true,
 			},
 			spellcheck: false,
-			disableExtraSpaces: true,
+			disableExtraSpaces: false,
 			targetBlank: true,
 			extensions: {
 				mention: new window.Mention({
