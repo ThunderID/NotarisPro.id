@@ -7,6 +7,9 @@ window.Mention = require("medium-editor-tc-mention").TCMention;
 // plugin search list
 window.list = require('./plugins/list-js/list.js');
 
+// app animation loading like youtube
+window.appLoading = require('./plugins/app-loading.js');
+
 
 // app UI
 require ('./appUI');
@@ -34,4 +37,4 @@ require('./plugins/toggleMenu.js');
 require('./plugins/searchList.js');
 
 //stripeGenerator
-// require('./plugins/stripeGenerator.js');
+require('./plugins/stripeGenerator.js');

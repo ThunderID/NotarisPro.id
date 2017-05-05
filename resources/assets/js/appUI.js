@@ -14,3 +14,5 @@ require ('./moduleUI/formUI');
 require ('./moduleUI/ajaxUI');
 // module locked unlocked paragraph
 require ('./moduleUI/lockUnlockParagraphUI');
+// moduel UI loading animation 
+require ('./moduleUI/loadingAnimationUI');

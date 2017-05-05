@@ -31,8 +31,17 @@
 	},
 	autoSave: function (el, url, form) {
 		var triggerAutoSave = function (event, editable) {
+			loadingAnimation.changeColor('#ddd');
+			loadingAnimation.loadingStart();
+			$('.save-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
+			$('.save-as-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
 			/* function ajax required url, type method, data */
 			window.ajaxCall.withoutSuccess(url, 'POST', form.serialize());
+			setTimeout( function (){
+				loadingAnimation.loadingStop();
+				$('.save-content').html('<i class="fa fa-save"></i> Simpan').removeClass('disabled');
+				$('.save-as-content').html('<i class="fa fa-save"></i> Simpan Sebagai').removeClass('disabled');
+			}, 2000);
 		};
 
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);

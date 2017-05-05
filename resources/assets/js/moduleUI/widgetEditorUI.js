@@ -8,17 +8,22 @@
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
 
+			loadingAnimation.changeColor('#ddd');
+			loadingAnimation.loadingStart();
+			$('.save-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
+
 			// call ajax add fill mention
 			/* function ajax required url, type method, data */
 			window.ajaxCall.withoutSuccess(urlFillMention, 'POST', {mention: field, isi_mention: value, template: isi_template});
 
+			setTimeout( function (){
+				loadingAnimation.loadingStop();
+				$('.save-content').html('<i class="fa fa-save"></i> Simpan').removeClass('disabled');
+			}, 2000);
+
 			window.widgetEditorUI.isActive(field);
 
 			$('#list-widgets').modal('hide');
-
-			// call ajax auto save editor
-			/* function ajax required url, type method, data */
-			window.ajaxCall.withoutSuccess(urlAutoSave, 'POST', form.serialize());
 		});
 	},
 	replaceContentWithData: function (param, data) {

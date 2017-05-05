@@ -5,7 +5,7 @@
 				url: ajaxUrl,
 				type: ajaxType,
 				data: ajaxData,
-				dataType: 'json'
+				dataType: 'json',
 			});
 		} catch (err) {
 			console.log('call post ajax error ' +err);
