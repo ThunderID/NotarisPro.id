@@ -33,5 +33,5 @@ require('./plugins/toggleMenu.js');
 //searchList
 require('./plugins/searchList.js');
 
-//stripeGenerator
-// require('./plugins/stripeGenerator.js');
+// stripeGenerator
+require('./plugins/stripeGenerator.js');
