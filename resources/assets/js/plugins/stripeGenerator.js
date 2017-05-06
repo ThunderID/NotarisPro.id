@@ -70,13 +70,13 @@ window.stripeGenerator = new function(){
 							// reset counter and add to main html text
 							textInRow = "";
 							tmpTextInRow = "";
-							newHtmlText = newHtmlText + spacer ;
+							// newHtmlText = newHtmlText + spacer ;
 
 						}
 
 						noSpaceFlag = true;
 
-					}else if(currHtmlObject == '</li>' || currHtmlObject == '</ul>'){
+					}else if(currHtmlObject == '</li>'){
 
 						// list closing
 						// console.log(textInRow); -->
@@ -97,15 +97,17 @@ window.stripeGenerator = new function(){
 							tmpTextInRow = "";
 							// console.log(textInRow); -->
 							// console.log(textInRow.length); -->
-							newHtmlText = newHtmlText + currHtmlObject + spacer ;
+							// newHtmlText = newHtmlText + currHtmlObject + spacer ;
+							newHtmlText = newHtmlText + currHtmlObject ;
 
 						}
 
 						noSpaceFlag = true;
 
-					}else if(currHtmlObject == '<li>' || currHtmlObject == '<ul>'){
+					}else if(currHtmlObject == '<li>'){
 						newHtmlText = cleanExceededSpace(newHtmlText);
-						newHtmlText = newHtmlText + getTag(value) + spacer;
+						// newHtmlText = newHtmlText + getTag(value) + spacer;
+						newHtmlText = newHtmlText + getTag(value);
 
 						noSpaceFlag = true;
 					}else{
@@ -123,6 +125,13 @@ window.stripeGenerator = new function(){
 						}else{
 							newHtmlText = newHtmlText + getTag(value) + spacer;
 						}
+
+						// tabs
+						if(currHtmlObject == '<ol>' || currHtmlObject == '<ul>'){
+							currMaxLength = currMaxLength - tabLetterCount;
+						}else if (currHtmlObject == '</ol>' || currHtmlObject == '</ul>'){
+							currMaxLength = currMaxLength + tabLetterCount;
+						}							
 
 					}
 				}
