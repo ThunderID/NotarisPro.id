@@ -1,6 +1,16 @@
 .editor {
-	p, ul, ol {
+	p, ul, ol, h5 {
 		margin-top: 0;
 		margin-bottom: 0;
+	}
+	h4 {
+		margin-top: 5px;
+		margin-bottom: 5px;
+		color: inherit;
+		font-weight: inherit;
+	},
+	h5 {
+		color: inherit;
+		font-weight: inherit;
 	}
 }

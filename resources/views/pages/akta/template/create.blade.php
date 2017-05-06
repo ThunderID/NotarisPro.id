@@ -46,10 +46,10 @@
 						</div>
 					</li> --}}
 					<li class="nav-item">
-						<a class="nav-link input-submit" href="#"><i class="fa fa-save"></i> Simpan</a>
+						<a class="nav-link input-submit save-content" href="#"><i class="fa fa-save"></i> Simpan</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan Sebagai</a>
+						<a class="nav-link save-as-content" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan Sebagai</a>
 					</li>
 				</ul>
 			</div>
@@ -135,6 +135,7 @@
 	var url = "{{ (!is_null($page_datas->id)) ? route('akta.template.automatic.store', ['id' => $page_datas->id]) : route('akta.template.automatic.store')  }}";
 	var form = $('.form-template');
 	window.editorUI.init(url, form);
+	window.loadingAnimation.init();
 
 	$('.input-submit').on('click', function(el) {
 		el.preventDefault();

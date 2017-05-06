@@ -47,7 +47,7 @@
 						</div>
 					</li> --}}
 					<li class="nav-item">
-						<a class="nav-link input-submit" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
+						<a class="nav-link input-submit save-content" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
 					</li>
 				</ul>
 			</div>
@@ -160,6 +160,7 @@
 	var form = $('.form-akta');
 	var urlFillMention = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.simpan.mention', ['akta_id' => $page_datas->akta_id]) : route('akta.akta.simpan.mention')  }}";
 	window.editorUI.init(urlAutoSave, form);
+	window.loadingAnimation.init();
 
 	window.widgetEditorUI.init();
 	window.modalUI.init();
