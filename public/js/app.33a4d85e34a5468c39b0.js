@@ -18469,6 +18469,9 @@ window.stripeGenerator = new function () {
 			// add anchor for middle text alignment
 			if (orientation == "center") {
 
+				// re-align
+				$($(this)['0']).css('text-align', 'left');
+
 				newHtmlText = cleanExceededSpace(newHtmlText);
 				newHtmlText = newHtmlText + '<FillerReplaceHere/>';
 				// noSpaceFlag = true; --> 
@@ -18502,7 +18505,7 @@ window.stripeGenerator = new function () {
 							// reset counter and add to main html text
 							textInRow = "";
 							tmpTextInRow = "";
-							// newHtmlText = newHtmlText + spacer ;
+							newHtmlText = newHtmlText + spacer;
 						}
 
 						noSpaceFlag = true;
@@ -18526,15 +18529,13 @@ window.stripeGenerator = new function () {
 							tmpTextInRow = "";
 							// console.log(textInRow); -->
 							// console.log(textInRow.length); -->
-							// newHtmlText = newHtmlText + currHtmlObject + spacer ;
-							newHtmlText = newHtmlText + currHtmlObject;
+							newHtmlText = newHtmlText + currHtmlObject + spacer;
 						}
 
 						noSpaceFlag = true;
 					} else if (currHtmlObject == '<li>') {
 						newHtmlText = cleanExceededSpace(newHtmlText);
-						// newHtmlText = newHtmlText + getTag(value) + spacer;
-						newHtmlText = newHtmlText + getTag(value);
+						newHtmlText = newHtmlText + getTag(value) + spacer;
 
 						noSpaceFlag = true;
 					} else {
