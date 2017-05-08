@@ -197,4 +197,35 @@
 	$('#deleteModal').on('shown.bs.modal', function(e) {
 		window.formUI.setFocus();
 	});
+
+	/* Footer Generator */
+	function drawFooter(){
+		// init
+		var pivot_pos = $('.page-editor').offset();
+		var pivot_h = $('.page-editor').outerHeight();
+		var pivot_w = $('.page-editor').width() - 4;
+		var template_h = window.footerGenerator.convertPX(29.7);
+		var margin_document = 47;
+
+		var footer = window.footerGenerator;
+		var ml = pivot_pos.left - margin_document - 4;
+		var mr = pivot_pos.left + pivot_w - footer.convertPX(1)  + 2;
+		var mt = 16 + footer.convertPX(2) - 2;
+		var mb = template_h - (footer.convertPX(2) + footer.convertPX(3) - 16);
+
+		footer.docLeft = $('.page-editor').children().offset().left;
+		footer.docWidth = pivot_w;
+		footer.docHeight = pivot_h;
+		footer.pageHeight = template_h;
+
+		footer.title = 'Judul Akta';
+
+		footer.display(mb);
+
+	}	
+
+	/* Events */
+	$(document).ready(function(){
+		drawFooter();
+	});	
 @endpush 

@@ -41,3 +41,6 @@ require('./plugins/stripeGenerator.js');
 
 // shortcuts
 require('./plugins/hotkey/hotkey.js');
+
+// footer
+require('./plugins/footerGenerator.js');
