@@ -9316,6 +9316,10 @@ window.footerGenerator = new function () {
 			bottom = bottom + this.pageHeight;
 		}
 	};
+
+	this.updateDisplay = function () {
+		$('.auto-footer').css('left', this.docLeft + 'px');
+	};
 }();
 
 /***/ }),

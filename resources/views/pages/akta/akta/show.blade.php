@@ -223,9 +223,20 @@
 		footer.display(mb);
 
 	}	
+	function reDrawFooter(){
+		var footer = window.footerGenerator;
+		footer.docLeft = $('.page-editor').children().offset().left;
+
+		footer.updateDisplay();
+	}
+
 
 	/* Events */
 	$(document).ready(function(){
 		drawFooter();
+	});	
+
+	$( window ).resize(function() {
+		reDrawFooter();
 	});	
 @endpush 

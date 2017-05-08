@@ -53,4 +53,8 @@ window.footerGenerator = new function(){
     	}
 
 	}
+
+	this.updateDisplay = function(){
+		$('.auto-footer').css('left', this.docLeft + 'px');
+	}
 }
