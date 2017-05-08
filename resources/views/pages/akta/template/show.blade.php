@@ -53,7 +53,7 @@
 							<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
 						</li>
 					
-						<li class="nav-item">
+						<li class="nav-item hidden-sm-down">
 							<a class="nav-link" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
 						</li>
 
