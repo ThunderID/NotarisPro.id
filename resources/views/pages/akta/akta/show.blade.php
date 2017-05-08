@@ -21,7 +21,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				{{-- COMPONENT MENUBAR --}}
 				<div class="row bg-faded">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
+					<div class="col-xs-6 col-sm-5 col-md-6 col-lg-6 pl-0">
 						<ul class="nav menu-content justify-content-start">
 							<li class="nav-item">
 								<a class="nav-link" href="{{ route('akta.akta.index') }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
@@ -39,7 +39,7 @@
 							@endif
 						</ul>
 					</div>
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
+					<div class="col-xs-12 col-sm-7 col-md-6 col-lg-6 pr-0">
 						<ul class="nav menu-content justify-content-end">
 							@if(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
