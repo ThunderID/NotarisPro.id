@@ -18496,16 +18496,20 @@ window.stripeGenerator = new function () {
 						// clean exceeding spaces
 						textInRow = cleanExceededSpace(textInRow);
 
-						// last element?
-						if (arrTmpText[arrTmpTextIndex + 1] != null) {
+						if (newHtmlText && orientation != "center") {
+							// last element?
+							if (arrTmpText[arrTmpTextIndex + 1] != null) {
 
-							// fill with filler
-							newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+								// fill with filler
+								newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
 
-							// reset counter and add to main html text
-							textInRow = "";
-							tmpTextInRow = "";
-							newHtmlText = newHtmlText + spacer;
+								// reset counter and add to main html text
+								textInRow = "";
+								tmpTextInRow = "";
+								newHtmlText = newHtmlText + spacer;
+							}
+						} else {
+							newHtmlText = newHtmlText + "<br>";
 						}
 
 						noSpaceFlag = true;
@@ -18610,8 +18614,10 @@ window.stripeGenerator = new function () {
 			});
 
 			// fill last row in object
-			textInRow = cleanExceededSpace(textInRow);
-			newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+			if (textInRow != "" && textInRow != " ") {
+				textInRow = cleanExceededSpace(textInRow);
+				newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+			}
 
 			// clean
 			textInRow = "";
@@ -18669,6 +18675,10 @@ window.stripeGenerator = new function () {
 	}
 
 	/* FILLER */
+	// filler definition
+	function fillerContent(number) {
+		return '<span style="font-weight: initial !important; color: initial !important;">' + insertStripeFromRight(number) + '</span>';
+	}
 	function addFiller(e, textInRow, maxLength, orientation) {
 		// Check Orientation
 		if (orientation == 'left') {
@@ -18694,7 +18704,8 @@ window.stripeGenerator = new function () {
 			}
 
 			// fill
-			return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(numberOfFiller) + '</span><br>';
+			return e + fillerContent(numberOfFiller) + '<br>';
+			// return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(numberOfFiller) + '</span><br>';
 			// return e + '<span style="font-weight: initial !important;"></span></br>'; -->
 
 			// return e + '<span style="font-weight: initial !important;">|' + textLength + '|</span></br>'; -->
@@ -18740,11 +18751,13 @@ window.stripeGenerator = new function () {
 			var r = Math.ceil(numberOfFiller / 2);
 
 			// fill left
-			var tmpFiller = '<span style="font-weight: initial !important;">' + insertStripeFromRight(l) + '</span>';
+			var tmpFiller = fillerContent(l);
+			// var tmpFiller =  '<span style="font-weight: initial !important;">' + insertStripeFromRight(l) + '</span>';
 			e = e.replace("<FillerReplaceHere/>", tmpFiller);
 
 			// fill right
-			return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(r) + '</span><br>';
+			return e + fillerContent(r) + '<br>';
+			// return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(r) + '</span><br>';
 		}
 	}
 	function insertStripeFromLeft(n) {
