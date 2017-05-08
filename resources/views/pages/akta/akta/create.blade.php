@@ -236,4 +236,8 @@
 		drawMargin();
 	});
 
+
+	/* Hotkeys */
+	var res = window.hotkey.init($('.editor'));	
+
 @endpush 
