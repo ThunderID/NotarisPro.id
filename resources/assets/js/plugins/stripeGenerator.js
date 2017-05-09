@@ -209,7 +209,7 @@
 			// rules here
 
 			// banned
-			if(tag == 'H4'){
+			if(tag == 'H4', 'H5'){
 				return false;
 			}
 
