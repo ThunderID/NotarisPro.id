@@ -16,7 +16,7 @@
 @stop
 
 @section('content')
-	
+
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				{{-- COMPONENT MENUBAR --}}
@@ -218,7 +218,9 @@
 		footer.docHeight = pivot_h;
 		footer.pageHeight = template_h;
 
-		footer.title = 'Judul Akta';
+		footer.title = '{{ $page_datas->notaris["nama"] }}';
+		footer.content1 = '{{"Daerah Kerja " . $page_datas->notaris["notaris"]['daerah_kerja'] }}';
+		footer.content2 = '';
 
 		footer.display(mb);
 

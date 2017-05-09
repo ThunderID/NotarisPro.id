@@ -9277,7 +9277,7 @@ window.footerGenerator = new function () {
 	this.docHeight = 0;
 	this.pageHeight = 0;
 
-	this.title = 'judul dokumen';
+	this.title = 'Title';
 	this.content1 = 'content1';
 	this.content2 = 'content2';
 
