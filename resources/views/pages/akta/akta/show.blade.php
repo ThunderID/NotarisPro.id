@@ -72,7 +72,11 @@
 
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
-							</li>							
+							</li>
+							@elseif (str_is($page_datas->datas['status'], 'akta'))
+								<li class="nav-item">
+									<a class="nav-link export-pdf" href="#" data-href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+								</li>					
 							@endif
 						</ul>
 					</div>

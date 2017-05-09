@@ -527,4 +527,16 @@ class aktaController extends Controller
 		//function from parent to generate view
 		return $this->generateView();  
 	}
+
+	public function pdf($akta_id)
+	{
+		$this->page_datas->datas			= $this->query->detailed($akta_id);
+		$this->page_attributes->title		= $this->page_datas->datas['judul'];
+
+		//initialize view
+		$this->view							= view('pages.akta.akta.pdf');
+
+		//function from parent to generate view
+		return $this->generateView();
+	}
 }

@@ -102,6 +102,8 @@ Route::group(['middleware' => ['authenticated']], function()
 		// versioning akta
 		Route::get('/akta/akta/{akta_id}/versioning', 		['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
 
+		Route::get('/akta/akta/{akta_id}/pdf',				['uses' => 'aktaController@pdf', 'as' => 'akta.akta.pdf']);
+
 	});
 
 	// Jadwal
