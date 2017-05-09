@@ -37,6 +37,8 @@
         <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" type="text/javascript"></script>
 
+        @stack('plugins')
+
         <!-- App -->
         <script src="{{ mix('js/app.js') }}"></script>
 

@@ -33,7 +33,7 @@ class InitTemplateTableSeeder extends Seeder
 					['konten' 	=> '<h4 class="text-center">SK. Kepala Badan Pertanahan Nasional Nomor : <span class="medium-editor-mention-at">@notaris.nomor_sk</span>&nbsp;</h4>'],
 					['konten' 	=> '<h4 class="text-center">Tanggal <span class="medium-editor-mention-at">@notaris.tanggal_pengangkatan</span>&nbsp;</h4>'],
 					['konten' 	=> '<h4 class="text-center"><span class="medium-editor-mention-at">@notaris.alamat</span>&nbsp;<span class="medium-editor-mention-at">@notaris.telepon</span>&nbsp;</h4>'],
-					['konten' 	=> '<h4 class="text-center">------------------------------------------------------------------</h4>'],
+					['konten' 	=> '<p class="text-center">------------------------------------------------------------------</p>'],
 					['konten' 	=> '<h5 style="text-align: center;"><b>AKTA JUAL BELI</b></h5>'],
 					['konten' 	=> '<h5 style="text-align: center;">Nomor <span class="medium-editor-mention-at">@akta.nomor</span>&nbsp;</h5>'],
 					['konten' 	=> '<h5 style="text-align: center;"><i>Lembar Pertama / Kedua</i></h5>'],
