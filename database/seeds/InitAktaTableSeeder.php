@@ -62,7 +62,7 @@ class InitAktaTableSeeder extends Seeder
 					['konten' 	=> '<h4 class="text-center">SK. Kepala Badan Pertanahan Nasional Nomor : <span class="medium-editor-mention-at" data-mention="@notaris.nomor_sk">'.$notaris_aktif['notaris']['nomor_sk'].'</span>&nbsp;</h4>'],
 					['konten' 	=> '<h4 class="text-center">Tanggal <span class="medium-editor-mention-at" data-mention="@notaris.tanggal_pengangkatan">'.$notaris_aktif['notaris']['tanggal_pengangkatan'].'</span>&nbsp;</h4>'],
 					['konten' 	=> '<h4 class="text-center"><span class="medium-editor-mention-at" data-mention="@notaris.alamat">'.$notaris_aktif['notaris']['alamat'].'</span>&nbsp;<span class="medium-editor-mention-at" data-mention="@notaris.telepon">'.$notaris_aktif['notaris']['telepon'].'</span>&nbsp;</h4>'],
-					['konten' 	=> '<h4 class="text-center">------------------------------------------------------------------</h4>'],
+					['konten' 	=> '<p class="text-center">------------------------------------------------------------------</p>'],
 					['konten' 	=> '<h5 class="text-center"><b>AKTA JUAL BELI</b></h5>'],
 					['konten' 	=> '<h5 class="text-center">Nomor <span class="medium-editor-mention-at" data-mention="@akta.nomor">'.$nomor_akta.'</span>&nbsp;</h5>'],
 					['konten' 	=> '<h5 class="text-center"><i>Lembar Pertama / Kedua</i></h5>'],
