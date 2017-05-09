@@ -29,35 +29,35 @@
 				<div class="d-flex justify-content-center mx-auto">
 					<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 						<div class="form-group editor">
-							<p>----------------------------------------------------------------------</p>
-							<p>----------------------------------------------------------------------</p>
+							<p></p>
+							<p></p>
 							<p>
 								Pada hari ini tanggal @tanggal.menghadap pukul @waktu.menghadap Waktu-<br>
-								Indonesia @waktu.indonesia.bagian .-----------------------------------
+								Indonesia @waktu.indonesia.bagian.
 							</p>
 							<p>
-								Menghadap kepada saya,Notaris berkedudukan di Jl Raya Mangga Dua Grand<br>
-								Boutique Centre Bl A/9 Wilayah Jabatan Provinsi Kota Jakarta Utara ---<br>
-								dengan dihadiri oleh para saksi yang saya, Notaris kenal yang --------<br>
-								sama-sama namanya disebutkan pada bagian akhir akta ini.--------------<br>
+								Menghadap kepada saya,Notaris berkedudukan di Jl Raya Mangga Dua Grand <br>
+								Boutique Centre Bl A/9 Wilayah Jabatan Provinsi Kota Jakarta Utara <br>
+								dengan dihadiri oleh para saksi yang saya, Notaris kenal yang <br>
+								sama-sama namanya disebutkan pada bagian akhir akta ini. <br>
 							</p>
-							<p>----------------------------------------------------------------------</p>
+							<p></p>
 							<ul>
 								<li>
-									Tuan/Nyonya @klien.1.nama ---------------------------------------<br>
-									dilahirkan diMalang tanggal 22-08-1990 Warga Negara Indonesia, --<br>
-									Swasta, bertempat tinggal di Jln. Mataram pemegang kartu tanda --<br>
-									penduduk (KTP) 201.1802.1101010 ---------------------------------<br>
+									Tuan/Nyonya @klien.1.nama<br>
+									dilahirkan diMalang tanggal 22-08-1990 Warga Negara Indonesia, <br>
+									Swasta, bertempat tinggal di Jln. Mataram pemegang kartu tanda <br>
+									penduduk (KTP) 201.1802.1101010 <br>
 								</li>
 								<li>
-									Tuan/Nyonya @klien.2.nama ---------------------------------------<br>
+									Tuan/Nyonya @klien.2.nama <br>
 									dilahirkan di@klien.2.tempat_lahir tanggal @klien.2.tanggal_lahir<br>
-									Warga Negara Indonesia, Swasta, bertempat tinggal di ------------<br>
-									@klien.2.alamat pemegang kartu tanda penduduk (KTP) -------------<br>
-									@klien.2.nomor_ktp ----------------------------------------------<br>
+									Warga Negara Indonesia, Swasta, bertempat tinggal di <br>
+									@klien.2.alamat pemegang kartu tanda penduduk (KTP) <br>
+									@klien.2.nomor_ktp <br>
 								</li>
 							</ul>
-							<p>----------------------------------------------------------------------</p>
+							<p></p>
 							<p>
 								Para penghadap telah saya, Notaris kenal berdasarkan identitasnya yang<br>
 								diperlihatkan kepada saya, Notaris.-----------------------------------<br>
