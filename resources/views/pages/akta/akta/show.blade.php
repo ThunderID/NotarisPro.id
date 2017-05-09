@@ -16,12 +16,12 @@
 @stop
 
 @section('content')
-	
+
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				{{-- COMPONENT MENUBAR --}}
 				<div class="row bg-faded">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
+					<div class="col-xs-6 col-sm-5 col-md-6 col-lg-6 pl-0">
 						<ul class="nav menu-content justify-content-start">
 							<li class="nav-item">
 								<a class="nav-link" href="{{ route('akta.akta.index') }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
@@ -39,14 +39,14 @@
 							@endif
 						</ul>
 					</div>
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
+					<div class="col-xs-12 col-sm-7 col-md-6 col-lg-6 pr-0">
 						<ul class="nav menu-content justify-content-end">
 							@if(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
 								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
 							</li>
 						
-							<li class="nav-item">
+							<li class="nav-item hidden-sm-down">
 								<a class="nav-link" href="{{route('akta.akta.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
 							</li>
 
@@ -177,8 +177,7 @@
 @push('scripts')
 
 	/* Load Stripe Generator Here */ 
-    window.stripeGenerator;
-
+    window.stripeGenerator.init();
 
 	/*	Start Lock */
 	    window.lockedUnlockedParagraphUI.init();
@@ -202,4 +201,48 @@
 	$('#deleteModal').on('shown.bs.modal', function(e) {
 		window.formUI.setFocus();
 	});
+
+	/* Footer Generator */
+	function drawFooter(){
+		// init
+		var pivot_pos = $('.page-editor').offset();
+		var pivot_h = $('.page-editor').outerHeight();
+		var pivot_w = $('.page-editor').width() - 4;
+		var template_h = window.footerGenerator.convertPX(29.7);
+		var margin_document = 47;
+
+		var footer = window.footerGenerator;
+		var ml = pivot_pos.left - margin_document - 4;
+		var mr = pivot_pos.left + pivot_w - footer.convertPX(1)  + 2;
+		var mt = 16 + footer.convertPX(2) - 2;
+		var mb = template_h - (footer.convertPX(2) + footer.convertPX(3) - 16);
+
+		footer.docLeft = $('.page-editor').children().offset().left;
+		footer.docWidth = pivot_w;
+		footer.docHeight = pivot_h;
+		footer.pageHeight = template_h;
+
+		footer.title = '{{ $page_datas->notaris["nama"] }}';
+		footer.content1 = '{{"Daerah Kerja " . $page_datas->notaris["notaris"]['daerah_kerja'] }}';
+		footer.content2 = '';
+
+		footer.display(mb);
+
+	}	
+	function reDrawFooter(){
+		var footer = window.footerGenerator;
+		footer.docLeft = $('.page-editor').children().offset().left;
+
+		footer.updateDisplay();
+	}
+
+
+	/* Events */
+	$(document).ready(function(){
+		drawFooter();
+	});	
+
+	$( window ).resize(function() {
+		reDrawFooter();
+	});	
 @endpush 

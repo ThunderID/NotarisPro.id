@@ -46,6 +46,12 @@ class SimpanKlien
 			//3. fill data
 			$klien 			= $klien->fill($this->klien);
 
+			//3b, set perusahaan
+			if(isset($this->klien['mewakili_perusahaan']))
+			{
+				$klien 		= $klien->addPerusahaan($this->klien['mewakili_perusahaan']);
+			}
+
 			//4. simpan klien
 			$klien->save();
 

@@ -8615,6 +8615,12 @@ __webpack_require__("./resources/assets/js/plugins/searchList.js");
 //stripeGenerator
 __webpack_require__("./resources/assets/js/plugins/stripeGenerator.js");
 
+// shortcuts
+__webpack_require__("./resources/assets/js/plugins/hotkey/hotkey.js");
+
+// footer
+__webpack_require__("./resources/assets/js/plugins/footerGenerator.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -9254,6 +9260,313 @@ window.equalHeight = new function () {
 		return _min;
 	};
 }();
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/footerGenerator.js":
+/***/ (function(module, exports) {
+
+/*
+	Footer Generator
+	Thunderlab 2017
+	created : Budi 
+	-------------
+*/
+
+window.footerGenerator = new function () {
+
+	// init
+	this.docLeft = 0;
+	this.docWidth = 0;
+	this.docHeight = 0;
+	this.pageHeight = 0;
+
+	this.title = 'Title';
+	this.content1 = 'content1';
+	this.content2 = 'content2';
+
+	// devinition
+	this.footer = function (top, left, width, page, content) {
+		return "<div class='auto-footer' style='font-family: Inconsolata, monospace; border-top: 1px solid black; top:" + top + "px;left:" + left + "px;width:" + width + "px; position:absolute;'><p style='text-align:left;margin-bottom: 0.3rem;'><i>" + this.title + "</i><span style='float:right'>" + page + "</span></p><p style='text-align:left;margin-bottom: 0rem;'>" + this.content1 + "</p><p style='text-align:left;'>" + this.content2 + "</p></div>";
+	};
+
+	// converter
+	this.convertCM = function (px) {
+		return parseFloat((px / 37.795276).toFixed(2));
+	};
+
+	this.convertPX = function (cm) {
+		return parseFloat((cm * 37.795276).toFixed(2));
+	};
+
+	// display
+	this.display = function (bottom) {
+
+		/* init */
+		var inner_h = this.docHeight;
+		var outer_h = this.pageHeight;
+		var gap = outer_h;
+
+		/* Draw */
+		var ctr = 0;
+		ctr = this.docHeight / this.pageHeight;
+		for (i = 0; i < ctr; i++) {
+
+			var t_page = "Halaman " + (i + 1);
+
+			$('#page').append(this.footer(bottom, this.docLeft, this.docWidth, t_page));
+
+			//set new top
+			bottom = bottom + this.pageHeight;
+		}
+	};
+
+	this.updateDisplay = function () {
+		$('.auto-footer').css('left', this.docLeft + 'px');
+	};
+}();
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/hotkey/hotkey.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("./resources/assets/js/plugins/hotkey/jquery.hotkeys.js");
+
+window.hotkey = {
+
+    init: function init(target) {
+        var elements = [
+        // "esc","tab","space","return","backspace","scroll","capslock","numlock","insert","home","del","end","pageup","pagedown",
+        // "left","up","right","down",
+        // "f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12",
+        // "1","2","3","4","5","6","7","8","9","0",
+        // "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+        "Ctrl+a", "Ctrl+b",, /*"Ctrl+c"*/"Ctrl+d", "Ctrl+e", "Ctrl+f", "Ctrl+g", "Ctrl+h", "Ctrl+i", "Ctrl+j", "Ctrl+k", "Ctrl+l", "Ctrl+m", "Ctrl+n", "Ctrl+o", "Ctrl+p", "Ctrl+q", "Ctrl+r", "Ctrl+s", "Ctrl+t", "Ctrl+u",, /*"Ctrl+v"*/"Ctrl+w", "Ctrl+x", "Ctrl+y", "Ctrl+z", "Shift+a", "Shift+b", "Shift+c", "Shift+d", "Shift+e", "Shift+f", "Shift+g", "Shift+h", "Shift+i", "Shift+j", "Shift+k", "Shift+l", "Shift+m", "Shift+n", "Shift+o", "Shift+p", "Shift+q", "Shift+r", "Shift+s", "Shift+t", "Shift+u", "Shift+v", "Shift+w", "Shift+x", "Shift+y", "Shift+z", "Alt+a", "Alt+b", "Alt+c", "Alt+d", "Alt+e", "Alt+f", "Alt+g", "Alt+h", "Alt+i", "Alt+j", "Alt+k", "Alt+l", "Alt+m", "Alt+n", "Alt+o", "Alt+p", "Alt+q", "Alt+r", "Alt+s", "Alt+t", "Alt+u", "Alt+v", "Alt+w", "Alt+x", "Alt+y", "Alt+z", "Ctrl+esc", "Ctrl+tab", "Ctrl+space", "Ctrl+return", "Ctrl+backspace", "Ctrl+scroll", "Ctrl+capslock", "Ctrl+numlock", "Ctrl+insert", "Ctrl+home", "Ctrl+del", "Ctrl+end", "Ctrl+pageup", "Ctrl+pagedown", "Ctrl+left", "Ctrl+up", "Ctrl+right", "Ctrl+down", "Ctrl+f1", "Ctrl+f2", "Ctrl+f3", "Ctrl+f4", "Ctrl+f5", "Ctrl+f6", "Ctrl+f7", "Ctrl+f8", "Ctrl+f9", "Ctrl+f10", "Ctrl+f11", "Ctrl+f12", "Shift+esc", "Shift+tab", "Shift+space", "Shift+return", "Shift+backspace", "Shift+scroll", "Shift+capslock", "Shift+numlock", "Shift+insert", "Shift+home", "Shift+del", "Shift+end", "Shift+pageup", "Shift+pagedown", "Shift+left", "Shift+up", "Shift+right", "Shift+down", "Shift+f1", "Shift+f2", "Shift+f3", "Shift+f4", "Shift+f5", "Shift+f6", "Shift+f7", "Shift+f8", "Shift+f9", "Shift+f10", "Shift+f11", "Shift+f12", "Alt+esc", "Alt+tab", "Alt+space", "Alt+return", "Alt+backspace", "Alt+scroll", "Alt+capslock", "Alt+numlock", "Alt+insert", "Alt+home", "Alt+del", "Alt+end", "Alt+pageup", "Alt+pagedown", "Alt+left", "Alt+up", "Alt+right", "Alt+down", "Alt+f1", "Alt+f2", "Alt+f3", "Alt+f4", "Alt+f5", "Alt+f6", "Alt+f7", "Alt+f8", "Alt+f9", "Alt+f10", "Alt+f11", "Alt+f12"];
+
+        // define actions
+        function commander(key) {
+            // saving
+            if (key == 'Ctrl+s') {
+                $('.save-content').trigger("click");
+            } else {
+                return false;
+            }
+        }
+
+        // shorcut code here
+        $.each(elements, function (i, e) {
+            // i is element index. e is element as text.
+
+            // Binding keys
+            $(target).bind('keydown', elements[i], function assets() {
+                commander(elements[i]);
+                return false;
+            });
+        });
+    }
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/hotkey/jquery.hotkeys.js":
+/***/ (function(module, exports) {
+
+/*jslint browser: true*/
+/*jslint jquery: true*/
+
+/*
+ * jQuery Hotkeys Plugin
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ *
+ * Based upon the plugin by Tzury Bar Yochay:
+ * https://github.com/tzuryby/jquery.hotkeys
+ *
+ * Original idea by:
+ * Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
+ */
+
+/*
+ * One small change is: now keys are passed by object { keys: '...' }
+ * Might be useful, when you want to pass some other data to your handler
+ */
+
+(function (jQuery) {
+
+  jQuery.hotkeys = {
+    version: "0.2.0",
+
+    specialKeys: {
+      8: "backspace",
+      9: "tab",
+      10: "return",
+      13: "return",
+      16: "shift",
+      17: "ctrl",
+      18: "alt",
+      19: "pause",
+      20: "capslock",
+      27: "esc",
+      32: "space",
+      33: "pageup",
+      34: "pagedown",
+      35: "end",
+      36: "home",
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down",
+      45: "insert",
+      46: "del",
+      59: ";",
+      61: "=",
+      96: "0",
+      97: "1",
+      98: "2",
+      99: "3",
+      100: "4",
+      101: "5",
+      102: "6",
+      103: "7",
+      104: "8",
+      105: "9",
+      106: "*",
+      107: "+",
+      109: "-",
+      110: ".",
+      111: "/",
+      112: "f1",
+      113: "f2",
+      114: "f3",
+      115: "f4",
+      116: "f5",
+      117: "f6",
+      118: "f7",
+      119: "f8",
+      120: "f9",
+      121: "f10",
+      122: "f11",
+      123: "f12",
+      144: "numlock",
+      145: "scroll",
+      173: "-",
+      186: ";",
+      187: "=",
+      188: ",",
+      189: "-",
+      190: ".",
+      191: "/",
+      192: "`",
+      219: "[",
+      220: "\\",
+      221: "]",
+      222: "'"
+    },
+
+    shiftNums: {
+      "`": "~",
+      "1": "!",
+      "2": "@",
+      "3": "#",
+      "4": "$",
+      "5": "%",
+      "6": "^",
+      "7": "&",
+      "8": "*",
+      "9": "(",
+      "0": ")",
+      "-": "_",
+      "=": "+",
+      ";": ": ",
+      "'": "\"",
+      ",": "<",
+      ".": ">",
+      "/": "?",
+      "\\": "|"
+    },
+
+    // excludes: button, checkbox, file, hidden, image, password, radio, reset, search, submit, url
+    textAcceptingInputTypes: ["text", "password", "number", "email", "url", "range", "date", "month", "week", "time", "datetime", "datetime-local", "search", "color", "tel"],
+
+    // default input types not to bind to unless bound directly
+    textInputTypes: /textarea|input|select/i,
+
+    options: {
+      filterInputAcceptingElements: true,
+      filterTextInputs: true,
+      filterContentEditable: true
+    }
+  };
+
+  function keyHandler(handleObj) {
+    if (typeof handleObj.data === "string") {
+      handleObj.data = {
+        keys: handleObj.data
+      };
+    }
+
+    // Only care when a possible input has been specified
+    if (!handleObj.data || !handleObj.data.keys || typeof handleObj.data.keys !== "string") {
+      return;
+    }
+
+    var origHandler = handleObj.handler,
+        keys = handleObj.data.keys.toLowerCase().split(" ");
+
+    handleObj.handler = function (event) {
+      //      Don't fire in text-accepting inputs that we didn't directly bind to
+      if (this !== event.target && (jQuery.hotkeys.options.filterInputAcceptingElements && jQuery.hotkeys.textInputTypes.test(event.target.nodeName) || jQuery.hotkeys.options.filterContentEditable && jQuery(event.target).attr('contenteditable') || jQuery.hotkeys.options.filterTextInputs && jQuery.inArray(event.target.type, jQuery.hotkeys.textAcceptingInputTypes) > -1)) {
+        return;
+      }
+
+      var special = event.type !== "keypress" && jQuery.hotkeys.specialKeys[event.which],
+          character = String.fromCharCode(event.which).toLowerCase(),
+          modif = "",
+          possible = {};
+
+      jQuery.each(["alt", "ctrl", "shift"], function (index, specialKey) {
+
+        if (event[specialKey + 'Key'] && special !== specialKey) {
+          modif += specialKey + '+';
+        }
+      });
+
+      // metaKey is triggered off ctrlKey erronously
+      if (event.metaKey && !event.ctrlKey && special !== "meta") {
+        modif += "meta+";
+      }
+
+      if (event.metaKey && special !== "meta" && modif.indexOf("alt+ctrl+shift+") > -1) {
+        modif = modif.replace("alt+ctrl+shift+", "hyper+");
+      }
+
+      if (special) {
+        possible[modif + special] = true;
+      } else {
+        possible[modif + character] = true;
+        possible[modif + jQuery.hotkeys.shiftNums[character]] = true;
+
+        // "$" can be triggered as "Shift+4" or "Shift+$" or just "$"
+        if (modif === "shift+") {
+          possible[jQuery.hotkeys.shiftNums[character]] = true;
+        }
+      }
+
+      for (var i = 0, l = keys.length; i < l; i++) {
+        if (possible[keys[i]]) {
+          return origHandler.apply(this, arguments);
+        }
+      }
+    };
+  }
+
+  jQuery.each(["keydown", "keyup", "keypress"], function () {
+    jQuery.event.special[this] = {
+      add: keyHandler
+    };
+  });
+})(jQuery || this.jQuery || window.jQuery);
 
 /***/ }),
 
@@ -18439,413 +18752,428 @@ window.searchList = new function () {
 /***/ "./resources/assets/js/plugins/stripeGenerator.js":
 /***/ (function(module, exports) {
 
-window.stripeGenerator = new function () {
+;window.stripeGenerator = {
+	init: function init() {
+		/* ADAPTER */
+		filler = "-";
+		spacer = ' ';
 
-	/* ADAPTER */
-	filler = "-";
-	spacer = ' ';
+		input = $('.editor').children();
+		paperWidth = formatMeasure($('.editor').width());
+		initPaperTextStartPos = getLeftPos($('.editor'));
+		currPaperTextStartPos = getLeftPos($('.editor'));
 
-	input = $('.editor').children();
-	paperWidth = formatMeasure($('.editor').width());
-	initPaperTextStartPos = getLeftPos($('.editor'));
-	currPaperTextStartPos = getLeftPos($('.editor'));
+		//measurement
+		var maxLetterInRow = 70;
+		var currMaxLength = 70;
+		var tabLetterCount = 5;
 
-	//measurement
-	var maxLetterInRow = 70;
-	var currMaxLength = 70;
-	var tabLetterCount = 5;
+		/* UI PROCESSOR */
+		input.each(function (index) {
 
-	/* UI PROCESSOR */
-	input.each(function (index) {
+			//policies
+			var orientation = detectAlignment($(this)['0'].outerHTML);
+			if (validateObjectPolicies($(this)['0'].tagName) == true && validateAlignmentPolicies(orientation) == true) {
 
-		//policies
-		var orientation = detectAlignment($(this)['0'].outerHTML);
-		if (validateObjectPolicies($(this)['0'].tagName) == true && validateAlignmentPolicies(orientation) == true) {
+				// initialize
+				var fontSize = parseInt($(this).css('font-size'), 10);
+				var arrTmpText = splitByTag(formatSpaces($(this)['0'].innerHTML));
+				var newHtmlText = "";
+				var newText = "";
+				var textInRow = "";
+				var noSpaceFlag = false;
 
-			// initialize
-			var fontSize = parseInt($(this).css('font-size'), 10);
-			var arrTmpText = splitByTag(formatSpaces($(this)['0'].innerHTML));
-			var newHtmlText = "";
-			var newText = "";
-			var textInRow = "";
-			var noSpaceFlag = false;
+				// add anchor for middle text alignment
+				if (orientation == "center") {
 
-			// add anchor for middle text alignment
-			if (orientation == "center") {
+					// re-align
+					$($(this)['0']).css('text-align', 'left');
 
-				// re-align
-				$($(this)['0']).css('text-align', 'left');
-
-				newHtmlText = cleanExceededSpace(newHtmlText);
-				newHtmlText = newHtmlText + '<FillerReplaceHere/>';
-				// noSpaceFlag = true; --> 
-			}
-
-			// console.log(arrTmpText); -->
-			//functions
-			$.each(arrTmpText, function (arrTmpTextIndex, value) {
-				// console.log(getTag(value)); -->
-
-				var arrCleanedText = cleanTag(value).split(" ");
-
-				// add html objects
-				var currHtmlObject = getTag(value);
-				if (currHtmlObject != null) {
-
-					if (currHtmlObject == '<br>' || currHtmlObject == '</br>') {
-						// new line?
-						// console.log(textInRow); -->
-						// console.log('newline'); -->
-
-						// clean exceeding spaces
-						textInRow = cleanExceededSpace(textInRow);
-
-						// last element?
-						if (arrTmpText[arrTmpTextIndex + 1] != null) {
-
-							// fill with filler
-							newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
-
-							// reset counter and add to main html text
-							textInRow = "";
-							tmpTextInRow = "";
-							newHtmlText = newHtmlText + spacer;
-						}
-
-						noSpaceFlag = true;
-					} else if (currHtmlObject == '</li>') {
-
-						// list closing
-						// console.log(textInRow); -->
-						// console.log('listClosing'); -->
-
-						// clean exceeding spaces
-						textInRow = cleanExceededSpace(textInRow);
-
-						// last element?
-						if (arrTmpText[arrTmpTextIndex + 1] != null) {
-
-							// fill with filler
-							newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
-
-							// reset counter and add to main html text
-							textInRow = "";
-							tmpTextInRow = "";
-							// console.log(textInRow); -->
-							// console.log(textInRow.length); -->
-							newHtmlText = newHtmlText + currHtmlObject + spacer;
-						}
-
-						noSpaceFlag = true;
-					} else if (currHtmlObject == '<li>') {
-						newHtmlText = cleanExceededSpace(newHtmlText);
-						newHtmlText = newHtmlText + getTag(value) + spacer;
-
-						noSpaceFlag = true;
-					} else {
-						// normal text
-						// console.log('get spaced here'); -->
-
-						newHtmlText = cleanExceededSpace(newHtmlText);
-
-						if (noSpaceFlag == true) {
-
-							noSpaceFlag = false;
-
-							textInRow = cleanExceededSpace(textInRow);
-							newHtmlText = newHtmlText + getTag(value);
-						} else {
-							newHtmlText = newHtmlText + getTag(value) + spacer;
-						}
-
-						// tabs
-						if (currHtmlObject == '<ol>' || currHtmlObject == '<ul>') {
-							currMaxLength = currMaxLength - tabLetterCount;
-						} else if (currHtmlObject == '</ol>' || currHtmlObject == '</ul>') {
-							currMaxLength = currMaxLength + tabLetterCount;
-						}
-					}
+					newHtmlText = cleanExceededSpace(newHtmlText);
+					newHtmlText = newHtmlText + '<FillerReplaceHere/>';
+					// noSpaceFlag = true; --> 
 				}
 
-				// add text 
-				$.each(arrCleanedText, function (arrCleanedTextIndex, value) {
-					// console.log(textInRow.length); -->
-					// console.log(textInRow); -->
-					// console.log(value); -->
-					// console.log(arrCleanedText); -->
+				// console.log(arrTmpText); -->
+				//functions
+				$.each(arrTmpText, function (arrTmpTextIndex, value) {
+					// console.log(getTag(value)); -->
 
-					// proceed is value exist
-					if (canAddText(value) == true) {
-						// init
-						tmpTextInRow = textInRow;
-						textInRow = textInRow + value;
+					var arrCleanedText = cleanTag(value).split(" ");
 
-						// console.log('bocor'); -->
+					// add html objects
+					var currHtmlObject = getTag(value);
+					if (currHtmlObject != null) {
 
-						// count and format text in one row
-						// console.log(textInRow); -->
-						if (textInRow.length > currMaxLength) {
+						if (currHtmlObject == '<br>' || currHtmlObject == '</br>') {
+							// new line?
+							// console.log(textInRow); -->
+							// console.log('newline'); -->
 
 							// clean exceeding spaces
-							// newHtmlText = cleanExceededSpace(newHtmlText); -->
-							textInRow = cleanExceededSpace(tmpTextInRow);
+							textInRow = cleanExceededSpace(textInRow);
 
-							// fill with filler
-							newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+							if (newHtmlText && orientation != "center") {
+								// last element?
+								if (arrTmpText[arrTmpTextIndex + 1] != null) {
 
-							// reset counter and add to main html text
-							// console.log(value); -->
+									// fill with filler
+									newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+
+									// reset counter and add to main html text
+									textInRow = "";
+									tmpTextInRow = "";
+									newHtmlText = newHtmlText + spacer;
+								}
+							} else {
+								newHtmlText = newHtmlText + "<br>";
+							}
+
+							noSpaceFlag = true;
+						} else if (currHtmlObject == '</li>') {
+
+							// list closing
 							// console.log(textInRow); -->
-							textInRow = value + spacer;
-							newHtmlText = newHtmlText + value + spacer;
+							// console.log('listClosing'); -->
+
+							// clean exceeding spaces
+							textInRow = cleanExceededSpace(textInRow);
+
+							// last element?
+							if (arrTmpText[arrTmpTextIndex + 1] != null) {
+
+								// fill with filler
+								newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+
+								// reset counter and add to main html text
+								textInRow = "";
+								tmpTextInRow = "";
+								// console.log(textInRow); -->
+								// console.log(textInRow.length); -->
+								newHtmlText = newHtmlText + currHtmlObject + spacer;
+							}
+
+							noSpaceFlag = true;
+						} else if (currHtmlObject == '<li>') {
+							newHtmlText = cleanExceededSpace(newHtmlText);
+							newHtmlText = newHtmlText + getTag(value) + spacer;
+
+							noSpaceFlag = true;
 						} else {
-							// console.log(textInRow); -->
-							// console.log(newHtmlText); -->
-							// console.log(textInRow.length); -->
-							newHtmlText = newHtmlText + value;
-							textInRow = addSpacer(textInRow, textInRow.length, currMaxLength);
+							// normal text
+							// console.log('get spaced here'); -->
 
-							if (arrCleanedText[arrCleanedTextIndex + 1]) {
-								newHtmlText = addSpacer(newHtmlText, textInRow.length, currMaxLength);
+							newHtmlText = cleanExceededSpace(newHtmlText);
+
+							if (noSpaceFlag == true) {
+
+								noSpaceFlag = false;
+
+								textInRow = cleanExceededSpace(textInRow);
+								newHtmlText = newHtmlText + getTag(value);
+							} else {
+								newHtmlText = newHtmlText + getTag(value) + spacer;
+							}
+
+							// tabs
+							if (currHtmlObject == '<ol>' || currHtmlObject == '<ul>') {
+								currMaxLength = currMaxLength - tabLetterCount;
+							} else if (currHtmlObject == '</ol>' || currHtmlObject == '</ul>') {
+								currMaxLength = currMaxLength + tabLetterCount;
 							}
 						}
 					}
+
+					// add text 
+					$.each(arrCleanedText, function (arrCleanedTextIndex, value) {
+						// console.log(textInRow.length); -->
+						// console.log(textInRow); -->
+						// console.log(value); -->
+						// console.log(arrCleanedText); -->
+
+						// proceed is value exist
+						if (canAddText(value) == true) {
+							// init
+							tmpTextInRow = textInRow;
+							textInRow = textInRow + value;
+
+							// console.log('bocor'); -->
+
+							// count and format text in one row
+							// console.log(textInRow); -->
+							if (textInRow.length > currMaxLength) {
+
+								// clean exceeding spaces
+								// newHtmlText = cleanExceededSpace(newHtmlText); -->
+								textInRow = cleanExceededSpace(tmpTextInRow);
+
+								// fill with filler
+								newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+
+								// reset counter and add to main html text
+								// console.log(value); -->
+								// console.log(textInRow); -->
+								textInRow = value + spacer;
+								newHtmlText = newHtmlText + value + spacer;
+							} else {
+								// console.log(textInRow); -->
+								// console.log(newHtmlText); -->
+								// console.log(textInRow.length); -->
+								newHtmlText = newHtmlText + value;
+								textInRow = addSpacer(textInRow, textInRow.length, currMaxLength);
+
+								if (arrCleanedText[arrCleanedTextIndex + 1]) {
+									newHtmlText = addSpacer(newHtmlText, textInRow.length, currMaxLength);
+								}
+							}
+						}
+					});
 				});
-			});
 
-			// fill last row in object
-			textInRow = cleanExceededSpace(textInRow);
-			newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+				// fill last row in object
+				if (textInRow != "" && textInRow != " ") {
+					textInRow = cleanExceededSpace(textInRow);
+					newHtmlText = addFiller(newHtmlText, textInRow, currMaxLength, orientation);
+				}
 
-			// clean
-			textInRow = "";
+				// clean
+				textInRow = "";
 
-			// inject to page
-			$(this).html(newHtmlText);
+				// inject to page
+				$(this).html(newHtmlText);
+			}
+		});
+
+		/* POLICIES */
+		function validateObjectPolicies(tag) {
+
+			// rules here
+			var banned = ['H4', 'H5'];
+
+			// banned
+			if (banned.indexOf(tag)) {
+				return false;
+			}
+
+			// extra calculation
+			if (isTabbed(tag) == true) {
+				decreaseMaxLength();
+				return true;
+			}
+
+			// noramalize
+			resetMaxLength();
+			return true;
 		}
-	});
-
-	/* POLICIES */
-	function validateObjectPolicies(tag) {
-
-		// rules here
-
-		// banned
-		if (tag == 'H4') {
-			return false;
+		function validateAlignmentPolicies(tag) {
+			return true;
 		}
+		function canAddText(e) {
+			if (e.match(/\s/g)) {
+				return false;
+			} else if (e.match(/\n/ig)) {
+				return false;
+			} else if (!e) {
+				// console.log(e); -->
+				// return false; -->
+			}
 
-		// extra calculation
-		if (isTabbed(tag) == true) {
-			decreaseMaxLength();
 			return true;
 		}
 
-		// noramalize
-		resetMaxLength();
-		return true;
-	}
-	function validateAlignmentPolicies(tag) {
-		return true;
-	}
-	function canAddText(e) {
-		if (e.match(/\s/g)) {
-			return false;
-		} else if (e.match(/\n/ig)) {
-			return false;
-		} else if (!e) {
-			// console.log(e); -->
-			// return false; -->
+		/* TEXT FORMATTER */
+		function splitByTag(e) {
+			return e.split(/(?=<.*?(.*?).*?>)/g);
+		}
+		function cleanTag(e) {
+			return e.replace(/<.*?(.*?).*?>/g, '');
+		}
+		function getTag(e) {
+			return e.match(/<.*?(.*?).*?>/g);
 		}
 
-		return true;
-	}
+		/* FILLER */
+		// filler definition
+		function fillerContent(number) {
+			return '<span style="font-weight: initial !important; color: initial !important;">' + insertStripeFromRight(number) + '</span>';
+		}
+		function addFiller(e, textInRow, maxLength, orientation) {
+			// Check Orientation
+			if (orientation == 'left') {
 
-	/* TEXT FORMATTER */
-	function splitByTag(e) {
-		return e.split(/(?=<.*?(.*?).*?>)/g);
-	}
-	function cleanTag(e) {
-		return e.replace(/<.*?(.*?).*?>/g, '');
-	}
-	function getTag(e) {
-		return e.match(/<.*?(.*?).*?>/g);
-	}
+				// get text length
+				textLength = getTextLength(textInRow);
 
-	/* FILLER */
-	function addFiller(e, textInRow, maxLength, orientation) {
-		// Check Orientation
-		if (orientation == 'left') {
-
-			// get text length
-			textLength = getTextLength(textInRow);
-
-			// check prev spaces
-			if (textLength > 0) {
-				if (isSpaced(e) == true) {
-					textLength++;
+				// check prev spaces
+				if (textLength > 0) {
+					if (isSpaced(e) == true) {
+						textLength++;
+					}
 				}
-			}
 
-			// get filler length
-			numberOfFiller = maxLength - textLength;
-			if (numberOfFiller == maxLength) {
+				// get filler length
+				numberOfFiller = maxLength - textLength;
+				if (numberOfFiller == maxLength) {
+					// remove the last space is any
+					textInRow = cleanExceededSpace(textInRow);
+					e = cleanExceededSpace(e);
+
+					numberOfFiller = maxLength - textLength;
+				}
+
+				// fill
+				return e + fillerContent(numberOfFiller) + '<br>';
+				// return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(numberOfFiller) + '</span><br>';
+				// return e + '<span style="font-weight: initial !important;"></span></br>'; -->
+
+				// return e + '<span style="font-weight: initial !important;">|' + textLength + '|</span></br>'; -->
+			} else {
+
+				// add spaces on first non html object 
+
+				// after tag replacer
+				var spacePos = 20;
+				var charPointed = e.charAt(spacePos);
+
+				if (charPointed != '<') {
+
+					var blockedChar = ['-', ' '];
+
+					if (blockedChar.indexOf(charPointed) < 0) {
+						e = e.slice(0, spacePos) + " " + e.slice(spacePos);
+					}
+				}
+
+				// get text length
+				textLength = getTextLength(textInRow);
+
+				// check prev spaces
+				if (textLength > 0) {
+					if (isSpaced(e) == true) {
+						textLength++;
+					}
+				}
+
 				// remove the last space is any
 				textInRow = cleanExceededSpace(textInRow);
-				e = cleanExceededSpace(e);
 
-				numberOfFiller = maxLength - textLength;
-			}
-
-			// fill
-			return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(numberOfFiller) + '</span><br>';
-			// return e + '<span style="font-weight: initial !important;"></span></br>'; -->
-
-			// return e + '<span style="font-weight: initial !important;">|' + textLength + '|</span></br>'; -->
-		} else {
-
-			// add spaces on first non html object 
-
-			// after tag replacer
-			var spacePos = 20;
-			var charPointed = e.charAt(spacePos);
-
-			if (charPointed != '<') {
-
-				var blockedChar = ['-', ' '];
-
-				if (blockedChar.indexOf(charPointed) < 0) {
-					e = e.slice(0, spacePos) + " " + e.slice(spacePos);
-				}
-			}
-
-			// get text length
-			textLength = getTextLength(textInRow);
-
-			// check prev spaces
-			if (textLength > 0) {
 				if (isSpaced(e) == true) {
-					textLength++;
+					e = cleanExceededSpace(e);
+				}
+
+				// get filler length
+				numberOfFiller = maxLength - textLength;
+
+				// get left and right
+				var l = Math.floor(numberOfFiller / 2);
+				var r = Math.ceil(numberOfFiller / 2);
+
+				// fill left
+				var tmpFiller = fillerContent(l);
+				// var tmpFiller =  '<span style="font-weight: initial !important;">' + insertStripeFromRight(l) + '</span>';
+				e = e.replace("<FillerReplaceHere/>", tmpFiller);
+
+				// fill right
+				return e + fillerContent(r) + '<br>';
+				// return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(r) + '</span><br>';
+			}
+		}
+		function insertStripeFromLeft(n) {
+			return e;
+		}
+		function insertStripeFromRight(n) {
+			var tmpStripe = "";
+
+			for (i = 0; i < n; i++) {
+				tmpStripe = tmpStripe + filler;
+			}
+
+			return tmpStripe;
+		}
+
+		/* TEXT LENGTH */
+		function getTextLength(e) {
+			firstChar = e.charAt(0);
+
+			if (firstChar.match(/\s/g)) {
+				return e.length - 1;
+			}
+			return e.length;
+		}
+
+		/* SPACES */
+		function cleanExceededSpace(e) {
+			if (isSpaced(e) == true) {
+				return e.slice(0, -1);
+			}
+			return e;
+		}
+		function addSpacer(e, currLength, max) {
+			if (currLength < max) {
+				if (isSpaced(e) == false) {
+					e = e + spacer;
 				}
 			}
+			return e;
+		}
+		function formatSpaces(e) {
+			return e.replace(/&nbsp;/g, " ");
+		}
+		function isSpaced(e) {
+			if (e.slice(-1) == " ") {
+				return true;
+			}
+			return false;
+		}
 
-			// remove the last space is any
-			textInRow = cleanExceededSpace(textInRow);
-
-			if (isSpaced(e) == true) {
-				e = cleanExceededSpace(e);
+		/* TABS */
+		function isTabbed(e) {
+			if (e == 'OL') {
+				return true;
+			} else if (e == 'UL') {
+				return true;
 			}
 
-			// get filler length
-			numberOfFiller = maxLength - textLength;
-
-			// get left and right
-			var l = Math.floor(numberOfFiller / 2);
-			var r = Math.ceil(numberOfFiller / 2);
-
-			// fill left
-			var tmpFiller = '<span style="font-weight: initial !important;">' + insertStripeFromRight(l) + '</span>';
-			e = e.replace("<FillerReplaceHere/>", tmpFiller);
-
-			// fill right
-			return e + '<span style="font-weight: initial !important;">' + insertStripeFromRight(r) + '</span><br>';
+			return false;
 		}
-	}
-	function insertStripeFromLeft(n) {
-		return e;
-	}
-	function insertStripeFromRight(n) {
-		var tmpStripe = "";
-
-		for (i = 0; i < n; i++) {
-			tmpStripe = tmpStripe + filler;
+		function increaseMaxLength() {
+			currMaxLength = currMaxLength + tabLetterCount;
+		}
+		function decreaseMaxLength() {
+			currMaxLength = currMaxLength - tabLetterCount;
+		}
+		function resetMaxLength() {
+			currMaxLength = maxLetterInRow;
 		}
 
-		return tmpStripe;
-	}
-
-	/* TEXT LENGTH */
-	function getTextLength(e) {
-		firstChar = e.charAt(0);
-
-		if (firstChar.match(/\s/g)) {
-			return e.length - 1;
-		}
-		return e.length;
-	}
-
-	/* SPACES */
-	function cleanExceededSpace(e) {
-		if (isSpaced(e) == true) {
-			return e.slice(0, -1);
-		}
-		return e;
-	}
-	function addSpacer(e, currLength, max) {
-		if (currLength < max) {
-			if (isSpaced(e) == false) {
-				e = e + spacer;
+		/* ALIGNMENT */
+		function detectAlignment(e) {
+			if (/text-align: center/i.test(e)) {
+				return "center";
+			} else {
+				return "left";
 			}
 		}
-		return e;
-	}
-	function formatSpaces(e) {
-		return e.replace(/&nbsp;/g, " ");
-	}
-	function isSpaced(e) {
-		if (e.slice(-1) == " ") {
-			return true;
-		}
-		return false;
-	}
 
-	/* TABS */
-	function isTabbed(e) {
-		if (e == 'OL') {
-			return true;
-		} else if (e == 'UL') {
-			return true;
+		/* POSITION */
+		function getLeftPos(e) {
+			return formatMeasure(e.offset().left);
 		}
 
-		return false;
-	}
-	function increaseMaxLength() {
-		currMaxLength = currMaxLength + tabLetterCount;
-	}
-	function decreaseMaxLength() {
-		currMaxLength = currMaxLength - tabLetterCount;
-	}
-	function resetMaxLength() {
-		currMaxLength = maxLetterInRow;
-	}
+		/* CONVERTER */
+		function formatMeasure(n) {
+			return parseFloat(n.toFixed(2));
+		}
 
-	/* ALIGNMENT */
-	function detectAlignment(e) {
-		if (/text-align: center/i.test(e)) {
-			return "center";
-		} else {
-			return "left";
+		function convertCM(px) {
+			return parseFloat((px / 37.795276).toFixed(2));
+		}
+
+		function convertPX(cm) {
+			return parseFloat((cm * 37.795276).toFixed(2));
 		}
 	}
-
-	/* POSITION */
-	function getLeftPos(e) {
-		return formatMeasure(e.offset().left);
-	}
-
-	/* CONVERTER */
-	function formatMeasure(n) {
-		return parseFloat(n.toFixed(2));
-	}
-
-	function convertCM(px) {
-		return parseFloat((px / 37.795276).toFixed(2));
-	}
-
-	function convertPX(cm) {
-		return parseFloat((cm * 37.795276).toFixed(2));
-	}
-}();
+};
 
 /***/ }),
 

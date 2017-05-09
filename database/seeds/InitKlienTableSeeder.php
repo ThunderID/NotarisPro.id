@@ -18,6 +18,8 @@ class InitKlienTableSeeder extends Seeder
 		
 		$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 		$login 			= TAuth::login($credentials);
+
+		$jabatan 		= ['Direktur', 'Pemegang Saham', 'Komisaris'];
 		
 		foreach (range(0, 19) as $key) 
 		{
@@ -34,7 +36,14 @@ class InitKlienTableSeeder extends Seeder
 					'provinsi'			=> 'Jawa Timur',
 					'negara'			=> 'Indonesia',
 				],
-				'nomor_ktp'			=> $faker->ean13,
+				'nomor_ktp'				=> $faker->ean13,
+				'mewakili_perusahaan'	=> [
+					'id'			=> rand(100000,999999),
+					'nama'			=> $faker->company,
+					'npwp'			=> rand(100000,999999),
+					'siup'			=> rand(100000,999999),
+					'jabatan'		=> $jabatan[rand(0,2)],
+				]
 			];
 
 			$akta 			= new \TCommands\Klien\SimpanKlien($data);

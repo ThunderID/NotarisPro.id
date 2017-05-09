@@ -92,14 +92,14 @@
 					<i class="fa fa-search" aria-hidden="true"></i>
 				</a>
 			</div>
-			<div class="col-12 mb-2">
-				@include('components.filterIndicator',[
-					'lists' => 	[
-						'q' 		=> 'Cari Data',
-						'status' 	=> 'Status Data'
-					]
-				])
-			</div>
+		</div>
+		<div class="col-12 mb-2">
+			@include('components.filterIndicator',[
+				'lists' => 	[
+					'q' 		=> 'Cari Data',
+					'status' 	=> 'Status Data'
+				]
+			])
 		</div>
 		<div class="row">
 			<div class="col-12">

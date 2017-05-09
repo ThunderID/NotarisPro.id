@@ -49,6 +49,7 @@ class Klien extends BaseModel
 											'alamat'				,
 											'nomor_ktp'				,
 											'kantor'				,
+											'perusahaan'			,
 										];
 	/**
 	 * Basic rule of database
@@ -69,6 +70,11 @@ class Klien extends BaseModel
 											'alamat.provinsi'		=> 'max:255',
 											'alamat.negara'			=> 'max:255',
 											'nomor_ktp'				=> 'max:255',
+											'perusahaan.*.id'		=> 'required|max:255',
+											'perusahaan.*.nama'		=> 'required|max:255',
+											'perusahaan.*.npwp'		=> 'required|max:255',
+											'perusahaan.*.siup'		=> 'required|max:255',
+											'perusahaan.*.jabatan'	=> 'required|max:255',
 										];
 
 	/**
@@ -124,6 +130,33 @@ class Klien extends BaseModel
 	public static function boot() 
 	{
 		parent::boot();
+	}
+
+	public function addPerusahaan($attributes)
+	{
+		$perusahaan 	= $this->perusahaan;
+		$perusahaan[]	= $attributes;
+
+		$this->attributes['perusahaan']	= $perusahaan;
+
+		return $this;
+	}
+
+	public function removePerusahaan($id)
+	{
+		$perusahaan 	= $this->perusahaan;
+
+		foreach ($perusahaan as $key => $value) 
+		{
+			if(str_is($value['id'], $id))
+			{
+				unset($perusahaan[$key]);
+			}
+		}
+
+		$this->attributes['perusahaan']	= $perusahaan;
+
+		return $this;
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
