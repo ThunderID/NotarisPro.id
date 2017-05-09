@@ -210,7 +210,7 @@
 			var banned = ['H4', 'H5'];
 
 			// banned
-			if(banned.indexOf(tag)){
+			if(banned.indexOf(tag) >= 0){
 				return false;
 			}
 
