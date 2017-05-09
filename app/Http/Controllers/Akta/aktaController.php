@@ -216,7 +216,12 @@ class aktaController extends Controller
 	 */
 	public function show($id)
 	{
+		//get data notaris
+		$notaris 				= new DaftarNotaris;
+		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
+
 		$this->page_datas->datas			= $this->query->detailed($id);
+		$this->page_datas->notaris			= $notaris;
 		$this->page_attributes->title		= $this->page_datas->datas['judul'];
 
 		//initialize view
