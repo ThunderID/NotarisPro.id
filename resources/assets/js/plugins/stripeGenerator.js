@@ -207,9 +207,10 @@
 		function validateObjectPolicies(tag){
 
 			// rules here
+			var banned = ['H4', 'H5'];
 
 			// banned
-			if(tag == 'H4', 'H5'){
+			if(banned.indexOf(tag)){
 				return false;
 			}
 
