@@ -8,6 +8,7 @@ namespace TQueries\Akta;
 use TAkta\DokumenKunci\Models\Dokumen as Model;
 
 use TAkta\DokumenKunci\Models\Versi;
+use TAkta\DokumenKunci\Models\ReadOnlyAkta;
 
 use Hash, Exception, Session, TAuth;
 
@@ -78,6 +79,12 @@ class DaftarAkta
 		$model 		= $model->id($id)->first();
 
 		$akta 		= $model->toArray();
+
+		if($akta['status']=='akta')
+		{
+			$version 				= ReadOnlyAkta::where('original_id', $id)->first();
+			$akta['paragraf']		= $version['paragraf'];
+		}
 
 		if(!isset($akta['fill_mention']))
 		{

@@ -248,7 +248,7 @@ class aktaController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function status($id, $status)
+	public function status(Request $request, $id, $status)
 	{	
 		try {
 			switch (strtolower($status)) 
@@ -260,7 +260,7 @@ class aktaController extends Controller
 					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
 				case 'akta':
-					$data		= new \TCommands\Akta\FinalisasiAkta($id);
+					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->only('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);
