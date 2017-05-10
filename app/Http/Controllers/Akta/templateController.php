@@ -83,21 +83,7 @@ class templateController extends Controller
 	 */
 	public function create($id = null)
 	{	
-		try {
-			$input['judul']		= 'Tidak ada judul [Untitled]';
-
-			// save
-			$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
-			$data				= $data->handle();
-		// save
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']	= $e->getMessage();
-			return $this->generateRedirect(route('akta.template.index'));
-		}
-
-		$this->page_attributes->msg['success']         = ['Data template telah di generate'];
-
-		return $this->generateRedirect(route('akta.template.edit', $data['id']));
+		//return view
 	}
 
 	/**
@@ -293,7 +279,7 @@ class templateController extends Controller
 						{
 							if (str_is('@*', $valuex))
 							{
-								$input['mentionable'][]	= strip_tags($valuex);
+								$input['mentionable'][]	= str_replace(',','',strip_tags($valuex));
 							}
 						}
 					}
@@ -301,14 +287,14 @@ class templateController extends Controller
 					{
 						if (str_is('@*', $valuex))
 						{
-							$input['mentionable'][]		= strip_tags($matches[1]);
+							$input['mentionable'][]		= str_replace(',','',strip_tags($matches[1]));
 						}
 							
 					}
 				}
 				elseif (!is_array($matches['1']) && !in_array($matches[1], $input['mentionable']))
 				{
-					$input['mentionable'][]				= strip_tags($matches[1]);
+					$input['mentionable'][]				= str_replace(',','',strip_tags($matches[1]));
 				}
 				elseif (is_array($matches['1']))
 				{
@@ -317,7 +303,7 @@ class templateController extends Controller
 					{
 						if (str_is('@*', $valuex))
 						{
-							$new_array[]				= $valuex;
+							$new_array[]				= str_replace(',','',strip_tags($valuex));
 						}
 					}
 					$input['mentionable']				= array_merge(
