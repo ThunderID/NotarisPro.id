@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use TQueries\Helpers\JSend;
 
-use TQueries\Akta\DaftarAkta as Query;
-use TQueries\Akta\DaftarTemplateAkta;
+use App\Service\Akta\DaftarAkta as Query;
+use App\Service\Akta\DaftarTemplateAkta;
 use TQueries\Tags\TagService;
 use TQueries\Kantor\DaftarNotaris;
 use TAuth;
@@ -260,7 +260,7 @@ class aktaController extends Controller
 					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
 				case 'akta':
-					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->only('template'));
+					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->get('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);
@@ -308,7 +308,7 @@ class aktaController extends Controller
 	 */
 	public function versioning($akta_id)
 	{	
-		$versioning         				= new \TQueries\Akta\DaftarAkta;
+		$versioning         				= new \App\Service\Akta\DaftarAkta;
 
 		$this->page_datas->datas			= $versioning->versioning($akta_id);
 		$this->page_attributes->title		= 'Histori Revisi ' . $this->page_datas->datas['terbaru']['judul'];
