@@ -51,6 +51,7 @@ class Dokumen extends BaseModel
 											'mentionable'			,
 											'fill_mention'			,
 											'total_perubahan'		,
+											'tanggal_pertemuan'		,
 										];
 	/**
 	 * Basic rule of database
@@ -59,6 +60,7 @@ class Dokumen extends BaseModel
 	 */
 	protected $rules				=	[
 											'judul'					=> 'required',
+											'jenis'					=> 'max:255',
 											'paragraf.*.konten'		=> 'required',
 											'paragraf.*.lock'		=> 'max:255',
 											// 'paragraf.*.key'		=> 'max:255',
@@ -70,7 +72,7 @@ class Dokumen extends BaseModel
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'tanggal_pertemuan'];
 	
 	/**
 	 * data hidden
@@ -84,7 +86,7 @@ class Dokumen extends BaseModel
 											'deleted_at', 
 										];
 
-	protected $appends 				= ['id', 'tanggal_pembuatan', 'tanggal_sunting'];
+	protected $appends 				= ['id', 'tanggal_pembuatan', 'tanggal_sunting', ''];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
