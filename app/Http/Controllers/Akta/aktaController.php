@@ -260,7 +260,7 @@ class aktaController extends Controller
 					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
 				case 'akta':
-					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->only('template'));
+					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->get('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);
