@@ -34,9 +34,11 @@ window.hotkey = {
         	// saving
         	if(key == 'Ctrl+s'){
 				$('.save-content').trigger( "click" );
+                return false;
         	}else{
-        		return false;
-        	}
+                return true;
+            }
+
         }
 
         // shorcut code here
@@ -44,8 +46,7 @@ window.hotkey = {
            
            // Binding keys
            $(target).bind('keydown', elements[i], function assets() {
-               commander(elements[i]);
-               return true;
+               return commander(elements[i]);
            });
         }); 
 
