@@ -83,7 +83,7 @@ class DaftarAkta
 		if($akta['status']=='akta')
 		{
 			$version 				= ReadOnlyAkta::where('original_id', $id)->first();
-			$akta['paragraf']		= $version['paragraf'];
+			$akta['paragraf']        = [['konten' => $version['paragraf']]];
 		}
 
 		if(!isset($akta['fill_mention']))
