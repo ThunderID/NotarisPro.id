@@ -24,6 +24,7 @@
 
 		<div class="panel">
 			@include('components.search',[
+				'title' => 'Cari Template',
 				'qs'	=> [ 'status','sort' ],
 				'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
 			])		
@@ -31,6 +32,7 @@
 
 		<div class="panel">
 			@include('components.filter',[
+				'title' => 'Filter Template',
 				'alias' => 'status',
 				'qs'	=> [ 'q','sort' ],
 				'lists' => [

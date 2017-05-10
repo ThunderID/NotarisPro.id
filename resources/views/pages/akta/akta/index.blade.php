@@ -23,6 +23,7 @@
 
 		<div class="panel">
 			@include('components.search',[
+				'title' => 'Cari Akta',
 				'qs'	=> [ 'status','urutkan' ],
 				'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
 			])
@@ -30,6 +31,7 @@
 
 		<div class="panel">
 			@include('components.filter',[
+				'title' => 'Filter Akta',
 				'alias' => 'status',
 				'qs'	=> [ 'q','urutkan' ],
 				'lists' => [
