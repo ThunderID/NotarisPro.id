@@ -18957,7 +18957,7 @@ window.searchList = new function () {
 				return true;
 			}
 
-			// noramalize
+			// normalize
 			resetMaxLength();
 			return true;
 		}

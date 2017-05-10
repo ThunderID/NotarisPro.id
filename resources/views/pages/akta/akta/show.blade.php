@@ -59,7 +59,7 @@
 							</li>
 								@if(str_is(acl_active_office['role'], 'notaris'))
 								<li class="nav-item">
-									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'akta'])}}" ><i class="fa fa-file"></i> Final</a>
+									<a  class="nav-link" href="javascript:void(0);" data-toggle="modal" data-target="#finalize" ><i class="fa fa-file"></i> Final</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'renvoi'])}}" ><i class="fa fa-check"></i> Renvoi</a>
@@ -129,6 +129,14 @@
 									@endif
 								@endforeach
 							</div>
+
+							@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
+								<div class="form-group editor-hidden" style="display:none;">
+									@foreach($page_datas->datas['paragraf'] as $key => $value)
+										{!!$value['konten']!!}
+									@endforeach
+								</div>
+							@endif
 						</div>
 					</div>
 				</div>
@@ -168,16 +176,57 @@
 			{!!$value['konten']!!}
 		</div> --}}
 
+	@component('components.modal', [
+		'id'		=> 'finalize',
+		'title'		=> 'Ubah status dokumen ke final?',
+		'settings'	=> [
+			'modal_class'	=> '',
+			'hide_buttons'	=> 'true',
+			'hide_title'	=> 'true',
+		]
+	])
+		<form id="finalize_akta" class="form-widgets text-right form" action="{{ route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'akta']) }}" method="POST">
+			<fieldset class="from-group">
+				<input type="text" name="password" class="form-control parsing set-focus" required />
+				<textarea class="input_akta" name="template" ></textarea>
+			</fieldset>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+				<button id="finalize_ok" type="button" class="btn btn-primary" data-save="true">Ok</button>
+				<button id="finalize_submit" type="submit" data-save="true" hidden>save</button>
+			</div>
+		</form>	
+	@endcomponent	
+
 	@include('components.deleteModal',[
 		'title' => 'Menghapus Draft Akta',
 		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])
 	])
+
 @stop
 
 @push('scripts')
 
-	/* Load Stripe Generator Here */ 
-    window.stripeGenerator.init();
+	/* Finalize */ 
+	$('#finalize_ok').click(function( event ) {
+		event.preventDefault();
+
+		// get original text
+		$('.editor').html($('.editor-hidden').html())
+
+		// draw stripes
+	    window.stripeGenerator.init();
+
+	    // draw footer
+
+	    // get document
+	    var target = $('#finalize_akta').find('textarea');
+	    $(target).val($('.editor').html());
+
+	    // submit
+	    $('#finalize_submit').click();
+
+	});
 
 	/*	Start Lock */
 	    window.lockedUnlockedParagraphUI.init();
