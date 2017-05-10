@@ -275,6 +275,8 @@
 		footer.content1 = '{{"Daerah Kerja " . $page_datas->notaris["notaris"]['daerah_kerja'] }}';
 		footer.content2 = '';
 
+		footer.target = $('.editor');
+
 		footer.display(mb);
 
 	}	
