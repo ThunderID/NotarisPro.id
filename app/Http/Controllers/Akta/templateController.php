@@ -83,21 +83,7 @@ class templateController extends Controller
 	 */
 	public function create($id = null)
 	{	
-		try {
-			$input['judul']		= 'Tidak ada judul [Untitled]';
-
-			// save
-			$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
-			$data				= $data->handle();
-		// save
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']	= $e->getMessage();
-			return $this->generateRedirect(route('akta.template.index'));
-		}
-
-		$this->page_attributes->msg['success']         = ['Data template telah di generate'];
-
-		return $this->generateRedirect(route('akta.template.edit', $data['id']));
+		//return view
 	}
 
 	/**
