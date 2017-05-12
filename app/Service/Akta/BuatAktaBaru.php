@@ -106,7 +106,7 @@ class BuatAktaBaru
 
 			$dokumen 			= new Dokumen;
 			$dokumen 			= $dokumen->fill($akta);
-			$dokumen 			= $dokumen->save();
+			$dokumen->save();
 
 			//3. simpan jadwal pertemuan
 			$jadwal 			= new Jadwal;
