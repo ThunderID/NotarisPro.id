@@ -94,21 +94,23 @@ class PublishAkta
 				$akta->total_perubahan	= 0;
 			}
 
-			//4. set status
-			$akta->status 			= 'pengajuan';
-
-
-			//5. check mentionable
-			foreach ($akta->mentionable as $key => $value) 
+			//4. check mentionable
+			if(!in_array($akta->status, ['renvoi']))
 			{
-				$fill 	= str_replace('@', '', $key);
-				$fill 	= str_replace('.', '-+', $fill);
-				
-				if(!isset($akta->fill_mention[$fill]))
+				foreach ($akta->mentionable as $key => $value) 
 				{
-					throw new Exception("Data Akta belum lengkap", 1);
+					$fill 	= str_replace('@', '', $value);
+					$fill 	= str_replace('.', '-+', $fill);
+					
+					if(!isset($akta->fill_mention[$fill]))
+					{
+						throw new Exception("Data Akta belum lengkap", 1);
+					}
 				}
 			}
+
+			//5. set status
+			$akta->status 			= 'pengajuan';
 
 			$akta->save();
 
