@@ -92,7 +92,7 @@ class Controller extends BaseController
 
 		// paging
 		$this->page_attributes->paging = new LengthAwarePaginator($count, $count, $take, $page);
-	    $this->page_attributes->paging->setPath($route);
+		$this->page_attributes->paging->setPath($route);
 	}
 
 	//search
@@ -119,7 +119,7 @@ class Controller extends BaseController
 	//only for displaying construction site. cool?
 	private function underConstruction()
 	{
-		if(in_array(Route::currentRouteName(), ['home.dashboard']) || str_is('jadwal.*', Route::currentRouteName()) || str_is('klien.*', Route::currentRouteName()))
+		if(str_is('jadwal.*', Route::currentRouteName()) || str_is('klien.*', Route::currentRouteName()))
 		{
 			$this->view 				= view('pages.developer.under_construction');
 		}

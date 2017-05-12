@@ -178,7 +178,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
 
-        TWeb\WebServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Collective\Html\HtmlServiceProvider::class,
 
@@ -233,7 +232,7 @@ return [
         // 'Form' => Collective\Html\FormFacade::class,
         // 'Html' => Collective\Html\HtmlFacade::class,
 
-        'TAuth' => TFacades\TAuth::class,
+        'TAuth' => App\Service\Facades\TAuth::class,
     ],
 
 ];
