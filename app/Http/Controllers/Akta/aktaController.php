@@ -99,7 +99,7 @@ class aktaController extends Controller
 			$akta						= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], 
 														$input['klien']['telepon'], $input['tanggal_pertemuan'], 
 														$input['judul'], $template['paragraf'], 
-														$template['mentionable'], $input['template_id']);
+														$input['mentionable'], $input['template_id']);
 
 			$akta 						= $akta->handle();
 

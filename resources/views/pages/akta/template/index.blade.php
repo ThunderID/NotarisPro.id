@@ -127,7 +127,7 @@
 								&nbsp;
 								{{ $data['judul'] }}
 							</td>
-							<td>
+							<td class="{{ ($data['status'] == 'publish') ? 'text-success' : '' }}">
 								{{ $data['status'] }}
 							</td>
 							<td>
