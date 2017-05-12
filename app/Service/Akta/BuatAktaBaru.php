@@ -71,7 +71,7 @@ class BuatAktaBaru
 			}
 
 			$klien->fill(['nama' => $this->klien_nama, 'kantor' => ['id' => $activeOffice['kantor']['id'], 'nama' => $activeOffice['kantor']['nama'], 'telepon' => $this->klien_telepon]]);
-			$klien 				= $klien->save();
+			$klien->save();
 
 			//2. simpan akta
 			$call				= new DaftarTemplateAkta;
@@ -114,7 +114,7 @@ class BuatAktaBaru
 					'judul'			=> 'Deadline '.$this->judul,
 					'waktu'			=> $this->tanggal_pertemuan,
 					'pembuat'		=> ['kantor' => ['id' => $activeOffice['kantor']['id'],'nama' => $activeOffice['kantor']['nama']]],
-					'peserta'		=> [['id' => $klien['id'],'nama' => $klien['nama']]],
+					'peserta'		=> [['id' => $klien->id,'nama' => $klien->nama]],
 					'referensi_id'	=> $dokumen->_id,
 				]);
 			$jadwal 			= $jadwal->save();

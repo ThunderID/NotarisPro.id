@@ -19,7 +19,6 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
-
 	return view('thunder');
 	return view('test');
 	$akta 			= '<span class="medium-editor-mention-at text-danger">@notaris.nama</span> Notaris di <span class="medium-editor-mention-at medium-editor-mention-at-active text-danger">@notaris.alamat</span>. Dengan dihadiri saksi-saksi yang saya, Notaris kenal dan akan disebut bagian akhir akta ini.</span>';
@@ -149,6 +148,33 @@ Route::group(['middleware' => ['authenticated']], function()
 			'edit' 		=> 'klien.edit', //get
 			'update' 	=> 'klien.update', //patch
 			'destroy' 	=> 'klien.destroy' //post 
+		]]);
+	});
+
+	//kantor
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/kantor', 'kantorController', ['names' => [
+			'index' 	=> 'kantor.index', //get
+			'create'	=> 'kantor.create', //get
+			'store' 	=> 'kantor.store', //post
+			'show' 		=> 'kantor.show', //get
+			'edit' 		=> 'kantor.edit', //get
+			'update' 	=> 'kantor.update', //patch
+			'destroy' 	=> 'kantor.destroy' //post 
+		]]);
+	});
+
+
+	//user
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/user', 'userController', ['names' => [
+			'index' 	=> 'user.index', //get
+			'create'	=> 'user.create', //get
+			'store' 	=> 'user.store', //post
+			'show' 		=> 'user.show', //get
+			'edit' 		=> 'user.edit', //get
+			'update' 	=> 'user.update', //patch
+			'destroy' 	=> 'user.destroy' //post 
 		]]);
 	});
 });

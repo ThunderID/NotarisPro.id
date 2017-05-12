@@ -72,7 +72,7 @@ class aktaController extends Controller
 		$this->page_datas->datas			= $this->query->get($query);
 
 		//paginate
-		$this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));        
+		$this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.index');
