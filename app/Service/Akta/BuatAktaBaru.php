@@ -116,7 +116,7 @@ class BuatAktaBaru
 					'pembuat'		=> ['kantor' => ['id' => $activeOffice['id'],'nama' => $activeOffice['nama']]],
 					'peserta'		=> [['id' => $klien['id'],'nama' => $klien['nama']]],
 					'referensi_id'	=> $dokumen->_id,
-				])
+				]);
 			$jadwal 			= $jadwal->save();
 
 			//4. simpan versi
