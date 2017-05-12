@@ -8,6 +8,7 @@ use TQueries\Helpers\JSend;
 
 use App\Service\Akta\DaftarAkta as Query;
 use App\Service\Akta\DaftarTemplateAkta;
+use App\Service\Akta\BuatAktaBaru;
 use TQueries\Tags\TagService;
 use App\Service\Admin\DaftarKantor;
 use TAuth;
@@ -180,15 +181,20 @@ class aktaController extends Controller
 	{
 		try 
 		{
-			$input		= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
-			
-			$template	= new DaftarTemplateAkta;
-			$template	= $template->detailed($input['template_id']);
+			$input						= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
+			$template					= new DaftarTemplateAkta;
+			$template					= $template->detailed($input['template_id']);
 	
+			$input['klien']['id'] 		= (isset($input['klien']['id']) && !is_null($input['klien']['id'])) ? $input['klien']['id'] : null;
+			$tanggal_pertemuan 			= date_create($input['tanggal_pertemuan']);
+			$input['tanggal_pertemuan']	= date_format($tanggal_pertemuan, 'd/m/Y H:i');
 
-			$akta		= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], $input['klien']['telepon'], $input['tanggal_pertemuan'], $input['judul'], $template['paragraf'], $template['mentionable'], $input['template_id']);
+			$akta						= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], 
+														$input['klien']['telepon'], $input['tanggal_pertemuan'], 
+														$input['judul'], $template['paragraf'], 
+														$template['mentionable'], $input['template_id']);
 
-			$akta 		= $akta->handle();
+			$akta 						= $akta->handle();
 
 			//save tanggal pertemuan
 		} catch (Exception $e) {
