@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Service\Admin\DaftarKantor as Query;
+use App\Service\Admin\SimpanKantor;
 
 use App\Http\Controllers\Controller;
 
-use Exception;
+use Exception, Redirect;
 
 class kantorController extends Controller
 {
@@ -45,6 +46,12 @@ class kantorController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		return $this->store($id, $request);
+		$input 	= $request->only('nama', 'notaris');
+
+		$data 	= new SimpanKantor($id, $input['nama'], $input['notaris']['nama'], $input['notaris']['daerah_kerja'], $input['notaris']['nomor_sk'], $input['notaris']['tanggal_pengangkatan'], $input['notaris']['alamat'], $input['notaris']['telepon'], null);
+
+		$data 	= $data->handle();
+
+		return Redirect::route('kantor.edit', $id);
 	}
 }
