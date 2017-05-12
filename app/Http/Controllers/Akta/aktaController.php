@@ -9,7 +9,7 @@ use TQueries\Helpers\JSend;
 use App\Service\Akta\DaftarAkta as Query;
 use App\Service\Akta\DaftarTemplateAkta;
 use TQueries\Tags\TagService;
-use TQueries\Kantor\DaftarNotaris;
+use App\Service\Admin\DaftarKantor;
 use TAuth;
 
 class aktaController extends Controller
@@ -156,7 +156,7 @@ class aktaController extends Controller
 	public function show($id)
 	{
 		//get data notaris
-		$notaris 				= new DaftarNotaris;
+		$notaris 				= new DaftarKantor;
 		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
 
 		$this->page_datas->datas			= $this->query->detailed($id);

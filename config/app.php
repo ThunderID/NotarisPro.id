@@ -178,7 +178,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
 
-        TWeb\WebServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Collective\Html\HtmlServiceProvider::class,
 

@@ -62,7 +62,7 @@ class Kantor extends BaseModel
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'notaris.tanggal_pengangkatan'];
 	
 	/**
 	 * data hidden
@@ -85,7 +85,7 @@ class Kantor extends BaseModel
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
 	public function setNotarisAttribute($value)
 	{
-		$value['tanggal_pengangkatan'] 		= $this->formatDateFrom($value['tanggal_pengangkatan']);
+		// $value['tanggal_pengangkatan'] 		= $this->formatDateFrom($value['tanggal_pengangkatan']);
 		$this->attributes['notaris']		= $value;
 	}
 
@@ -98,7 +98,7 @@ class Kantor extends BaseModel
 
 	public function getNotarisAttribute($value = NULL)
 	{
-		$value['tanggal_pengangkatan'] 		= $this->formatDateTo($value['tanggal_pengangkatan']);
+		// $value['tanggal_pengangkatan'] 		= $this->formatDateTo($value['tanggal_pengangkatan']);
 		return $value;
 	}
 
