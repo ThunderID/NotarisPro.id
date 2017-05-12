@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Service\Akta\DaftarTemplateAkta as Query;
 use App\Service\Tag\TagService;
 use App\Service\Akta\BuatTemplateBaru;
+use App\Service\Akta\HapusTemplate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\helperController;
@@ -216,7 +217,7 @@ class templateController extends Controller
 
 		// hapus
 		try {
-			$template								= new \TCommands\Akta\HapusTemplateAkta($id);
+			$template								= new HapusTemplate($id);
 			$template								= $template->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMesssage();
