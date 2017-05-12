@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use TQueries\Helpers\JSend;
 
-use TQueries\Akta\DaftarAkta as Query;
-use TQueries\Akta\DaftarTemplateAkta;
+use App\Service\Akta\DaftarAkta as Query;
+use App\Service\Akta\DaftarTemplateAkta;
 use TQueries\Tags\TagService;
-use TQueries\Kantor\DaftarNotaris;
+use App\Service\Admin\DaftarKantor;
 use TAuth;
 
 class aktaController extends Controller
@@ -236,7 +236,7 @@ class aktaController extends Controller
 	public function show($id)
 	{
 		//get data notaris
-		$notaris 				= new DaftarNotaris;
+		$notaris 				= new DaftarKantor;
 		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
 
 		$this->page_datas->datas			= $this->query->detailed($id);
@@ -388,7 +388,7 @@ class aktaController extends Controller
 	 */
 	public function versioning($akta_id)
 	{	
-		$versioning         				= new \TQueries\Akta\DaftarAkta;
+		$versioning         				= new \App\Service\Akta\DaftarAkta;
 
 		$this->page_datas->datas			= $versioning->versioning($akta_id);
 		$this->page_attributes->title		= 'Histori Revisi ' . $this->page_datas->datas['terbaru']['judul'];

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Akta;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use TQueries\Akta\DaftarTemplateAkta as Query;
+use App\Service\Akta\DaftarTemplateAkta as Query;
 use TQueries\Tags\TagService;
 
 use App\Http\Controllers\Controller;
