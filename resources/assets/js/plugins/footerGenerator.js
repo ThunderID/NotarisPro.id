@@ -20,7 +20,7 @@ window.footerGenerator = new function(){
 
 	// devinition
 	this.footer = function(top,left,width,page, content){
-		return "<div class='auto-footer' style='font-family: Inconsolata, monospace; border-top: 1px solid black; top:" + top + "px;left:" + left + "px;width:" + width + "px; position:absolute;'><p style='text-align:left;margin-bottom: 0.3rem;'><i>" + this.title + "</i><span style='float:right'>" + page + "</span></p><p style='text-align:left;margin-bottom: 0rem;'>" + this.content1 + "</p><p style='text-align:left;'>" + this.content2 + "</p></div>";
+		return "<div class='auto-footer' style='font-family: Inconsolata, monospace; border-top: 1px solid black; top:" + top + "px;width:" + width + "px; position:absolute;'><p style='text-align:left;margin-bottom: 0.3rem;'><i>" + this.title + "</i><span style='float:right'>" + page + "</span></p><p style='text-align:left;margin-bottom: 0rem;'>" + this.content1 + "</p><p style='text-align:left;'>" + this.content2 + "</p></div>";
 	}
 
 	// converter

@@ -75,7 +75,7 @@
 							</li>
 							@elseif (str_is($page_datas->datas['status'], 'akta'))
 								<li class="nav-item">
-									<a class="nav-link export-pdf" href="#" data-href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+									<a class="nav-link export-pdf" href="{{route('akta.akta.pdf', ['akta_id' => $page_datas->datas['id']] )}}" ><i class="fa fa-file-pdf-o"></i> Export PDF</a>
 								</li>					
 							@endif
 						</ul>
@@ -188,7 +188,7 @@
 		<form id="finalize_akta" class="form-widgets text-right form" action="{{ route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'akta']) }}" method="POST">
 			<fieldset class="from-group">
 				<input type="text" name="password" class="form-control parsing set-focus" required />
-				<textarea class="input_akta" name="template" ></textarea>
+				<textarea class="input_akta" name="template" hidden></textarea>
 			</fieldset>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -218,6 +218,7 @@
 	    window.stripeGenerator.init();
 
 	    // draw footer
+		window.drawFooter();
 
 	    // get document
 	    var target = $('#finalize_akta').find('textarea');
@@ -290,10 +291,10 @@
 
 	/* Events */
 	$(document).ready(function(){
-		drawFooter();
+		<!-- drawFooter(); -->
 	});	
 
 	$( window ).resize(function() {
-		reDrawFooter();
+		<!-- reDrawFooter(); -->
 	});	
 @endpush 
