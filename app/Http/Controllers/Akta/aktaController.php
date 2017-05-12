@@ -15,7 +15,7 @@ use App\Service\Akta\HapusAkta;
 
 use App\Service\Tag\TagService;
 use App\Service\Admin\DaftarKantor;
-use TAuth;
+use TAuth, App, PDF;
 
 class aktaController extends Controller
 {
@@ -460,10 +460,26 @@ class aktaController extends Controller
 	public function pdf($akta_id)
 	{
 		$this->page_datas->datas			= $this->query->detailed($akta_id);
-		$this->page_attributes->title		= $this->page_datas->datas['judul'];
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.pdf');
+
+		// convert pdf
+		// $pdf = new PDF();
+		// $pdf = $pdf::setOptions(['dpi' => 150, 'defaultFont' => 'monospace']);
+		// $pdf = App::make('dompdf.wrapper');
+		// $pdf->loadHTML($this->generateView());
+
+		
+		set_time_limit(600); 
+		return PDF::loadHTML($this->generateView())
+			->setPaper('a4', 'portrait')
+			// ->setOptions(['defaultFont' => 'monospace'])
+			->stream();
+		
+
+		// return $pdf->stream();
+
 
 		//function from parent to generate view
 		return $this->generateView();
