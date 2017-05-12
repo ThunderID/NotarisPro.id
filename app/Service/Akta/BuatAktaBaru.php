@@ -70,7 +70,7 @@ class BuatAktaBaru
 				$klien 			= Klien::find($this->klien_id);
 			}
 
-			$klien->fill(['nama' => $klien_nama, 'kantor' => ['id' => $activeOffice['id'], 'nama' => $activeOffice['nama'], 'telepon' => $activeOffice['telepon']]]);
+			$klien->fill(['nama' => $this->klien_nama, 'kantor' => ['id' => $activeOffice['id'], 'nama' => $activeOffice['nama'], 'telepon' => $activeOffice['telepon']]]);
 			$klien 				= $klien->save();
 
 			//2. simpan akta
