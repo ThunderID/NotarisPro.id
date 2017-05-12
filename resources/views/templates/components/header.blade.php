@@ -58,14 +58,8 @@
 	<div class="collapse navbar-collapse justify-content-end" id="navbarCollapseAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="javascript:void(0);"  data-toggle="modal" data-target="#modal-change-org">
-					<i class="fa fa-building" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
-					<span class="hidden-lg-down">
-						{{$acl_active_office['kantor']['nama']}}
-					</span>
-					<span class="hidden-md-up">
-						{{$acl_active_office['kantor']['nama']}}
-					</span>					
+				<a class="nav-link" href="{{route('kantor.edit', ['id' => $acl_active_office['kantor']['id']])}}">
+					{{$acl_active_office['kantor']['nama']}}
 				</a>
 			</li>
 			<li class="nav-item">
@@ -79,43 +73,4 @@
 	</div>
 
 </nav>
-
-
-{{-- modal change org --}}
-@component('components.modal', [
-		'id'			=> 'modal-change-org',
-		'title'			=> 'Pilih Organisasi',
-		'settings'		=> [
-			'hide_buttons'	=> true
-		]
-	])
-	<div id="list-organisasi">
-		<div class="form-group has-feedback">
-			<input type="text" class="search form-control" placeholder="cari nama organisasi">
-			<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
-		</div>
-		<ul class="list-group list">
-			@foreach($acl_logged_user['visas'] as $key => $value)			
-				<li class="list-group-item">
-					<a class="name" href="{{ route('uac.office.activate', $value['id']) }}" ><i class="fa fa-building"></i>&nbsp;&nbsp; {{ $value['kantor']['nama'] }}</a> 
-				</li>
-			@endforeach
-		</ul>
-
-		<hr/>
-
-		<div class="row">
-			<div class="col-sm-10 text-left">
-				<span class="label">Aktif : &nbsp;&nbsp;{{ $acl_active_office['kantor']['nama'] }}
-				</span>
-			</div>
-			<div class="col-sm-2 text-right">
-				@if(str_is($acl_active_office['role'], 'notaris'))
-					<a href="{{ route('notaris.kantor.edit', $acl_active_office['kantor']['id']) }}"> Edit</a>
-				@endif
-			</div>
-		</div>
-	</div>
-	
-@endcomponent
 

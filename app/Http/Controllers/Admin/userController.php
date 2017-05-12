@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Kantor;
+namespace App\Http\Controllers\Admin;
 
-use TQueries\Kantor\DaftarNotaris as Query;
+use App\Service\Admin\DaftarPengguna as Query;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 
 use TAuth, Redirect, URL;
 
-class KantorController extends Controller
+class userController extends Controller
 {
 	public function __construct(Query $query)
 	{
@@ -18,16 +18,17 @@ class KantorController extends Controller
 		$this->query            = $query;
 	}  
 
-	public function edit($kantor_id){
+	public function index(){
 		// init
-		$this->page_attributes->title	= 'Kantor';
+		$this->page_attributes->title	= 'User';
 
 		//get data from database
-		$this->page_datas->id			= $kantor_id;
-		$this->page_datas->datas		= $this->query->detailed($kantor_id);
+		$this->page_datas->datas		= $this->query->get(['per_page' => (int)env('DATA_PERPAGE')]);
+
+		$this->paginate(null, $this->query->count(), (int)env('DATA_PERPAGE'));
 
 		//initialize view
-		$this->view						= view('pages.kantor.create');
+		$this->view						= view('pages.user.index');
 
 		//function from parent to generate view
 		return $this->generateView(); 
