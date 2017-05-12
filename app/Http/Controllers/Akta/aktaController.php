@@ -180,42 +180,15 @@ class aktaController extends Controller
 	{
 		try 
 		{
-			$input				= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
+			$input		= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
 			
-			$call				= new DaftarTemplateAkta;
-			$template			= $call->detailed($input['template_id']);
+			$template	= new DaftarTemplateAkta;
+			$template	= $template->detailed($input['template_id']);
+	
 
-			//1. parse data 
-			if(!isset($input['klien']['id']))
-			{
-				$save_klien 	= new SimpanKlien($input['klien']);
-				$save_klien 	= $save_klien->handle();
+			$akta		= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], $input['klien']['telepon'], $input['tanggal_pertemuan'], $input['judul'], $template['paragraf'], $template['mentionable'], $input['template_id']);
 
-				$input['klien']['id']				= $save_klien['id'];
-			}
-
-			$content['pemilik']['klien']['id']		= $input['klien']['id'];
-			$content['pemilik']['klien']['nama'] 	= $input['klien']['nama'];
-			$content['judul']						= $input['judul'];
-			$content['tanggal_pertemuan']			= $input['tanggal_pertemuan'];
-			$content['fill_mention']				= $input['mentionable'];
-			$content['mentionable']					= $template['mentionable'];
-
-			// get data
-			$pattern 	= "/<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-			// change key index like 'paragraph[*]'
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/li>/i', '</li>', $out[0][$key]);
-				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/span>/i', '</span><br>', $out[0][$key]);
-				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/b>/i', '</b><br>', $out[0][$key]);
-			}
-
-			// save akta
-			$data		= new \TCommands\Akta\DraftingAkta($input);
-			$akta 		= $data->handle();
+			$akta 		= $akta->handle();
 
 			//save tanggal pertemuan
 		} catch (Exception $e) {
@@ -224,7 +197,7 @@ class aktaController extends Controller
 
 		//return view
 		$this->page_attributes->msg['success']		= ['Data akta telah ditambahkan'];
-		return $this->generateRedirect(route('akta.akta.index'));
+		return $this->generateRedirect(route('akta.akta.edit', $akta['id']));
 	}
 
 	/**

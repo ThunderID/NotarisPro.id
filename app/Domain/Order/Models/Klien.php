@@ -40,6 +40,7 @@ class Klien extends BaseModel
 	protected $fillable				=	[
 											'_id'					,
 											'nama'					,
+											'telepon'				,
 											'tempat_lahir'			,
 											'tanggal_lahir'			,
 											'pekerjaan'				,

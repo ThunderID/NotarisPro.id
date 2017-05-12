@@ -14,6 +14,7 @@ class BuatAktaBaru
 {
 	protected $klien_id;
 	protected $klien_nama;
+	protected $klien_telepon;
 	protected $tanggal_pertemuan;
 	protected $judul;
 	protected $isi_akta;
@@ -25,6 +26,7 @@ class BuatAktaBaru
 	 *
 	 * @param  $klien_id
 	 * @param  $klien_nama
+	 * @param  $klien_telepon
 	 * @param  $tanggal_pertemuan
 	 * @param  $judul
 	 * @param  $isi_akta
@@ -33,10 +35,11 @@ class BuatAktaBaru
 	 *
 	 * @return void
 	 */
-	public function __construct($klien_id, $klien_nama, $tanggal_pertemuan, $judul, array $isi_akta, array $mentionable, $template_id)
+	public function __construct($klien_id, $klien_nama, $klien_telepon, $tanggal_pertemuan, $judul, array $isi_akta, array $mentionable, $template_id)
 	{
 		$this->klien_id				= $klien_id;
 		$this->klien_nama			= $klien_nama;
+		$this->klien_telepon		= $klien_telepon;
 		$this->tanggal_pertemuan	= $tanggal_pertemuan;
 		$this->judul				= $judul;
 		$this->isi_akta				= $isi_akta;
@@ -67,7 +70,7 @@ class BuatAktaBaru
 				$klien 			= Klien::find($this->klien_id);
 			}
 
-			$klien->fill(['nama' => $klien_nama, 'kantor' => ['id' => $activeOffice['id'], 'nama' => $activeOffice['nama']]]);
+			$klien->fill(['nama' => $klien_nama, 'kantor' => ['id' => $activeOffice['id'], 'nama' => $activeOffice['nama'], 'telepon' => $activeOffice['telepon']]]);
 			$klien 				= $klien->save();
 
 			//2. simpan akta
@@ -82,6 +85,7 @@ class BuatAktaBaru
 
 			$akta['pemilik']['klien']['id'] 		= $klien['id'];
 			$akta['pemilik']['klien']['nama'] 		= $klien['nama'];
+			$akta['pemilik']['klien']['telepon'] 	= $klien['telepon'];
 
 			$akta['penulis']['id'] 					= $loggedUser['id'];
 			$akta['penulis']['nama'] 				= $loggedUser['nama'];
