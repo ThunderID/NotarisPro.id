@@ -65,7 +65,7 @@
 	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel">
 		<div class="row">
 			<div class="col-6">
-				<h4 class="title">Data Template</h4>		
+				<h4 class="title">Template Dokumen</h4>		
 			</div>
 			<div class="col-6 hidden-sm-down text-right">
 				@include('components.sort',[
@@ -102,7 +102,12 @@
 			<div class="col-12">
 				@include('components.alertbox')
 			</div>
-		</div>		
+		</div>
+		<div class="row mt-3 mb-3">
+			<div class="col-12">
+				<a href="{{ route('akta.template.initial') }}" class="btn btn-primary btn-sm">Buat Template</a>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-12">
 				<table class="table table-hover">

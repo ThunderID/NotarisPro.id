@@ -53,7 +53,15 @@
 			toolbar: {
 				buttons: [{name: 'h4', contentFA: '<i class="fa fa-header"></i>1'}, {name: 'h5', contentFA: '<i class="fa fa-header"></i>2'},
 					"bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"
-				]
+				],
+				static: true,
+				sticky: true,
+				diffLeft: 0,
+		        diffTop: -330,
+		        updateOnEmptySelection: true
+			},
+			onHideToolbar: function () {
+				// editor.toolbar.showToolbar();
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -67,12 +75,14 @@
 			spellcheck: false,
 			disableExtraSpaces: false,
 			targetBlank: true,
+			// disableEditing: true,
 			extensions: {
 				mention: new window.Mention({
 					extraPanelClassName: 'dropdown-menu',
 					tagName: 'span',
 					renderPanelContent: function (panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
+						console.log(this.mention);
 						if ([this.mention].length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
 							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');

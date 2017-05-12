@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Akta;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use TQueries\Helpers\JSend;
+use App\Service\Helpers\JSend;
 
-use TQueries\Akta\DaftarAkta as Query;
-use TQueries\Akta\DaftarTemplateAkta;
-use TQueries\Tags\TagService;
-use TQueries\Kantor\DaftarNotaris;
+use App\Service\Akta\DaftarTemplateAkta;
+
+use App\Service\Akta\DaftarAkta as Query;
+use App\Service\Akta\BuatAktaBaru;
+use App\Service\Akta\SimpanAkta;
+use App\Service\Akta\HapusAkta;
+
+use App\Service\Tag\TagService;
+use App\Service\Admin\DaftarKantor;
 use TAuth;
 
 class aktaController extends Controller
@@ -50,28 +55,11 @@ class aktaController extends Controller
 			}
 		}
 
-		/*
-		//1. untuk menampilkan data dengan filter status
-		$filter['status']                   = 'draft';
-
-		//2. untuk menampilkan data dengan pencarian nama klien
-		$filter['klien']                    = 'Lili';
-
-		//3. untuk menampilkan data dengan urutan judul
-		$filter['urutkan']                  = ['judul' => 'desc'];
-		//4. untuk menampilkan data dengan urutan status
-		$filter['urutkan']                  = ['status' => 'desc'];
-		//5. untuk menampilkan data dengan urutan tanggal pembuatan
-		$filter['urutkan']                  = ['tanggal_pembuatan' => 'desc'];
-		//6. untuk menampilkan data dengan urutan tanggal sunting
-		$filter['urutkan']                  = ['tanggal_sunting' => 'desc'];
-		*/
-
 		//get data from database
 		$this->page_datas->datas			= $this->query->get($query);
 
 		//paginate
-		$this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));        
+		$this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.index');
@@ -88,6 +76,7 @@ class aktaController extends Controller
 	public function create(Request $request)
 	{
 		//return view
+		return $this->generateRedirect(route('akta.akta.create'));
 	}
 
 	/**
@@ -100,42 +89,20 @@ class aktaController extends Controller
 	{
 		try 
 		{
-			$input				= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
-			
-			$call				= new DaftarTemplateAkta;
-			$template			= $call->detailed($input['template_id']);
+			$input						= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
+			$template					= new DaftarTemplateAkta;
+			$template					= $template->detailed($input['template_id']);
+	
+			$input['klien']['id'] 		= (isset($input['klien']['id']) && !is_null($input['klien']['id'])) ? $input['klien']['id'] : null;
+			$tanggal_pertemuan 			= date_create($input['tanggal_pertemuan']);
+			$input['tanggal_pertemuan']	= date_format($tanggal_pertemuan, 'd/m/Y H:i');
 
-			//1. parse data 
-			if(!isset($input['klien']['id']))
-			{
-				$save_klien 	= new SimpanKlien($input['klien']);
-				$save_klien 	= $save_klien->handle();
+			$akta						= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], 
+														$input['klien']['telepon'], $input['tanggal_pertemuan'], 
+														$input['judul'], $template['paragraf'], 
+														$template['mentionable'], $input['template_id']);
 
-				$input['klien']['id']				= $save_klien['id'];
-			}
-
-			$content['pemilik']['klien']['id']		= $input['klien']['id'];
-			$content['pemilik']['klien']['nama'] 	= $input['klien']['nama'];
-			$content['judul']						= $input['judul'];
-			$content['tanggal_pertemuan']			= $input['tanggal_pertemuan'];
-			$content['fill_mention']				= $input['mentionable'];
-			$content['mentionable']					= $template['mentionable'];
-
-			// get data
-			$pattern 	= "/<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
-			// change key index like 'paragraph[*]'
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/li>/i', '</li>', $out[0][$key]);
-				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/span>/i', '</span><br>', $out[0][$key]);
-				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/b>/i', '</b><br>', $out[0][$key]);
-			}
-
-			// save akta
-			$data		= new \TCommands\Akta\DraftingAkta($input);
-			$akta 		= $data->handle();
+			$akta 						= $akta->handle();
 
 			//save tanggal pertemuan
 		} catch (Exception $e) {
@@ -144,7 +111,7 @@ class aktaController extends Controller
 
 		//return view
 		$this->page_attributes->msg['success']		= ['Data akta telah ditambahkan'];
-		return $this->generateRedirect(route('akta.akta.index'));
+		return $this->generateRedirect(route('akta.akta.edit', $akta['id']));
 	}
 
 	/**
@@ -156,7 +123,7 @@ class aktaController extends Controller
 	public function show($id)
 	{
 		//get data notaris
-		$notaris 				= new DaftarNotaris;
+		$notaris 				= new DaftarKantor;
 		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
 
 		$this->page_datas->datas			= $this->query->detailed($id);
@@ -203,7 +170,11 @@ class aktaController extends Controller
 	{
 		//
 		try {
-			$this->parse_store($id, $request->only('template'));
+			$content 	= $this->parse_store($id, $request->only('template'));
+			
+			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
+			$akta		= $akta->handle();
+
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -231,7 +202,7 @@ class aktaController extends Controller
 
 		// hapus
 		try {
-			$akta									= new \TCommands\Akta\HapusAkta($id);
+			$akta									= new HapusAkta($id);
 			$akta									= $akta->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMesssage();
@@ -308,7 +279,7 @@ class aktaController extends Controller
 	 */
 	public function versioning($akta_id)
 	{	
-		$versioning         				= new \TQueries\Akta\DaftarAkta;
+		$versioning         				= new \App\Service\Akta\DaftarAkta;
 
 		$this->page_datas->datas			= $versioning->versioning($akta_id);
 		$this->page_attributes->title		= 'Histori Revisi ' . $this->page_datas->datas['terbaru']['judul'];
@@ -324,21 +295,41 @@ class aktaController extends Controller
 	}
 
 	/**
-	 * function get list widgets on template create or edit
+	 * function get list fillable mention on template
 	 */
-	private function list_widgets() 
+	public function list_widgets(Request $request) 
 	{
-		$call 			= new TagService;
-		$list 			= $call::all();
+		try 
+		{
+			$template_id 			= $request->get('template_id'); 
 
-		$list 			= array_sort_recursive($list);
+			$call					= new DaftarTemplateAkta;
+			$template 				= $call->detailed($template_id);
 
-		return $list;
+			$mentionable			= [];
+
+			if (isset($template['mentionable']))
+			{
+				foreach ($template['mentionable'] as $key => $value) 
+				{
+					if(!str_is('@notaris.*', $value) && !str_is('@akta.nomor', $value))
+					{
+						$mentionable[]	= $value;
+					}
+				}
+			}
+
+			return response()->json(['data' => $mentionable], 200);
+			
+		} catch (Exception $e) {
+			$msg						= $e->getMessage();
+
+			return response()->json(['data' => $msg], 200);
+		}
 	}
 
 	private function parse_store($id, $template)
 	{
-
 		$check_status 								= $this->query->detailed($id);
 		$input['id']								= $id;
 		
@@ -355,9 +346,6 @@ class aktaController extends Controller
 
 				$input['paragraf'][$key]['konten']	= $value;
 			}
-
-			$data			= new \TCommands\Akta\SimpanAkta($input);
-			$data 			= $data->handle();
 		}
 		elseif($check_status['status']=='draft')
 		{
@@ -375,16 +363,13 @@ class aktaController extends Controller
 
 				$input['paragraf'][$key]['konten']	= $value;
 			}
-
-			$data			= new \TCommands\Akta\DraftingAkta($input);
-			$data 			= $data->handle();
 		}
 		else
 		{
 			throw new Exception("Status invalid", 1);
 		}
 
-		return $data;
+		return $input;
 	}
 
 	/**
@@ -412,21 +397,21 @@ class aktaController extends Controller
 	public function mention($akta_id, Request $request)
 	{
 		 try {
+			$check_status	= $this->query->detailed($akta_id);
+
 			// get data
 			$input			= $request->only('mention', 'isi_mention');
-			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
-			$content['id']	= $akta_id;
+			$content 		= [$input['mention'] => $input['isi_mention']];
 
 			// save
-			$data			= new \TCommands\Akta\DraftingAkta($content);
-			$data 			= $data->handle();
+			$data 			= new SimpanAkta($akta_id, $check_status['judul'], $check_status['paragraf'], $content);
 
 			$this->parse_store($akta_id, $request->only('template'));
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}
 
-		return JSend::success(['data' => $data['fill_mention']])->asArray();
+		return JSend::success(['data' => $content])->asArray();
 	}
 
 

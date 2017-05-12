@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Akta;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use TQueries\Akta\DaftarTemplateAkta as Query;
-use TQueries\Tags\TagService;
+use App\Service\Akta\DaftarTemplateAkta as Query;
+use App\Service\Tag\TagService;
+use App\Service\Akta\BuatTemplateBaru;
+use App\Service\Akta\HapusTemplate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\helperController;
@@ -49,20 +51,6 @@ class templateController extends Controller
 			}
 		}
 
-		/*
-		//1. untuk menampilkan data dengan filter status
-		$filter['status']                   = 'draft';
-		
-		//3. untuk menampilkan data dengan urutan judul
-		$filter['urutkan']                  = ['judul' => 'desc'];
-		//4. untuk menampilkan data dengan urutan status
-		$filter['urutkan']                  = ['status' => 'desc'];
-		//5. untuk menampilkan data dengan urutan tanggal pembuatan
-		$filter['urutkan']                  = ['tanggal_pembuatan' => 'desc'];
-		//6. untuk menampilkan data dengan urutan tanggal sunting
-		$filter['urutkan']                  = ['tanggal_sunting' => 'desc'];
-		*/
-
 		//get data from database
 		$this->page_datas->datas            = $this->query->get($query);
 
@@ -83,7 +71,32 @@ class templateController extends Controller
 	 */
 	public function create($id = null)
 	{	
-		//return view
+		// try {
+		// 	$input['judul']		= 'Tidak ada judul [Untitled]';
+
+		// 	// save
+		// 	$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
+		// 	$data				= $data->handle();
+		// // save
+		// } catch (Exception $e) {
+		// 	$this->page_attributes->msg['error']	= $e->getMessage();
+		// 	return $this->generateRedirect(route('akta.template.index'));
+		// }
+
+		// $this->page_attributes->msg['success']         = ['Data template telah di generate'];
+
+		// return $this->generateRedirect(route('akta.template.edit', $data['id']));
+
+		$this->page_attributes->title       = 'Buat Template Dokumen Baru';
+
+		$this->page_datas->id 				= null;
+		$this->page_datas->list_widgets     = $this->list_widgets();
+
+		//initialize view
+		$this->view                         = view('pages.akta.template.create');
+
+		//function from parent to generate view
+		return $this->generateView();
 	}
 
 	/**
@@ -96,7 +109,14 @@ class templateController extends Controller
 	{
 		//
 		try {
-			$this->parse_store($id, $request);
+
+			$paragraph		= $this->parse_store($id, $request);
+			
+
+			$akta			= new BuatTemplateBaru($paragraph['judul'], $paragraph['paragraf'], $paragraph['mentionable']);
+
+			$akta 			= $akta->handle();		
+
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']    = $e->getMessage();
 		}
@@ -197,7 +217,7 @@ class templateController extends Controller
 
 		// hapus
 		try {
-			$template								= new \TCommands\Akta\HapusTemplateAkta($id);
+			$template								= new HapusTemplate($id);
 			$template								= $template->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMesssage();
@@ -249,10 +269,10 @@ class templateController extends Controller
 	{
 		// get data
 		$input									= $request->only(
-															'title', 
+															'nama', 
 															'template'
 													);
-		$input['judul']							= ($request->has('title') && !is_null($request->input('title'))) ? $request->input('title') : 'Tidak ada judul [Untitled]';
+		$input['judul']							= ($request->has('nama') && !is_null($request->input('nama'))) ? $request->input('nama') : 'Tidak ada judul [Untitled]';
 
 		if(!is_null($id))
 		{
@@ -263,6 +283,8 @@ class templateController extends Controller
 
 		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
 
+		$input['paragraf']		= [];
+		$input['mentionable']	= [];
 		foreach ($out[0] as $key => $value) 
 		{
 			$value 								= str_replace('&nbsp;', ' ', $value);
@@ -315,10 +337,20 @@ class templateController extends Controller
 			}
 		}
 
-		// save
-		$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
-		$data 				= $data->handle();
+		return $input;
+	}
 
-		return $data;
+	public function initial()
+	{
+		$this->page_attributes->title       = 'Buat Template Dokumen Baru';
+
+		$this->page_datas->id 				= null;
+		$this->page_datas->list_widgets     = $this->list_widgets();
+
+		//initialize view
+		$this->view                         = view('pages.akta.template.initial');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 }

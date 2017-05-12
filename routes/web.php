@@ -19,7 +19,6 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
-
 	return view('thunder');
 	return view('test');
 	$akta 			= '<span class="medium-editor-mention-at text-danger">@notaris.nama</span> Notaris di <span class="medium-editor-mention-at medium-editor-mention-at-active text-danger">@notaris.alamat</span>. Dengan dihadiri saksi-saksi yang saya, Notaris kenal dan akan disebut bagian akhir akta ini.</span>';
@@ -75,6 +74,8 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
 
+		Route::get('/akta/template/initial/new',		['uses' => 'templateController@initial', 'as' => 'akta.template.initial']);
+
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
 			'index' 	=> 'akta.akta.index', //get
@@ -88,6 +89,9 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::any('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
 		
+		// get list widget template in for akta
+		Route::any('/akta/akta/list/mentionable', 			['uses' => 'aktaController@list_widgets', 'as' => 'akta.akta.list.mentionable']);
+
 		// choose template for akta
 		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 
@@ -145,6 +149,33 @@ Route::group(['middleware' => ['authenticated']], function()
 			'edit' 		=> 'klien.edit', //get
 			'update' 	=> 'klien.update', //patch
 			'destroy' 	=> 'klien.destroy' //post 
+		]]);
+	});
+
+	//kantor
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/kantor', 'kantorController', ['names' => [
+			'index' 	=> 'kantor.index', //get
+			'create'	=> 'kantor.create', //get
+			'store' 	=> 'kantor.store', //post
+			'show' 		=> 'kantor.show', //get
+			'edit' 		=> 'kantor.edit', //get
+			'update' 	=> 'kantor.update', //patch
+			'destroy' 	=> 'kantor.destroy' //post 
+		]]);
+	});
+
+
+	//user
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/user', 'userController', ['names' => [
+			'index' 	=> 'user.index', //get
+			'create'	=> 'user.create', //get
+			'store' 	=> 'user.store', //post
+			'show' 		=> 'user.show', //get
+			'edit' 		=> 'user.edit', //get
+			'update' 	=> 'user.update', //patch
+			'destroy' 	=> 'user.destroy' //post 
 		]]);
 	});
 });
