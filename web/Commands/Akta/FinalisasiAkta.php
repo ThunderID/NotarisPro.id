@@ -4,6 +4,7 @@ namespace TCommands\Akta;
 
 use TAkta\DokumenKunci\Models\Versi;
 use TAkta\DokumenKunci\Models\Dokumen;
+use TAkta\DokumenKunci\Models\ReadOnlyAkta;
 use TImmigration\Pengguna\Models\Pengguna;
 
 use Exception, DB, TAuth, Carbon\Carbon;
@@ -11,6 +12,7 @@ use Exception, DB, TAuth, Carbon\Carbon;
 class FinalisasiAkta
 {
 	protected $akta_id;
+	protected $justforshow;
 
 	/**
 	 * Create a new job instance.
@@ -18,9 +20,10 @@ class FinalisasiAkta
 	 * @param  $akta_id
 	 * @return void
 	 */
-	public function __construct($akta_id)
+	public function __construct($akta_id, $justforshow)
 	{
 		$this->akta_id		= $akta_id;
+		$this->justforshow	= $justforshow;
 	}
 
 	/**
@@ -65,13 +68,17 @@ class FinalisasiAkta
 
 			$akta->save();
 
-
 			$prev_versi 			= Versi::where('original_id', $akta->id)->orderby('created_at', 'desc')->first();
 			$versi 					= new Versi;
 			$versi 					= $versi->fill($akta->toArray());
 			$versi->original_id 	= $akta->id;
 			$versi->versi 			= ($prev_versi->versi*1) + 1;
 			$versi->save();
+
+			$ro_akta				= new ReadOnlyAkta;
+			$ro_akta->paragraf		= $this->justforshow;
+			$ro_akta->original_id 	= $akta->id;
+			$ro_akta->save();
 			
 			return true;
 		}

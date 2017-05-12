@@ -9,8 +9,8 @@ window.hotkey = {
             // "f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12",
             // "1","2","3","4","5","6","7","8","9","0",
             // "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
-            "Ctrl+a","Ctrl+b",/*"Ctrl+c"*/,"Ctrl+d","Ctrl+e","Ctrl+f","Ctrl+g","Ctrl+h","Ctrl+i","Ctrl+j","Ctrl+k","Ctrl+l","Ctrl+m",
-            "Ctrl+n","Ctrl+o","Ctrl+p","Ctrl+q","Ctrl+r","Ctrl+s","Ctrl+t","Ctrl+u",/*"Ctrl+v"*/,"Ctrl+w","Ctrl+x","Ctrl+y","Ctrl+z",
+            "Ctrl+a","Ctrl+b","Ctrl+c","Ctrl+d","Ctrl+e","Ctrl+f","Ctrl+g","Ctrl+h","Ctrl+i","Ctrl+j","Ctrl+k","Ctrl+l","Ctrl+m",
+            "Ctrl+n","Ctrl+o","Ctrl+p","Ctrl+q","Ctrl+r","Ctrl+s","Ctrl+t","Ctrl+u","Ctrl+v","Ctrl+w","Ctrl+x","Ctrl+y","Ctrl+z",
             "Shift+a","Shift+b","Shift+c","Shift+d","Shift+e","Shift+f","Shift+g","Shift+h","Shift+i","Shift+j","Shift+k","Shift+l",
             "Shift+m","Shift+n","Shift+o","Shift+p","Shift+q","Shift+r","Shift+s","Shift+t","Shift+u","Shift+v","Shift+w","Shift+x",
             "Shift+y","Shift+z",
@@ -31,12 +31,19 @@ window.hotkey = {
 
         // define actions
         function commander(key){
+            // ctrl list
+            var ctrl = ["Ctrl+a","Ctrl+b","Ctrl+c","Ctrl+d","Ctrl+e","Ctrl+f","Ctrl+g","Ctrl+h","Ctrl+i","Ctrl+j","Ctrl+k","Ctrl+l","Ctrl+m",
+            "Ctrl+n","Ctrl+o","Ctrl+p","Ctrl+q","Ctrl+r","Ctrl+s","Ctrl+t","Ctrl+u","Ctrl+v","Ctrl+w","Ctrl+x","Ctrl+y","Ctrl+z"];
+
         	// saving
-        	if(key == 'Ctrl+s'){
-				$('.save-content').trigger( "click" );
+            if(ctrl.indexOf(key)){
+                if(key == 'Ctrl+s'){
+                    $('.save-content').trigger( "click" );
+                }
+                return false;
         	}else{
-        		return false;
-        	}
+                return true;
+            }
         }
 
         // shorcut code here
@@ -44,8 +51,7 @@ window.hotkey = {
            
            // Binding keys
            $(target).bind('keydown', elements[i], function assets() {
-               commander(elements[i]);
-               return false;
+               return commander(elements[i]);
            });
         }); 
 

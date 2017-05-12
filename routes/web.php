@@ -19,6 +19,9 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
+
+	return view('thunder');
+	return view('test');
 	$akta 			= '<span class="medium-editor-mention-at text-danger">@notaris.nama</span> Notaris di <span class="medium-editor-mention-at medium-editor-mention-at-active text-danger">@notaris.alamat</span>. Dengan dihadiri saksi-saksi yang saya, Notaris kenal dan akan disebut bagian akhir akta ini.</span>';
 
 	$pattern3 		= "/<span.*?>|<\/span>/i";
@@ -85,7 +88,7 @@ Route::group(['middleware' => ['authenticated']], function()
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
 
-		Route::get('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
+		Route::any('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
 		
 		// get list widget template in for akta
 		Route::any('/akta/akta/list/mentionable', 			['uses' => 'aktaController@list_widgets', 'as' => 'akta.akta.list.mentionable']);

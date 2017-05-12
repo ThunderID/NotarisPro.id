@@ -90,80 +90,80 @@ class aktaController extends Controller
 		//return view
 		return $this->generateRedirect(route('akta.akta.create'));
 
-		try {
-			$template_id 			= $request->get('template_id'); 
+		// try {
+		// 	$template_id 			= $request->get('template_id'); 
 
-			$call					= new DaftarTemplateAkta;
-			$template 				= $call->detailed($template_id);
+		// 	$call					= new DaftarTemplateAkta;
+		// 	$template 				= $call->detailed($template_id);
 
-			// $akta['id']				= '';
-			$akta['judul']			= $template['judul'];
-			$akta['paragraf']		= $template['paragraf'];
-			if(!isset($template['mentionable']))
-			{
-				$akta['mentionable']	= [];
-			}
-			else
-			{
-				$akta['mentionable']	= $template['mentionable'];
-			}
+		// 	// $akta['id']				= '';
+		// 	$akta['judul']			= $template['judul'];
+		// 	$akta['paragraf']		= $template['paragraf'];
+		// 	if(!isset($template['mentionable']))
+		// 	{
+		// 		$akta['mentionable']	= [];
+		// 	}
+		// 	else
+		// 	{
+		// 		$akta['mentionable']	= $template['mentionable'];
+		// 	}
 
-			$notaris 				= new DaftarNotaris;
-			$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
+		// 	$notaris 				= new DaftarNotaris;
+		// 	$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
 
-			foreach ($akta['mentionable'] as $key => $value) 
-			{
-				if(str_is($value, '@notaris.nama'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['nama']; 
-				}
+		// 	foreach ($akta['mentionable'] as $key => $value) 
+		// 	{
+		// 		if(str_is($value, '@notaris.nama'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['nama']; 
+		// 		}
 
-				if(str_is($value, '@notaris.daerah_kerja'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['daerah_kerja']; 
-				}
+		// 		if(str_is($value, '@notaris.daerah_kerja'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['daerah_kerja']; 
+		// 		}
 
-				if(str_is($value, '@notaris.nomor_sk'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['nomor_sk']; 
-				}
+		// 		if(str_is($value, '@notaris.nomor_sk'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['nomor_sk']; 
+		// 		}
 
-				if(str_is($value, '@notaris.tanggal_pengangkatan'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['tanggal_pengangkatan']; 
-				}
+		// 		if(str_is($value, '@notaris.tanggal_pengangkatan'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['tanggal_pengangkatan']; 
+		// 		}
 
-				if(str_is($value, '@notaris.alamat'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['alamat']; 
-				}
+		// 		if(str_is($value, '@notaris.alamat'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['alamat']; 
+		// 		}
 
-				if(str_is($value, '@notaris.telepon'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['telepon']; 
-				}
+		// 		if(str_is($value, '@notaris.telepon'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['telepon']; 
+		// 		}
 
-				if(str_is($value, '@notaris.fax'))
-				{
-					$akta['fill_mention'][$value] 	= $notaris['notaris']['fax']; 
-				}
-			}
+		// 		if(str_is($value, '@notaris.fax'))
+		// 		{
+		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['fax']; 
+		// 		}
+		// 	}
 
-			foreach ($akta['paragraf'] as $key => $value) 
-			{
-				foreach ($akta['fill_mention'] as $key2 => $value2) 
-				{
-					$akta['paragraf'][$key]['konten'] = str_replace('">'.$key2, '" data-mention="'.$key2.'">'.$value2, $akta['paragraf'][$key]['konten']);
-				}
-			}
+		// 	foreach ($akta['paragraf'] as $key => $value) 
+		// 	{
+		// 		foreach ($akta['fill_mention'] as $key2 => $value2) 
+		// 		{
+		// 			$akta['paragraf'][$key]['konten'] = str_replace('">'.$key2, '" data-mention="'.$key2.'">'.$value2, $akta['paragraf'][$key]['konten']);
+		// 		}
+		// 	}
 
-			// save
-			$data			= new \TCommands\Akta\DraftingAkta($akta);
-			$data 			= $data->handle();
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']	= $e->getMessage();
-			return $this->generateRedirect(route('akta.akta.choose.template'));
-		}
+		// 	// save
+		// 	$data			= new \TCommands\Akta\DraftingAkta($akta);
+		// 	$data 			= $data->handle();
+		// } catch (Exception $e) {
+		// 	$this->page_attributes->msg['error']	= $e->getMessage();
+		// 	return $this->generateRedirect(route('akta.akta.choose.template'));
+		// }
 
 		// $this->page_attributes->msg['success']         = ['Data akta telah di generate'];
 
@@ -178,36 +178,52 @@ class aktaController extends Controller
 	 */
 	public function store($id = null, Request $request)
 	{
-		try {
+		try 
+		{
+			$input				= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
+			
+			$call				= new DaftarTemplateAkta;
+			$template			= $call->detailed($input['template_id']);
+
+			//1. parse data 
+			if(!isset($input['klien']['id']))
+			{
+				$save_klien 	= new SimpanKlien($input['klien']);
+				$save_klien 	= $save_klien->handle();
+
+				$input['klien']['id']				= $save_klien['id'];
+			}
+
+			$content['pemilik']['klien']['id']		= $input['klien']['id'];
+			$content['pemilik']['klien']['nama'] 	= $input['klien']['nama'];
+			$content['judul']						= $input['judul'];
+			$content['tanggal_pertemuan']			= $input['tanggal_pertemuan'];
+			$content['fill_mention']				= $input['mentionable'];
+			$content['mentionable']					= $template['mentionable'];
+
 			// get data
-			$input		= $request->only('template', 'template_id');
 			$pattern 	= "/<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
 			preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
 			// change key index like 'paragraph[*]'
 
 			foreach ($out[0] as $key => $value) 
 			{
-				$input['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/li>/i', '</li>', $out[0][$key]);
-				$input['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/span>/i', '</span><br>', $out[0][$key]);
-				$input['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/b>/i', '</b><br>', $out[0][$key]);
+				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/li>/i', '</li>', $out[0][$key]);
+				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/span>/i', '</span><br>', $out[0][$key]);
+				$content['paragraf'][$key]['konten']	= preg_replace('/<br.*?><\/b>/i', '</b><br>', $out[0][$key]);
 			}
 
-			$call 									= new DaftarTemplateAkta;
-			$template_id 							= $input['template_id'];
-			$template								= $call->detailed($template_id);
+			// save akta
+			$data		= new \TCommands\Akta\DraftingAkta($input);
+			$akta 		= $data->handle();
 
-			$input['mentionable']					= $template['mentionable'];
-			$input['judul']							= $template['judul'];
-
-			// save
-			$data                               	= new \TCommands\Akta\DraftingAkta($input);
-			$data->handle();
+			//save tanggal pertemuan
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
 
 		//return view
-		$this->page_attributes->msg['success']         = ['Data akta telah ditambahkan'];
+		$this->page_attributes->msg['success']		= ['Data akta telah ditambahkan'];
 		return $this->generateRedirect(route('akta.akta.index'));
 	}
 
@@ -312,7 +328,7 @@ class aktaController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function status($id, $status)
+	public function status(Request $request, $id, $status)
 	{	
 		try {
 			switch (strtolower($status)) 
@@ -324,7 +340,7 @@ class aktaController extends Controller
 					$data		= new \TCommands\Akta\RenvoiAkta($id);
 					break;
 				case 'akta':
-					$data		= new \TCommands\Akta\FinalisasiAkta($id);
+					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->get('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);

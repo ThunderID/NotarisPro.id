@@ -55,7 +55,7 @@ class SimpanKlien
 			//4. simpan klien
 			$klien->save();
 
-			return true;
+			return $klien->toArray();
 		}
 		catch(Exception $e)
 		{
