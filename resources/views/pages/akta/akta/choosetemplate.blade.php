@@ -76,11 +76,11 @@
 				<div class="col text-left">
 					<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Kembali</a>
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel">
 					<div class="row">
 						<div class="col-12">
 							<h4 class="title ml-3">{{ $page_attributes->title }}</h4>
-							<div class="form-group has-feedback">
+							<div class="form-group has-feedback pl-3 pr-3">
 								<input type="text" class="search search-input form-control" placeholder="cari nama template">
 								<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
 							</div>
@@ -193,7 +193,7 @@
 						tempForm = $('<div class="form-group"></div>');
 						tempForm.append('<label>' + labelNew + '</label>');
 						tempForm.append($('<input type="text" value="" />')
-						.attr('name', v).attr('class', 'form-control'));
+						.attr('name', 'mentionable['+ v +']').attr('class', 'form-control'));
 						//tempForm.prepend('<h5>' + group[0] + '</h5>');
 
 						$('.content-fillable-template').append(tempForm);
@@ -207,7 +207,7 @@
 	});
 
 	/**
-	 * event choice template
+	 * event click link class choice-template
 	 */
 	$('.choice-template').on('click', function(e) {
 		e.preventDefault();
@@ -217,11 +217,22 @@
 
 		$('.list-card-template').find('.hover').css('display', 'none').removeClass('active');
 		$('.list-card-template').find('span').css('border', '1px solid #fff').html('Pilih');
-		$(this).addClass('active');
-		$(this).find('.hover').css('display', 'block');
-		$(this).find('span').html('<i class="fa fa-check"></i>').css('border', 0);
 
+		if ($(this).hasClass('active')) {
+			$(this).removeClass('active');
+			$(this).find('.hover').css('display', 'none').removeClass('active');
+			$(this).find('span').css('border', '1px solid #fff').html('Pilih');
+		}
+		else {
+			$(this).addClass('active');
+			$(this).find('.hover').css('display', 'block');
+			$(this).find('span').html('<i class="fa fa-check"></i>').css('border', 0);
+		}
 	});
+
+	/**
+	 * event hover link class choice-template
+	 */
 
 	$('.choice-template').hover(function(){
 		if (!$(this).hasClass('active')) {
