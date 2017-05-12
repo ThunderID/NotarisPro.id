@@ -32,7 +32,7 @@
 @section('content')
 	@component('components.form', [ 
 			'data_id'		=> null,
-			'store_url' 	=> route('akta.akta.create'), 
+			'store_url' 	=> route('akta.akta.store'), 
 			'class'			=> 'mb-0'
 		])
 		<div id="information" style="display: block;">
@@ -43,21 +43,22 @@
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
 					<div class="form">
 						<h4 class="title">Form Informasi Akta</h4>
+						{{-- <input type="hidden" name="klien[id]" value="null"> --}}
 						<div class="form-group">
 							<label>Nama</label>
-							<input type="text" name="nama" class="form-control required" placeholder="Nama Klien">
+							<input type="text" name="klien[nama]" class="form-control required" placeholder="Nama Klien">
 						</div>
 						<div class="form-group">
 							<label>No. Telp</label>
-							<input type="tetx" name="no_telepon" class="form-control required" placeholder="No. Telp Klien">
+							<input type="tetx" name="klien[telepon]" class="form-control required" placeholder="No. Telp Klien">
 						</div>
 						<div class="form-group">
 							<label>Tgl. Pertemuan</label>
-							<input type="text" name="tgl_pertemuan" class="form-control required" placeholder="Tgl Pertemuan Klien dengan Notaris">
+							<input type="text" name="tanggal_pertemuan" class="form-control required" placeholder="Tgl Pertemuan Klien dengan Notaris">
 						</div>
 						<div class="form-group mb-3 pb-3">
 							<label>Judul Akta</label>
-							<input type="text" name="title" class="form-control required" placeholder="Judul dari Akta">
+							<input type="text" name="judul" class="form-control required" placeholder="Judul dari Akta">
 						</div>
 						<div class="clearfix">&nbsp;</div>
 						<div class="form-group text-right pb-3">
@@ -79,12 +80,10 @@
 					<div class="row">
 						<div class="col-12">
 							<h4 class="title ml-3">{{ $page_attributes->title }}</h4>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="form-group has-feedback">
-							<input type="text" class="search search-input form-control" placeholder="cari nama template">
-							<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+							<div class="form-group has-feedback">
+								<input type="text" class="search search-input form-control" placeholder="cari nama template">
+								<span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+							</div>
 						</div>
 					</div>
 					<div class="row p-3 list-card-template">
@@ -123,9 +122,11 @@
 						<h4 class="title">Form Fillable Template</h4>
 						<div class="content-fillable-template"></div>
 					</div>
-					<div class="clearfix">&nbsp;</div>
 					<div class="form-group text-right pb-3">
-						<a href="#" class="btn btn-primary"><i class="fa fa-gears"></i> Generate Akta</a>
+						<div class="clearfix">&nbsp;</div>
+						<button class="btn btn-primary" type="submit">
+							<i class="fa fa-gears"></i> Generate Akta
+						</button>
 					</div>
 				</div>
 				<div class="col">&nbsp;</div>

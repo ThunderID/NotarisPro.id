@@ -32,7 +32,7 @@
 @section('content')
 	@component('components.form', [ 
 			'data_id'		=> null,
-			'store_url' 	=> route('akta.template.create'), 
+			'store_url' 	=> route('akta.template.store'), 
 			'class'			=> 'mb-0'
 		])
 		<div id="information" style="display: block;">
