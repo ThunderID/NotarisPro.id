@@ -238,6 +238,6 @@
 
 
 	/* Hotkeys */
-	//var res = window.hotkey.init($('.editor'));	
+	var res = window.hotkey.init($('.editor'));	
 
 @endpush 

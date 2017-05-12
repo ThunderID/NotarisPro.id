@@ -220,7 +220,7 @@
 				return true;
 			}
 
-			// noramalize
+			// normalize
 			resetMaxLength();
 			return true;
 		}

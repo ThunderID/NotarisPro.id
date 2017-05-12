@@ -16,6 +16,7 @@ window.footerGenerator = new function(){
 	this.title = 'Title';
 	this.content1 = 'content1';
 	this.content2 = 'content2';
+	this.target = $('#page');
 
 	// devinition
 	this.footer = function(top,left,width,page, content){
@@ -46,7 +47,7 @@ window.footerGenerator = new function(){
 
     		var t_page = "Halaman " + (i + 1);
 
-			$('#page').append(this.footer(bottom, this.docLeft, this.docWidth, t_page));
+			this.target.append(this.footer(bottom, this.docLeft, this.docWidth, t_page));
 
 			//set new top
 		 	bottom = bottom + this.pageHeight;
