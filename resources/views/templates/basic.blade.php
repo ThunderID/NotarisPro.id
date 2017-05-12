@@ -4,9 +4,11 @@
 @include('templates.components.header')
 
 <!-- Content -->
-<div class="container-fluid" style="padding-top: 54px;height: 100%;">
+@section('template')
+<div class="container-fluid" style="padding-top: 54px;">
     @yield('content')           
 </div>
+@stop
 
 <!-- Footer -->
 @include('templates.components.footer')
