@@ -394,13 +394,17 @@ class aktaController extends Controller
 			$call					= new DaftarTemplateAkta;
 			$template 				= $call->detailed($template_id);
 
-			if (!isset($template['mentionable']))
+			$mentionable			= [];
+
+			if (isset($template['mentionable']))
 			{
-				$mentionable	= [];
-			}
-			else
-			{
-				$mentionable	= $template['mentionable'];
+				foreach ($template['mentionable'] as $key => $value) 
+				{
+					if(!str_is('@notaris.*', $value) && !str_is('@akta.nomor', $value))
+					{
+						$mentionable[]	= $value;
+					}
+				}
 			}
 
 			return response()->json(['data' => $mentionable], 200);
