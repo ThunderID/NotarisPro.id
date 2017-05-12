@@ -105,6 +105,7 @@ Route::group(['middleware' => ['authenticated']], function()
 		// versioning akta
 		Route::get('/akta/akta/{akta_id}/versioning', 		['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
 
+		// Export PDF
 		Route::get('/akta/akta/{akta_id}/pdf',				['uses' => 'aktaController@pdf', 'as' => 'akta.akta.pdf']);
 
 	});
