@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use TQueries\Helpers\JSend;
 
-use App\Service\Akta\DaftarAkta as Query;
 use App\Service\Akta\DaftarTemplateAkta;
+
+use App\Service\Akta\DaftarAkta as Query;
 use App\Service\Akta\BuatAktaBaru;
+use App\Service\Akta\HapusAkta;
+
 use TQueries\Tags\TagService;
 use App\Service\Admin\DaftarKantor;
 use TAuth;
@@ -194,7 +197,7 @@ class aktaController extends Controller
 
 		// hapus
 		try {
-			$akta									= new \TCommands\Akta\HapusAkta($id);
+			$akta									= new HapusAkta($id);
 			$akta									= $akta->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMesssage();
