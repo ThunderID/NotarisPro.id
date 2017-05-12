@@ -87,6 +87,9 @@ class aktaController extends Controller
 	 */
 	public function create(Request $request)
 	{
+		//return view
+		return $this->generateRedirect(route('akta.akta.create'));
+
 		try {
 			$template_id 			= $request->get('template_id'); 
 
@@ -162,9 +165,9 @@ class aktaController extends Controller
 			return $this->generateRedirect(route('akta.akta.choose.template'));
 		}
 
-		$this->page_attributes->msg['success']         = ['Data akta telah di generate'];
+		// $this->page_attributes->msg['success']         = ['Data akta telah di generate'];
 
-		return $this->generateRedirect(route('akta.akta.edit', $data['id']));
+		// return $this->generateRedirect(route('akta.akta.edit', $data['id']));
 	}
 
 	/**
@@ -385,16 +388,33 @@ class aktaController extends Controller
 	}
 
 	/**
-	 * function get list widgets on template create or edit
+	 * function get list fillable mention on template
 	 */
-	private function list_widgets() 
+	public function list_widgets(Request $request) 
 	{
-		$call 			= new TagService;
-		$list 			= $call::all();
+		try 
+		{
+			$template_id 			= $request->get('template_id'); 
 
-		$list 			= array_sort_recursive($list);
+			$call					= new DaftarTemplateAkta;
+			$template 				= $call->detailed($template_id);
 
-		return $list;
+			if (!isset($template['mentionable']))
+			{
+				$mentionable	= [];
+			}
+			else
+			{
+				$mentionable	= $template['mentionable'];
+			}
+
+			return response()->json(['data' => $mentionable], 200);
+			
+		} catch (Exception $e) {
+			$msg						= $e->getMessage();
+
+			return response()->json(['data' => $msg], 200);
+		}
 	}
 
 	private function parse_store($id, $template)

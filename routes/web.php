@@ -72,6 +72,8 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
 
+		Route::get('/akta/template/initial/new',		['uses' => 'templateController@initial', 'as' => 'akta.template.initial']);
+
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
 			'index' 	=> 'akta.akta.index', //get
@@ -85,6 +87,9 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::get('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
 		
+		// get list widget template in for akta
+		Route::any('/akta/akta/list/mentionable', 			['uses' => 'aktaController@list_widgets', 'as' => 'akta.akta.list.mentionable']);
+
 		// choose template for akta
 		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
 

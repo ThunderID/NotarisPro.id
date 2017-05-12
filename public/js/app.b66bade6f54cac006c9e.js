@@ -8726,7 +8726,15 @@ __webpack_require__("./resources/assets/js/moduleUI/loadingAnimationUI.js");
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
-				buttons: [{ name: 'h4', contentFA: '<i class="fa fa-header"></i>1' }, { name: 'h5', contentFA: '<i class="fa fa-header"></i>2' }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
+				buttons: [{ name: 'h4', contentFA: '<i class="fa fa-header"></i>1' }, { name: 'h5', contentFA: '<i class="fa fa-header"></i>2' }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"],
+				static: true,
+				sticky: true,
+				diffLeft: 0,
+				diffTop: -330,
+				updateOnEmptySelection: true
+			},
+			onHideToolbar: function onHideToolbar() {
+				// editor.toolbar.showToolbar();
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -8740,12 +8748,14 @@ __webpack_require__("./resources/assets/js/moduleUI/loadingAnimationUI.js");
 			spellcheck: false,
 			disableExtraSpaces: false,
 			targetBlank: true,
+			// disableEditing: true,
 			extensions: {
 				mention: new window.Mention({
 					extraPanelClassName: 'dropdown-menu',
 					tagName: 'span',
 					renderPanelContent: function renderPanelContent(panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
+						console.log(this.mention);
 						if ([this.mention].length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
 							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
@@ -9350,7 +9360,7 @@ window.hotkey = {
             if (key == 'Ctrl+s') {
                 $('.save-content').trigger("click");
             } else {
-                return false;
+                return true;
             }
         }
 
@@ -9361,7 +9371,7 @@ window.hotkey = {
             // Binding keys
             $(target).bind('keydown', elements[i], function assets() {
                 commander(elements[i]);
-                return false;
+                return true;
             });
         });
     }
@@ -18951,7 +18961,7 @@ window.searchList = new function () {
 			var banned = ['H4', 'H5'];
 
 			// banned
-			if (banned.indexOf(tag)) {
+			if (banned.indexOf(tag) >= 0) {
 				return false;
 			}
 
