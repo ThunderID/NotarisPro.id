@@ -113,7 +113,7 @@ class BuatAktaBaru
 			$jadwal->fill([
 					'judul'			=> 'Deadline '.$this->judul,
 					'waktu'			=> $this->tanggal_pertemuan,
-					'pembuat'		=> ['kantor' => ['id' => $activeOffice['id'],'nama' => $activeOffice['nama']]],
+					'pembuat'		=> ['kantor' => ['id' => $activeOffice['kantor']['id'],'nama' => $activeOffice['kantor']['nama']]],
 					'peserta'		=> [['id' => $klien['id'],'nama' => $klien['nama']]],
 					'referensi_id'	=> $dokumen->_id,
 				]);
