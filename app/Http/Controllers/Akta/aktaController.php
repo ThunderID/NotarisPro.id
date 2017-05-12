@@ -51,23 +51,6 @@ class aktaController extends Controller
 			}
 		}
 
-		/*
-		//1. untuk menampilkan data dengan filter status
-		$filter['status']                   = 'draft';
-
-		//2. untuk menampilkan data dengan pencarian nama klien
-		$filter['klien']                    = 'Lili';
-
-		//3. untuk menampilkan data dengan urutan judul
-		$filter['urutkan']                  = ['judul' => 'desc'];
-		//4. untuk menampilkan data dengan urutan status
-		$filter['urutkan']                  = ['status' => 'desc'];
-		//5. untuk menampilkan data dengan urutan tanggal pembuatan
-		$filter['urutkan']                  = ['tanggal_pembuatan' => 'desc'];
-		//6. untuk menampilkan data dengan urutan tanggal sunting
-		$filter['urutkan']                  = ['tanggal_sunting' => 'desc'];
-		*/
-
 		//get data from database
 		$this->page_datas->datas			= $this->query->get($query);
 
@@ -90,85 +73,6 @@ class aktaController extends Controller
 	{
 		//return view
 		return $this->generateRedirect(route('akta.akta.create'));
-
-		// try {
-		// 	$template_id 			= $request->get('template_id'); 
-
-		// 	$call					= new DaftarTemplateAkta;
-		// 	$template 				= $call->detailed($template_id);
-
-		// 	// $akta['id']				= '';
-		// 	$akta['judul']			= $template['judul'];
-		// 	$akta['paragraf']		= $template['paragraf'];
-		// 	if(!isset($template['mentionable']))
-		// 	{
-		// 		$akta['mentionable']	= [];
-		// 	}
-		// 	else
-		// 	{
-		// 		$akta['mentionable']	= $template['mentionable'];
-		// 	}
-
-		// 	$notaris 				= new DaftarNotaris;
-		// 	$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
-
-		// 	foreach ($akta['mentionable'] as $key => $value) 
-		// 	{
-		// 		if(str_is($value, '@notaris.nama'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['nama']; 
-		// 		}
-
-		// 		if(str_is($value, '@notaris.daerah_kerja'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['daerah_kerja']; 
-		// 		}
-
-		// 		if(str_is($value, '@notaris.nomor_sk'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['nomor_sk']; 
-		// 		}
-
-		// 		if(str_is($value, '@notaris.tanggal_pengangkatan'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['tanggal_pengangkatan']; 
-		// 		}
-
-		// 		if(str_is($value, '@notaris.alamat'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['alamat']; 
-		// 		}
-
-		// 		if(str_is($value, '@notaris.telepon'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['telepon']; 
-		// 		}
-
-		// 		if(str_is($value, '@notaris.fax'))
-		// 		{
-		// 			$akta['fill_mention'][$value] 	= $notaris['notaris']['fax']; 
-		// 		}
-		// 	}
-
-		// 	foreach ($akta['paragraf'] as $key => $value) 
-		// 	{
-		// 		foreach ($akta['fill_mention'] as $key2 => $value2) 
-		// 		{
-		// 			$akta['paragraf'][$key]['konten'] = str_replace('">'.$key2, '" data-mention="'.$key2.'">'.$value2, $akta['paragraf'][$key]['konten']);
-		// 		}
-		// 	}
-
-		// 	// save
-		// 	$data			= new \TCommands\Akta\DraftingAkta($akta);
-		// 	$data 			= $data->handle();
-		// } catch (Exception $e) {
-		// 	$this->page_attributes->msg['error']	= $e->getMessage();
-		// 	return $this->generateRedirect(route('akta.akta.choose.template'));
-		// }
-
-		// $this->page_attributes->msg['success']         = ['Data akta telah di generate'];
-
-		// return $this->generateRedirect(route('akta.akta.edit', $data['id']));
 	}
 
 	/**

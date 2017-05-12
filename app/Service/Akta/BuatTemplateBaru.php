@@ -17,8 +17,9 @@ class BuatTemplateBaru
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct(array $isi_template, array $mentionable)
+	public function __construct($judul, array $isi_template, array $mentionable)
 	{
+		$this->judul		= $judul;
 		$this->isi_template	= $isi_template;
 		$this->mentionable	= $mentionable;
 	}
@@ -42,19 +43,20 @@ class BuatTemplateBaru
 			$akta['penulis']['id'] 				= TAuth::loggedUser()['id'];
 			$akta['penulis']['nama'] 			= TAuth::loggedUser()['nama'];
 
+			$akta['judul']						= $this->judul;
 			$akta['paragraf']					= $this->isi_template;
 			$akta['mentionable']				= $this->mentionable;
 
 			//3. simpan value yang ada
-			$dokumen			= $dokumen->fill($akta);
+			$template			= $template->fill($akta);
 
-			//4. set status dokumen
-			$dokumen->status 	= 'draft';
+			//4. set status template
+			$template->status 	= 'draft';
 
-			//5. simpan dokumen
-			$dokumen->save();
+			//5. simpan template
+			$template->save();
 
-			return $dokumen->toArray();
+			return $template->toArray();
 		}
 		catch(Exception $e)
 		{

@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Akta;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Service\Akta\DaftarTemplateAkta as Query;
-use TQueries\Tags\TagService;
+use App\Service\Tag\TagService;
+use App\Service\Akta\BuatTemplateBaru;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\helperController;
@@ -107,7 +108,14 @@ class templateController extends Controller
 	{
 		//
 		try {
-			$this->parse_store($id, $request);
+
+			$paragraph		= $this->parse_store($id, $request);
+			
+
+			$akta			= new BuatTemplateBaru($paragraph['judul'], $paragraph['paragraf'], $paragraph['mentionable']);
+
+			$akta 			= $akta->handle();		
+
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']    = $e->getMessage();
 		}
@@ -260,10 +268,10 @@ class templateController extends Controller
 	{
 		// get data
 		$input									= $request->only(
-															'title', 
+															'nama', 
 															'template'
 													);
-		$input['judul']							= ($request->has('title') && !is_null($request->input('title'))) ? $request->input('title') : 'Tidak ada judul [Untitled]';
+		$input['judul']							= ($request->has('nama') && !is_null($request->input('nama'))) ? $request->input('nama') : 'Tidak ada judul [Untitled]';
 
 		if(!is_null($id))
 		{
@@ -274,6 +282,8 @@ class templateController extends Controller
 
 		preg_match_all($pattern, $input['template'], $out, PREG_PATTERN_ORDER);
 
+		$input['paragraf']		= [];
+		$input['mentionable']	= [];
 		foreach ($out[0] as $key => $value) 
 		{
 			$value 								= str_replace('&nbsp;', ' ', $value);
@@ -326,11 +336,7 @@ class templateController extends Controller
 			}
 		}
 
-		// save
-		$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
-		$data 				= $data->handle();
-
-		return $data;
+		return $input;
 	}
 
 	public function initial()
