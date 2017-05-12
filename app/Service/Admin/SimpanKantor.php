@@ -35,7 +35,7 @@ class SimpanKantor
 	public function __construct($id, $nama_kantor, $nama_notaris, $daerah_kerja, $nomor_sk, $tanggal_pengangkatan, $alamat, $telepon, $fax)
 	{
 		$this->id					= $id;
-		$this->judul				= $judul;
+		$this->nama_kantor			= $nama_kantor;
 		$this->nama_notaris			= $nama_notaris;
 		$this->daerah_kerja			= $daerah_kerja;
 		$this->nomor_sk				= $nomor_sk;
@@ -58,20 +58,21 @@ class SimpanKantor
 			$kantor 		= Kantor::findorfail($this->id);
 
 			//1b. pastikan kantor tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $this->id))
+			if(!str_is(TAuth::activeOffice()['kantor']['id'], $this->id))
 			{
 				throw new Exception("Anda tidak memiliki akses untuk kantor ini", 1);
 			}
 
 			//2. check lock
-			$kantor->judul					= $this->judul;
-			$kantor->nama_notaris			= $this->nama_notaris;
-			$kantor->daerah_kerja			= $this->daerah_kerja;
-			$kantor->nomor_sk				= $this->nomor_sk;
-			$kantor->tanggal_pengangkatan	= $this->tanggal_pengangkatan;
-			$kantor->alamat					= $this->alamat;
-			$kantor->telepon				= $this->telepon;
-			$kantor->fax					= $this->fax;
+			$notaris['nama']					= $this->nama_notaris;
+			$notaris['daerah_kerja']			= $this->daerah_kerja;
+			$notaris['nomor_sk']				= $this->nomor_sk;
+			$notaris['tanggal_pengangkatan']	= $this->tanggal_pengangkatan;
+			$notaris['alamat']					= $this->alamat;
+			$notaris['telepon']					= $this->telepon;
+			$notaris['fax']						= $this->fax;
+			$kantor->nama						= $this->nama_kantor;
+			$kantor->notaris					= $notaris;
 
 			//5. simpan dokumen
 			$kantor->save();

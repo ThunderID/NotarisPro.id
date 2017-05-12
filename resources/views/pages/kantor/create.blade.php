@@ -38,8 +38,8 @@
 				<div class="col-12">
 					@component('components.form', [ 
 						'data_id' 		=> $page_datas->id,
-						'store_url' 	=> route('notaris.kantor.store'), 
-						'update_url' 	=> route('notaris.kantor.update', ['id' => $page_datas->id]), 
+						'store_url' 	=> route('kantor.store'), 
+						'update_url' 	=> route('kantor.update', ['id' => $page_datas->id]), 
 					])
 
 						<div class="row">
