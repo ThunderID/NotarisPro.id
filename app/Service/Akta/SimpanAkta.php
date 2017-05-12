@@ -40,7 +40,7 @@ class SimpanAkta
 			$akta 		= Dokumen::findorfail($this->id);
 
 			//1b. check status akta 
-			if(in_array($akta->status, ['renvoi', 'draft']))
+			if(!in_array($akta->status, ['renvoi', 'draft']))
 			{
 				throw new Exception("Status Harus Renvoi atau draft", 1);
 			}
