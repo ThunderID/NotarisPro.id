@@ -94,12 +94,27 @@ class PublishAkta
 				$akta->total_perubahan	= 0;
 			}
 
-			//4. set status
+			//4. check mentionable
+			if(!in_array($akta->status, ['renvoi']))
+			{
+				foreach ($akta->mentionable as $key => $value) 
+				{
+					$fill 	= str_replace('@', '', $value);
+					$fill 	= str_replace('.', '-+', $fill);
+					
+					if(!isset($akta->fill_mention[$fill]))
+					{
+						throw new Exception("Data Akta belum lengkap", 1);
+					}
+				}
+			}
+
+			//5. set status
 			$akta->status 			= 'pengajuan';
 
 			$akta->save();
 
-			//5. simpan versi
+			//6. simpan versi
 			$prev_versi 			= Versi::where('original_id', $akta->id)->orderby('created_at', 'desc')->first();
 			$versi 					= new Versi;
 			$versi 					= $versi->fill($akta->toArray());

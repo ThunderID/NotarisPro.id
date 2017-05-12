@@ -4,17 +4,22 @@ namespace App\Http\Controllers\Akta;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use TQueries\Helpers\JSend;
+use App\Service\Helpers\JSend;
 
 use App\Service\Akta\DaftarTemplateAkta;
 
 use App\Service\Akta\DaftarAkta as Query;
 use App\Service\Akta\BuatAktaBaru;
+use App\Service\Akta\SimpanAkta;
 use App\Service\Akta\HapusAkta;
 
-use TQueries\Tags\TagService;
+use App\Service\Akta\UnlockAkta;
+use App\Service\Akta\PublishAkta;
+use App\Service\Akta\FinalizeAkta;
+
+use App\Service\Tag\TagService;
 use App\Service\Admin\DaftarKantor;
-use TAuth;
+use TAuth, App, PDF;
 
 class aktaController extends Controller
 {
@@ -169,7 +174,11 @@ class aktaController extends Controller
 	{
 		//
 		try {
-			$this->parse_store($id, $request->only('template'));
+			$content 	= $this->parse_store($id, $request->only('template'));
+			
+			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
+			$akta		= $akta->handle();
+
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -220,13 +229,13 @@ class aktaController extends Controller
 			switch (strtolower($status)) 
 			{
 				case 'pengajuan':
-					$data		= new \TCommands\Akta\AjukanAkta($id);
+					$data		= new PublishAkta($id);
 					break;
 				case 'renvoi':
-					$data		= new \TCommands\Akta\RenvoiAkta($id);
+					$data		= new UnlockAkta($id, []);
 					break;
 				case 'akta':
-					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->get('template'));
+					$data		= new FinalizeAkta($id, $request->get('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);
@@ -325,7 +334,6 @@ class aktaController extends Controller
 
 	private function parse_store($id, $template)
 	{
-
 		$check_status 								= $this->query->detailed($id);
 		$input['id']								= $id;
 		
@@ -342,9 +350,6 @@ class aktaController extends Controller
 
 				$input['paragraf'][$key]['konten']	= $value;
 			}
-
-			$data			= new \TCommands\Akta\SimpanAkta($input);
-			$data 			= $data->handle();
 		}
 		elseif($check_status['status']=='draft')
 		{
@@ -362,16 +367,13 @@ class aktaController extends Controller
 
 				$input['paragraf'][$key]['konten']	= $value;
 			}
-
-			$data			= new \TCommands\Akta\DraftingAkta($input);
-			$data 			= $data->handle();
 		}
 		else
 		{
 			throw new Exception("Status invalid", 1);
 		}
 
-		return $data;
+		return $input;
 	}
 
 	/**
@@ -399,21 +401,21 @@ class aktaController extends Controller
 	public function mention($akta_id, Request $request)
 	{
 		 try {
+			$check_status	= $this->query->detailed($akta_id);
+
 			// get data
 			$input			= $request->only('mention', 'isi_mention');
-			$content 		= ['fill_mention' => [$input['mention'] => $input['isi_mention']]];
-			$content['id']	= $akta_id;
+			$content 		= [$input['mention'] => $input['isi_mention']];
 
 			// save
-			$data			= new \TCommands\Akta\DraftingAkta($content);
-			$data 			= $data->handle();
+			$data 			= new SimpanAkta($akta_id, $check_status['judul'], $check_status['paragraf'], $content);
 
 			$this->parse_store($akta_id, $request->only('template'));
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}
 
-		return JSend::success(['data' => $data['fill_mention']])->asArray();
+		return JSend::success(['data' => $content])->asArray();
 	}
 
 
@@ -428,8 +430,8 @@ class aktaController extends Controller
 			$input			= $request->get('lock');
 
 			// save
-			$data			= new \TCommands\Akta\TandaiRenvoi($akta_id, [$input]);
-			$data 			= $data->handle();
+			$data			= new UnlockAkta($akta_id, [$input]);
+			$data 			= $data->unlock();
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}
@@ -462,10 +464,26 @@ class aktaController extends Controller
 	public function pdf($akta_id)
 	{
 		$this->page_datas->datas			= $this->query->detailed($akta_id);
-		$this->page_attributes->title		= $this->page_datas->datas['judul'];
 
 		//initialize view
 		$this->view							= view('pages.akta.akta.pdf');
+
+		// convert pdf
+		// $pdf = new PDF();
+		// $pdf = $pdf::setOptions(['dpi' => 150, 'defaultFont' => 'monospace']);
+		// $pdf = App::make('dompdf.wrapper');
+		// $pdf->loadHTML($this->generateView());
+
+		
+		set_time_limit(600); 
+		return PDF::loadHTML($this->generateView())
+			->setPaper('a4', 'portrait')
+			// ->setOptions(['defaultFont' => 'monospace'])
+			->stream();
+		
+
+		// return $pdf->stream();
+
 
 		//function from parent to generate view
 		return $this->generateView();
