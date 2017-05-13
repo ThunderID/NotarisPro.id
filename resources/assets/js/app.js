@@ -22,10 +22,10 @@ require ('./appUI');
 require('./plugins/clickableTableRow');
 
 // margin editor drawer
-require('./plugins/marginDrawer');
+// require('./plugins/marginDrawer');
 
 // editor auto page break
-require('./plugins/editorAutoPage');
+// require('./plugins/editorAutoPage');
 
 // plugin equal height
 require('./plugins/equalHeight.js');

@@ -97,14 +97,16 @@
 					</div>
 				</div>
 				<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu">
+					{{-- 
 					<div id="page-breaker" class="row page-breaker"></div>
 					<div id="l-margin" class="margin margin-v"></div>
 					<div id="r-margin" class="margin margin-v"></div>
 					<div id="h-margin"></div>				
+					--}}
 					<div class="row">
 						<div class="d-flex justify-content-center mx-auto">
-							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-								<div class="editor" id="doc-content-mention">
+							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm; ">
+								<div class="editor" id="doc-content-mention" style="border: 2px dashed #ececec;">
 									@forelse ($page_datas->datas['paragraf'] as $k => $v)
 										@php
 											$temp = explode('<span class="medium-editor-mention-at', $v['konten']);
@@ -183,6 +185,7 @@
 		window.formUI.init();
 	});
 
+	{{--
 
 	// Functions
 
@@ -226,10 +229,11 @@
 
 	// Handlers 
 	editor.keyup(function(){
-		drawMargin();
+		pageBreak();
 	});	
 
 	$(document).ready(function(){
+		pageBreak();
 		drawMargin();
 	});	
 
@@ -237,6 +241,7 @@
 		drawMargin();
 	});
 
+	--}}
 
 	/* Hotkeys */
 	var res = window.hotkey.init($('.editor'));	
