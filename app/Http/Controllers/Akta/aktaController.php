@@ -474,7 +474,7 @@ class aktaController extends Controller
 		set_time_limit(600); 
 		return PDF::loadHTML($this->generateView())
 			->setPaper('a4', 'portrait')
-			// ->setOptions(['defaultFont' => 'monospace'])
+			->setOptions(['defaultFont' => 'courier'])
 			->stream();
 		
 

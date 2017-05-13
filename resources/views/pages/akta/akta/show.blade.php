@@ -1,7 +1,7 @@
 @extends('templates.basic')
 
 @push('fonts')
-	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+	<link href="/font/Inconsolata-Regular.ttf">
 @endpush
 
 @push('styles')  

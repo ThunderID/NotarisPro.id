@@ -1,25 +1,20 @@
 @extends('templates.print')
 
 @push('fonts')
-	<!-- <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet"> -->
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
 @endpush
 
 @push('styles')  
-	
-	body {
-		font-family: 'monospace';
-	}
 	html{
 		margin:0;
-	}
-	html p {
-		font-family: monospace;
-		font-size: 1rem;
 	}
 
 	p, ul, ol, h5 {
 		margin-top: 0;
 		margin-bottom: 0;
+	}
+	body {
+		font-family: 'Inconsolata', monospace !important;
 	}
 @endpush  
 
