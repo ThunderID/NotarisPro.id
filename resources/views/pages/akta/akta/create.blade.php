@@ -17,6 +17,7 @@
 @stop
 
 @section('content')
+
 	<div class="hidden-sm-down">
 		@component('components.form', [ 
 			'data_id'		=> $page_datas->akta_id,
@@ -28,7 +29,7 @@
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
 					<ul class="nav menu-content justify-content-start">
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('akta.akta.show', ['id' => $page_datas->akta_id]) }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
+							<span class="nav-link">{{ $page_datas->datas['judul'] }}</span>
 						</li>
 					</ul>
 				</div>

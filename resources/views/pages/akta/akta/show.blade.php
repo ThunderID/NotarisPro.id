@@ -16,7 +16,6 @@
 @stop
 
 @section('content')
-
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				{{-- COMPONENT MENUBAR --}}
@@ -24,7 +23,7 @@
 					<div class="col-xs-6 col-sm-5 col-md-6 col-lg-6 pl-0">
 						<ul class="nav menu-content justify-content-start">
 							<li class="nav-item">
-								<a class="nav-link" href="{{ route('akta.akta.index') }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
+								<span class="nav-link">{{ $page_datas->datas['judul'] }}</span>
 							</li>
 							@if(str_is($page_datas->datas['status'], 'pengajuan'))
 								@if($page_datas->datas['total_perubahan'] * 1 == 0)
