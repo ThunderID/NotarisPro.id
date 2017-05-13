@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Service\Akta\DaftarTemplateAkta as Query;
 use App\Service\Tag\TagService;
 use App\Service\Akta\BuatTemplateBaru;
+use App\Service\Akta\SimpanTemplate;
 use App\Service\Akta\HapusTemplate;
 
 use App\Http\Controllers\Controller;
@@ -111,7 +112,6 @@ class templateController extends Controller
 		try {
 
 			$paragraph		= $this->parse_store($id, $request);
-			
 
 			$akta			= new BuatTemplateBaru($paragraph['judul'], $paragraph['paragraf'], $paragraph['mentionable']);
 
@@ -124,10 +124,10 @@ class templateController extends Controller
 		//return view
 		if($id == null){
 			$this->page_attributes->msg['success']         = ['Data template telah ditambahkan'];
-			return $this->generateRedirect(route('akta.template.index'));
+			return $this->generateRedirect(route('akta.template.edit', ['id' => $akta['id']]));
 		}else{
 			$this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
-			return $this->generateRedirect(route('akta.template.show', ['id' => $id]));
+			return $this->generateRedirect(route('akta.template.create'));
 		}
 	}
 
@@ -180,7 +180,23 @@ class templateController extends Controller
 	 */
 	public function update($id, Request $request)
 	{
-		return $this->store($id, $request);
+		//
+		try {
+			$content 	= $this->parse_store($id, $request);
+			$akta 		= new SimpanTemplate($id, $content['paragraf'], $content['mentionable']);
+			$akta 		= $akta->handle();	
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']    = $e->getMessage();
+		}
+
+		//return view
+		if($id == null){
+			$this->page_attributes->msg['success']         = ['Data template telah ditambahkan'];
+			return $this->generateRedirect(route('akta.template.edit', ['id' => $akta['id']]));
+		}else{
+			$this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
+			return $this->generateRedirect(route('akta.template.edit', ['id' => $akta['id']]));
+		}
 	}
 
 
@@ -248,8 +264,9 @@ class templateController extends Controller
 	public function automatic_store ($id = null, Request $request)
 	{
 		try {
-			$this->parse_store($id, $request);
-			
+			$content 	= $this->parse_store($id, $request);
+			$akta 		= new SimpanTemplate($id, $content['paragraf'], $content['mentionable']);
+			$akta 		= $akta->handle();
 		} catch (Exception $e) {
 			return response()->json(['status'	=> $e->getMessage()], 200);
 		}

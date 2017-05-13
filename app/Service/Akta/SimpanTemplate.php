@@ -35,12 +35,12 @@ class SimpanTemplate
 		try
 		{
 			//1a. pastikan akta exists
-			$akta 			= Template::findorfail($id);
+			$akta 			= Template::findorfail($this->id);
 
 			//1b. check status akta 
-			if(!str_is($akta->status, 'publish'))
+			if(!str_is($akta->status, 'draft'))
 			{
-				throw new Exception("Status Harus publish", 1);
+				throw new Exception("Status Harus draft", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
