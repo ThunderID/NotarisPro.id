@@ -6,3 +6,13 @@
 		}
 	}
 }
+
+/**
+ * modify list-group first-child disable border radius on top right & left
+ */
+.list-group-item {
+	&:first-child {
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+}

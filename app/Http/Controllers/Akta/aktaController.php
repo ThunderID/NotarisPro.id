@@ -13,6 +13,10 @@ use App\Service\Akta\BuatAktaBaru;
 use App\Service\Akta\SimpanAkta;
 use App\Service\Akta\HapusAkta;
 
+use App\Service\Akta\UnlockAkta;
+use App\Service\Akta\PublishAkta;
+use App\Service\Akta\FinalizeAkta;
+
 use App\Service\Tag\TagService;
 use App\Service\Admin\DaftarKantor;
 use TAuth, App, PDF;
@@ -100,7 +104,7 @@ class aktaController extends Controller
 			$akta						= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], 
 														$input['klien']['telepon'], $input['tanggal_pertemuan'], 
 														$input['judul'], $template['paragraf'], 
-														$template['mentionable'], $input['template_id']);
+														$input['mentionable'], $input['template_id']);
 
 			$akta 						= $akta->handle();
 
@@ -225,13 +229,13 @@ class aktaController extends Controller
 			switch (strtolower($status)) 
 			{
 				case 'pengajuan':
-					$data		= new \TCommands\Akta\AjukanAkta($id);
+					$data		= new PublishAkta($id);
 					break;
 				case 'renvoi':
-					$data		= new \TCommands\Akta\RenvoiAkta($id);
+					$data		= new UnlockAkta($id, []);
 					break;
 				case 'akta':
-					$data		= new \TCommands\Akta\FinalisasiAkta($id, $request->get('template'));
+					$data		= new FinalizeAkta($id, $request->get('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);
@@ -426,8 +430,8 @@ class aktaController extends Controller
 			$input			= $request->get('lock');
 
 			// save
-			$data			= new \TCommands\Akta\TandaiRenvoi($akta_id, [$input]);
-			$data 			= $data->handle();
+			$data			= new UnlockAkta($akta_id, [$input]);
+			$data 			= $data->unlock();
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}

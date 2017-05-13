@@ -103,12 +103,12 @@
 								@empty
 								@endforelse
 							@else
-								<p>Tidak ada widget</p>
+								<p>Tidak ada Fillable Mention</p>
 							@endif
 						</div>
 					</div>
 				</div>
-				<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu" style="margin-left: 15px;">
+				<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu">
 					<div id="page-breaker" class="row page-breaker"></div>
 					<div id="l-margin" class="margin margin-v"></div>
 					<div id="r-margin" class="margin margin-v"></div>
@@ -127,36 +127,6 @@
 									@endif
 								</textarea>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			{{-- COMPONENT MODAL TITLE TEMPLATE --}}
-			<div class="modal fade" id="form-title">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Template</h4>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-								<span class="sr-only">Close</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="form">
-								<fieldset class="from-group">
-									<label class="text-capitalize">judul template</label>
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<input type="text" name="title" class="form-control" value="{{ isset($page_datas->datas['judul']) ? $page_datas->datas['judul'] : 'Tidak ada judul [Untitled]' }}">
-										</div>
-									</div>
-								</fieldset>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-							<button type="submit" class="btn btn-primary">Simpan</button>
 						</div>
 					</div>
 				</div>

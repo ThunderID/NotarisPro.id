@@ -23,7 +23,7 @@ class UnlockAkta
 	public function __construct($id, array $locks)
 	{
 		$this->id		= $id;
-		$this->locks		= $locks;
+		$this->locks	= $locks;
 	}
 
 	/**
@@ -31,7 +31,7 @@ class UnlockAkta
 	 *
 	 * @return void
 	 */
-	public function handle()
+	public function unlock()
 	{
 		try
 		{
@@ -61,7 +61,7 @@ class UnlockAkta
 
 			foreach ($akta->paragraf as $key => $value) 
 			{
-				if(in_array($value['lock'], $this->renvoi_ids))
+				if(in_array($value['lock'], $this->locks))
 				{
 					$paragraf[$key] 			= $value;
 
@@ -73,6 +73,62 @@ class UnlockAkta
 					{
 						$paragraf[$key]['unlock']	= true;
 					}
+				}
+			}
+			$akta->paragraf 			= $paragraf;
+
+			$akta->save();
+
+			return $akta->toArray();
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	}
+
+	/**
+	 * Execute the job.
+	 *
+	 * @return void
+	 */
+	public function handle()
+	{
+		try
+		{
+			//1a. pastikan akta exists
+			$akta 		= Dokumen::findorfail($this->id);
+
+			//1b. check status akta 
+			if(!in_array($akta->status, ['pengajuan']))
+			{
+				throw new Exception("Status Harus Publish", 1);
+			}
+
+			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
+			if(!in_array(TAuth::loggedUser()['id'], [$akta->pemilik['orang'][0]['id']]))
+			{
+				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
+			}
+
+			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
+			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
+			{
+				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
+			}
+
+			//2. set status
+			$akta->status 			= 'renvoi';
+
+			//3. unlock paragraf
+			$paragraf 				= [];
+			foreach ($akta->paragraf as $key => $value) 
+			{
+				$paragraf[$key]			 	= $value;	
+				if(isset($value['unlock']) && $value['unlock'])
+				{
+					$paragraf[$key]['lock'] = null;	
+					unset($paragraf[$key]['unlock']);
 				}
 			}
 			$akta->paragraf 			= $paragraf;
