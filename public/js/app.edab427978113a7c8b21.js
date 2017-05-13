@@ -8526,6 +8526,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -8718,19 +8722,14 @@ __webpack_require__("./resources/assets/js/moduleUI/loadingAnimationUI.js");
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
 	},
-	init: function init(url, form) {
+
+	init: function init(url, form, param) {
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
 				buttons: [{ name: 'h4', contentFA: '<i class="fa fa-header"></i>1' }, { name: 'h5', contentFA: '<i class="fa fa-header"></i>2' }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"],
 				static: true,
-				sticky: true,
-				diffLeft: 0,
-				diffTop: -330,
-				updateOnEmptySelection: true
-			},
-			onHideToolbar: function onHideToolbar() {
-				// editor.toolbar.showToolbar();
+				sticky: true
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -8743,8 +8742,6 @@ __webpack_require__("./resources/assets/js/moduleUI/loadingAnimationUI.js");
 			},
 			spellcheck: false,
 			disableExtraSpaces: false,
-			targetBlank: true,
-			// disableEditing: true,
 			extensions: {
 				mention: new window.Mention({
 					extraPanelClassName: 'dropdown-menu',
@@ -8752,8 +8749,13 @@ __webpack_require__("./resources/assets/js/moduleUI/loadingAnimationUI.js");
 					renderPanelContent: function renderPanelContent(panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						console.log(this.mention);
-						if ([this.mention].length != 0) {
+						if (Object.keys(this.mention).length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
+							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
+							$(panelEl).html(listMention);
+						} else {
+							fieldMention = currentMentionText.substr(1);
+							listMention = window.editorUI.renderListMention({ fieldMention: currentMentionText }, selectMentionCallback);
 							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
 							$(panelEl).html(listMention);
 						}

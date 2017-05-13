@@ -209,11 +209,13 @@
 	}
 
 	/* Auto page break */
+	/*
 	function pageBreak(){
 		var ep = editorPaging;
 		ep.pageHeight =  editorPaging.convertPX(29.7);
 		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
 	}
+	*/
 
 
 	// Adapter 
@@ -223,12 +225,10 @@
 
 	// Handlers 
 	editor.keyup(function(){
-		pageBreak();
 		drawMargin();
 	});	
 
 	$(document).ready(function(){
-		pageBreak();
 		drawMargin();
 	});	
 
