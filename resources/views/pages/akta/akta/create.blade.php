@@ -55,47 +55,6 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar subset-2menu">
-					<div class="panel">
-						<h5>List Fillable Mention</h5>
-						<div class="list-group list-widgets">
-							@if (isset($page_datas->datas['mentionable']))
-								@php
-									$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
-								@endphp
-								@forelse ($sort_mentionable as $k => $v)
-									<a class="list-group-item list-group-item-action justify-content-between p-2 mb-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
-										{{ $v }}
-										<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
-									</a>
-								@empty
-								@endforelse
-
-								@component('components.modal', [
-									'id'		=> 'list-widgets',
-									'title'		=> '',
-									'settings'	=> [
-										'modal_class'	=> '',
-										'hide_buttons'	=> 'true',
-										'hide_title'	=> 'true',
-									]
-								])
-									<form class="form-widgets text-right form" action="#">
-										<fieldset class="from-group">
-											<input type="text" name="" class="form-control parsing set-focus" />
-										</fieldset>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-											<button type="button" class="btn btn-primary" data-save="true">Simpan</button>
-										</div>
-									</form>
-								@endcomponent
-							@else
-								<p>Tidak ada fillable mention</p>
-							@endif
-						</div>
-					</div>
-				</div>
 				<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu">
 					{{-- 
 					<div id="page-breaker" class="row page-breaker"></div>
@@ -144,6 +103,47 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar sidebar-right subset-2menu">
+					<div class="panel">
+						<h5>List Fillable Mention</h5>
+						<div class="list-group list-widgets">
+							@if (isset($page_datas->datas['mentionable']))
+								@php
+									$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
+								@endphp
+								@forelse ($sort_mentionable as $k => $v)
+									<a class="list-group-item list-group-item-action justify-content-between p-2 mb-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
+										{{ $v }}
+										<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
+									</a>
+								@empty
+								@endforelse
+
+								@component('components.modal', [
+									'id'		=> 'list-widgets',
+									'title'		=> '',
+									'settings'	=> [
+										'modal_class'	=> '',
+										'hide_buttons'	=> 'true',
+										'hide_title'	=> 'true',
+									]
+								])
+									<form class="form-widgets text-right form" action="#">
+										<fieldset class="from-group">
+											<input type="text" name="" class="form-control parsing set-focus" />
+										</fieldset>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+											<button type="button" class="btn btn-primary" data-save="true">Simpan</button>
+										</div>
+									</form>
+								@endcomponent
+							@else
+								<p>Tidak ada fillable mention</p>
+							@endif
+						</div>
+					</div>
+				</div>				
 			</div>
 		@endcomponent
 		@component('components.modal', [

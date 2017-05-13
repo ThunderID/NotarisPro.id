@@ -23,3 +23,9 @@
 		color: #0275d8 ;
 	}
 }
+
+.sidebar-right{
+	@media screen and (min-width: 767px) {
+		margin-left: 0px; 
+	}
+}

@@ -8594,10 +8594,10 @@ __webpack_require__("./resources/assets/js/appUI.js");
 __webpack_require__("./resources/assets/js/plugins/clickableTableRow.js");
 
 // margin editor drawer
-__webpack_require__("./resources/assets/js/plugins/marginDrawer.js");
+// require('./plugins/marginDrawer');
 
 // editor auto page break
-__webpack_require__("./resources/assets/js/plugins/editorAutoPage.js");
+// require('./plugins/editorAutoPage');
 
 // plugin equal height
 __webpack_require__("./resources/assets/js/plugins/equalHeight.js");
@@ -9101,96 +9101,6 @@ function _classCallCheck(instance, Constructor) {
 $('.clickable-row').click(function () {
 	window.location = $(this).data('href');
 });
-
-/***/ }),
-
-/***/ "./resources/assets/js/plugins/editorAutoPage.js":
-/***/ (function(module, exports) {
-
-/*
-	Auto Editor Paging
-	Thunderlab 2017
-	created : Budi 
-	-------------
-*/
-window.editorPaging = new function () {
-
-	/* Adapter */
-	this.pageHeight = 29.7;
-	this.pagePadd = 5;
-
-	/* Binded to class page, which is the element holder of your text editor. */
-	this.getOuterHeight = function () {
-		return parseFloat($('.page-editor').height().toFixed(2));
-	};
-
-	/* editor pages */
-	this.getEditorHeight = function () {
-		return Math.floor(this.getOuterHeight() / this.pageHeight);
-	};
-
-	/* Function */
-
-	// Converter
-
-	this.convertCM = function (px) {
-		return parseFloat((px / 37.795276).toFixed(2));
-	};
-
-	this.convertPX = function (cm) {
-		return parseFloat((cm * 37.795276).toFixed(2));
-	};
-
-	// Page Adjuster
-
-	this.autoAdjustHeight = function (target, target_padding, editor, editor_padding) {
-
-		/* init 
-  var inner_h = editor.height() + editor_padding  + target_padding;
-  var outer_h = this.pageHeight;
-  var gap = outer_h - inner_h;
-  	/* measure ideal height 
-  do {
-  if(gap < 0){
-  this.autoPageBreak(outer_h);
-     /* add new page 
-    outer_h = outer_h + this.pageHeight;
-    gap = outer_h - inner_h;
-  }
-  }
-  while (gap < 0);
-  /* apply height 
-  target.css('min-height', outer_h);
-  */
-
-		var inner_h = editor.height() + editor_padding + target_padding;
-		var outer_h = this.pageHeight;
-
-		do {
-			if (outer_h < inner_h) {
-				this.autoPageBreak(outer_h);
-
-				/* add new page */
-				outer_h = outer_h + this.pageHeight;
-			}
-		} while (outer_h < inner_h);
-
-		/* apply height */
-		target.css('min-height', outer_h);
-	};
-
-	// Page Break
-	// require html binded : [id] page-breaker. This will be your page break html.
-	// require html binded : [id] page. This will be your base canvas.
-
-	this.autoPageBreak = function (h) {
-		// append page break
-		temp = $('#page-breaker').clone();
-		temp.addClass('page-break');
-		temp.css('top', h - 1 + 16 + 'px');
-		$('#page').append(temp);
-	};
-}();
 
 /***/ }),
 
@@ -10902,102 +10812,6 @@ var require;var require;var __WEBPACK_AMD_DEFINE_RESULT__;// List.js v1.4.1 (htt
       return s;
     };
   }, {}] }, {}, [4]);
-
-/***/ }),
-
-/***/ "./resources/assets/js/plugins/marginDrawer.js":
-/***/ (function(module, exports) {
-
-/*
-	Margin Drawer
-	Thunderlab 2017
-	created : Budi 
-	-------------
-*/
-
-window.Margin = new function () {
-
-	this.docLeft = 0;
-	this.docTop = 0;
-	this.docWidth = 0;
-	this.docHeight = 0;
-	this.pageHeight = 0;
-	this.pageWidth = 0;
-
-	this.convertCM = function (px) {
-		return parseFloat((px / 37.795276).toFixed(2));
-	};
-
-	this.convertPX = function (cm) {
-		return parseFloat((cm * 37.795276).toFixed(2));
-	};
-
-	this.toggleOff = function () {
-		$('.margin').css('display', 'none');
-	};
-
-	this.toggleOn = function () {
-		$('.margin').css('display', 'block');
-	};
-
-	this.displayMargin = function (left, top, right, bottom) {
-		// left & right margin
-		$('#l-margin').css('left', left);
-		$('#l-margin').css('height', this.docHeight + 'px');
-
-		$('#r-margin').css('left', right);
-		$('#r-margin').css('height', this.docHeight + 'px');
-
-		// Top & Bottom
-		/* init */
-		var inner_h = this.docHeight;
-		var outer_h = this.pageHeight;
-		var gap = outer_h;
-
-		/* clean */
-		$(".margin-h").remove();
-
-		/* top draw */
-		var ctr_top = 0;
-		ctr_top = this.docHeight / this.pageHeight;
-
-		for (i = 0; i < ctr_top; i++) {
-
-			temp = $('#h-margin').clone();
-			temp.addClass('margin');
-			temp.addClass('margin-h');
-			temp.css('top', top + 'px');
-			temp.css('display', 'block');
-			temp.css('width', this.docWidth + 'px');
-			temp.css('margin-left', this.docLeft);
-			$('#page').append(temp);
-
-			//set new top
-			// console.log(this.pageHeight);
-			top = top + this.pageHeight;
-		}
-
-		/* bottom draw */
-		var ctr_bottom = 0;
-		ctr_bottom = this.docHeight / this.pageHeight;
-		for (i = 0; i < ctr_bottom; i++) {
-
-			temp = $('#h-margin').clone();
-			temp.addClass('margin');
-			temp.addClass('margin-h');
-			temp.css('top', bottom + 'px');
-			temp.css('display', 'block');
-			temp.css('width', this.docWidth + 'px');
-			temp.css('margin-left', this.docLeft);
-			$('#page').append(temp);
-
-			//set new top
-			// console.log(bottom);
-			// console.log(this.pageHeight);
-			bottom = bottom + this.pageHeight;
-		}
-	};
-}();
 
 /***/ }),
 
