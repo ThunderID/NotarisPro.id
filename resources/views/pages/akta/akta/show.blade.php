@@ -82,7 +82,7 @@
 				</div>
 				{{-- END COMPONENT MENUBAR --}}
 			</div>
-			<div id="page" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 scrollable_panel subset-2menu">
+			<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
 					<div class="d-flex justify-content-center mx-auto">
@@ -140,6 +140,27 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar sidebar-right subset-2menu">
+				<div class="panel">
+					<h5>List Fillable Mention</h5>
+					<div class="list-group list-widgets">
+						@if (isset($page_datas->datas['mentionable']))
+							@php
+								$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
+							@endphp
+							@forelse ($sort_mentionable as $k => $v)
+								<div class="list-group-item list-group-item-action justify-content-between p-2 mb-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
+									{{ $v }}
+									<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
+								</div>
+							@empty
+							@endforelse
+						@else
+							<p>Tidak ada fillable mention</p>
+						@endif
+					</div>
+				</div>
+			</div>				
 		</div>
 
 		{{-- simpanan untuk kedepan --}}
@@ -197,6 +218,7 @@
 		</form>	
 	@endcomponent	
 
+
 	@include('components.deleteModal',[
 		'title' => 'Menghapus Draft Akta',
 		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])
@@ -235,6 +257,7 @@
 	/*	Call plugin */
 	window.formUI.init();
 
+	{{-- 
 	/* Auto Page Break */
 	$(document).ready(function(){
 		/* Adapter */
@@ -245,6 +268,7 @@
 		ep.pageHeight =  editorPaging.convertPX(29.7);
 		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
 	});
+	--}}
 
 	/* Script call modal delete */
 	$('#deleteModal').on('shown.bs.modal', function(e) {
@@ -287,13 +311,4 @@
 		footer.updateDisplay();
 	}
 
-
-	/* Events */
-	$(document).ready(function(){
-		<!-- drawFooter(); -->
-	});	
-
-	$( window ).resize(function() {
-		<!-- reDrawFooter(); -->
-	});	
 @endpush 
