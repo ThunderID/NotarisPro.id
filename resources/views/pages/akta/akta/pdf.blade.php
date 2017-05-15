@@ -66,7 +66,7 @@
 			<div style="page-break-after: always;"></div>
 
 			<div style="width: 14.5cm;">
-				<div style="padding-top: 1.5cm;margin-bottom: 1cm;">
+				<div style="padding-top: 1.5cm;margin-bottom: 1.5cm;">
 					<p style="text-align: right;">...................,...........................</p>			
 				</div>		
 			</div>
@@ -93,7 +93,7 @@
 						</div>
 					</td>
 
-					@if($i % 2 == 0)
+					@if(!$i % 2 == 0)
 						</tr>
 					@endif
 
