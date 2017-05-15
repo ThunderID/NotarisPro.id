@@ -1,5 +1,11 @@
-;window.callSelect2 = {
-	init: function () {
-		// $('.select2').window.select2();
+;window.selectUI = {
+	selectTag: function () {
+		$('.select-tag').select2({
+			themes: 'bootstrap',
+			tokenSeparators: [',', ' '],
+		});
+	},
+	init: function() {
+		window.selectUI.selectTag();
 	}
 }

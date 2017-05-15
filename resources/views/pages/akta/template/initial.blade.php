@@ -51,7 +51,7 @@
 						</div>
 						<div class="form-group">
 							<label>Jumlah Pihak</label>
-							<select name="jumlah_pihak" class="form-control c-select select2">
+							<select name="jumlah_pihak" class="form-control custom-select">
 								<option>1</option>
 								<option>2</option>
 								<option>3</option>
@@ -92,8 +92,8 @@
 	@endcomponent
 @stop
 
-@push('scripts')  
-	window.callSelect2.init();
+@push('scripts')
+	window.selectUI.init();
 
 	/**
 	 * event button action wizard
@@ -122,40 +122,49 @@
 					// pihak
 					for (var i=1; i<=jumPihak; i++) {
 						$temp.append('<h5 class="text-muted">Pihak ' +i+ '</h5>');
+						selectElement = $('<select></select>');
+						selectElement.addClass('form-control custom-select select-tag mb-3');
+						selectElement.attr('name', 'dokumen_pihak[' +i + '][]');
+						selectElement.attr('multiple', 'multiple');
 						$.each(result['pihak'], function(k, v) {
-							input = $('<input type="checkbox" />');
-							input.addClass('form-check-input');
-							input.attr('name', v);
-							$temp.append(input);
-							$temp.append(v);
-							$temp.append('<br>');
+							optionElement = $('<option></option>');
+							optionElement.attr('value', v);
+							optionElement.html(v);
+							selectElement.append(optionElement);
 						});
-						$temp.append('<br>');
+						$temp.append(selectElement);
+						$temp.append('<div class="clearfix">&nbsp;</div>');
 					}
 
 					// saksi
 					$temp.append('<h5 class="text-muted">Saksi</h5>');
+					selectElement = $('<select></select>');
+					selectElement.addClass('form-control custom-select select-tag mb-3');
+					selectElement.attr('name', 'dokumen_saksi');
 					$.each(result['saksi'], function(k, v) {
-						input = $('<input type="checkbox" />');
-						input.addClass('form-check-input');
-						input.attr('name', v);
-						$temp.append(input);
-						$temp.append(v);
-						$temp.append('<br>');
+						optionElement = $('<option></option>');
+						optionElement.attr('value', v);
+						optionElement.html(v);
+						selectElement.append(optionElement);
 					});
-					$temp.append('<br>');
+					$temp.append(selectElement);
+					$temp.append('<div class="clearfix">&nbsp;</div>');
 
 					// objek
 					$temp.append('<h5 class="text-muted">Objek</h5>');
+					selectElement = $('<select></select>');
+					selectElement.addClass('form-control custom-select select-tag mb-3');
+					selectElement.attr('name', 'dokumen_objek');
 					$.each(result['objek'], function(k, v) {
-						input = $('<input type="checkbox" />');
-						input.addClass('form-check-input');
-						input.attr('name', v);
-						$temp.append(input);
-						$temp.append(v);
-						$temp.append('<br>');
+						optionElement = $('<option></option>');
+						optionElement.attr('value', v);
+						optionElement.html(v);
+						selectElement.append(optionElement);
 					});
-					$temp.append('<br>');
+					$temp.append(selectElement);
+					$temp.append('<div class="clearfix">&nbsp;</div>');
+
+					window.selectUI.selectTag();
 				}
 			});
 		}
