@@ -191,17 +191,17 @@
 
 	// handlers
 	$(document).ready(function(){
-		pageBreak();
-		drawMargin();
+		//pageBreak();
+		//drawMargin();
 	});
 
 	$( window ).resize(function() {
-		drawMargin();
+		// drawMargin();
 	});
 
 	editor.keyup(function(){
-		pageBreak();
-		drawMargin()
+		// pageBreak();
+		// drawMargin()
 	});
 
 
