@@ -17,11 +17,15 @@ class BuatTemplateBaru
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct($judul, array $isi_template, array $mentionable)
+	public function __construct($judul, array $isi_template, array $mentionable, $jumlah_pihak, array $dokumen_objek, array $dokumen_pihak, array $dokumen_saksi)
 	{
-		$this->judul		= $judul;
-		$this->isi_template	= $isi_template;
-		$this->mentionable	= $mentionable;
+		$this->judul			= $judul;
+		$this->isi_template		= $isi_template;
+		$this->mentionable		= $mentionable;
+		$this->jumlah_pihak		= $jumlah_pihak;
+		$this->dokumen_objek	= $dokumen_objek;
+		$this->dokumen_pihak	= $dokumen_pihak;
+		$this->dokumen_saksi	= $dokumen_saksi;
 	}
 
 	/**
@@ -46,12 +50,20 @@ class BuatTemplateBaru
 			$akta['judul']						= $this->judul;
 			$akta['paragraf']					= $this->isi_template;
 			$akta['mentionable']				= $this->mentionable;
+			$akta['jumlah_pihak']				= $this->jumlah_pihak;
+			$akta['dokumen_objek']				= $this->dokumen_objek;
+			$akta['dokumen_saksi']				= $this->dokumen_saksi;
+
+			foreach (range(1, $this->jumlah_pihak) as $key) 
+			{
+				$akta['dokumen_pihak'][$key]	= $this->dokumen_pihak[$key-1];
+			}
 
 			//3. simpan value yang ada
-			$template			= $template->fill($akta);
+			$template							= $template->fill($akta);
 
 			//4. set status template
-			$template->status 	= 'draft';
+			$template->status 					= 'draft';
 
 			//5. simpan template
 			$template->save();
