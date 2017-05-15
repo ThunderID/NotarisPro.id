@@ -9,6 +9,7 @@ use App\Service\Tag\TagService;
 use App\Service\Akta\BuatTemplateBaru;
 use App\Service\Akta\SimpanTemplate;
 use App\Service\Akta\HapusTemplate;
+use App\Service\Akta\PublishTemplate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\helperController;
@@ -211,7 +212,7 @@ class templateController extends Controller
 	{
 		try {
 			// save
-			$data									= new \TCommands\Akta\PublishTemplateAkta($id);
+			$data									= new PublishTemplate($id);
 			$data->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
