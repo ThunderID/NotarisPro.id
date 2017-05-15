@@ -18,12 +18,15 @@ class InitTemplateTableSeeder extends Seeder
 
 		$hari 			= ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
 		$j_akta 		= ['Akta Jual Beli Perorangan 2 Pihak', 'Akta Pemberian Hak Tanggungan 3 Pihak Perorangan', 'Akta Fidusia 2 Pihak Perorangan', 'Akta Perjanjian Sewa Persero dengan Persero'];
+		$d_akta 		= ['Akta Jual Beli Mengatur Perorangan 2 Pihak', 'Akta Mengatur Pemberian Hak Tanggungan 3 Pihak Perorangan', 'Akta Mengatur Fidusia 2 Pihak Perorangan', 'Akta Mengatur Perjanjian Sewa Persero dengan Persero'];
+
 
 		//drafting
 		foreach (range(0, 19) as $key) 
 		{
 			$isi				= [
 				'judul'			=> $j_akta[0],
+				'deskripsi'		=> $d_akta[0],
 				'paragraf'		=> [
 					['konten' 	=> '<h4 class="text-center"><br></h4>'],
 					['konten' 	=> '<h4 class="text-center"><b style="color: rgb(41, 43, 44); font-size: 1rem;">PEJABAT PEMBUAT AKTA TANAH</b></h4>'],
@@ -37,9 +40,9 @@ class InitTemplateTableSeeder extends Seeder
 					['konten' 	=> '<h5 style="text-align: center;"><b>AKTA JUAL BELI</b></h5>'],
 					['konten' 	=> '<h5 style="text-align: center;">Nomor <span class="medium-editor-mention-at">@akta.nomor</span>&nbsp;</h5>'],
 					['konten' 	=> '<h5 style="text-align: center;"><i>Lembar Pertama / Kedua</i></h5>'],
-					['konten' 	=> '<p style="text-align: left;">Pada hari ini <span class="medium-editor-mention-at">@tanggal.menghadap</span>&nbsp;hadir dihadapan saya <span class="medium-editor-mention-at">@notaris.nama</span>&nbsp;yang berdasarkan surat keputusan menteri Agraria / Kepala Badan Pertanahan Nasional tanggal <span class="medium-editor-mention-at">@notaris.tanggal_pengangkatan</span>&nbsp;nomor <span class="medium-editor-mention-at">@notaris.nomor_sk</span>&nbsp;diangkat / ditunjuk sebagai Pejabat Pembuat Akta Tanah&nbsp;, yang selanjutnya disebut PPAT, yang dimaksud dalam pasal 7 Peraturan Pemerintah Nomor 24 Tahun 1997 tentang pendaftaran tanah, dengan daerah kerja <span class="medium-editor-mention-at">@notaris.daerah_kerja</span>&nbsp;dengan dihadiri oleh saksi - saksi yang saya kenal dan akan disebut pada bagian akhir akta ini :</p>'],
-					['konten' 	=> '<ol><li><span class="medium-editor-mention-at">@pihak.1.nama</span>&nbsp;lahir di <span class="medium-editor-mention-at">@pihak.1.tempat_lahir</span>&nbsp;pada tanggal <span class="medium-editor-mention-at">@pihak.1.tanggal_lahir</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at">@pihak.1.pekerjaan</span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at">@pihak.1.alamat</span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at">@pihak.1.nomor_ktp</span>&nbsp;<br><span class="medium-editor-mention-at medium-editor-mention-at">@pihak.1.deskripsi</span>&nbsp;<br>Selaku penjual, yang selanjutnya disebut sebagai<br>PIHAK PERTAMA</li>'],
-					['konten' 	=> '<li><span class="medium-editor-mention-at">@pihak.2.nama</span>&nbsp;lahir di <span class="medium-editor-mention-at">@pihak.2.tempat_lahir,</span>&nbsp;pada tanggal <span class="medium-editor-mention-at">@pihak.2.tanggal_lahir</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at">@pihak.2.pekerjaan</span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at">@pihak.2.alamat</span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at medium-editor-mention-at">@pihak.2.nomor_ktp</span><span class="medium-editor-mention-at medium-editor-mention-at">@pihak.2.deskripsi</span><br>Selaku pembeli, yang selanjutnya disebut sebagai<br>PIHAK KEDUA<br></li></ol>'],
+					['konten' 	=> '<p style="text-align: left;">Pada hari ini <span class="medium-editor-mention-at">@akta.tanggal</span>&nbsp;hadir dihadapan saya <span class="medium-editor-mention-at">@notaris.nama</span>&nbsp;yang berdasarkan surat keputusan menteri Agraria / Kepala Badan Pertanahan Nasional tanggal <span class="medium-editor-mention-at">@notaris.tanggal_pengangkatan</span>&nbsp;nomor <span class="medium-editor-mention-at">@notaris.nomor_sk</span>&nbsp;diangkat / ditunjuk sebagai Pejabat Pembuat Akta Tanah&nbsp;, yang selanjutnya disebut PPAT, yang dimaksud dalam pasal 7 Peraturan Pemerintah Nomor 24 Tahun 1997 tentang pendaftaran tanah, dengan daerah kerja <span class="medium-editor-mention-at">@notaris.daerah_kerja</span>&nbsp;dengan dihadiri oleh saksi - saksi yang saya kenal dan akan disebut pada bagian akhir akta ini :</p>'],
+					['konten' 	=> '<ol><li><span class="medium-editor-mention-at">@pihak.1.ktp.nama</span>&nbsp;lahir di <span class="medium-editor-mention-at">@pihak.1.ktp.tempat_lahir</span>&nbsp;pada tanggal <span class="medium-editor-mention-at">@pihak.1.ktp.tanggal_lahir</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at">@pihak.1.ktp.pekerjaan</span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at">@pihak.1.ktp.alamat</span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at">@pihak.1.ktp.nomor_ktp</span>&nbsp;<br><span class="medium-editor-mention-at medium-editor-mention-at">@pihak.1.ktp.deskripsi</span>&nbsp;<br>Selaku penjual, yang selanjutnya disebut sebagai<br>PIHAK PERTAMA</li>'],
+					['konten' 	=> '<li><span class="medium-editor-mention-at">@pihak.2.ktp.nama</span>&nbsp;lahir di <span class="medium-editor-mention-at">@pihak.2.ktp.tempat_lahir,</span>&nbsp;pada tanggal <span class="medium-editor-mention-at">@pihak.2.ktp.tanggal_lahir</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at">@pihak.2.ktp.pekerjaan</span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at">@pihak.2.ktp.alamat</span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at medium-editor-mention-at">@pihak.2.ktp.nomor_ktp</span><span class="medium-editor-mention-at medium-editor-mention-at">@pihak.2.ktp.deskripsi</span><br>Selaku pembeli, yang selanjutnya disebut sebagai<br>PIHAK KEDUA<br></li></ol>'],
 				],
 				'mentionable'	=> [
 					'@notaris.nama',
@@ -49,48 +52,37 @@ class InitTemplateTableSeeder extends Seeder
 					'@notaris.alamat',
 					'@notaris.telepon',
 					'@akta.nomor',
-					'@tanggal.menghadap',
-					'@pihak.1.nama',
-					'@pihak.1.tempat_lahir',
-					'@pihak.1.tanggal_lahir',
-					'@pihak.1.pekerjaan',
-					'@pihak.1.alamat',
-					'@pihak.1.nomor_ktp',
-					'@pihak.1.deskripsi',
-					'@pihak.2.nama',
-					'@pihak.2.tempat_lahir',
-					'@pihak.2.tanggal_lahir',
-					'@pihak.2.pekerjaan',
-					'@pihak.2.alamat',
-					'@pihak.2.nomor_ktp',
-					'@pihak.2.deskripsi',
+					'@akta.tanggal',
+					'@pihak.1.ktp.nama',
+					'@pihak.1.ktp.tempat_lahir',
+					'@pihak.1.ktp.tanggal_lahir',
+					'@pihak.1.ktp.pekerjaan',
+					'@pihak.1.ktp.alamat',
+					'@pihak.1.ktp.nomor_ktp',
+					'@pihak.1.ktp.deskripsi',
+					'@pihak.2.ktp.nama',
+					'@pihak.2.ktp.tempat_lahir',
+					'@pihak.2.ktp.tanggal_lahir',
+					'@pihak.2.ktp.pekerjaan',
+					'@pihak.2.ktp.alamat',
+					'@pihak.2.ktp.nomor_ktp',
+					'@pihak.2.ktp.deskripsi',
 				],
+				'dokumen_objek'	=> [],
+				'dokumen_pihak'	=> [1 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']], 2 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']]],
+				'dokumen_saksi'	=> []
 			];
 
-			$akta 			= new \TCommands\Akta\DraftingTemplateAkta($isi);
-			$akta->handle();
+			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
+			$akta 			= $akta->handle();
 		}
 
 		//init publish
-		$dokumen 			= TAkta\DokumenKunci\Models\Template::skip(0)->take(8)->get();
+		$dokumen 			= App\Domain\Akta\Models\Template::skip(0)->take(8)->get();
 
 		foreach ($dokumen as $key => $value) 
 		{
-			$akta 			= new \TCommands\Akta\PublishTemplateAkta($value->id);
-			$akta->handle();
-		}
-
-		//init update
-		$dokumen 		= TAkta\DokumenKunci\Models\Template::skip(0)->take(3)->get();
-
-		foreach ($dokumen as $key => $value) 
-		{
-			$edited 	= $value->toArray();
-
-			$edited['paragraf'][0]['konten'] 	= ''.$edited['paragraf'][0]['konten'];
-			$edited['paragraf'][1]['konten'] 	= ''.$edited['paragraf'][1]['konten'];
-
-			$akta 		= new \TCommands\Akta\SimpanTemplateAkta($edited);
+			$akta 			= new App\Service\Akta\PublishTemplate($value->id);
 			$akta->handle();
 		}
 	}
