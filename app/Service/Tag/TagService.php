@@ -39,6 +39,6 @@ class TagService
 			'hpl'				=> ['nomor'],
 		];
 
-		return array_merge($dok_pihak, $dok_objek);
+		return array_merge(['pihak' => $dok_pihak], ['objek' => $dok_objek]);
 	}
 }
