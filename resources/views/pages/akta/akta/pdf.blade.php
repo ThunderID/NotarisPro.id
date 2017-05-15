@@ -53,7 +53,7 @@
 	    	<span style="float:right;">Halaman <span class="pagenum"></span>
 	    </p>
 	    <p>
-	    	Daerah Kerja : 
+	    	Daerah Kerja : {{ $page_datas->notaris['notaris']['daerah_kerja'] }}
 	    </p>
 	</div>
 
