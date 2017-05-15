@@ -59,7 +59,7 @@ class Template extends BaseModel
 											'judul'					=> 'required',
 											// 'paragraf.*.konten'		=> '',
 											'status'				=> 'in:draft,publish',
-											'jumlah_pihak'			=> 'numeric',
+											// 'jumlah_pihak'			=> 'numeric',
 										];
 	/**
 	 * Date will be returned as carbon
