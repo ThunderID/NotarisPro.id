@@ -48,8 +48,8 @@ class TagService
 
 		//generate docs
 		$dok['objek']	= [];
-		$dok['pihak_1']	= [];
 		$dok['saksi']	= [];
+		$dok['pihak_1']	= [];
 
 		//@shgb.nomor
 		foreach ($dokumen_objek as $key => $value) 
