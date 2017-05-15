@@ -207,7 +207,7 @@
 	])
 		<form id="finalize_akta" class="form-widgets text-right form" action="{{ route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'akta']) }}" method="POST">
 			<fieldset class="from-group">
-				<input type="text" name="password" class="form-control parsing set-focus" required />
+				<input type="password" name="password" class="form-control parsing set-focus" required />
 				<textarea class="input_akta" name="template" hidden></textarea>
 			</fieldset>
 			<div class="modal-footer">
