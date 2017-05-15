@@ -390,7 +390,40 @@ class templateController extends Controller
 	// Trash Bin
 	public function trash()
 	{
-		dd('Trashed');
+				// init
+		$this->page_attributes->title       = 'Template Akta';
+
+		//filter&search
+		$query                              = $this->getQueryString(['q','status', 'page']);
+		$query['per_page']                  = (int)env('DATA_PERPAGE');
+
+		// special treat judul
+		if(isset($query['q'])){
+			$query['judul']                 = $query['q'];
+			unset($query['q']);     
+		}
+
+		// special treat sort
+		if(isset($query['urutkan'])){
+			try{
+				$sort                       = explode("-", $query['urutkan']);
+				$query['urutkan']           = [ $sort[0] => $sort[1]]; 
+			} catch (Exception $e) {
+				// display error?
+			}
+		}
+
+		//get data from database
+		$this->page_datas->datas            = $this->query->trash($query);
+
+		//paginate
+		$this->paginate(null, $this->query->countTrash($query), (int)env('DATA_PERPAGE'));        
+
+		//initialize view
+		$this->view                         = view('pages.akta.template.index');
+
+		//function from parent to generate view
+		return $this->generateView();  
 	}
 
 }

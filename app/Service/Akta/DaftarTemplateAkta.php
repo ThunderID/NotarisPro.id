@@ -184,4 +184,55 @@ class DaftarTemplateAkta
 
 		return $model;
 	} 
+
+
+	/**
+	 * this function mean keep executing
+	 * @param array $data
+	 * 
+	 * @return UserDTODataTransformer $data
+	 */
+	public function trash($queries = [])
+	{
+		$model 		= $this->queries($queries);
+
+		//2. pagination
+		if(isset($queries['per_page']))
+		{
+			$queries['take']	= $queries['per_page'];
+			$this->per_page 	= $queries['per_page'];
+		}
+		else
+		{
+			$queries['take']	= 15;
+		}
+
+		if(isset($queries['page']))
+		{
+			$queries['skip']	= (($queries['page'] - 1) * $queries['take']);
+			$this->page 		= $queries['page'];
+		}
+		else
+		{
+			$queries['skip']	= 0;
+		}
+		
+		$model  				= $model->onlyTrashed()->skip($queries['skip'])->take($queries['take'])->orderby('created_at', 'desc')->get(['judul', 'status', 'pemilik', 'penulis', 'created_at', 'updated_at'])->toArray();
+
+		return 	$model;
+	}
+
+	/**
+	 * this function mean keep executing
+	 * @param array $data
+	 * 
+	 * @return UserDTODataTransformer $data
+	 */
+	public function countTrash($queries = [])
+	{
+		$model 		= $this->queries($queries);
+		$model		= $model->onlyTrashed()->count();
+
+		return 	$model;
+	}
 }
