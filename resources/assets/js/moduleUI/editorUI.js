@@ -19,7 +19,7 @@
 
 		try {
 			for (var i in dataListWidgets) {
-				if (i.toLowerCase().indexOf(search) > -1) {
+				if (dataListWidgets[i].toLowerCase().substr(1).indexOf(search) > -1) {
 					result[i] = dataListWidgets[i];
 				}
 			}
@@ -94,7 +94,7 @@
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if (Object.keys(this.mention).length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
-							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
+							$(panelEl).attr('role', 'menu').css('display', 'block').css('height', '200px').css('overflow-y', 'scroll').addClass('menu-mention text-left m-0 p-0');
 							$(panelEl).html(listMention);
 						}
 						else {
