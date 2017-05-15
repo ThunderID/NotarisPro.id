@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Service\Admin\DaftarPengguna as Query;
+use App\Service\Admin\PenggunaBaru;
+use App\Service\Admin\GrantVisa;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -33,6 +35,19 @@ class userController extends Controller
 		//function from parent to generate view
 		return $this->generateView(); 
 	}
+
+	public function create()
+	{
+		// init
+		$this->page_datas->id			= null;
+		$this->page_attributes->title	= 'User Baru';
+
+		//initialize view
+		$this->view						= view('pages.user.create');
+
+		//function from parent to generate view
+		return $this->generateView(); 
+	}
 	
 	/**
 	 * Store a newly created resource in storage.
@@ -40,28 +55,29 @@ class userController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update($id = null, Request $request)
+	public function store($id = null, Request $request)
 	{
 		try {
 			// get data
 			$input		= $request->only(
-											'nama', 
-											'notaris'
+											'akun_nama', 
+											'akun_email',
+											'akun_role',
+											'akun_password'
 										);
-			//is edit?
-			if(!is_null($id)){
-				$input['id']                     = $id;
-			}
-
 			// save
-			$data                               = new \TCommands\Kantor\SimpanNotaris($input);
-			$data->handle();            
+			$data		= new PenggunaBaru($input['akun_nama'],$input['akun_email'],$input['akun_password']);
+			$data 		= $data->handle();
+
+			$grant 		= new GrantVisa($data['id'], $input['akun_role'], TAuth::activeOffice()['kantor']['id'], TAuth::activeOffice()['kantor']['nama']);
+			$grant 		= $grant->handle();
+
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']       = $e->getMessage();
 		}
 
-		$this->page_attributes->msg['success']	= ['Data kantor notaris telah diperbarui'];
+		$this->page_attributes->msg['success']	= ['Data user telah diperbarui, billing akan mulai bertambah sesuai jumlah user'];
 
-		return $this->generateRedirect(route('notaris.kantor.edit', ['id' => $id]));
+		return $this->generateRedirect(route('user.index', ['id' => $id]));
 	}
 }

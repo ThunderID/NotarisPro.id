@@ -15,53 +15,78 @@
 <div class="row">
 
 	<div class="col-12 col-md-3 col-lg-3 col-xl-3 hide-mobile sidebar subset-menu target-menu">
-		<div class="panel hidden-md-up text-right">
-			<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-off">
-				<i class="fa fa-times" aria-hidden="true"></i>
-			</a>
+		<div class="row" style="overflow-y: scroll;height: calc(100% - 65px);">
+			<div class="col-md-12">
+
+				<div class="panel hidden-md-up text-right">
+					<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-off">
+						<i class="fa fa-times" aria-hidden="true"></i>
+					</a>
+				</div>
+
+				<div class="panel">
+					@include('components.search',[
+						'title' => 'Cari Akta',
+						'qs'	=> [ 'status','urutkan' ],
+						'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
+					])
+				</div>
+
+				<div class="panel">
+					@include('components.filter',[
+						'title' => 'Filter Akta',
+						'alias' => 'status',
+						'qs'	=> [ 'q','urutkan' ],
+						'lists' => [
+							'semua status' 	=> null,
+							'draft' 		=> 'draft', 
+							'pengajuan' 	=> 'pengajuan',
+							'renvoi' 		=> 'renvoi',
+							'akta' 			=> 'akta',
+							'minuta akta' 	=> 'minuta',
+						]
+					])
+				</div>	
+
+				<div class="panel hidden-md-up">
+					@include('components.filter',[
+						'title'	=> 'Urutkan',
+						'alias' => 'urutkan',
+						'qs'	=> [ 'q','status' ],
+						'lists' => [
+							'tanggal sunting terbaru' 	=> null,
+							'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
+							'tanggal pembuatan terbaru' => 'tanggal_pembuatan-desc',
+							'tanggal pembuatan terlama' => 'tanggal_pembuatan-asc',
+							'judul a - z' 	=> 'judul-asc',
+							'judul z - a' 	=> 'judul-desc',
+							'status a - z'	=> 'status-asc',
+							'status z - a'	=> 'status-desc',
+						]
+					])
+				</div>
+
+			</div>
 		</div>
 
-		<div class="panel">
-			@include('components.search',[
-				'title' => 'Cari Akta',
-				'qs'	=> [ 'status','urutkan' ],
-				'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
-			])
-		</div>
-
-		<div class="panel">
-			@include('components.filter',[
-				'title' => 'Filter Akta',
-				'alias' => 'status',
-				'qs'	=> [ 'q','urutkan' ],
-				'lists' => [
-					'semua status' 	=> null,
-					'draft' 		=> 'draft', 
-					'pengajuan' 	=> 'pengajuan',
-					'renvoi' 		=> 'renvoi',
-					'akta' 			=> 'akta',
-					'minuta akta' 	=> 'minuta',
-				]
-			])
+		<div class="row hidden-sm" style="height: 65px;">
+			<div class="col-md-12 pt-2">
+				<!-- <h5>Keranjang Sampah</h5> -->
+				<div class="filter">
+					<ul>
+						<a href="{{ route('akta.akta.trash') }}">
+							<li>
+								Keranjang Sampah
+								<span class="indicator float-right">
+									<i class="fa fa-trash"></i>
+								</span>
+							</li>
+						</a>	
+					</ul>
+				</div>
+			</div>
 		</div>	
 
-		<div class="panel hidden-md-up">
-			@include('components.filter',[
-				'title'	=> 'Urutkan',
-				'alias' => 'urutkan',
-				'qs'	=> [ 'q','status' ],
-				'lists' => [
-					'tanggal sunting terbaru' 	=> null,
-					'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
-					'tanggal pembuatan terbaru' => 'tanggal_pembuatan-desc',
-					'tanggal pembuatan terlama' => 'tanggal_pembuatan-asc',
-					'judul a - z' 	=> 'judul-asc',
-					'judul z - a' 	=> 'judul-desc',
-					'status a - z'	=> 'status-asc',
-					'status z - a'	=> 'status-desc',
-				]
-			])
-		</div>			
 	</div>
 <!-- 	<div class="col-12 sidebar-togler">
 		<h4> Filter & Pencarian<span class="text-right">v</span></h4>
@@ -91,7 +116,7 @@
 			<div class="col-6 hidden-md-up text-right mobile-toggle-search">
 				<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-on">
 					<!-- <i class="fa fa-binoculars" aria-hidden="true"></i> -->
-					<i class="fa fa-search" aria-hidden="true"></i>
+					<i class="fa fa fa-ellipsis-v" aria-hidden="true"></i>
 				</a>
 			</div>
 		</div>

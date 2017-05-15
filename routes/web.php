@@ -70,6 +70,8 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.template.update', //patch
 			'destroy' 	=> 'akta.template.destroy' //post 
 		]]);
+		Route::get('/template/trash', 					['uses' => 'templateController@trash', 'as' => 'akta.template.trash']);
+
 		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
 
 		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
@@ -89,6 +91,8 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.akta.update', //patch
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
+
+		Route::get('/akta/trash', 							['uses' => 'aktaController@trash', 'as' => 'akta.akta.trash']);
 
 		Route::any('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
 		
@@ -168,6 +172,31 @@ Route::group(['middleware' => ['authenticated']], function()
 		]]);
 	});
 
+	//billing
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/billing', 'billingController', ['names' => [
+			'index' 	=> 'billing.index', //get
+			'create'	=> 'billing.create', //get
+			'store' 	=> 'billing.store', //post
+			'show' 		=> 'billing.show', //get
+			'edit' 		=> 'billing.edit', //get
+			'update' 	=> 'billing.update', //patch
+			'destroy' 	=> 'billing.destroy' //post 
+		]]);
+	});
+
+	//akun
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/akun', 'akunController', ['names' => [
+			'index' 	=> 'akun.index', //get
+			'create'	=> 'akun.create', //get
+			'store' 	=> 'akun.store', //post
+			'show' 		=> 'akun.show', //get
+			'edit' 		=> 'akun.edit', //get
+			'update' 	=> 'akun.update', //patch
+			'destroy' 	=> 'akun.destroy' //post 
+		]]);
+	});
 
 	//user
 	Route::group(['namespace' => 'Admin\\'], function(){

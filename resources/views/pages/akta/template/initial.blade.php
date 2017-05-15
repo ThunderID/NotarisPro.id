@@ -77,7 +77,9 @@
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0 mx-auto scrollable_panel pl-3">
 					<div class="form">
-						<h4 class="title">Informasi Template</h4>
+						<h4 class="title">Dokumen Kelengkapan Template Akta<br/>
+							<small><small><small>Centang dokumen yang dibutuhkan untuk generate template akta</small></small></small>
+						</h4>
 						<div class="content-choice-doc-template ml-3"></div>
 						<div class="clearfix">&nbsp;</div>
 					</div>
