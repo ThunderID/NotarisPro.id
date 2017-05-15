@@ -40,6 +40,7 @@ class Template extends BaseModel
 	protected $fillable				=	[
 											'_id'					,
 											'judul'					,
+											'deskripsi'				,
 											'paragraf'				,
 											'pemilik'				,
 											'penulis'				,

@@ -11,7 +11,10 @@ class homeController extends Controller
 		parent::__construct();
 	}    
 
-    public function dashboard(){
+    public function dashboard()
+    {
+    	$role 				= TAuth::activeOffice();
+
 		// init
 		$this->page_attributes->title       = 'Data Member';
 
