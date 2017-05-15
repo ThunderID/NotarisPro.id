@@ -9,6 +9,7 @@ use App\Service\Tag\TagService;
 use App\Service\Akta\BuatTemplateBaru;
 use App\Service\Akta\SimpanTemplate;
 use App\Service\Akta\HapusTemplate;
+use App\Service\Tag\DokumenWajibService;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\helperController;
@@ -163,7 +164,7 @@ class templateController extends Controller
 
 		// get list widgets
 		$this->page_datas->list_widgets     = $this->list_widgets();
-		
+
 		//initialize view
 		$this->view                         = view('pages.akta.template.create');
 
@@ -243,19 +244,6 @@ class templateController extends Controller
 
 		//return view
 		return $this->generateRedirect(route('akta.template.index'));
-	}
-
-	/**
-	 * function get list widgets on template create or edit
-	 */
-	private function list_widgets() 
-	{
-		$call           = new TagService;
-		$list           = $call::all();
-
-		$list           = array_sort_recursive($list);
-
-		return $list;
 	}
 
 	/**
@@ -357,12 +345,38 @@ class templateController extends Controller
 		return $input;
 	}
 
+	/**
+	 * function get list widgets on template create or edit
+	 */
+	private function list_widgets() 
+	{
+		$call           = new TagService;
+		$list           = $call::all();
+		$list           = array_sort_recursive($list);
+
+		return $list;
+	}
+
+	/**
+	 * function get list document pihak return json
+	 */
+	public function list_document()
+	{
+		$call 			= new DokumenWajibService;
+		$dokumen_pihak	= $call::pihak();
+		$dokumen_objek 	= $call::objek();
+		$dokumen_saksi	= $call::saksi();
+		
+		return response()->json(['pihak' => $dokumen_pihak, 'objek' => $dokumen_objek, 'saksi' => $dokumen_saksi], 200);
+	}
+
 	public function initial()
 	{
 		$this->page_attributes->title       = 'Buat Template Dokumen Baru';
 
 		$this->page_datas->id 				= null;
-		$this->page_datas->list_widgets     = $this->list_widgets();
+		// $this->page_datas->list_widgets     = $this->list_widgets();
+
 
 		//initialize view
 		$this->view                         = view('pages.akta.template.initial');

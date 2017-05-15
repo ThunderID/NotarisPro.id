@@ -10,6 +10,9 @@ window.list = require('./plugins/list-js/list.js');
 // app animation loading like youtube
 window.appLoading = require('./plugins/app-loading.js');
 
+// plugin select2
+window.select2 = require('./plugins/select2.js');
+
 
 // app UI
 require ('./appUI');

@@ -49,14 +49,31 @@
 	},
 	
 	init: function (url, form, param) {
+		// var customToolbar = window.Editor.extensions.toolbar.extends({
+		// 	init: function () {
+		// 		Extensions.prototype.init.apply(this, arguments);
+		// 		this.initThrottledMethods();
+
+		// 		var toolbarElement = this.getToolbarElement();
+
+		// 		console.log(toolbarElement);
+		// 	}
+		// });
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
-				buttons: [{name: 'h4', contentFA: '<i class="fa fa-header"></i>1'}, {name: 'h5', contentFA: '<i class="fa fa-header"></i>2'},
-					"bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"
-				],
-				static: true,
-				sticky: true,
+				// buttons: [{name: 'h4', contentFA: '<i class="fa fa-header"></i>1'}, {name: 'h5', contentFA: '<i class="fa fa-header"></i>2'},
+				// 	"bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"
+				// ],
+				// static: true,
+				// sticky: true,
+				init: function () {
+					window.Editor.Extension.prototype.init.apply(this, arguments);
+
+				    this.initThrottledMethods();
+				    $('#toolbarMedium').append(this.getToolbarElement());
+				    // this.getEditorOption('#toolbarMediume').appendChild(this.getToolbarElement());
+				}
 			},
 			placeholder: {
 				text: "Tulis disini",
@@ -75,7 +92,6 @@
 					tagName: 'span',
 					renderPanelContent: function (panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
-						console.log(this.mention);
 						if (Object.keys(this.mention).length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
 							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
@@ -94,7 +110,7 @@
 						$('span.medium-editor-mention-at').addClass('text-danger');
 					},
 					activeTriggerList: ["@"],
-				})
+				}),
 			}
 		});
 

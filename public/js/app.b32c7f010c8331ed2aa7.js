@@ -8748,7 +8748,6 @@ __webpack_require__("./resources/assets/js/moduleUI/loadingAnimationUI.js");
 					tagName: 'span',
 					renderPanelContent: function renderPanelContent(panelEl, currentMentionText, selectMentionCallback) {
 						this.mention = window.editorUI.searchMention(currentMentionText);
-						console.log(this.mention);
 						if (Object.keys(this.mention).length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
 							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');

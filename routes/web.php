@@ -76,6 +76,9 @@ Route::group(['middleware' => ['authenticated']], function()
 
 		Route::get('/akta/template/initial/new',		['uses' => 'templateController@initial', 'as' => 'akta.template.initial']);
 
+		// get list dokumen
+		Route::any('/akta/template/list/document',		['uses' => 'templateController@list_document', 'as' => 'akta.template.list.document']);
+
 		//akta
 		Route::resource('/akta/akta', 'aktaController', ['names' => [
 			'index' 	=> 'akta.akta.index', //get

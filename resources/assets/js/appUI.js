@@ -16,3 +16,5 @@ require ('./moduleUI/ajaxUI');
 require ('./moduleUI/lockUnlockParagraphUI');
 // moduel UI loading animation 
 require ('./moduleUI/loadingAnimationUI');
+// module Select2
+require ('./moduleUI/selectUI');
