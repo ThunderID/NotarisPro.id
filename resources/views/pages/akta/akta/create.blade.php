@@ -5,7 +5,7 @@
 @endpush
 
 @push('styles')  
-	body {background-color: rgba(0, 0, 0, 0.075) !important;}
+	body { background-color: rgba(0, 0, 0, 0.075) !important; }
 @endpush  
 
 @section('akta')

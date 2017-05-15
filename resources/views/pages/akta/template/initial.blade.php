@@ -75,12 +75,12 @@
 				<div class="col">
 					<a href="#information" class="btn btn-primary action-wizard" data-content="#choice-doc-template">Sebelumnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-left"></i></a>
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0 mx-auto scrollable_panel pl-3">
-					<div class="form">
-						<h4 class="title">Dokumen Kelengkapan Template Akta<br/>
-							<small><small><small>Centang dokumen yang dibutuhkan untuk generate template akta</small></small></small>
-						</h4>
-						<div class="content-choice-doc-template ml-3"></div>
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0 mx-auto scrollable_panel">
+					<div class="form ml-3">
+						<h4 class="title mb-0 pb-0">Dokumen Kelengkapan Template Akta</h4>
+						<small>Centang dokumen yang dibutuhkan untuk generate template akta</small>
+						<div class="clearfix">&nbsp;</div>
+						<div class="content-choice-doc-template"></div>
 						<div class="clearfix">&nbsp;</div>
 					</div>
 				</div>
@@ -113,6 +113,7 @@
 		// check if fillable-mention
 		if (contentTo === '#choice-doc-template') {
 			jumPihak = $('[name="jumlah_pihak"]').val();
+			$('.content-choice-doc-template').html('');
 			
 			$.ajax({
 				url: '{{ route("akta.template.list.document") }}',
@@ -128,10 +129,11 @@
 						selectElement.addClass('form-control custom-select select-tag mb-3');
 						selectElement.attr('name', 'dokumen_pihak[' +i + '][]');
 						selectElement.attr('multiple', 'multiple');
+						selectElement.attr('placeholder', 'Pilih Dokumen Pihak '+ i).attr('data-placeholder', 'Pilih Dokumen Pihak '+ i);
 						$.each(result['pihak'], function(k, v) {
 							optionElement = $('<option></option>');
 							optionElement.attr('value', v);
-							optionElement.html(v);
+							optionElement.html(v.replace(/_/g, ' '));
 							selectElement.append(optionElement);
 						});
 						$temp.append(selectElement);
@@ -142,11 +144,13 @@
 					$temp.append('<h5 class="text-muted">Saksi</h5>');
 					selectElement = $('<select></select>');
 					selectElement.addClass('form-control custom-select select-tag mb-3');
-					selectElement.attr('name', 'dokumen_saksi');
+					selectElement.attr('name', 'dokumen_saksi[]');
+					selectElement.attr('multiple', 'multiple');
+					selectElement.attr('placeholder', 'Pilih Dokumen Saksi').attr('data-placeholder', 'Pilih Dokumen Saksi');
 					$.each(result['saksi'], function(k, v) {
 						optionElement = $('<option></option>');
 						optionElement.attr('value', v);
-						optionElement.html(v);
+						optionElement.html(v.replace(/_/g, ' '));
 						selectElement.append(optionElement);
 					});
 					$temp.append(selectElement);
@@ -156,11 +160,13 @@
 					$temp.append('<h5 class="text-muted">Objek</h5>');
 					selectElement = $('<select></select>');
 					selectElement.addClass('form-control custom-select select-tag mb-3');
-					selectElement.attr('name', 'dokumen_objek');
+					selectElement.attr('name', 'dokumen_objek[]');
+					selectElement.attr('multiple', 'multiple');
+					selectElement.attr('placeholder', 'Pilih Dokumen Objek').attr('data-placeholder', 'Pilih Dokumen Objek');
 					$.each(result['objek'], function(k, v) {
 						optionElement = $('<option></option>');
 						optionElement.attr('value', v);
-						optionElement.html(v);
+						optionElement.html(v.replace(/_/g, ' '));
 						selectElement.append(optionElement);
 					});
 					$temp.append(selectElement);

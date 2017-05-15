@@ -5,6 +5,8 @@
 @endpush
 
 @push('styles')  
+	body {background-color: rgba(0, 0, 0, 0.075) !important;}
+	.editor { border: 2px dashed #ececec; }
 	.medium-editor-toolbar {
 	  visibility: visible;
 	}
@@ -42,12 +44,13 @@
 					</ul>
 				</div>
 			</div>
-			<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
-				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 flex-last sidebar subset-2menu">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 flex-last sidebar sidebar-right subset-2menu">
 					<div class="panel">
-						<div id="toolbarMedium" style="position: relative; margin-bottom: 120px;">&nbsp;</div>
+						<h5>Toolbar</h5>
+						<div id="toolbarMedium" style="position: relative; margin-bottom: 180px;">&nbsp;</div>
+						<h5>Informasi Variable Mention</h5>
 						<div class="list-widgets">
-							<h5>Informasi Variable Mention</h5>
 							@if (isset($page_datas->list_widgets))
 								{{-- objek --}}
 								@forelse ($page_datas->list_widgets as $k => $v)
@@ -112,14 +115,14 @@
 					</div>
 				</div>
 				<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 flex-start pl-0 scrollable_panel subset-2menu">
-					<div id="page-breaker" class="row page-breaker"></div>
+					{{-- <div id="page-breaker" class="row page-breaker"></div>
 					<div id="l-margin" class="margin margin-v"></div>
 					<div id="r-margin" class="margin margin-v"></div>
-					<div id="h-margin"></div>
+					<div id="h-margin"></div> --}}
 					<div class="row">
 						<div class="d-flex justify-content-center mx-auto">
-							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
-								<textarea name="template" class="editor">
+							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
+								<textarea name="template" class="editor" style="border: 2px dashed #ececec;">
 									@if (!is_null($page_datas->id))
 										@if (!empty($page_datas->datas['paragraf']))
 											@forelse ($page_datas->datas['paragraf'] as $k => $v)

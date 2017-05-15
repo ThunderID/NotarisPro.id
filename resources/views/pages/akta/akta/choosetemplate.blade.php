@@ -54,7 +54,7 @@
 						</div>
 						<div class="form-group">
 							<label>Tgl. Pertemuan</label>
-							<input type="text" name="tanggal_pertemuan" class="form-control required" placeholder="Tgl Pertemuan Klien dengan Notaris">
+							<input type="text" name="tanggal_pertemuan" class="form-control required datetime" placeholder="Tgl Pertemuan Klien dengan Notaris">
 						</div>
 						<div class="form-group mb-3 pb-3">
 							<label>Judul Akta</label>
@@ -228,7 +228,7 @@
 		}
 
 		// trigger event window resize to fix height content
-		$(this).trigger($(window).resize());
+		$(window).resize();
 	});
 
 	/**
@@ -268,5 +268,17 @@
 			$(this).find('.hover').css('display', 'none');
 		}
 	});
+
+	var selector = document.getElementsByClassName('datetime');
+	var datetime = new Inputmask('datetime', {
+		mask: "1-2-y h:s", 
+		placeholder: "dd-mm-yyyy hh:mm",  
+		separator: "-", 
+		alias: "dd/mm/yyyy"
+	});
+	datetime.mask(selector);
+
+
+	
 
 @endpush 
