@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Service\Admin\DaftarKantor as Query;
-use App\Service\Admin\SimpanKantor;
+use App\Service\Admin\DaftarPengguna as Query;
+use App\Service\Admin\UbahPassword;
 
 use App\Http\Controllers\Controller;
 
 use Exception, Redirect;
 
-class kantorController extends Controller
+class akunController extends Controller
 {
 	public function __construct(Query $query)
 	{
 		parent::__construct();
 		
-		$this->query            = $query;
-	}    
+		$this->query			= $query;
+	}
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -30,9 +30,9 @@ class kantorController extends Controller
 
 		$this->page_datas->id				= $id;
 		$this->page_datas->datas			= $this->query->detailed($id);
-		$this->page_attributes->title		= 'Profil Kantor';
+		$this->page_attributes->title		= 'Akun Anda';
 
-        $this->view                         = view('pages.kantor.create');
+		$this->view                         = view('pages.akun.create');
 
 		return $this->generateView();  
 	}
@@ -46,12 +46,12 @@ class kantorController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		$input 	= $request->only('nama', 'notaris');
+		$input 	= $request->only('akun_email', 'akun_password', 'akun_password_confirmation');
 
-		$data 	= new SimpanKantor($id, $input['nama'], $input['notaris']['nama'], $input['notaris']['daerah_kerja'], $input['notaris']['nomor_sk'], $input['notaris']['tanggal_pengangkatan'], $input['notaris']['alamat'], $input['notaris']['telepon'], null);
+		$data 	= new UbahPassword($id, $input['akun_email'], $input['akun_password'], $input['akun_password_confirmation']);
 
 		$data 	= $data->handle();
 
-		return Redirect::route('kantor.edit', $id);
+		return Redirect::route('akun.edit', $id);
 	}
 }

@@ -62,7 +62,7 @@ class Kantor extends BaseModel
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'notaris.tanggal_pengangkatan'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
 	
 	/**
 	 * data hidden

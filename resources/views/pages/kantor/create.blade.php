@@ -8,19 +8,7 @@
 
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 sidebar">
 			<div class="panel">
-				@include('components.sidebarmenu',[
-					'title' => 'Menu',
-					'lists' => [
-						'Kantor'		=>[
-							'url' 	=> route('kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
-							'icon' 	=> 'fa-building'
-						],
-						'User' 	=> [
-							'url' 	=> route('user.index'),
-							'icon' 	=> 'fa-users'
-						]
-					]
-				])
+				@include('helpers.setting_sidebar')
 			</div>	
 		</div>
 		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
@@ -35,7 +23,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12">
+				<div class="col-8">
 					@component('components.form', [ 
 						'data_id' 		=> $page_datas->id,
 						'store_url' 	=> route('kantor.store'), 
@@ -109,16 +97,18 @@
 						</fieldset>
 
 						<fieldset class="form-group">
-							</br>
-						</fieldset>
-
-						<fieldset class="form-group">
 							<div class="row">
 								<div class="col-6">
-									<button type="submit" class="btn btn-primary">Save</button>
+									<button type="submit" class="btn btn-primary">Update</button>
 								</div>
 							</div>
-						</fieldset>		
+						</fieldset>	
+							
+						<fieldset class="form-group">
+							</br>
+							</br>
+							</br>
+						</fieldset>
 					@endcomponent	
 				</div>
 			</div>

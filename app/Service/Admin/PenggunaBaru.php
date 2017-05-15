@@ -49,7 +49,3 @@ class PenggunaBaru
 		}
 	}
 }
-
-'email'					,
-'password'				,
-'nama'					,

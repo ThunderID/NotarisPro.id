@@ -18,9 +18,10 @@ class InitNotarisTableSeeder extends Seeder
 						'password'	=> 'admin',
 		];
 
-		dispatch(new TCommands\ACL\DaftarkanPengguna($pengguna));
+		$usa 		= new App\Service\Admin\PenggunaBaru($pengguna['nama'],$pengguna['email'],$pengguna['password']);
+		$usa 		= $usa->handle();
 		
-		$pengguna 	= TImmigration\Pengguna\Models\Pengguna::first();
+		$pengguna 	= App\Domain\Admin\Models\Pengguna::first();
 
 		$visa_1 		= [
 			'role'		=> 'notaris',
@@ -36,8 +37,13 @@ class InitNotarisTableSeeder extends Seeder
 				'nama'	=> 'Notaris Paulus Oliver Yoesoef, SH'
 			],
 		];
-		dispatch(new TCommands\ACL\GrantVisa($pengguna->_id, $visa_1));
-		dispatch(new TCommands\ACL\GrantVisa($pengguna->_id, $visa_2));
+
+
+		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->_id, $visa_1['role'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
+		$grant_v_1 		= $grant_v_1->handle();
+
+		$grant_v_2 		= new App\Service\Admin\GrantVisa($pengguna->_id, $visa_2['role'], $visa_2['kantor']['id'], $visa_2['kantor']['nama']);
+		$grant_v_2 		= $grant_v_2->handle();
 
 		$notaris_1 		= [
 			'_id'						=> 'PPATANNAWONG',
@@ -67,11 +73,11 @@ class InitNotarisTableSeeder extends Seeder
 			]
 		];
 
-		$simpan_notaris_1 	= new \TKantor\Notaris\Models\Notaris;
+		$simpan_notaris_1 	= new App\Domain\Admin\Models\Kantor;
 		$simpan_notaris_1->fill($notaris_1);
 		$simpan_notaris_1->save();
 
-		$simpan_notaris_2 	= new \TKantor\Notaris\Models\Notaris;
+		$simpan_notaris_2 	= new App\Domain\Admin\Models\Kantor;
 		$simpan_notaris_2->fill($notaris_2);
 		$simpan_notaris_2->save();
 	}

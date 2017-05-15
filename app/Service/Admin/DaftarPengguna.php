@@ -68,7 +68,7 @@ class DaftarPengguna
 	public function detailed($id)
 	{
 		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-		$model 						= $this->model->id($id)->draftOrPublished($queries)->first();
+		$model 						= $this->model->id($id)->first();
 
 		return $model->toArray();
 	}
@@ -107,14 +107,14 @@ class DaftarPengguna
 						$model  			= $model->orderby('nama', $value);
 						break;
 					default:
-						$model  			= $model->orderby('updated_at', 'desc');
+						$model  			= $model->orderby('created_at', 'desc');
 						break;
 				}
 			}
 		}
 		else
 		{
-			$model  			= $model->orderby('updated_at', 'desc');
+			$model  			= $model->orderby('created_at', 'desc');
 		}
 
 		return $model;

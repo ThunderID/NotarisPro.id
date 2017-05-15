@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Service\Admin\DaftarKantor as Query;
+use App\Service\Admin\DaftarPengguna as Query;
 use App\Service\Admin\SimpanKantor;
 
 use App\Http\Controllers\Controller;
 
 use Exception, Redirect;
 
-class kantorController extends Controller
+class billingController extends Controller
 {
 	public function __construct(Query $query)
 	{
@@ -18,6 +18,39 @@ class kantorController extends Controller
 		
 		$this->query            = $query;
 	}    
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		$this->page_attributes->title			= 'Informasi Tagihan';
+
+		$this->page_datas->total_user			= $this->query->count();
+		$this->page_datas->total_tagihan		= $this->totalTagihan($this->query->get());
+		$this->page_datas->tagihan_bulan_ini	= 'Lunas';
+
+        $this->view                         	= view('pages.billing.index');
+
+		return $this->generateView();  
+	}
+
+	public function totalTagihan($users)
+	{
+		if(count($users)<=2)
+		{
+			return 'Rp 500,000';
+		}
+
+		$billing 	= 250000;
+
+		$total 		= $billing * count($users);
+
+		return 'Rp '.number_format($total);
+	}
 
 	/**
 	 * Show the form for editing the specified resource.
