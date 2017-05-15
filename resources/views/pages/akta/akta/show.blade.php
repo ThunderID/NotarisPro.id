@@ -238,9 +238,6 @@
 		// draw stripes
 	    window.stripeGenerator.init();
 
-	    // draw footer
-		window.drawFooter();
-
 	    // get document
 	    var target = $('#finalize_akta').find('textarea');
 	    $(target).val($('.editor').html());
