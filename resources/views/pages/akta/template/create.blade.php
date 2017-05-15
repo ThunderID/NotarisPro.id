@@ -62,13 +62,7 @@
 												@foreach ($v2 as $k3 => $v3)
 													@php
 														{{-- dd($page_datas->list_widgets); --}}
-														if ($k == 'objek')
-														{
-															$sub_title 	= substr($v3, 1);
-															$temp 		= explode('.', $sub_title);
-															$title 		= $temp[0];
-														}
-														else if ($k == 'saksi')
+														if (in_array($k, ['objek', 'saksi', 'akta', 'notaris']))
 														{
 															$sub_title 	= substr($v3, 1);
 															$temp 		= explode('.', $sub_title);

@@ -47,6 +47,9 @@ class TagService
 		$doks 			= self::all();
 
 		//generate docs
+		$dok['akta']	= [['@akta.nomor', '@akta.tanggal']];
+		$dok['notaris']	= [['@notaris.nama', '@notaris.daerah_kerja', '@notaris.nomor_sk', '@notaris.tanggal_pengangkatan', '@notaris.alamat', '@notaris.telepon']];
+		
 		$dok['objek']	= [];
 		$dok['saksi']	= [];
 		$dok['pihak_1']	= [];
