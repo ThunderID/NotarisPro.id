@@ -18,28 +18,27 @@ class TagService
 	 */
 	public static function all($number_of_client = 1)
 	{
-		$array 			= [];
-		foreach (range(1, $number_of_client) as $key)
-		{
-			$array["klien.$key.nama"]			= "@klien.$key.nama";
-			$array["klien.$key.tempat_lahir"]	= "@klien.$key.tempat_lahir";
-			$array["klien.$key.tanggal_lahir"]	= "@klien.$key.tanggal_lahir";
-			$array["klien.$key.pekerjaan"]		= "@klien.$key.pekerjaan";
-			$array["klien.$key.alamat"]			= "@klien.$key.alamat";
-			$array["klien.$key.nomor_ktp"]		= "@klien.$key.nomor_ktp";
-		}
+		//1. dokumen pihak
+		$dok_pihak	= [
+			'ktp'				=> ['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'status_pernikahan', 'pekerjaan', 'kewarganegaraan'],
+			'kk'				=> ['nomor', 'nama_kepala_keluarga', 'alamat', 'dikeluarkan_tanggal'],
+			'akta_lahir'		=> ['nomor', 'stbld', 'nama', 'nama_ayah', 'nama_ibu', 'tempat_lahir', 'tanggal_lahir'],
+			'akta_ganti_nama'	=> ['nomor', 'stbld', 'nama_semula', 'nama_sekarang', 'tempat_ganti_nama', 'tanggal_ganti_nama'],
+			'akta_kawin'		=> ['nomor', 'stbld', 'tanggal_pencatatan', 'tanggal_pernikahan', 'nama_suami', 'nama_istri', 'agama', 'pemuka_agama', 'tempat_upacara_pernikahan', 'nama_notaris', 'nomor_sk_notaris'],
+			'akta_cerai'		=> ['nomor', 'stbld', 'tempat_cerai', 'tanggal_cerai', 'nama_suami', 'nama_istri', 'nomor_akta_perkawinan', 'tanggal_perkawinan'],
+			'akta_kematian'		=> ['nomor', 'stbld', 'tempat_kematian', 'tanggal_kematian', 'nama', 'tempat_lahir', 'tanggal_lahir', 'alamat_terakhir', 'nama_ibu'],
+			'akta_waris'		=> ['nomor', 'stbld', 'nama_ahli_waris', 'tanggal_lahir'],
+			'akta_pendirian'	=> ['nomor', 'stbld', 'nama_pihak'],
+		];
 
-		$array['notaris.nama']					= '@notaris.nama';
-		$array['notaris.daerah_kerja']			= '@notaris.daerah_kerja';
-		$array['notaris.nomor_sk']				= '@notaris.nomor_sk';
-		$array['notaris.tanggal_pengangkatan']	= '@notaris.tanggal_pengangkatan';
-		$array['notaris.telepon']				= '@notaris.telepon';
-		$array['notaris.fax']					= '@notaris.fax';
-		$array['notaris.alamat']				= '@notaris.alamat';
-		
-		$array['tanggal.menghadap']				= '@tanggal.menghadap';
-		$array['akta.nomor']					= '@akta.nomor';
-		
-		return $array; 
+		$dok_objek	= [
+			'shgb'				=> ['nomor', 'alamat', 'atas_nama'],
+			'shm'				=> ['nomor', 'alamat', 'atas_nama'],
+			'imb'				=> ['nomor', 'alamat', 'atas_nama'],
+			'pbb'				=> ['nomor', 'alamat', 'nama_wajib_pajak'],
+			'hpl'				=> ['nomor'],
+		];
+
+		return array_merge(['pihak' => $dok_pihak], ['objek' => $dok_objek]);
 	}
 }
