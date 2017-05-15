@@ -93,7 +93,6 @@ class templateController extends Controller
 		$this->page_attributes->title       = 'Buat Template Dokumen Baru';
 
 		$this->page_datas->id 				= null;
-		$this->page_datas->list_widgets     = $this->list_widgets();
 
 		//initialize view
 		$this->view                         = view('pages.akta.template.create');
@@ -115,7 +114,7 @@ class templateController extends Controller
 
 			$paragraph		= $this->parse_store($id, $request);
 
-			$akta			= new BuatTemplateBaru($paragraph['judul'], $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), $request->get('dokumen_objek'), $request->get('dokumen_pihak'), $request->get('dokumen_saksi'));
+			$akta			= new BuatTemplateBaru($paragraph['judul'], $request->get('deskripsi'), $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), [$request->get('dokumen_objek')], $request->get('dokumen_pihak'), [$request->get('dokumen_saksi')]);
 	
 			$akta 			= $akta->handle();		
 
@@ -164,7 +163,7 @@ class templateController extends Controller
 		$this->page_datas->datas			= $this->query->detailed($id);
 
 		// get list widgets
-		$this->page_datas->list_widgets     = $this->list_widgets();
+		$this->page_datas->list_widgets     = $this->list_widgets($this->page_datas->datas);
 
 		//initialize view
 		$this->view                         = view('pages.akta.template.create');
@@ -349,11 +348,9 @@ class templateController extends Controller
 	/**
 	 * function get list widgets on template create or edit
 	 */
-	private function list_widgets() 
+	private function list_widgets($template) 
 	{
-		$call           = new TagService;
-		$list           = $call::all();
-		$list           = array_sort_recursive($list);
+		$list           = TagService::fill_mention($template['dokumen_objek'], $template['dokumen_pihak'], $template['dokumen_saksi']);
 
 		return $list;
 	}
@@ -390,7 +387,39 @@ class templateController extends Controller
 	// Trash Bin
 	public function trash()
 	{
-		dd('Trashed');
-	}
+				// init
+		$this->page_attributes->title       = 'Template Akta';
 
+		//filter&search
+		$query                              = $this->getQueryString(['q','status', 'page']);
+		$query['per_page']                  = (int)env('DATA_PERPAGE');
+
+		// special treat judul
+		if(isset($query['q'])){
+			$query['judul']                 = $query['q'];
+			unset($query['q']);     
+		}
+
+		// special treat sort
+		if(isset($query['urutkan'])){
+			try{
+				$sort                       = explode("-", $query['urutkan']);
+				$query['urutkan']           = [ $sort[0] => $sort[1]]; 
+			} catch (Exception $e) {
+				// display error?
+			}
+		}
+
+		//get data from database
+		$this->page_datas->datas            = $this->query->trash($query);
+
+		//paginate
+		$this->paginate(null, $this->query->countTrash($query), (int)env('DATA_PERPAGE'));        
+
+		//initialize view
+		$this->view                         = view('pages.akta.template.index');
+
+		//function from parent to generate view
+		return $this->generateView();  
+	}
 }

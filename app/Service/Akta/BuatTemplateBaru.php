@@ -8,8 +8,14 @@ use Exception, DB, TAuth, Carbon\Carbon;
 
 class BuatTemplateBaru
 {
+	protected $judul;
+	protected $deskripsi;
 	protected $isi_template;
 	protected $mentionable;
+	protected $jumlah_pihak;
+	protected $dokumen_objek;
+	protected $dokumen_pihak;
+	protected $dokumen_saksi;
 
 	/**
 	 * Create a new job instance.
@@ -17,9 +23,10 @@ class BuatTemplateBaru
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct($judul, array $isi_template, array $mentionable, $jumlah_pihak, array $dokumen_objek, array $dokumen_pihak, array $dokumen_saksi)
+	public function __construct($judul, $deskripsi, array $isi_template, array $mentionable, $jumlah_pihak, array $dokumen_objek, array $dokumen_pihak, array $dokumen_saksi)
 	{
 		$this->judul			= $judul;
+		$this->deskripsi		= $deskripsi;
 		$this->isi_template		= $isi_template;
 		$this->mentionable		= $mentionable;
 		$this->jumlah_pihak		= $jumlah_pihak;
@@ -48,6 +55,7 @@ class BuatTemplateBaru
 			$akta['penulis']['nama'] 			= TAuth::loggedUser()['nama'];
 
 			$akta['judul']						= $this->judul;
+			$akta['deskripsi']					= $this->deskripsi;
 			$akta['paragraf']					= $this->isi_template;
 			$akta['mentionable']				= $this->mentionable;
 			$akta['jumlah_pihak']				= $this->jumlah_pihak;
@@ -56,7 +64,7 @@ class BuatTemplateBaru
 
 			foreach (range(1, $this->jumlah_pihak) as $key) 
 			{
-				$akta['dokumen_pihak'][$key]	= $this->dokumen_pihak[$key-1];
+				$akta['dokumen_pihak'][$key]	= $this->dokumen_pihak[$key];
 			}
 
 			//3. simpan value yang ada

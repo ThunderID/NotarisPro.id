@@ -11,7 +11,7 @@ window.list = require('./plugins/list-js/list.js');
 window.appLoading = require('./plugins/app-loading.js');
 
 // plugin select2
-window.select2 = require('./plugins/select2.js');
+require('./plugins/select2.js');
 
 
 // app UI
