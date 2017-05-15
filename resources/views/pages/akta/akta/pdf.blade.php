@@ -53,11 +53,11 @@
 	    	<span style="float:right;">Halaman <span class="pagenum"></span>
 	    </p>
 	    <p>
-	    	Daerah Kerja : 
+	    	Daerah Kerja : {{ $page_datas->notaris['notaris']['daerah_kerja'] }}
 	    </p>
 	</div>
 
-	<div class="form font-editor page-editor" style="width: 17cm; min-height: 29.7cm; background-color: #fff;">
+	<div class="form font-editor page-editor" style="width: 15cm; min-height: 29.7cm; background-color: #fff;">
 		<div class="form-group editor" style="page-break-inside: auto;">
 			@foreach($page_datas->datas['paragraf'] as $key => $value)
 				{!!$value['konten']!!}
@@ -66,7 +66,7 @@
 			<div style="page-break-after: always;"></div>
 
 			<div style="width: 14.5cm;">
-				<div style="padding-top: 1.5cm;margin-bottom: 1cm;">
+				<div style="padding-top: 1.5cm;margin-bottom: 1.5cm;">
 					<p style="text-align: right;">...................,...........................</p>			
 				</div>		
 			</div>
@@ -76,28 +76,28 @@
 					<th style="width:7.5cm;"></th>
 					<th style="width:7.5cm;"></th>
 				</tr>
-				<tr>
+				@for($i = 0; $i < $page_datas->datas['jumlah_pihak']; $i++)
+
+					@if($i % 2 == 0)
+						<tr>
+					@endif
+
 					<td>
 						<div class="text-center">
 							<p><b>TANDA TANGAN</b></p>
-							<p>PIHAK 1</p>
+							<p>PIHAK {{$i}}</p>
 							<br> 
 							<br> 
 							<br> 
 							<p>......................</p>
 						</div>
 					</td>
-					<td>
-						<div class="text-center">
-							<p><b>TANDA TANGAN</b></p>
-							<p>PIHAK 1</p>
-							<br> 
-							<br> 
-							<br> 
-							<p>......................</p>
-						</div>						
-					</td>
-				</tr>
+
+					@if(!$i % 2 == 0)
+						</tr>
+					@endif
+
+				@endfor
 			</table>						
 
 			<!-- <div class="col-md-12" style="padding-top: 3cm;"></div>	 -->
