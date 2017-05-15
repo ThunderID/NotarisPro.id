@@ -18787,6 +18787,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -18957,7 +18961,7 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 
 		try {
 			for (var i in dataListWidgets) {
-				if (i.toLowerCase().indexOf(search) > -1) {
+				if (dataListWidgets[i].toLowerCase().substr(1).indexOf(search) > -1) {
 					result[i] = dataListWidgets[i];
 				}
 			}
@@ -19032,7 +19036,7 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if (Object.keys(this.mention).length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
-							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
+							$(panelEl).attr('role', 'menu').css('display', 'block').css('height', '200px').css('overflow-y', 'scroll').addClass('menu-mention text-left m-0 p-0');
 							$(panelEl).html(listMention);
 						} else {
 							fieldMention = currentMentionText.substr(1);

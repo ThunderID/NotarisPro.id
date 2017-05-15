@@ -196,7 +196,7 @@ class templateController extends Controller
 			return $this->generateRedirect(route('akta.template.edit', ['id' => $akta['id']]));
 		}else{
 			$this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
-			return $this->generateRedirect(route('akta.template.edit', ['id' => $akta['id']]));
+			return $this->generateRedirect(route('akta.template.show', ['id' => $akta['id']]));
 		}
 	}
 

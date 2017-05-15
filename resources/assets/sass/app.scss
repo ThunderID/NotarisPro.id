@@ -1,4 +1,5 @@
 // Theme
+@import "variable";
 @import "navbar";
 @import "general";
 @import "login";
@@ -35,7 +36,7 @@
 @import "plugins/app-loading.css";
 
 // plugins select2
-@import "plugins/select2.scss";
+@import "plugins/select2/core.scss";
 
 
 // Themes
