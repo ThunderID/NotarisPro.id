@@ -10,7 +10,7 @@ use App\Domain\Akta\Models\Dokumen as Model;
 use App\Domain\Akta\Models\Versi;
 use App\Domain\Akta\Models\ReadOnlyAkta;
 
-use Hash, Exception, Session, TAuth;
+use Hash, Exception, Session, TAuth, Carbon\Carbon;
 
 /**
  * Class Services Application
@@ -132,6 +132,24 @@ class DaftarAkta
 		return 	$model;
 	}
 	
+	/**
+	 * this function mean keep executing
+	 * @param array $data
+	 * 
+	 * @return UserDTODataTransformer $data
+	 */
+	public function countThisMonth()
+	{
+		$model 		= $this->queries([]);
+
+		$now 		= new Carbon('first day of this month');
+		
+		$model 		= $model->where('created_at', '>=', $now->format('Y-m-d H:i:s'));
+		$model		= $model->count();
+
+		return 	$model;
+	}
+
 	/**
 	 * this function mean keep executing
 	 * @param numeric $page
