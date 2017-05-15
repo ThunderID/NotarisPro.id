@@ -15,7 +15,7 @@
 <div class="row">
 
 	<div class="col-12 col-md-3 col-lg-3 col-xl-3 hide-mobile sidebar subset-menu target-menu">
-		<div class="row" style="overflow-y: scroll;height: calc(100% - 60px);">
+		<div class="row" style="overflow-y: scroll;height: calc(100% - 65px);">
 			<div class="col-md-12">
 
 				<div class="panel hidden-md-up text-right">
@@ -69,7 +69,7 @@
 			</div>
 		</div>
 
-		<div class="row hidden-sm" style="height: 60px;">
+		<div class="row hidden-sm" style="height: 65px;">
 			<div class="col-md-12 pt-2">
 				<!-- <h5>Keranjang Sampah</h5> -->
 				<div class="filter">
