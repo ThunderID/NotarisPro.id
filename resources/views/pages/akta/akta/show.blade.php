@@ -28,7 +28,7 @@
 							@if(str_is($page_datas->datas['status'], 'pengajuan'))
 								@if($page_datas->datas['total_perubahan'] * 1 == 0)
 									<li class="nav-item">
-										<span class="nav-link">Status : Menunggu Renvoi</span>
+										<!-- <span class="nav-link">Status : Menunggu Renvoi</span> -->
 									</li>
 								@else
 									<li class="nav-item">
