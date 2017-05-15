@@ -45,6 +45,10 @@ class Template extends BaseModel
 											'penulis'				,
 											'status'				,
 											'mentionable'			,
+											'jumlah_pihak'			,
+											'dokumen_objek'			,
+											'dokumen_pihak'			,
+											'dokumen_saksi'			,
 										];
 	/**
 	 * Basic rule of database
@@ -55,6 +59,7 @@ class Template extends BaseModel
 											'judul'					=> 'required',
 											// 'paragraf.*.konten'		=> '',
 											'status'				=> 'in:draft,publish',
+											// 'jumlah_pihak'			=> 'numeric',
 										];
 	/**
 	 * Date will be returned as carbon

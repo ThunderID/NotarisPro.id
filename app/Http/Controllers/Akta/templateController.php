@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Service\Akta\DaftarTemplateAkta as Query;
 use App\Service\Tag\TagService;
+use App\Service\Tag\DokumenWajibService;
 use App\Service\Akta\BuatTemplateBaru;
 use App\Service\Akta\SimpanTemplate;
 use App\Service\Akta\HapusTemplate;
-use App\Service\Tag\DokumenWajibService;
+use App\Service\Akta\PublishTemplate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\helperController;
@@ -114,8 +115,8 @@ class templateController extends Controller
 
 			$paragraph		= $this->parse_store($id, $request);
 
-			$akta			= new BuatTemplateBaru($paragraph['judul'], $paragraph['paragraf'], $paragraph['mentionable']);
-
+			$akta			= new BuatTemplateBaru($paragraph['judul'], $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), $request->get('dokumen_objek'), $request->get('dokumen_pihak'), $request->get('dokumen_saksi'));
+	
 			$akta 			= $akta->handle();		
 
 		} catch (Exception $e) {
@@ -212,7 +213,7 @@ class templateController extends Controller
 	{
 		try {
 			// save
-			$data									= new \TCommands\Akta\PublishTemplateAkta($id);
+			$data									= new PublishTemplate($id);
 			$data->handle();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();

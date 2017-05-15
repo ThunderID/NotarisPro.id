@@ -48,6 +48,11 @@ class Dokumen extends BaseModel
 											'mentionable'			,
 											'fill_mention'			,
 											'total_perubahan'		,
+											
+											'jumlah_pihak'			,
+											'dokumen_objek'			,
+											'dokumen_pihak'			,
+											'dokumen_saksi'			,
 										];
 	/**
 	 * Basic rule of database

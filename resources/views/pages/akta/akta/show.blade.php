@@ -1,7 +1,7 @@
 @extends('templates.basic')
 
 @push('fonts')
-	<link href="/font/Inconsolata-Regular.ttf">
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
 @endpush
 
 @push('styles')  
@@ -237,9 +237,6 @@
 
 		// draw stripes
 	    window.stripeGenerator.init();
-
-	    // draw footer
-		window.drawFooter();
 
 	    // get document
 	    var target = $('#finalize_akta').find('textarea');

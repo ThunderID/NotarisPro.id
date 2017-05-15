@@ -35,7 +35,7 @@ class DokumenWajibService
 			'kk',
 			'akta_lahir',
 			'akta_ganti_nama',
-			'wni',
+			'paspor',
 			'akta_nikah',
 			'akta_cerai',
 			'akta_kematian',
@@ -46,14 +46,17 @@ class DokumenWajibService
 			'ktp_direksi',
 			'ktp_komisaris',
 			'persetujuan_komisaris',
-			'penerima_kuasa'
+			'ktp_penerima_kuasa',
+			'ktp_pemberi_kuasa',
+			'lain_lain'
 		];
 	}
 
 	public static function saksi()
 	{
 		return [
-			'ktp'
+			'ktp',
+			'lain_lain'
 		];
 	}
 }
