@@ -70,6 +70,8 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.template.update', //patch
 			'destroy' 	=> 'akta.template.destroy' //post 
 		]]);
+		Route::get('/akta/template/trash', 				['uses' => 'templateController@trash', 'as' => 'akta.template.trash']);
+
 		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
 
 		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
@@ -89,6 +91,8 @@ Route::group(['middleware' => ['authenticated']], function()
 			'update' 	=> 'akta.akta.update', //patch
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
+
+		Route::get('/akta/akta/trash', 						['uses' => 'aktaController@trash', 'as' => 'akta.akta.trash']);
 
 		Route::any('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
 		

@@ -385,4 +385,12 @@ class templateController extends Controller
 		//function from parent to generate view
 		return $this->generateView();  
 	}
+
+
+	// Trash Bin
+	public function trash()
+	{
+		dd('Trashed');
+	}
+
 }

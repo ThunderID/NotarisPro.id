@@ -482,4 +482,10 @@ class aktaController extends Controller
 			->stream();
 		
 	}
+
+	// Trash Bin
+	public function trash()
+	{
+		dd('Trashed');
+	}	
 }
