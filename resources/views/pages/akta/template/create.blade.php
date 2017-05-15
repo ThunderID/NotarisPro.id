@@ -93,7 +93,18 @@
 					<div class="panel">
 						<h5>Info Fillable Mention</h5>
 						<div class="list-widgets">
-
+							@if (isset($page_datas->list_widgets))
+								@forelse ($page_datas->list_widgets as $k => $v)
+									<p class="mt-2 mb-2" style="font-size: 14px;">{{ $v }}</p>
+									{{-- <a class="justify-content-between p-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
+										
+										<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
+									</a> --}}
+								@empty
+								@endforelse
+							@else
+								<p>Tidak ada Fillable Mention</p>
+							@endif
 						</div>
 					</div>
 				</div>
