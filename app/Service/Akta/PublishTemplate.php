@@ -45,11 +45,11 @@ class PublishTemplate
 				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
 			}
 
-			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
+			// //1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
+			// if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
+			// {
+			// 	throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
+			// }
 
 			//2. set status
 			$akta->status 			= 'publish';

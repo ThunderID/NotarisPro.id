@@ -104,6 +104,7 @@ class PublishAkta
 					
 					if(!isset($akta->fill_mention[$fill]))
 					{
+						dd($fill);
 						throw new Exception("Data Akta belum lengkap", 1);
 					}
 				}
@@ -114,15 +115,24 @@ class PublishAkta
 
 			$akta->save();
 
+			$akta 						= $akta->toArray();
+			$to_insert['judul'] 		= $akta['judul'];
+			$to_insert['paragraf'] 		= $akta['paragraf'];
+			$to_insert['status'] 		= $akta['status'];
+			$to_insert['pemilik'] 		= $akta['pemilik'];
+			$to_insert['penulis'] 		= $akta['penulis'];
+			$to_insert['mentionable'] 	= $akta['mentionable'];
+			$to_insert['fill_mention'] 	= $akta['fill_mention'];
+
 			//6. simpan versi
-			$prev_versi 			= Versi::where('original_id', $akta->id)->orderby('created_at', 'desc')->first();
+			$prev_versi 			= Versi::where('original_id', $akta['id'])->orderby('created_at', 'desc')->first();
 			$versi 					= new Versi;
-			$versi 					= $versi->fill($akta->toArray());
-			$versi->original_id 	= $akta->id;
+			$versi 					= $versi->fill($to_insert);
+			$versi->original_id 	= $akta['id'];
 			$versi->versi 			= ($prev_versi->versi*1) + 1;
 			$versi->save();
 
-			return $versi->toArray();
+			return $akta;
 		}
 		catch(Exception $e)
 		{
