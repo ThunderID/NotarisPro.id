@@ -8,19 +8,7 @@
 
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 sidebar">
 			<div class="panel">
-				@include('components.sidebarmenu',[
-					'title' => 'Menu',
-					'lists' => [
-						'Kantor'		=>[
-							'url' 	=> route('kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
-							'icon' 	=> 'fa-building'
-						],
-						'User' 	=> [
-							'url' 	=> route('user.index'),
-							'icon' 	=> 'fa-users'
-						]
-					]
-				])
+				@include('helpers.setting_sidebar')
 			</div>	
 		</div>
 		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
@@ -34,6 +22,12 @@
 					@include('components.alertbox')
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<a class="btn btn-primary" href="{{route('user.create')}}">Tambah User</a>
+				</div>
+			</div>
+			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-hover">

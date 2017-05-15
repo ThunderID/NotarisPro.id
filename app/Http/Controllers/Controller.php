@@ -30,13 +30,16 @@ class Controller extends BaseController
 
 	public function generateView()
 	{
-		///from here to next stoppage just for the sake of performance
-		$logged_user 					= \TAuth::loggedUser();
-		$active_office 					= \TAuth::activeOffice();
-		define('acl_logged_user', $logged_user);
-		define('acl_active_office', $active_office);
-		\View::share('acl_logged_user', $logged_user);
-		\View::share('acl_active_office', $active_office);
+		if(!str_is('uac*', Route::currentRouteName()))
+		{
+			///from here to next stoppage just for the sake of performance
+			$logged_user 					= \TAuth::loggedUser();
+			$active_office 					= \TAuth::activeOffice();
+			define('acl_logged_user', $logged_user);
+			define('acl_active_office', $active_office);
+			\View::share('acl_logged_user', $logged_user);
+			\View::share('acl_active_office', $active_office);
+		}
 
 		//temporary line can be removed anytime
 		//this one to display underconstruction

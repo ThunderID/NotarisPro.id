@@ -172,6 +172,31 @@ Route::group(['middleware' => ['authenticated']], function()
 		]]);
 	});
 
+	//billing
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/billing', 'billingController', ['names' => [
+			'index' 	=> 'billing.index', //get
+			'create'	=> 'billing.create', //get
+			'store' 	=> 'billing.store', //post
+			'show' 		=> 'billing.show', //get
+			'edit' 		=> 'billing.edit', //get
+			'update' 	=> 'billing.update', //patch
+			'destroy' 	=> 'billing.destroy' //post 
+		]]);
+	});
+
+	//akun
+	Route::group(['namespace' => 'Admin\\'], function(){
+		Route::resource('/akun', 'akunController', ['names' => [
+			'index' 	=> 'akun.index', //get
+			'create'	=> 'akun.create', //get
+			'store' 	=> 'akun.store', //post
+			'show' 		=> 'akun.show', //get
+			'edit' 		=> 'akun.edit', //get
+			'update' 	=> 'akun.update', //patch
+			'destroy' 	=> 'akun.destroy' //post 
+		]]);
+	});
 
 	//user
 	Route::group(['namespace' => 'Admin\\'], function(){
