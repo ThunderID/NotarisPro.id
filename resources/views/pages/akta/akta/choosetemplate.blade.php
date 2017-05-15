@@ -9,15 +9,15 @@
 	}
 	a.choice-template .hover {
 		display: none;
-		background-color: rgba(2, 90, 165, 0.95);
+		background-color: rgba(2, 90, 165, 0.6);
 		position: absolute;
 	}
 	a.choice-template .hover span {
 		color: #fff !important;
 		position: relative;
-		top: 45%;
+		top: 40%;
 		padding: 5px 15px;
-		border: 1px solid #fff;
+		//border: 1px solid #fff;
 	}
 @endpush  
 
@@ -61,9 +61,9 @@
 							<input type="text" name="judul" class="form-control required" placeholder="Judul dari Akta">
 						</div>
 						<div class="clearfix">&nbsp;</div>
-						<div class="form-group text-right pb-3">
-							{{-- <a href="#list-template" class="btn btn-primary">Berikutnya</a> --}}
-						</div>
+						{{-- <div class="form-group text-right pb-3">
+							<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
+						</div> --}}
 					</div>
 				</div>
 				<div class="col text-right">
@@ -71,12 +71,12 @@
 				</div>
 			</div>
 		</div>
-		<div id="list-template" style="display: none;">
+		<div id="list-template" class="mt-1" style="display: none;">
 			<div class="row align-items-center">
 				<div class="col text-left">
-					<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Kembali</a>
+					<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel" style="height: 90%;">
 					<div class="row">
 						<div class="col-12">
 							<h4 class="title ml-3">{{ $page_attributes->title }}</h4>
@@ -105,7 +105,16 @@
 						@endforeach
 						<input type="hidden" name="template_id" class="template-id">
 					</div>
-					<div class="clearfix">&nbsp;</div>
+					{{-- <div class="clearfix">&nbsp;</div> --}}
+					{{-- <div class="row">
+						<div class="col-6">
+							<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+						</div>
+						<div class="col-6 text-right">
+							<a href="#fillable" class="btn btn-primary action-wizard" data-content="#list-template">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
+						</div>
+					</div>
+					<div class="clearfix">&nbsp;</div> --}}
 				</div>
 				<div class="col text-right">
 					<a href="#fillable" class="btn btn-primary action-wizard" data-content="#list-template">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
@@ -115,21 +124,37 @@
 		<div id="fillable" style="display: none;">
 			<div class="row align-items-center">
 				<div class="col text-left">
-					<a href="#list-template" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Kembali</a>
+					<a href="#list-template" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3">
 					<div class="form">
 						<h4 class="title">Form Fillable Template</h4>
 						<div class="content-fillable-template"></div>
 					</div>
-					<div class="form-group text-right pb-3">
+					{{-- <div class="form-group text-right pb-3">
 						<div class="clearfix">&nbsp;</div>
 						<button class="btn btn-primary" type="submit">
 							<i class="fa fa-gears"></i> Generate Akta
 						</button>
+					</div> --}}
+					<div class="clearfix">&nbsp;</div>
+					<div class="row">
+							{{-- <div class="col-6">
+								<a href="#list-template" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+							</div>
+							<div class="col-6 text-right">
+								<button class="btn btn-primary" type="submit">
+								<i class="fa fa-gears"></i> Generate Akta
+							</button>
+							</div> --}}
 					</div>
+					<div class="clearfix">&nbsp;</div>
 				</div>
-				<div class="col">&nbsp;</div>
+				<div class="col text-right">
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-gears"></i> Generate Akta
+					</button>
+				</div>
 			</div>
 		</div>
 	@endcomponent

@@ -5,7 +5,9 @@
 @endpush
 
 @push('styles')  
-	
+	.medium-editor-toolbar {
+	  visibility: visible;
+	}
 @endpush  
 
 @section('akta')
@@ -25,22 +27,14 @@
 			'class'			=> 'form-template mb-0  form'
 		])
 			<div class="row bg-faded action-bar">
-				<div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 pl-0">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 					<ul class="nav menu-content justify-content-start">
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('akta.template.show', ['id' => $page_datas->id]) }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
+							<span class="navbar-text">{{ isset($page_datas->id) ? $page_datas->datas['judul'] : '' }}</span>
 						</li>
 					</ul>
 				</div>
-				<div class="col-xs-12 col-md-6 col-lg-6">
-					{{-- <ul class="nav menu-content" id="medium-editor-toolbar-actions1">
-						<li class="nav-item">
-							<button class="medium-editor-action medium-editor-action-h4 medium-editor-button-first" data-action="append-h4" title="header type four" aria-label="header type four" type="button"><i class="fa fa-header"></i>1
-							</button>
-						</li>
-					</ul> --}}
-				</div>
-				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 pr-0">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 					<ul class="nav menu-content justify-content-end">
 						<li class="nav-item">
 							<a class="nav-link input-submit save-content" href="#"><i class="fa fa-save"></i> Simpan</a>
@@ -89,26 +83,36 @@
 					</div>
 				</div> --}}
 
-				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar subset-2menu">
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 flex-last sidebar subset-2menu">
 					<div class="panel">
-						<h5>Info Fillable Mention</h5>
+						<h5>Informasi Variable Mention</h5>
 						<div class="list-widgets">
+							@php
+							// dd($page_datas);
+							@endphp
 							@if (isset($page_datas->list_widgets))
+								@php $i=0; @endphp
 								@forelse ($page_datas->list_widgets as $k => $v)
-									<p class="mt-2 mb-2" style="font-size: 14px;">{{ $v }}</p>
-									{{-- <a class="justify-content-between p-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
-										
-										<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
-									</a> --}}
+									@if ($i <= 10)
+										<p class="mt-2 mb-2" style="font-size: 14px;">
+											{{ $v }} 
+											<a class="float-right" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-angle-down mt-1"></i></a>
+											<div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+												Anim pariatur cliche reprehenderit
+											</div>
+										</p>
+									@endif
+									@php $i++; @endphp
 								@empty
 								@endforelse
 							@else
 								<p>Tidak ada Fillable Mention</p>
 							@endif
 						</div>
+						<div id="toolbarMedium">tes</div>
 					</div>
 				</div>
-				<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu">
+				<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 flex-start pl-0 scrollable_panel subset-2menu">
 					<div id="page-breaker" class="row page-breaker"></div>
 					<div id="l-margin" class="margin margin-v"></div>
 					<div id="r-margin" class="margin margin-v"></div>
@@ -154,57 +158,6 @@
 
 
 	//	functions
-
-	/* Margin Drawer */
-	function drawMargin(){
-		// init
-		var pivot_pos = $('.page-editor').offset();
-		var pivot_h = $('.page-editor').outerHeight();
-		var pivot_w = $('.page-editor').outerWidth();
-		var template_h = window.Margin.convertPX(29.7);
-		var margin_document = 47;
-
-		var margin = window.Margin;
-		var ml = margin.convertPX(5) + pivot_pos.left - margin_document  - $('.sidebar').width() - 4;
-		var mr = pivot_pos.left + pivot_w - margin.convertPX(1) - margin_document  - $('.sidebar').width() + 2;
-		var mt = 16 + margin.convertPX(2) - 2;
-		var mb = template_h - (margin.convertPX(2) + margin.convertPX(3) - 16);
-
-		margin.docLeft = pivot_pos.left - 45 - $('.sidebar').width();
-		margin.docWidth = pivot_w;
-		margin.docHeight = pivot_h;
-		margin.pageHeight = template_h;
-
-		margin.displayMargin(ml,mt,mr,mb);
-	}
-
-	/* Page Break */
-	function pageBreak(){
-		var ep = editorPaging;
-		ep.pageHeight =  editorPaging.convertPX(29.7);
-		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
-	}
-
-	// adapter
-	var editor = $('.editor');
-	var page_editor = $('.page-editor');
-
-	// handlers
-	$(document).ready(function(){
-		//pageBreak();
-		//drawMargin();
-	});
-
-	$( window ).resize(function() {
-		// drawMargin();
-	});
-
-	editor.keyup(function(){
-		// pageBreak();
-		// drawMargin()
-	});
-
-
 	/* Hotkeys */
 	//var res = window.hotkey.init($('.editor'));	
 @endpush 
