@@ -6,6 +6,7 @@ namespace App\Service\Order;
 //   Models  //
 ///////////////
 use App\Domain\Order\Models\Klien as Model;
+use MongoDB\BSON\UTCDateTime;
 
 use Hash, Exception, Session, TAuth;
 
@@ -99,7 +100,13 @@ class DaftarKlien
 			$model  			= $model->nama($queries['nama']);
 		}
 
-		//3.sort nama
+		//3.allow created
+		if(isset($queries['created']))
+		{
+			$model  			= $model->where('created_at', '>=', new UTCDateTime(strtotime($queries['created'])));
+		}
+
+		//4.sort nama
 		if(isset($queries['urutkan']))
 		{
 			foreach ($queries['urutkan'] as $key => $value) 
