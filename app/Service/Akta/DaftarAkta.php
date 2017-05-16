@@ -11,6 +11,7 @@ use App\Domain\Akta\Models\Versi;
 use App\Domain\Akta\Models\ReadOnlyAkta;
 
 use Hash, Exception, Session, TAuth, Carbon\Carbon;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class Services Application
@@ -166,7 +167,6 @@ class DaftarAkta
 			case 'drafter':
 				return ['draft', 'renvoi'];
 				break;
-			
 			default:
 				throw new Exception("Forbidden", 1);
 				break;
@@ -214,8 +214,14 @@ class DaftarAkta
 		{
 			$model  			= $model->judul($queries['judul']);
 		}
-		
-		//6.sort klien
+
+		//6.allow created
+		if(isset($queries['created']))
+		{
+			$model  			= $model->where('created_at', '>=', new UTCDateTime(strtotime($queries['created'])));
+		}
+
+		//7.sort klien
 		if(isset($queries['urutkan']))
 		{
 			foreach ($queries['urutkan'] as $key => $value) 
