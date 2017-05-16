@@ -102,7 +102,7 @@ class PublishAkta
 					$fill 	= str_replace('@', '', $value);
 					$fill 	= str_replace('.', '-+', $fill);
 					
-					if(!isset($akta->fill_mention[$fill]))
+					if(!isset($akta->fill_mention[$fill]) && !str_is('akta-+nomor', $fill))
 					{
 						throw new Exception("Data Akta belum lengkap", 1);
 					}

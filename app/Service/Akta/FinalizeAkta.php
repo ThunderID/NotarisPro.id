@@ -12,6 +12,7 @@ use Exception, DB, TAuth, Carbon\Carbon;
 class FinalizeAkta
 {
 	protected $id;
+	protected $nomor_akta;
 	protected $content_stripes;
 
 	/**
@@ -20,9 +21,10 @@ class FinalizeAkta
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct($id, $content_stripes)
+	public function __construct($id, $nomor_akta, $content_stripes)
 	{
 		$this->id				= $id;
+		$this->nomor_akta		= $nomor_akta;
 		$this->content_stripes	= $content_stripes;
 	}
 
@@ -59,17 +61,28 @@ class FinalizeAkta
 			$paragraf 					= [];
 			foreach ($akta->paragraf as $key => $value) 
 			{
+				$value 					= str_replace('@akta.nomor', $this->nomor_akta, $value);
 				$paragraf[$key] 		= $value;
 				$paragraf[$key]['lock']	= Dokumen::createID('lock');
 			}
 			$akta->paragraf 			= $paragraf;
 
-			$akta->status 				= 'akta';
+			if(in_array('@akta.nomor', $akta->mentionable)) 
+			{
+				$fill_mention					= $akta->fill_mention;
+				$fill_mention['akta-+nomor']	= $this->nomor_akta;
+				$akta->fill_mention				= $fill_mention;
+			}
+
+			$akta->status			= 'akta';
 
 			$akta->save();
 
 			//2. simpan versi
 			$prev_versi 			= Versi::where('original_id', $akta->id)->orderby('created_at', 'desc')->first();
+
+			$this->content_stripes	= str_replace('@akta.nomor', $this->nomor_akta, $this->content_stripes);
+
 			$versi 					= new Versi;
 			$versi 					= $versi->fill($akta->toArray());
 			$versi->original_id 	= $akta->id;
@@ -82,7 +95,7 @@ class FinalizeAkta
 			$ro_akta->original_id 	= $akta->id;
 			$ro_akta->save();
 			
-			return true;
+			return $akta;
 		}
 		catch(Exception $e)
 		{
