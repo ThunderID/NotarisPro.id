@@ -37,14 +37,7 @@
 						'title' => 'Filter Akta',
 						'alias' => 'status',
 						'qs'	=> [ 'q','urutkan' ],
-						'lists' => [
-							'semua status' 	=> null,
-							'dalam proses'	=> 'dalam_proses', 
-							'draft' 		=> 'draft',
-							'renvoi' 		=> 'renvoi',
-							'akta' 			=> 'akta',
-							'minuta akta' 	=> 'minuta',
-						]
+						'lists' => \App\Service\Akta\DaftarAkta::statuses()
 					])
 				</div>	
 
