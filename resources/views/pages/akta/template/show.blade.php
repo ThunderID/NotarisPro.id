@@ -49,6 +49,9 @@
 							</li>
 						@elseif(str_is($page_datas->datas['status'], 'publish'))
 							<li class="nav-item">
+								<a class="nav-link" href="{{ route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]) }}"><i class="fa fa-plus-square"></i> &nbsp;Buat Akta dengan Template ini</a>
+							</li>
+							<li class="nav-item">
 								<span class="nav-link">Published</span>
 							</li>
 						@endif

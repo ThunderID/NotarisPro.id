@@ -124,7 +124,7 @@
 
 					// pihak
 					for (var i=1; i<=jumPihak; i++) {
-						$temp.append('<h5 class="text-muted">Pihak ' +i+ '</h5>');
+						$temp.append('<label>Pihak ' +i+ '</label>');
 						selectElement = $('<select></select>');
 						selectElement.addClass('form-control custom-select select-tag mb-3');
 						selectElement.attr('name', 'dokumen_pihak[' +i + '][]');
@@ -141,7 +141,7 @@
 					}
 
 					// saksi
-					$temp.append('<h5 class="text-muted">Saksi</h5>');
+					$temp.append('<label>Saksi</label>');
 					selectElement = $('<select></select>');
 					selectElement.addClass('form-control custom-select select-tag mb-3');
 					selectElement.attr('name', 'dokumen_saksi[]');
@@ -157,7 +157,7 @@
 					$temp.append('<div class="clearfix">&nbsp;</div>');
 
 					// objek
-					$temp.append('<h5 class="text-muted">Objek</h5>');
+					$temp.append('<label>Objek</label>');
 					selectElement = $('<select></select>');
 					selectElement.addClass('form-control custom-select select-tag mb-3');
 					selectElement.attr('name', 'dokumen_objek[]');

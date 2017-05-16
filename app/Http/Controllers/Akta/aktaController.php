@@ -258,18 +258,26 @@ class aktaController extends Controller
 	/**
 	 * Function to choose template from new akta
 	 */
-	public function choose_template()
+	public function choose_template(Request $request)
 	{
 		// init
 		$this->page_attributes->title       = 'Pilih Template';
 
-		$call 								= new DaftarTemplateAkta;
+		if ($request->has('template_id'))
+		{
+			$this->page_datas->template_id	= $request->get('template_id');
+		}
+		else
+		{
+			$this->page_datas->template_id	= null;	
+			
+			$call 							= new DaftarTemplateAkta;
+			$filter 						= ['status' => 'publish'];
+			$list_template 					= $call->all($filter);
 
-		$filter         					= ['status' => 'publish'];
-		$list_template 						= $call->all($filter);
-
-		//get data from database
-		$this->page_datas->datas            = $list_template;
+			//get data from database
+			$this->page_datas->datas 		= $list_template;
+		}
 
 		//initialize view
 		$this->view                         = view('pages.akta.akta.choosetemplate');

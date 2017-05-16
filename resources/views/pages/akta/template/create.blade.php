@@ -8,7 +8,7 @@
 	body {background-color: rgba(0, 0, 0, 0.075) !important;}
 	.editor { border: 2px dashed #ececec; }
 	.medium-editor-toolbar {
-	  visibility: visible;
+	  {{-- visibility: visible; --}}
 	}
 @endpush  
 
@@ -21,6 +21,9 @@
 @stop
 
 @section('content')
+	@php
+		// dd($page_datas);
+	@endphp
 	<div class="hidden-sm-down">
 		@component('components.form', [ 
 			'data_id'		=> $page_datas->id,
