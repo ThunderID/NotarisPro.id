@@ -20,7 +20,7 @@ class TagService
 	{
 		//1. dokumen pihak
 		$dok_mention	= [
-			'ktp'				=> ['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'status_pernikahan', 'pekerjaan', 'kewarganegaraan'],
+			'ktp'				=> ['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'status_pernikahan', 'pekerjaan', 'kewarganegaraan', 'alamat'],
 			'kk'				=> ['nomor', 'nama_kepala_keluarga', 'alamat', 'dikeluarkan_tanggal'],
 			'paspor'			=> ['nomor', 'stbld', 'nama_semula', 'nama_sekarang', 'tempat_ganti_nama', 'tanggal_ganti_nama'],
 			'akta_lahir'		=> ['nomor', 'stbld', 'nama', 'nama_ayah', 'nama_ibu', 'tempat_lahir', 'tanggal_lahir'],
@@ -49,7 +49,7 @@ class TagService
 		//generate docs
 		$dok['akta']	= [['@akta.nomor', '@akta.tanggal']];
 		$dok['notaris']	= [['@notaris.nama', '@notaris.daerah_kerja', '@notaris.nomor_sk', '@notaris.tanggal_pengangkatan', '@notaris.alamat', '@notaris.telepon']];
-		
+
 		$dok['objek']	= [];
 		$dok['saksi']	= [];
 		$dok['pihak_1']	= [];

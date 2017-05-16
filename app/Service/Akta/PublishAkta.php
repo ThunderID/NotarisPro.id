@@ -104,7 +104,6 @@ class PublishAkta
 					
 					if(!isset($akta->fill_mention[$fill]))
 					{
-						dd($fill);
 						throw new Exception("Data Akta belum lengkap", 1);
 					}
 				}
