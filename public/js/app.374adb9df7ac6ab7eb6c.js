@@ -18994,30 +18994,28 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 	},
 
 	init: function init(url, form, param) {
-		// var customToolbar = window.Editor.extensions.toolbar.extends({
-		// 	init: function () {
-		// 		Extensions.prototype.init.apply(this, arguments);
-		// 		this.initThrottledMethods();
+		// init: function () {
+		// 	window.Editor.Extension.prototype.init.apply(this, arguments);
 
-		// 		var toolbarElement = this.getToolbarElement();
+		//     this.initThrottledMethods();
+		//     var newToolbar = $(this.getToolbarElement());
+		//     // newToolbar.find('#medium-editor-toolbar-1').remove();
+		//     // console.log($(this.getToolbarElement()).find('#medium-editor-toolbar-1').removeAttr('style'));
+		//     $('#toolbarMedium').append(newToolbar);
+		//     $('#toolbarMedium').find('.medium-editor-toolbar').attr('data-hes', 'halo');
+		//     // $('#toolbarMedium').find('.medium')
+		//     // $('#toolbarMedium').find('#medium-editor-toolbar-1').attr('style', '');
+		//     // this.getEditorOption('#toolbarMediume').appendChild(this.getToolbarElement());
+		// },
+		// hideToolbar: function () {
 
-		// 		console.log(toolbarElement);
-		// 	}
-		// });
+		// }
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
-				buttons: [{ name: 'h4', contentFA: '<i class="fa fa-header" style="font-size: 15px;"></i>' }, { name: 'h5', contentFA: '<i class="fa fa-header" style="font-size: 10px;"></i>' }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"],
-				// static: true,
-				// sticky: true,
-				init: function init() {
-					window.Editor.Extension.prototype.init.apply(this, arguments);
-
-					this.initThrottledMethods();
-					$('#toolbarMedium').append(this.getToolbarElement());
-					// this.getEditorOption('#toolbarMediume').appendChild(this.getToolbarElement());
-				}
+				buttons: [{ name: 'h4', contentFA: '<i class="fa fa-header" style="font-size: 15px;"></i>' }, { name: 'h5', contentFA: '<i class="fa fa-header" style="font-size: 10px;"></i>' }, "bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"]
 			},
+			// toolbar: false,
 			placeholder: {
 				text: "Tulis disini",
 				hideOnClick: true
@@ -19047,9 +19045,16 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 						}
 						$('.link-mention').on('click', function (el) {
 							el.preventDefault();
-							selectMentionCallback($(this).html());
+							if ($(this).html() === currentMentionText) {
+								selectMentionCallback(null);
+							} else {
+								selectMentionCallback($(this).html());
+							}
 						});
-						$('span.medium-editor-mention-at').addClass('text-danger');
+						$('span.medium-editor-mention-at').addClass('text-danger').removeClass('medium-editor-mention-at-active');
+					},
+					destroyPanelContent: function destroyPanelContent(panelEl) {
+						$(panelEl).remove();
 					},
 					activeTriggerList: ["@"]
 				})
@@ -19059,6 +19064,14 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 		// in input able remove color and style color
 		editor.elements.forEach(function (element) {
 			$(element).find('*').removeAttr('color').css('color', '');
+			$(element).find('span').each(function (k, v) {
+				if ($(v).hasClass('medium-editor-mention-at')) {
+					text = $(v).html();
+					if (text.charAt(0) != '@') {
+						$(v).removeClass('medium-editor-mention-at medium-editor-mention-at-active text-danger text-primary');
+					}
+				}
+			});
 		});
 
 		try {
