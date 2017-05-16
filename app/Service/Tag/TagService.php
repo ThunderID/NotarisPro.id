@@ -61,7 +61,7 @@ class TagService
 			{
 				foreach ($doks[$value] as $key2 => $value2) 
 				{
-					$dok['objek'][$value][$key2]	= '@'.$value.'.'.$value2;
+					$dok['objek'][$value][$key2]	= '@objek.'.$value.'.'.$value2;
 				}
 			}
 		}
@@ -73,7 +73,7 @@ class TagService
 			{
 				foreach ($doks[$value] as $key2 => $value2) 
 				{
-					$dok['saksi'][$value][$key2]	= '@'.$value.'.'.$value2;
+					$dok['saksi'][$value][$key2]	= '@saksi.'.$value.'.'.$value2;
 				}
 			}
 		}

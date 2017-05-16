@@ -318,7 +318,26 @@ class aktaController extends Controller
 				{
 					if(!str_is('@notaris.*', $value) && !str_is('@akta.nomor', $value))
 					{
-						$mentionable[]	= $value;
+						if(str_is('@objek*', $value))
+						{
+							$prefix 				= str_replace('@', '', $value);
+							$prefix 				= explode('.', $prefix);
+							$mentionable[$prefix[0]][$prefix[1]]	= $value;
+						}
+
+						if(str_is('@saksi*', $value))
+						{
+							$prefix 				= str_replace('@', '', $value);
+							$prefix 				= explode('.', $prefix);
+							$mentionable[$prefix[0]][$prefix[1]]	= $value;
+						}
+
+						if(str_is('@pihak*', $value))
+						{
+							$prefix 				= str_replace('@', '', $value);
+							$prefix 				= explode('.', $prefix);
+							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]]	= $value;
+						}
 					}
 				}
 			}
