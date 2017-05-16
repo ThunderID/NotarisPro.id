@@ -6,12 +6,9 @@
 @section('content')
 	<div class="row">
 
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 sidebar">
-			<div class="panel">
-				@include('helpers.setting_sidebar')
-			</div>	
-		</div>
-		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
+		@include('helpers.company_sidebar', ['active' => 'Tagihan'])
+
+		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel">
 			<div class="row">
 				<div class="col-12">
 					<h4 class="title">{{$page_attributes->title}}</h4>		
@@ -32,7 +29,10 @@
 					<p>{{$page_datas->total_user}} User(s)</p>
 				</div>
 				<div class="col-3 text-right">
-					<a class="btn btn-primary" href="{{route('user.create')}}">Tambah User</a>
+					<a class="btn btn-sm btn-primary" href="{{route('user.create')}}">
+						<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
+						Tambah User
+					</a>
 				</div>
 			</div>
 			<hr>

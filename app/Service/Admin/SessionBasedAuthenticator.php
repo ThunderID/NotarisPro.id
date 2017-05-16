@@ -100,8 +100,8 @@ class SessionBasedAuthenticator
 	 */
 	public function activeOffice()
 	{
-		$user 		= Session::get('activating');
-		// $user 	= $this->loggedUser();
+		// $user 		= Session::get('activating');
+		$user 	= $this->loggedUser();
 
 		$visas 	= collect($user['visas']);
 

@@ -6,16 +6,18 @@
 @section('content')
 	<div class="row">
 
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 sidebar">
-			<div class="panel">
-				@include('helpers.setting_sidebar')
-			</div>	
-		</div>
-		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
+		@include('helpers.company_sidebar', ['active' => 'User'])
+
+		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-6">
 					<h4 class="title">{{$page_attributes->title}}</h4>		
 				</div>
+				<div class="col-6 hidden-md-up text-right mobile-toggle-search">
+					<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-on">
+						<i class="fa fa fa-ellipsis-v" aria-hidden="true"></i>
+					</a>
+				</div>					
 			</div>	
 			<div class="row">
 				<div class="col-12">
@@ -23,7 +25,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-8">
+				<div class="col-12 col-lg-10 col-xl-8">
 					@component('components.form', [ 
 						'data_id' 		=> $page_datas->id,
 						'store_url' 	=> route('user.store'), 
@@ -74,6 +76,10 @@
 								</div>
 							</div>
 						</fieldset>	
+
+						<fieldset class="form-group">
+							</br>
+						</fieldset>						
 					
 						<fieldset class="form-group">
 							<div class="row">
@@ -84,8 +90,6 @@
 						</fieldset>	
 							
 						<fieldset class="form-group">
-							</br>
-							</br>
 							</br>
 						</fieldset>
 					@endcomponent	

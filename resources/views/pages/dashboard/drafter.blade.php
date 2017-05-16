@@ -11,43 +11,33 @@
 		<div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
-				<div class="col-sm-3">
+				<div class="col-sm-4">
 					<div class="card card-inverse card-success mb-3 text-center">
 						<div class="card-block">
 							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_akta_bulan_ini}}</h1>
-								<footer>Total Akta Bulan Ini</footer>
+								<h1>{{$page_datas->stat_draft_akta}}</h1>
+								<footer>Queue Draft Akta</footer>
 							</blockquote>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-sm-3">
-					<div class="card card-inverse card-info mb-3 text-center">
+				<div class="col-sm-4">
+					<div class="card card-inverse card-danger mb-3 text-center">
 						<div class="card-block">
 							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_total_drafter}}</h1>
-								<footer>Total Drafter</footer>
+								<h1>{{$page_datas->stat_renvoi_akta}}</h1>
+								<footer>Queue Renvoi</footer>
 							</blockquote>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-4">
 					<div class="card card-inverse card-warning mb-3 text-center">
 						<div class="card-block">
 							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_total_klien_baru}}</h1>
-								<footer>Total Klien Baru</footer>
-							</blockquote>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="card card-inverse card-danger text-center">
-						<div class="card-block">
-							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_tagihan}}</h1>
-								<footer>Tagihan</footer>
+								<h1>{{$page_datas->stat_template}}</h1>
+								<footer>Queue Draft Template</footer>
 							</blockquote>
 						</div>
 					</div>
@@ -59,7 +49,32 @@
 				<div class="col-sm-6">
 					<div class="card">
 						<div class="card-block">
-							<h4 class="card-title">Akta Menunggu Untuk di Cek</h4>
+							<h4 class="card-title">Draft Akta Untuk di Selesaikan</h4>
+							<ul class="list-group list-group-flush">
+								@foreach($page_datas->draft_to_check as $key => $value)
+									<li class="list-group-item">
+										<a href="{{route('akta.akta.show', $value['id'])}}" style="text-decoration: none;">
+											{{$value['judul']}} 
+											@if(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) > 0)
+												<span class="badge badge-info">
+											@elseif(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) == 0)
+												<span class="badge badge-warning">
+											@else
+												<span class="badge badge-danger">
+											@endif
+												<small>{{$value['tanggal_sunting']}}</small>
+											</span>
+										</a>
+									</li>
+								@endforeach
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="card">
+						<div class="card-block">
+							<h4 class="card-title">Renvoi Akta Untuk di Selesaikan</h4>
 							<ul class="list-group list-group-flush">
 								@foreach($page_datas->lists_to_check as $key => $value)
 									<li class="list-group-item">
@@ -82,32 +97,6 @@
 					</div>
 				</div>
 
-
-				<div class="col-sm-6">
-					<div class="card">
-						<div class="card-block">
-							<h4 class="card-title">Akta Published Terbaru</h4>
-							<ul class="list-group list-group-flush">
-								@foreach($page_datas->lists_akta as $key => $value)
-									<li class="list-group-item">
-										<a href="{{route('akta.akta.show', $value['id'])}}" style="text-decoration: none;">
-											{{$value['judul']}} 
-											@if(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) > 0)
-												<span class="badge badge-info">
-											@elseif(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) == 0)
-												<span class="badge badge-warning">
-											@else
-												<span class="badge badge-danger">
-											@endif
-												<small>{{$value['tanggal_sunting']}}</small>
-											</span>
-										</a>
-									</li>
-								@endforeach
-							</ul>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>
 			<div class="clearfix">&nbsp;</div>

@@ -30,6 +30,20 @@ class InitNotarisTableSeeder extends Seeder
 				'nama'	=> 'Notaris & PPAT Anna Wong, SH'
 			],
 		];
+
+		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->_id, $visa_1['role'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
+		$grant_v_1 		= $grant_v_1->handle();
+
+
+
+		$pengguna_2 	= [
+						'email'		=> 'drafter@notaris.id',
+						'nama'		=> 'Ms. Drafter',
+						'password'	=> 'admin',
+		];
+		$usa_2 		= new App\Service\Admin\PenggunaBaru($pengguna_2['nama'],$pengguna_2['email'],$pengguna_2['password']);
+		$usa_2 		= $usa_2->handle();
+
 		$visa_2 		= [
 			'role'		=> 'drafter',
 			'kantor'	=> [
@@ -38,11 +52,7 @@ class InitNotarisTableSeeder extends Seeder
 			],
 		];
 
-
-		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->_id, $visa_1['role'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
-		$grant_v_1 		= $grant_v_1->handle();
-
-		$grant_v_2 		= new App\Service\Admin\GrantVisa($pengguna->_id, $visa_2['role'], $visa_2['kantor']['id'], $visa_2['kantor']['nama']);
+		$grant_v_2 		= new App\Service\Admin\GrantVisa($usa_2['id'], $visa_2['role'], $visa_2['kantor']['id'], $visa_2['kantor']['nama']);
 		$grant_v_2 		= $grant_v_2->handle();
 
 		$notaris_1 		= [
