@@ -25,7 +25,7 @@
 							<li class="nav-item">
 								<span class="nav-link">{{ $page_datas->datas['judul'] }}</span>
 							</li>
-							@if(str_is($page_datas->datas['status'], 'pengajuan'))
+							@if(str_is($page_datas->datas['status'], 'draft'))
 								@if($page_datas->datas['total_perubahan'] * 1 == 0)
 									<li class="nav-item">
 										<!-- <span class="nav-link">Status : Menunggu Renvoi</span> -->
@@ -40,7 +40,7 @@
 					</div>
 					<div class="col-xs-12 col-sm-7 col-md-6 col-lg-6 pr-0">
 						<ul class="nav menu-content justify-content-end">
-							@if(str_is($page_datas->datas['status'], 'draft'))
+							@if(str_is($page_datas->datas['status'], 'dalam_proses'))
 							<li class="nav-item">
 								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
 							</li>
@@ -50,9 +50,9 @@
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
+								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'draft'])}}" ><i class="fa fa-check"></i> Publish</a>
 							</li>
-							@elseif(str_is($page_datas->datas['status'], 'pengajuan'))
+							@elseif(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
 								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
 							</li>
@@ -70,7 +70,7 @@
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'pengajuan'])}}" ><i class="fa fa-check"></i> Publish</a>
+								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'draft'])}}" ><i class="fa fa-check"></i> Publish</a>
 							</li>
 							@elseif (str_is($page_datas->datas['status'], 'akta'))
 								<li class="nav-item">
@@ -89,8 +89,8 @@
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group editor">
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
-									@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
-										{{-- PENGAJUAN --}}
+									@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='draft')
+										{{-- draft --}}
 										@if(isset($value['unlock']) && $value['unlock'])
 											{{-- UNCLOKED --}}
 											<div class="bg-unlocked">
@@ -129,7 +129,7 @@
 								@endforeach
 							</div>
 
-							@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='pengajuan')
+							@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='draft')
 								<div class="form-group editor-hidden" style="display:none;">
 									@foreach($page_datas->datas['paragraf'] as $key => $value)
 										{!!$value['konten']!!}
@@ -221,7 +221,7 @@
 
 
 	@include('components.deleteModal',[
-		'title' => 'Menghapus Draft Akta',
+		'title' => 'Menghapus Akta',
 		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])
 	])
 

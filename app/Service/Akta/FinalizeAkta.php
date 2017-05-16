@@ -41,9 +41,9 @@ class FinalizeAkta
 			$akta 		= Dokumen::findorfail($this->id);
 
 			//1b. check status akta 
-			if(!in_array($akta->status, ['pengajuan']))
+			if(!in_array($akta->status, ['draft']))
 			{
-				throw new Exception("Status Harus Pengajuan", 1);
+				throw new Exception("Status Harus draft", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 

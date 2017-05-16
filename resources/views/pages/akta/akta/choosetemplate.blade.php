@@ -30,51 +30,17 @@
 @stop
 
 @section('content')
+	@php 
+		// dd($page_datas);
+	@endphp
 	@component('components.form', [ 
 			'data_id'		=> null,
 			'store_url' 	=> route('akta.akta.store'), 
 			'class'			=> 'mb-0'
 		])
-		<div id="information" style="display: block;">
+		<div id="list-template" class="mt-1" style="{{ is_null($page_datas->template_id) ? 'display: block;' : 'display: none;' }}">
 			<div class="row align-items-center">
-				<div class="col text-left">
-					{{-- <a href="#list-template" class="btn btn-primary">Berikutnya</a> --}}
-				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
-					<div class="form">
-						<h4 class="title">Form Informasi Akta</h4>
-						{{-- <input type="hidden" name="klien[id]" value="null"> --}}
-						<div class="form-group">
-							<label>Nama</label>
-							<input type="text" name="klien[nama]" class="form-control required" placeholder="Nama Klien">
-						</div>
-						<div class="form-group">
-							<label>No. Telp</label>
-							<input type="tetx" name="klien[telepon]" class="form-control required" placeholder="No. Telp Klien">
-						</div>
-						<div class="form-group">
-							<label>Tgl. Pertemuan</label>
-							<input type="text" name="tanggal_pertemuan" class="form-control required datetime" placeholder="Tgl Pertemuan Klien dengan Notaris">
-						</div>
-						<div class="form-group mb-3 pb-3">
-							<label>Judul Akta</label>
-							<input type="text" name="judul" class="form-control required" placeholder="Judul dari Akta">
-						</div>
-						<div class="clearfix">&nbsp;</div>
-						{{-- <div class="form-group text-right pb-3">
-							<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
-						</div> --}}
-					</div>
-				</div>
-				<div class="col text-right">
-					<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
-				</div>
-			</div>
-		</div>
-		<div id="list-template" class="mt-1" style="display: none;">
-			<div class="row align-items-center">
-				<div class="col text-left">
-					<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+				<div class="col text-left">&nbsp;
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel" style="height: 90%;">
 					<div class="row">
@@ -87,23 +53,25 @@
 						</div>
 					</div>
 					<div class="row p-3 list-card-template">
-						@foreach ($page_datas->datas as $k => $v)
-							<div class="col-md-4 mb-3">
-								<div class="card">
-									<a href="#" data-id="{{ $v['id'] }}" class="choice-template card-link text-muted">
-										<div class="hover text h-100 w-100 text-center">
-											<span>Pilih</span>
-										</div>
-										<div class="card-block">
-											<h4 class="card-title text-center pb-3"><i class="fa fa-file-text fa-2x"></i></h4>
-											<p class="card-text"><small class="search-list">{{ !is_null($v['judul']) ? $v['judul'] : '' }}</small></p>
-										</div>
-									</a>
-									{{-- <a href="#" class="btn btn-primary btn-sm btn-block choice-template" data-id="{{ $v['id'] }}">Pilih</a> --}}
+						@if (isset($page_datas->datas) && !is_null($page_datas->datas))
+							@foreach ($page_datas->datas as $k => $v)
+								<div class="col-md-4 mb-3">
+									<div class="card">
+										<a href="#" data-id="{{ $v['id'] }}" class="choice-template card-link text-muted">
+											<div class="hover text h-100 w-100 text-center">
+												<span>Pilih</span>
+											</div>
+											<div class="card-block">
+												<h4 class="card-title text-center pb-3"><i class="fa fa-file-text fa-2x"></i></h4>
+												<p class="card-text"><small class="search-list">{{ !is_null($v['judul']) ? $v['judul'] : '' }}</small></p>
+											</div>
+										</a>
+										{{-- <a href="#" class="btn btn-primary btn-sm btn-block choice-template" data-id="{{ $v['id'] }}">Pilih</a> --}}
+									</div>
 								</div>
-							</div>
-						@endforeach
-						<input type="hidden" name="template_id" class="template-id">
+							@endforeach
+						@endif
+						<input type="hidden" name="template_id" class="template-id" value="{{ !is_null($page_datas->template_id) ? $page_datas->template_id : null }}">
 					</div>
 					{{-- <div class="clearfix">&nbsp;</div> --}}
 					{{-- <div class="row">
@@ -121,34 +89,41 @@
 				</div>
 			</div>
 		</div>
-		<div id="fillable" style="display: none;">
+		<div id="fillable" style="{{ is_null($page_datas->template_id) ? 'display: none;' : 'display: block;' }} height: 90%;">
 			<div class="row align-items-center">
 				<div class="col text-left">
-					<a href="#list-template" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+					@if (is_null($page_datas->template_id))
+						<a href="#list-template" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+					@endif
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3">
 					<div class="form">
 						<h4 class="title">Form Fillable Template</h4>
 						<div class="content-fillable-template"></div>
 					</div>
-					{{-- <div class="form-group text-right pb-3">
+				</div>
+				<div class="col text-right">
+					<a href="#information" class="btn btn-primary action-wizard" data-content="#fillable">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
+				</div>
+			</div>
+		</div>
+		<div id="information" style="display: none;">
+			<div class="row align-items-center">
+				<div class="col text-left">
+					<a href="#fillable" class="btn btn-primary action-wizard" data-content="#information"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+				</div>
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
+					<div class="form">
+						<h4 class="title">Form Informasi Akta</h4>
+						<div class="form-group mb-3 pb-3">
+							<label>Judul Akta</label>
+							<input type="text" name="judul" class="form-control required" placeholder="Judul dari Akta">
+						</div>
 						<div class="clearfix">&nbsp;</div>
-						<button class="btn btn-primary" type="submit">
-							<i class="fa fa-gears"></i> Generate Akta
-						</button>
-					</div> --}}
-					<div class="clearfix">&nbsp;</div>
-					<div class="row">
-							{{-- <div class="col-6">
-								<a href="#list-template" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
-							</div>
-							<div class="col-6 text-right">
-								<button class="btn btn-primary" type="submit">
-								<i class="fa fa-gears"></i> Generate Akta
-							</button>
-							</div> --}}
+						{{-- <div class="form-group text-right pb-3">
+							<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
+						</div> --}}
 					</div>
-					<div class="clearfix">&nbsp;</div>
 				</div>
 				<div class="col text-right">
 					<button class="btn btn-primary" type="submit">
@@ -203,6 +178,7 @@
 		// check if fillable-mention
 		if (contentTo === '#fillable') {
 			template_id = $('.template-id').val() !== null ? $('.template-id').val() : null;
+			$('.content-fillable-template').html('');
 
 			$.ajax({
 				url: '{{ route("akta.akta.list.mentionable") }}',
@@ -230,6 +206,35 @@
 		// trigger event window resize to fix height content
 		$(window).resize();
 	});
+
+	@if (!is_null($page_datas->template_id))
+		$(document).ready (function() {
+			template_id = $('.template-id').val() !== null ? $('.template-id').val() : null;
+			$('.content-fillable-template').html('');
+
+			$.ajax({
+				url: '{{ route("akta.akta.list.mentionable") }}',
+				method: 'GET',
+				dataType: 'json',
+				data: {template_id: template_id},
+				success: function(result) {
+					var tempGroup = '', i=0;
+					$.each(result['data'], function(k, v) {
+						label = v.substr(1);
+						group = label.split('.');
+						labelNew = label.replace(/_|\./g, ' ');
+						tempForm = $('<div class="form-group"></div>');
+						tempForm.append('<label>' + labelNew + '</label>');
+						tempForm.append($('<input type="text" value="" />')
+						.attr('name', 'mentionable['+ v +']').attr('class', 'form-control'));
+						//tempForm.prepend('<h5>' + group[0] + '</h5>');
+
+						$('.content-fillable-template').append(tempForm);
+					});
+				}
+			});
+		});
+	@endif
 
 	/**
 	 * event click link class choice-template

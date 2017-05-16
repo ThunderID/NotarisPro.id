@@ -136,7 +136,7 @@ class BuatAktaBaru
 			}
 
 			$akta['paragraf']	= $this->isi_akta;
-			$akta['status']		= 'draft';
+			$akta['status']		= 'dalam_proses';
 
 			$dokumen 			= new Dokumen;
 			$dokumen 			= $dokumen->fill($akta);

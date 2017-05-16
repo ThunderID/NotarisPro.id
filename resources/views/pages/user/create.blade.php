@@ -61,7 +61,7 @@
 								<div class="col-12">
 									<label class="control-label" for="role">Role</label>  
 									<select name="akun_role" value="{{ old('role') ? old('role') : '' }}" class="form-control">
-										<option value="drafter">Drafter</option>
+										<option value="drafter">drafter</option>
 										<option value="notaris">Notaris</option>
 									</select>
 								</div>

@@ -1,6 +1,4 @@
 <?php
-
-
 	if(!isset($alias)){
 		$alias = 'filter';
 	}

@@ -36,7 +36,7 @@ class HapusTemplate
 			//1b. check status akta 
 			if(!str_is($akta->status, 'draft'))
 			{
-				throw new Exception("Status Harus Draft", 1);
+				throw new Exception("Status Harus draft", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 

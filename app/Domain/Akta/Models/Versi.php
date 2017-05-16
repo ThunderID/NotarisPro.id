@@ -58,7 +58,7 @@ class Versi extends BaseModel
 											'paragraf.*.lock'		=> 'max:255',
 											// 'paragraf.*.key'		=> 'max:255',
 											// 'paragraf.*.padlock'	=> 'max:255',
-											'status'				=> 'in:draft,pengajuan,renvoi,akta,minuta'
+											'status'				=> 'in:dalam_proses,draft,renvoi,akta,minuta'
 										];
 	/**
 	 * Date will be returned as carbon

@@ -162,10 +162,34 @@ class DaftarAkta
 		switch (strtolower($role)) 
 		{
 			case 'notaris':
-				return ['draft', 'pengajuan', 'renvoi', 'akta', 'minuta'];
+				return ['dalam_proses', 'draft', 'renvoi', 'akta', 'minuta'];
 				break;
 			case 'drafter':
-				return ['draft', 'renvoi'];
+				return ['dalam_proses', 'renvoi'];
+				break;
+			default:
+				throw new Exception("Forbidden", 1);
+				break;
+		}
+	}
+
+	/**
+	 * this function mean keep executing
+	 * @param numeric $page
+	 * 
+	 * @return CreditDTODataTransformer $data
+	 */
+	public static function statuses()
+	{
+		$active_office 	= TAuth::activeOffice();
+
+		switch (strtolower($active_office['role'])) 
+		{
+			case 'notaris':
+				return ['semua status' => null, 'dalam proses' => 'dalam_proses', 'draft' => 'draft', 'renvoi' => 'renvoi', 'akta' => 'akta', 'minuta' => 'minuta'];
+				break;
+			case 'drafter':
+				return ['semua status' => null, 'dalam proses' => 'dalam_proses', 'renvoi' => 'renvoi'];
 				break;
 			default:
 				throw new Exception("Forbidden", 1);

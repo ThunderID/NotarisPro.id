@@ -36,7 +36,7 @@ class PublishTemplate
 			//1b. check status akta 
 			if(!in_array($akta->status, ['draft']))
 			{
-				throw new Exception("Status Harus Draft", 1);
+				throw new Exception("Status Harus draft", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
