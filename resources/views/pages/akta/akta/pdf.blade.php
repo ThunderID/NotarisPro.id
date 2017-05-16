@@ -85,7 +85,7 @@
 					<td>
 						<div class="text-center">
 							<p><b>TANDA TANGAN</b></p>
-							<p>PIHAK {{$i++}}</p>
+							<p>PIHAK {{$i+1}}</p>
 							<br> 
 							<br> 
 							<br> 
