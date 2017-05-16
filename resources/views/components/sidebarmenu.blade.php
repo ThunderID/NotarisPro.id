@@ -12,7 +12,7 @@
 				@endforeach
 			@endif
 		>
-			<li>
+			<li class="{{ isset($list['active']) ? $list['active'] : '' }}">
 				{{ ucWords($key) }}
 				<span class="indicator float-right">
 					<i class="fa {{ $list['icon']}}"></i>
