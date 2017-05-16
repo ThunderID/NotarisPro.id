@@ -50,8 +50,8 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 flex-last sidebar sidebar-right subset-2menu">
 					<div class="panel">
-						<h5>Toolbar</h5>
-						<div id="toolbarMedium" style="position: relative; margin-bottom: 180px;">&nbsp;</div>
+						{{-- <h5>Toolbar</h5> --}}
+						{{-- <div id="toolbarMedium" style="position: relative; margin-bottom: 180px;">&nbsp;</div> --}}
 						<h5>Informasi Variable Mention</h5>
 						<div class="list-widgets">
 							@if (isset($page_datas->list_widgets))
