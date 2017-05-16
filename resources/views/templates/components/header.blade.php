@@ -10,13 +10,13 @@
 <!-- second layer -->
 <nav class="navbar navbar-toggleable-sm navbar-inverse bg-primary text fixed-top">
 
-	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapseAccount" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	<button id="togleCollapseNavbarAccount" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavbarAccount" aria-controls="navbarNavbarAccount" aria-expanded="false" aria-label="Toggle navigation">
 			<i class="fa fa-user-o"></i>
 	</button>
 
 	<a class="navbar-brand text-center text-lg-left text-xl-left" href="{{route('home.dashboard')}}">{{ str_replace("_", " ", env('APP_NAME')) }}</a>
 	
-	<button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	<button id="togleCollapseSupportedContent" class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fa fa-align-justify"></i>
 	</button>
 
@@ -55,11 +55,13 @@
 		</ul>
 	</div>
 
-	<div class="collapse navbar-collapse justify-content-end" id="navbarCollapseAccount">
+	<div class="collapse navbar-collapse justify-content-end" id="navbarNavbarAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('kantor.edit', ['id' => $acl_active_office['kantor']['id']])}}">
-					{{$acl_active_office['kantor']['nama']}}
+					<i class="fa fa-briefcase" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
+					<span class="hidden-md-up">{{$acl_active_office['kantor']['nama']}}</span>	
+					<span class="hidden-md-down">{{$acl_active_office['kantor']['nama']}}</span>
 				</a>
 			</li>
 			<li class="nav-item">
@@ -74,3 +76,11 @@
 
 </nav>
 
+@push('scripts') 
+	$('#togleCollapseSupportedContent').on('click', function(){
+		$('#navbarNavbarAccount').collapse('hide'); 
+	});
+	$('#togleCollapseNavbarAccount').on('click', function(){
+		$('#navbarSupportedContent').collapse('hide'); 
+	});
+@endpush 
