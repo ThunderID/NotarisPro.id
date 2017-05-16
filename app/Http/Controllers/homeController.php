@@ -51,11 +51,11 @@ class homeController extends Controller
     	else
     	{
     		$this->page_datas->lists_to_check			= $this->query->get(['status' => 'renvoi']);
-    		$this->page_datas->dalam_proses_to_check			= $this->query->get(['status' => 'dalam_proses']);
+    		$this->page_datas->draft_to_check			= $this->query->get(['status' => 'dalam_proses']);
 			
-			$this->page_datas->stat_dalam_proses_akta			= $this->query->count(['status' => 'dalam_proses']);
+			$this->page_datas->stat_draft_akta			= $this->query->count(['status' => 'dalam_proses']);
 			$this->page_datas->stat_renvoi_akta			= $this->query->count(['status' => 'renvoi']);
-			$this->page_datas->stat_template			= $this->template->count(['status' => 'dalam_proses']);
+			$this->page_datas->stat_template			= $this->template->count(['status' => 'draft']);
 
 			$this->page_datas->stat_total_klien_baru	= $this->klien->count(['created' => Carbon::parse('first day of this month')->format('Y-m-d H:i:s')]);
 

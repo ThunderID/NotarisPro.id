@@ -221,7 +221,7 @@
 
 
 	@include('components.deleteModal',[
-		'title' => 'Menghapus dalam_proses Akta',
+		'title' => 'Menghapus Akta',
 		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])
 	])
 

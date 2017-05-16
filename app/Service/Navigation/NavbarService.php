@@ -40,7 +40,7 @@ class NavbarService
 				'akta'		=>	[
 									'route' => null,
 									'sub'	=> 	[
-													'dalam_prosesing' 		=> [
+													'drafting' 		=> [
 														'route'		=> route('dashboard.index'),
 														'sub'	=> []
 													],

@@ -13,14 +13,14 @@
 
 // custom
 .subset-menu{
-	height: calc(100% - 54px);
+	height: calc(100vh - 54px);
 }
 
 .subset-2menu{
-	height: calc(100% - 94px);
+	height: calc(100vh - 94px);
 
 	@media screen and (max-width: 575px) {
-		height: calc(100% - 134px);
+		height: calc(100vh - 134px);
 	}
 }
 

@@ -15,8 +15,8 @@
 					<div class="card card-inverse card-success mb-3 text-center">
 						<div class="card-block">
 							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_dalam_proses_akta}}</h1>
-								<footer>Queue dalam_proses Akta</footer>
+								<h1>{{$page_datas->stat_draft_akta}}</h1>
+								<footer>Queue Draft Akta</footer>
 							</blockquote>
 						</div>
 					</div>
@@ -37,7 +37,7 @@
 						<div class="card-block">
 							<blockquote class="card-blockquote">
 								<h1>{{$page_datas->stat_template}}</h1>
-								<footer>Queue dalam_proses Template</footer>
+								<footer>Queue Draft Template</footer>
 							</blockquote>
 						</div>
 					</div>
@@ -49,9 +49,9 @@
 				<div class="col-sm-6">
 					<div class="card">
 						<div class="card-block">
-							<h4 class="card-title">dalam_proses Akta Untuk di Selesaikan</h4>
+							<h4 class="card-title">Draft Akta Untuk di Selesaikan</h4>
 							<ul class="list-group list-group-flush">
-								@foreach($page_datas->dalam_proses_to_check as $key => $value)
+								@foreach($page_datas->draft_to_check as $key => $value)
 									<li class="list-group-item">
 										<a href="{{route('akta.akta.show', $value['id'])}}" style="text-decoration: none;">
 											{{$value['judul']}} 

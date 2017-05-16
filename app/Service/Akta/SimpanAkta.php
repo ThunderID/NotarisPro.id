@@ -42,7 +42,7 @@ class SimpanAkta
 			//1b. check status akta 
 			if(!in_array($akta->status, ['renvoi', 'dalam_proses']))
 			{
-				throw new Exception("Status Harus Renvoi atau dalam_proses", 1);
+				throw new Exception("Status Harus Renvoi atau dalam proses", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 

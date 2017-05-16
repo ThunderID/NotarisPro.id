@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Klien;
 
 use Illuminate\Http\Request;
-use TQueries\Klien\DaftarKlien as Query;
+use App\Service\Order\DaftarKlien as Query;
 
 use App\Http\Controllers\Controller;
 
