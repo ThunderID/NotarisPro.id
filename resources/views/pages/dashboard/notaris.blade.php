@@ -6,65 +6,66 @@
 @push('styles')  
 @endpush  
 
+{{-- Fuze --}}
+<?php
+	$stat_akta_bulan_ini = isset($page_datas->stat_akta_bulan_ini) ? $page_datas->stat_akta_bulan_ini : 0;
+	$stat_total_drafter = isset($page_datas->stat_total_drafter) ? $page_datas->stat_total_drafter : 0;
+	$stat_total_klien_baru = isset($page_datas->stat_total_klien_baru) ? $page_datas->stat_total_klien_baru : 0;
+	$stat_tagihan = isset($page_datas->stat_tagihan) ? $page_datas->stat_tagihan : 0;
+?>
+
 @section('content')
 	<div class="row">
 		<div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
 			<div class="clearfix">&nbsp;</div>
-			<div class="row">
-				<div class="col-sm-3">
-					<div class="card card-inverse card-success mb-3 text-center">
-						<div class="card-block">
-							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_akta_bulan_ini}}</h1>
-								<footer>Total Akta Bulan Ini</footer>
-							</blockquote>
-						</div>
-					</div>
-				</div>
+			<div class="row pt-3">
 
-				<div class="col-sm-3">
-					<div class="card card-inverse card-info mb-3 text-center">
-						<div class="card-block">
-							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_total_drafter}}</h1>
-								<footer>Total Drafter</footer>
-							</blockquote>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="card card-inverse card-warning mb-3 text-center">
-						<div class="card-block">
-							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_total_klien_baru}}</h1>
-								<footer>Total Klien Baru</footer>
-							</blockquote>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="card card-inverse card-danger text-center">
-						<div class="card-block">
-							<blockquote class="card-blockquote">
-								<h1>{{$page_datas->stat_tagihan}}</h1>
-								<footer>Tagihan</footer>
-							</blockquote>
-						</div>
-					</div>
-				</div>
+				@include('components.dashboardCard', [
+					'value'	=> $stat_akta_bulan_ini,
+					'title'	=> 'Total Akta Bulan Ini'
+				])
+
+				@include('components.dashboardCard', [
+					'value'	=> $stat_total_drafter,
+					'title'	=> 'Total Drafter'
+				])					
+
+				@include('components.dashboardCard', [
+					'value'	=> $stat_total_klien_baru,
+					'title'	=> 'Total Klien Baru'
+				])
+
+				@include('components.dashboardCard', [
+					'value'	=> $stat_tagihan,
+					'title'	=> 'Total Tagihan'
+				])	
+
 			</div>
-			<div class="clearfix">&nbsp;</div>
 
 			<div class="row">
-				<div class="col-sm-6">
+
+				<div class="col-12 col-md-6 pb-4">
 					<div class="card">
 						<div class="card-block">
-							<h4 class="card-title">Akta Menunggu Untuk di Cek</h4>
-							<ul class="list-group list-group-flush">
-								@foreach($page_datas->lists_to_check as $key => $value)
-									<li class="list-group-item">
-										<a href="{{route('akta.akta.show', $value['id'])}}" style="text-decoration: none;">
-											{{$value['judul']}} 
+
+							<h5 class="card-title pb-2">Akta Menunggu Untuk di Cek</h5>
+
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>Dokumen</th>
+										<th>Deadline</th>
+									</tr>
+								</thead>
+								<tbody>
+					                @forelse($page_datas->lists_to_check as $key => $value)
+									<tr class="clickable-row" data-href="{{route('akta.akta.show', $value['id'])}}">
+										<td>
+											<i class="fa fa-file"></i>
+											&nbsp;
+											{{ $value['judul'] }}
+										</td>
+										<td>
 											@if(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::now()) > 0)
 												<span class="badge badge-info">
 											@elseif(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::now()) == 0)
@@ -74,24 +75,45 @@
 											@endif
 												<small>{{$value['tanggal_pembuatan']}}</small>
 											</span>
-										</a>
-									</li>
-								@endforeach
-							</ul>
+										</td>					
+									</tr>
+					                @empty
+					                <tr>
+					                    <td colspan="2" class="text-center">
+					                        Tidak Ada Data
+					                    </td>
+					                </tr>
+					                @endforelse
+								</tbody>
+							</table>
+
 						</div>
 					</div>
 				</div>
 
 
-				<div class="col-sm-6">
+				<div class="col-12 col-md-6 pb-4">
 					<div class="card">
 						<div class="card-block">
-							<h4 class="card-title">Akta Published Terbaru</h4>
-							<ul class="list-group list-group-flush">
-								@foreach($page_datas->lists_akta as $key => $value)
-									<li class="list-group-item">
-										<a href="{{route('akta.akta.show', $value['id'])}}" style="text-decoration: none;">
-											{{$value['judul']}} 
+
+							<h5 class="card-title pb-2">Akta Published Terbaru</h5>
+
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>Dokumen</th>
+										<th>Deadline</th>
+									</tr>
+								</thead>
+								<tbody>
+					                @forelse($page_datas->lists_akta as $key => $value)
+									<tr class="clickable-row" data-href="{{route('akta.akta.show', $value['id'])}}">
+										<td>
+											<i class="fa fa-file"></i>
+											&nbsp;
+											{{ $value['judul'] }}
+										</td>
+										<td>
 											@if(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) > 0)
 												<span class="badge badge-info">
 											@elseif(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) == 0)
@@ -101,16 +123,22 @@
 											@endif
 												<small>{{$value['tanggal_sunting']}}</small>
 											</span>
-										</a>
-									</li>
-								@endforeach
-							</ul>
+										</td>					
+									</tr>
+					                @empty
+					                <tr>
+					                    <td colspan="2" class="text-center">
+					                        Tidak Ada Data
+					                    </td>
+					                </tr>
+					                @endforelse
+								</tbody>
+							</table>							
+
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="clearfix">&nbsp;</div>
-			<div class="clearfix">&nbsp;</div>
 		</div>
 	</div>
 @stop
