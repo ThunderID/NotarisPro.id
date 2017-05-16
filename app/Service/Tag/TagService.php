@@ -47,8 +47,8 @@ class TagService
 		$doks 			= self::all();
 
 		//generate docs
-		$dok['akta']	= [['@akta.nomor', '@akta.tanggal']];
-		$dok['notaris']	= [['@notaris.nama', '@notaris.daerah_kerja', '@notaris.nomor_sk', '@notaris.tanggal_pengangkatan', '@notaris.alamat', '@notaris.telepon']];
+		$dok['akta']['akta']		= ['@akta.nomor', '@akta.tanggal'];
+		$dok['notaris']['notaris']	= ['@notaris.nama', '@notaris.daerah_kerja', '@notaris.nomor_sk', '@notaris.tanggal_pengangkatan', '@notaris.alamat', '@notaris.telepon'];
 
 		$dok['objek']	= [];
 		$dok['saksi']	= [];
@@ -61,7 +61,7 @@ class TagService
 			{
 				foreach ($doks[$value] as $key2 => $value2) 
 				{
-					$dok['objek'][$key][$key2]	= '@'.$value.'.'.$value2;
+					$dok['objek'][$value][$key2]	= '@'.$value.'.'.$value2;
 				}
 			}
 		}
@@ -73,7 +73,7 @@ class TagService
 			{
 				foreach ($doks[$value] as $key2 => $value2) 
 				{
-					$dok['saksi'][$key][$key2]	= '@'.$value.'.'.$value2;
+					$dok['saksi'][$value][$key2]	= '@'.$value.'.'.$value2;
 				}
 			}
 		}
@@ -87,14 +87,14 @@ class TagService
 				{
 					foreach ($doks[$value2] as $key3 => $value3) 
 					{
-						$dok["pihak_$key"][$key2][$key3]	= '@pihak.'.$key.'.'.$value2.'.'.$value3;
+						$dok["pihak_$key"][$value2][$key3]	= '@pihak.'.$key.'.'.$value2.'.'.$value3;
 					}
 				}
 				elseif(str_is('ktp_*', $value2))
 				{
 					foreach ($doks['ktp'] as $key3 => $value3) 
 					{
-						$dok["pihak_$key"][$key2][$key3]	= '@pihak.'.$key.'.'.$value2.'.'.$value3;
+						$dok["pihak_$key"][$value2][$key3]	= '@pihak.'.$key.'.'.$value2.'.'.$value3;
 					}
 				}
 			}
