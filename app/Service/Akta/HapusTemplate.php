@@ -34,9 +34,9 @@ class HapusTemplate
 			$akta 		= Template::findorfail($this->id);
 
 			//1b. check status akta 
-			if(!str_is($akta->status, 'dalam_proses'))
+			if(!str_is($akta->status, 'draft'))
 			{
-				throw new Exception("Status Harus dalam_proses", 1);
+				throw new Exception("Status Harus draft", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
