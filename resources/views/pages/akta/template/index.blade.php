@@ -109,6 +109,8 @@
 					<i class="fa fa fa-ellipsis-v" aria-hidden="true"></i>
 				</a>
 			</div>		
+		</div>
+		<div class="row">
 			<div class="col-12 mb-2">
 				@include('components.filterIndicator',[
 					'lists' => 	[
@@ -116,8 +118,8 @@
 						'status' 	=> 'Status Data'
 					]
 				])
-			</div>		
-		</div>
+			</div>
+		</div>			
 		<div class="row">
 			<div class="col-12">
 				@include('components.alertbox')
