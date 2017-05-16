@@ -235,7 +235,7 @@ class aktaController extends Controller
 					$data		= new UnlockAkta($id, []);
 					break;
 				case 'akta':
-					$data		= new FinalizeAkta($id, $request->get('template'));
+					$data		= new FinalizeAkta($id, $request->get('nomor_akta'), $request->get('template'));
 					break;
 				default:
 					throw new Exception("Status invalid", 1);

@@ -8,6 +8,8 @@ use App\Domain\Akta\Models\Dokumen;
 use App\Domain\Order\Models\Klien;
 use App\Domain\Order\Models\Jadwal;
 
+use App\Domain\Admin\Models\Kantor;
+
 use Exception, DB, TAuth, Carbon\Carbon;
 
 class BuatAktaBaru
@@ -59,6 +61,7 @@ class BuatAktaBaru
 			//0. get logged data
 			$loggedUser 		= TAuth::loggedUser();
 			$activeOffice 		= TAuth::activeOffice();
+			$notaris 			= Kantor::find($activeOffice['kantor']['id']);
 
 			//1. simpan klien
 			if(is_null($this->klien_id))
@@ -104,6 +107,32 @@ class BuatAktaBaru
 				{
 					$akta['fill_mention'][str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
 				}
+			}
+
+			//2b. akta mentionable
+			if(in_array('@notaris.nama', $akta['mentionable']))
+			{
+				$akta['fill_mention']['notaris-+nama'] 					= $notaris['notaris']['nama'];
+			}
+			if(in_array('@notaris.daerah_kerja', $akta['mentionable']))
+			{
+				$akta['fill_mention']['notaris-+daerah_kerja'] 			= $notaris['notaris']['daerah_kerja'];
+			}
+			if(in_array('@notaris.nomor_sk', $akta['mentionable']))
+			{
+				$akta['fill_mention']['notaris-+nomor_sk'] 				= $notaris['notaris']['nomor_sk'];
+			}
+			if(in_array('@notaris.tanggal_pengangkatan', $akta['mentionable']))
+			{
+				$akta['fill_mention']['notaris-+tanggal_pengangkatan'] 	= $notaris['notaris']['tanggal_pengangkatan'];
+			}
+			if(in_array('@notaris.alamat', $akta['mentionable']))
+			{
+				$akta['fill_mention']['notaris-+alamat'] 				= $notaris['notaris']['alamat'];
+			}
+			if(in_array('@notaris.telepon', $akta['mentionable']))
+			{
+				$akta['fill_mention']['notaris-+telepon'] 				= $notaris['notaris']['telepon'];
 			}
 
 			$akta['paragraf']	= $this->isi_akta;
