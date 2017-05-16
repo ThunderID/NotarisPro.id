@@ -35,42 +35,29 @@
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 					<ul class="nav menu-content justify-content-end">
-						<!--<li class="nav-item">
-							<span class="nav-link">Zoom</span>
-						</li>
-						<li class="nav-item">
-							<span class="nav-link">Halaman</span>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">A4</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<a class="dropdown-item" href="#">A4</a>
-								<a class="dropdown-item" href="#">F4</a>
-							</div>
-						</li> -->
 						@if(str_is($page_datas->datas['status'], 'draft'))
-						<li class="nav-item">
-							<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
-						</li>
-					
-						<li class="nav-item hidden-sm-down">
-							<a class="nav-link" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
-						</li>
+							<li class="nav-item">
+								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
+							</li>
+						
+							<li class="nav-item hidden-sm-down">
+								<a class="nav-link" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
+							</li>
 
-						<li class="nav-item">
-							<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-cloud-upload"></i> Publish</a>
-						</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-cloud-upload"></i> Publish</a>
+							</li>
 						@elseif(str_is($page_datas->datas['status'], 'publish'))
-						<li class="nav-item">
-							<span class="nav-link">Published</span>
-						</li>
+							<li class="nav-item">
+								<span class="nav-link">Published</span>
+							</li>
 						@endif
 					</ul>
 				</div>
 			</div>
 			{{-- END COMPONENT MENUBAR --}}
 		</div>
-		<div id="page" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 scrollable_panel subset-2menu"">
+		<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu"">
 			<div id="page-breaker" class="row page-breaker"></div>
 			<div class="row">
 				<div class="d-flex justify-content-center mx-auto">
@@ -82,6 +69,12 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="col-12 col-sm-12 col-md-3 col-lg-3 sidebar sidebar-right subset-2menu">
+			<div class="panel">
+				<h5 class="text-capitalize">Deskripsi Template</h5>
+				<p>{{ $page_datas->datas['deskripsi'] }}</p>
 			</div>
 		</div>
 	</div>

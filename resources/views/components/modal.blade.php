@@ -108,8 +108,8 @@
 	}		
 ?>
 
-<div id="{{ $id }}" class="modal fade">
-	<div class="modal-dialog">
+<div id="{{ $id }}" class="modal fade" style="font-family: 'Muli', sans-serif; !important;">
+	<div class="modal-dialog {{ isset($large) ? $large == true ? 'modal-lg' : '' : '' }}">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">

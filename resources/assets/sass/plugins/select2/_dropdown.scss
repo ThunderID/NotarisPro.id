@@ -2,7 +2,7 @@
   background-color: white;
 
   border: 1px solid #aaa;
-  border-radius: 4px;
+  border-radius: 0;
 
   box-sizing: border-box;
 
@@ -48,6 +48,7 @@
 }
 
 .select2-container--open .select2-dropdown--below {
+  border-color: $border-color-focus;
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;

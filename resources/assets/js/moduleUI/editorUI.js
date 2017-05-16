@@ -19,7 +19,7 @@
 
 		try {
 			for (var i in dataListWidgets) {
-				if (i.toLowerCase().indexOf(search) > -1) {
+				if (dataListWidgets[i].toLowerCase().substr(1).indexOf(search) > -1) {
 					result[i] = dataListWidgets[i];
 				}
 			}
@@ -62,9 +62,9 @@
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
-				// buttons: [{name: 'h4', contentFA: '<i class="fa fa-header"></i>1'}, {name: 'h5', contentFA: '<i class="fa fa-header"></i>2'},
-				// 	"bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"
-				// ],
+				buttons: [{name: 'h4', contentFA: '<i class="fa fa-header" style="font-size: 15px;"></i>'}, {name: 'h5', contentFA: '<i class="fa fa-header" style="font-size: 10px;"></i>'},
+					"bold", "italic", "underline", "justifyLeft", "justifyCenter", "justifyRight", "orderedlist", "unorderedlist", "indent", "outdent"
+				],
 				// static: true,
 				// sticky: true,
 				init: function () {
@@ -94,7 +94,7 @@
 						this.mention = window.editorUI.searchMention(currentMentionText);
 						if (Object.keys(this.mention).length != 0) {
 							listMention = window.editorUI.renderListMention(this.mention, selectMentionCallback);
-							$(panelEl).attr('role', 'menu').css('display', 'block').addClass('menu-mention text-left m-0 p-0');
+							$(panelEl).attr('role', 'menu').css('display', 'block').css('height', '200px').css('overflow-y', 'scroll').addClass('menu-mention text-left m-0 p-0');
 							$(panelEl).html(listMention);
 						}
 						else {
@@ -115,11 +115,8 @@
 		});
 
 		// in input able remove color and style color
-		editor.subscribe('editableInput', function (event, editable) {
-			$(editable).children().each( function(k, v){
-				$(this).css('color', '');
-				$(this).find('*').removeAttr('color').css('color', '');
-			});
+		editor.elements.forEach(function (element) {
+			$(element).find('*').removeAttr('color').css('color', '')
 		});
 
 

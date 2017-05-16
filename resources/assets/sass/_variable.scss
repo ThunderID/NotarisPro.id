@@ -1,0 +1,15 @@
+$gray:                  #464a4c !default;
+
+$font-size-base:        1rem !default;
+$input-line-height:     1.25 !default;
+
+$border-width:          1px !default;
+$border-color: 			#ccc !default;
+$border-color-focus: 	#5cb3fd !default;
+
+$input-padding-x:       .75rem !default;
+$input-padding-y:       .5rem !default;
+
+$input-color:           $gray !default;
+
+$input-height: (($font-size-base * $input-line-height) + ($input-padding-y * 2)) !default;

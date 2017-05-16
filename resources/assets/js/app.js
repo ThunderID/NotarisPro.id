@@ -13,6 +13,9 @@ window.appLoading = require('./plugins/app-loading.js');
 // plugin select2
 require('./plugins/select2.js');
 
+// plugin inputmask RobinHerbots/inputmask documention: https://github.com/RobinHerbots/Inputmask
+var Inputmask = require ('./plugins/jquery.inputmask.bundle.js');
+
 
 // app UI
 require ('./appUI');
