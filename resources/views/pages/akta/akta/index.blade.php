@@ -39,8 +39,8 @@
 						'qs'	=> [ 'q','urutkan' ],
 						'lists' => [
 							'semua status' 	=> null,
-							'draft' 		=> 'draft', 
-							'pengajuan' 	=> 'pengajuan',
+							'dalam proses'	=> 'dalam_proses', 
+							'draft' 		=> 'draft',
 							'renvoi' 		=> 'renvoi',
 							'akta' 			=> 'akta',
 							'minuta akta' 	=> 'minuta',

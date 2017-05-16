@@ -71,7 +71,7 @@ class BuatTemplateBaru
 			$template							= $template->fill($akta);
 
 			//4. set status template
-			$template->status 					= 'draft';
+			$template->status 					= 'dalam_proses';
 
 			//5. simpan template
 			$template->save();

@@ -38,7 +38,7 @@
 						'qs'	=> [ 'q','sort' ],
 						'lists' => [
 							'semua status' 	=> null,
-							'draft' 		=> 'draft', 
+							'dalam_proses' 		=> 'dalam_proses', 
 							'publish' 		=> 'publish',
 						]
 					])

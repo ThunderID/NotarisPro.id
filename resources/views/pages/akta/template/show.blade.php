@@ -35,7 +35,7 @@
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 					<ul class="nav menu-content justify-content-end">
-						@if(str_is($page_datas->datas['status'], 'draft'))
+						@if(str_is($page_datas->datas['status'], 'dalam_proses'))
 							<li class="nav-item">
 								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
 							</li>
@@ -84,7 +84,7 @@
 
 
 	@include('components.deleteModal',[
-		'title' => 'Menghapus Draft Template',
+		'title' => 'Menghapus dalam_proses Template',
 		'route' => route('akta.template.destroy', ['id' => $page_datas->datas['id']])
 	])
 @stop

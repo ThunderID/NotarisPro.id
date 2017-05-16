@@ -27,7 +27,7 @@
 						<div class="card-block">
 							<blockquote class="card-blockquote">
 								<h1>{{$page_datas->stat_total_drafter}}</h1>
-								<footer>Total Drafter</footer>
+								<footer>Total drafter</footer>
 							</blockquote>
 						</div>
 					</div>

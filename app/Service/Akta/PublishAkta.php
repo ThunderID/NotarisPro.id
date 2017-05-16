@@ -36,9 +36,9 @@ class PublishAkta
 			$akta 		= Dokumen::findorfail($this->id);
 
 			//1b. check status akta 
-			if(!in_array($akta->status, ['draft', 'renvoi']))
+			if(!in_array($akta->status, ['dalam_proses', 'renvoi']))
 			{
-				throw new Exception("Status Harus Draft atau Renvoi", 1);
+				throw new Exception("Status Harus dalam_proses atau Renvoi", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
@@ -110,7 +110,7 @@ class PublishAkta
 			}
 
 			//5. set status
-			$akta->status 			= 'pengajuan';
+			$akta->status 			= 'dalam_proses';
 
 			$akta->save();
 

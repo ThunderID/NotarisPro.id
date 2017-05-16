@@ -228,7 +228,7 @@ class aktaController extends Controller
 		try {
 			switch (strtolower($status)) 
 			{
-				case 'pengajuan':
+				case 'draft':
 					$data		= new PublishAkta($id);
 					break;
 				case 'renvoi':
@@ -330,21 +330,21 @@ class aktaController extends Controller
 						{
 							$prefix 				= str_replace('@', '', $value);
 							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0]][$prefix[1]]	= $value;
+							$mentionable[$prefix[0]][$prefix[1]][]	= $value;
 						}
 
 						if(str_is('@saksi*', $value))
 						{
 							$prefix 				= str_replace('@', '', $value);
 							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0]][$prefix[1]]	= $value;
+							$mentionable[$prefix[0]][$prefix[1]][]	= $value;
 						}
 
 						if(str_is('@pihak*', $value))
 						{
 							$prefix 				= str_replace('@', '', $value);
 							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]]	= $value;
+							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]][]	= $value;
 						}
 					}
 				}
@@ -378,7 +378,7 @@ class aktaController extends Controller
 				$input['paragraf'][$key]['konten']	= $value;
 			}
 		}
-		elseif($check_status['status']=='draft')
+		elseif($check_status['status']=='dalam_proses')
 		{
 			// get data
 			$pattern		= "/\/t.*?<h.*?>(.*?)<\/h.*?>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";

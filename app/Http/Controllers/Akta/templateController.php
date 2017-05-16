@@ -78,7 +78,7 @@ class templateController extends Controller
 		// 	$input['judul']		= 'Tidak ada judul [Untitled]';
 
 		// 	// save
-		// 	$data				= new \TCommands\Akta\DraftingTemplateAkta($input);
+		// 	$data				= new \TCommands\Akta\dalam_prosesingTemplateAkta($input);
 		// 	$data				= $data->handle();
 		// // save
 		// } catch (Exception $e) {

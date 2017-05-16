@@ -88,7 +88,7 @@ class DaftarTemplateAkta
 	public function detailed($id)
 	{
 		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-		$model 						= $this->model->id($id)->draftOrPublished($queries)->first();
+		$model 						= $this->model->id($id)->dalam_prosesOrPublished($queries)->first();
 		$model 						= $model->toArray();
 
 		if(!isset($model['paragraf']))
@@ -127,23 +127,23 @@ class DaftarTemplateAkta
 		{
 			switch (strtolower($queries['status'])) 
 			{
-				case 'draft':
+				case 'dalam_proses':
 					$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-					$model  					= $model->draft($queries['penulis']['id']);
+					$model  					= $model->dalam_proses($queries['penulis']['id']);
 					break;
 				case 'publish':
 					$model  					= $model->status($queries['status']);
 					break;
 				default:
 					$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-					$model  					= $model->draftOrPublished($queries);
+					$model  					= $model->dalam_prosesOrPublished($queries);
 					break;
 			}
 		}
 		else
 		{
 			$queries['penulis']['id']	= TAuth::loggedUser()['id'];
-			$model  					= $model->draftOrPublished($queries);
+			$model  					= $model->dalam_prosesOrPublished($queries);
 		}
 
 		//3.allow judul

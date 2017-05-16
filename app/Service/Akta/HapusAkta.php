@@ -34,9 +34,9 @@ class HapusAkta
 			$akta 		= Akta::findorfail($this->id);
 
 			//1b. check status akta 
-			if(!str_is($akta->status, 'draft'))
+			if(!str_is($akta->status, 'dalam_proses'))
 			{
-				throw new Exception("Status Harus Draft", 1);
+				throw new Exception("Status Harus dalam_proses", 1);
 			}
 
 			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 

@@ -162,10 +162,10 @@ class DaftarAkta
 		switch (strtolower($role)) 
 		{
 			case 'notaris':
-				return ['draft', 'pengajuan', 'renvoi', 'akta', 'minuta'];
+				return ['dalam_proses', 'dalam_proses', 'renvoi', 'akta', 'minuta'];
 				break;
 			case 'drafter':
-				return ['draft', 'renvoi'];
+				return ['dalam_proses', 'renvoi'];
 				break;
 			default:
 				throw new Exception("Forbidden", 1);
