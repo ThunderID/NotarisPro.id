@@ -59,7 +59,7 @@ class Template extends BaseModel
 	protected $rules				=	[
 											'judul'					=> 'required',
 											// 'paragraf.*.konten'		=> '',
-											'status'				=> 'in:dalam_proses,publish',
+											'status'				=> 'in:draft,publish',
 											// 'jumlah_pihak'			=> 'numeric',
 										];
 	/**
@@ -145,13 +145,13 @@ class Template extends BaseModel
 		return $query->where('pemilik.orang.id', $value);
 	}
 
-	public function scopedalam_proses($query, $value)
+	public function scopeDraft($query, $value)
 	{
-		return $query->where(function($query) use ($value){$query->where('status', 'dalam_proses')->where('penulis.id', $value);});
+		return $query->where(function($query) use ($value){$query->where('status', 'draft')->where('penulis.id', $value);});
 	}
 	
-	public function scopedalam_prosesOrPublished($query, $value)
+	public function scopeDraftOrPublished($query, $value)
 	{
-		return $query->where(function($query) use ($value){$query->where('status', 'dalam_proses')->where('penulis.id', $value['penulis']['id']);})->orwhere('status', 'publish');
+		return $query->where(function($query) use ($value){$query->where('status', 'draft')->where('penulis.id', $value['penulis']['id']);})->orwhere('status', 'publish');
 	}
 }
