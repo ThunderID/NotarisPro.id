@@ -13,6 +13,7 @@
 	$stat_total_klien_baru = isset($page_datas->stat_total_klien_baru) ? $page_datas->stat_total_klien_baru : 0;
 	$stat_tagihan = isset($page_datas->stat_tagihan) ? $page_datas->stat_tagihan : 0;
 ?>
+{{-- End of Fuze --}}
 
 @section('content')
 	<div class="row">
