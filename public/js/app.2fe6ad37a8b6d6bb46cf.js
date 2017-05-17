@@ -19063,7 +19063,7 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 
 		// in input able remove color and style color
 		editor.elements.forEach(function (element) {
-			$(element).find('*').removeAttr('color').css('color', '').css('font-size', '');
+			$(element).find('*').attr('color', '').css('color', 'none').css('font-size', '');
 			$(element).find('span').each(function (k, v) {
 				if ($(v).hasClass('medium-editor-mention-at')) {
 					text = $(v).html();
@@ -19215,14 +19215,20 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {;window.selectUI = {
-	selectTag: function selectTag() {
-		$('.select-tag').select2({
-			themes: 'bootstrap',
+	selectMultiple: function selectMultiple() {
+		$('.select-multiple').select2({
 			tokenSeparators: [',', ' ']
 		});
 	},
+	selectTag: function selectTag() {
+		$('.select-tag').select2({
+			tokenSeparators: [',', ' '],
+			tags: true
+		});
+	},
 	init: function init() {
-		window.selectUI.selectTag();
+		this.selectTag();
+		this.selectMultiple();
 	}
 };
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))

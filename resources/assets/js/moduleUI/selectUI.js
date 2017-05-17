@@ -1,11 +1,17 @@
 ;window.selectUI = {
-	selectTag: function () {
-		$('.select-tag').select2({
-			themes: 'bootstrap',
+	selectMultiple: function () {
+		$('.select-multiple').select2({
 			tokenSeparators: [',', ' '],
 		});
 	},
+	selectTag: function () {
+		$('.select-tag').select2({
+			tokenSeparators: [',', ' '],
+			tags: true,
+		});
+	},
 	init: function() {
-		window.selectUI.selectTag();
+		this.selectTag();
+		this.selectMultiple();
 	}
 }

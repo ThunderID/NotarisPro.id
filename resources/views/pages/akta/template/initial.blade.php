@@ -51,16 +51,11 @@
 						</div>
 						<div class="form-group">
 							<label>Jumlah Pihak</label>
-							<select name="jumlah_pihak" class="form-control custom-select">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
-								<option>8</option>
-							</select>
+							<input type="text" name="jumlah_pihak" class="form-control mask-number" placeholder="0">
+						</div>
+						<div class="form-group">
+							<label>Jumlah Saksi</label>
+							<input type="text" name="jumlah_saksi" class="form-control mask-number" placeholder="0">
 						</div>
 						<div class="clearfix">&nbsp;</div>
 					</div>
@@ -113,6 +108,8 @@
 		// check if fillable-mention
 		if (contentTo === '#choice-doc-template') {
 			jumPihak = $('[name="jumlah_pihak"]').val();
+			jumSaksi = $('[name="jumlah_saksi"]').val();
+
 			$('.content-choice-doc-template').html('');
 			
 			$.ajax({
@@ -126,7 +123,7 @@
 					for (var i=1; i<=jumPihak; i++) {
 						$temp.append('<label>Pihak ' +i+ '</label>');
 						selectElement = $('<select></select>');
-						selectElement.addClass('form-control custom-select select-tag mb-3');
+						selectElement.addClass('form-control custom-select select-multiple mb-3');
 						selectElement.attr('name', 'dokumen_pihak[' +i + '][]');
 						selectElement.attr('multiple', 'multiple');
 						selectElement.attr('placeholder', 'Pilih Dokumen Pihak '+ i).attr('data-placeholder', 'Pilih Dokumen Pihak '+ i);
@@ -141,25 +138,27 @@
 					}
 
 					// saksi
-					$temp.append('<label>Saksi</label>');
-					selectElement = $('<select></select>');
-					selectElement.addClass('form-control custom-select select-tag mb-3');
-					selectElement.attr('name', 'dokumen_saksi[]');
-					selectElement.attr('multiple', 'multiple');
-					selectElement.attr('placeholder', 'Pilih Dokumen Saksi').attr('data-placeholder', 'Pilih Dokumen Saksi');
-					$.each(result['saksi'], function(k, v) {
-						optionElement = $('<option></option>');
-						optionElement.attr('value', v);
-						optionElement.html(v.replace(/_/g, ' '));
-						selectElement.append(optionElement);
-					});
-					$temp.append(selectElement);
-					$temp.append('<div class="clearfix">&nbsp;</div>');
+					for (var i=1; i<=jumSaksi; i++) {
+						$temp.append('<label>Saksi ' +i+ '</label>');
+						selectElement = $('<select></select>');
+						selectElement.addClass('form-control custom-select select-multiple mb-3');
+						selectElement.attr('name', 'dokumen_saksi[' +i + '][]');
+						selectElement.attr('multiple', 'multiple');
+						selectElement.attr('placeholder', 'Pilih Dokumen Saksi').attr('data-placeholder', 'Pilih Dokumen Saksi');
+						$.each(result['saksi'], function(k, v) {
+							optionElement = $('<option></option>');
+							optionElement.attr('value', v);
+							optionElement.html(v.replace(/_/g, ' '));
+							selectElement.append(optionElement);
+						});
+						$temp.append(selectElement);
+						$temp.append('<div class="clearfix">&nbsp;</div>');
+					}
 
 					// objek
 					$temp.append('<label>Objek</label>');
 					selectElement = $('<select></select>');
-					selectElement.addClass('form-control custom-select select-tag mb-3');
+					selectElement.addClass('form-control custom-select select-multiple mb-3');
 					selectElement.attr('name', 'dokumen_objek[]');
 					selectElement.attr('multiple', 'multiple');
 					selectElement.attr('placeholder', 'Pilih Dokumen Objek').attr('data-placeholder', 'Pilih Dokumen Objek');
@@ -172,7 +171,7 @@
 					$temp.append(selectElement);
 					$temp.append('<div class="clearfix">&nbsp;</div>');
 
-					window.selectUI.selectTag();
+					window.selectUI.selectMultiple();
 				}
 			});
 		}
@@ -180,4 +179,9 @@
 		// trigger event window resize to fix height content
 		$(window).resize();
 	});
+
+	var number = new Inputmask({
+		mask: "9{1,5}", 
+	});
+	number.mask($('.mask-number'));
 @endpush 

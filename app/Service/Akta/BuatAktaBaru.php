@@ -79,6 +79,7 @@ class BuatAktaBaru
 			$akta['judul']							= $this->judul;
 
 			$akta['jumlah_pihak']					= $template['jumlah_pihak'];
+			$akta['jumlah_saksi']					= $template['jumlah_saksi'];
 			$akta['dokumen_objek']					= $template['dokumen_objek'];
 			$akta['dokumen_pihak']					= $template['dokumen_pihak'];
 			$akta['dokumen_saksi']					= $template['dokumen_saksi'];

@@ -183,22 +183,6 @@
 	        @include('components.paginate')
 		</div>
 	</div>
-
-<!-- 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-2" style="height: calc(100% - 54px); background-color: #ddd; ">
-		<h5 style="padding-top: 2rem; padding-bottom: 0.5rem;">Cari Data</h5>
-
-		<div class="search">
-			<form class="form" action="" data-pjax=true data-ajax-submit=false>
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Cari" aria-describedby="basic-addon1" name="q">
-					<span class="input-group-addon" id="basic-addon1">
-						<i class="fa fa-search" aria-hidden="true"></i>
-					</span>
-				</div>
-			</form>
-		</div>
-	</div>	 -->
-
 </div>
 @stop
 

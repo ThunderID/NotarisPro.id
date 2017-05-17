@@ -13,6 +13,7 @@ class BuatTemplateBaru
 	protected $isi_template;
 	protected $mentionable;
 	protected $jumlah_pihak;
+	protected $jumlah_saksi;
 	protected $dokumen_objek;
 	protected $dokumen_pihak;
 	protected $dokumen_saksi;
@@ -23,13 +24,14 @@ class BuatTemplateBaru
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct($judul, $deskripsi, array $isi_template, array $mentionable, $jumlah_pihak, array $dokumen_objek, array $dokumen_pihak, array $dokumen_saksi)
+	public function __construct($judul, $deskripsi, array $isi_template, array $mentionable, $jumlah_pihak, $jumlah_saksi, array $dokumen_objek, array $dokumen_pihak, array $dokumen_saksi)
 	{
 		$this->judul			= $judul;
 		$this->deskripsi		= $deskripsi;
 		$this->isi_template		= $isi_template;
 		$this->mentionable		= $mentionable;
 		$this->jumlah_pihak		= $jumlah_pihak;
+		$this->jumlah_saksi		= $jumlah_saksi;
 		$this->dokumen_objek	= $dokumen_objek;
 		$this->dokumen_pihak	= $dokumen_pihak;
 		$this->dokumen_saksi	= $dokumen_saksi;
@@ -59,12 +61,25 @@ class BuatTemplateBaru
 			$akta['paragraf']					= $this->isi_template;
 			$akta['mentionable']				= $this->mentionable;
 			$akta['jumlah_pihak']				= $this->jumlah_pihak;
+			$akta['jumlah_saksi']				= $this->jumlah_saksi;
 			$akta['dokumen_objek']				= $this->dokumen_objek;
-			$akta['dokumen_saksi']				= $this->dokumen_saksi;
-
-			foreach (range(1, $this->jumlah_pihak) as $key) 
+			$akta['dokumen_pihak']				= [];
+			$akta['dokumen_saksi']				= [];
+			
+			if($this->jumlah_pihak>0)
 			{
-				$akta['dokumen_pihak'][$key]	= $this->dokumen_pihak[$key];
+				foreach (range(1, $this->jumlah_pihak) as $key) 
+				{
+					$akta['dokumen_pihak'][$key]	= $this->dokumen_pihak[$key];
+				}
+			}
+			
+			if($this->jumlah_saksi>0)
+			{
+				foreach (range(1, $this->jumlah_saksi) as $key) 
+				{
+					$akta['dokumen_saksi'][$key]	= $this->dokumen_saksi[$key];
+				}
 			}
 
 			//3. simpan value yang ada

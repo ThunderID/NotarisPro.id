@@ -50,6 +50,7 @@ class Dokumen extends BaseModel
 											'total_perubahan'		,
 											
 											'jumlah_pihak'			,
+											'jumlah_saksi'			,
 											'dokumen_objek'			,
 											'dokumen_pihak'			,
 											'dokumen_saksi'			,
