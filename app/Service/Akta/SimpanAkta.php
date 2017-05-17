@@ -4,6 +4,9 @@ namespace App\Service\Akta;
 
 use App\Domain\Akta\Models\Dokumen;
 
+use App\Domain\Order\Models\Klien;
+use App\Domain\Order\Models\Jadwal;
+
 use Exception, DB, TAuth, Carbon\Carbon;
 
 class SimpanAkta
@@ -69,19 +72,58 @@ class SimpanAkta
 			}
 
 			//3. simpan value yang ada
-			$akta->paragraf = $paragraf;
+			$akta->paragraf 		= $paragraf;
 
 			//4. simpan mention
 			$fill_mention 			= $akta->fill_mention;
+
+			$pihak					= [];
 
 			foreach($akta->mentionable as $key => $value)
 			{
 				if(isset($this->mentionable[$value]))
 				{
 					$fill_mention[str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
+
+					if(str_is('@pihak.*.ktp.*', $value))
+					{
+						$pihaks 		= str_replace('@', '', $value);
+						$pihaks 		= explode('.', $pihaks);
+
+						$pihak[$pihaks[1]][$pihaks[3]]	= $this->mentionable[$value];
+					}
 				}
 			}
-			$akta->fill_mention 	= $fill_mention;
+
+			foreach ($pihak as $key => $value) 
+			{
+				$new_pihak 				= Klien::where('nomor_ktp', $value['nomor_ktp'])->first();
+
+				if(!$new_pihak)
+				{
+					$new_pihak 			= new Klien;
+				}
+
+				$new_pihak 				= $new_pihak->fill($value);
+
+				$new_pihak->save();
+				$new_pihak 				= $new_pihak->toArray();
+				
+				$pemilik 				= $akta->pemilik;
+				$pemilik['pemilik']['klien'][$key]['id'] 	= $new_pihak['id'];
+				$pemilik['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
+
+				$akta->pemilik 			= $pemilik;
+
+				$jadwal 				= Jadwal::where('original_id', $akta->_id)->first();
+				if($jadwal)
+				{
+					$jadwal->peserta 	= $pemilik['pemilik']['klien'];
+					$jadwal->save();
+				}
+			}
+
+			$akta->fill_mention 		= $fill_mention;
 
 			//5. simpan dokumen
 			$akta->save();

@@ -58,10 +58,10 @@
 	<div class="collapse navbar-collapse justify-content-end" id="navbarNavbarAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="{{route('kantor.edit', ['id' => $acl_active_office['kantor']['id']])}}">
-					<i class="fa fa-briefcase" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
-					<span class="hidden-md-up">{{$acl_active_office['kantor']['nama']}}</span>	
-					<span class="hidden-md-down">{{$acl_active_office['kantor']['nama']}}</span>
+				<a class="nav-link" href="{{route('billing.index')}}">
+					<i class="fa fa-cog" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
+					<span class="hidden-md-up">Pengaturan & Tagihan</span>	
+					<span class="hidden-md-down">Pengaturan & Tagihan</span>
 				</a>
 			</li>
 			<li class="nav-item">

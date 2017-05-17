@@ -93,6 +93,7 @@ class DaftarAkta
 		}
 		foreach ((array)$akta['fill_mention'] as $key => $value) 
 		{
+
 			$akta['fill_mention']['@'.str_replace('-+','.',$key)] = $value;
 			unset($akta['fill_mention'][$key]);
 		}

@@ -2,6 +2,8 @@
 
 namespace App\Domain\Akta\Models;
 
+use App\Domain\Akta\Observers\TemplateObserver;
+
 use App\Infrastructure\Traits\GuidTrait;
 use App\Infrastructure\Traits\TanggalTrait;
 
@@ -116,6 +118,8 @@ class Template extends BaseModel
 	public static function boot() 
 	{
 		parent::boot();
+
+		Template::observe(new TemplateObserver());
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
