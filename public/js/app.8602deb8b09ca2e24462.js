@@ -19063,7 +19063,7 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 
 		// in input able remove color and style color
 		editor.elements.forEach(function (element) {
-			$(element).find('*').removeAttr('color').css('color', '');
+			$(element).find('*').removeAttr('color').css('color', '').css('font-size', '');
 			$(element).find('span').each(function (k, v) {
 				if ($(v).hasClass('medium-editor-mention-at')) {
 					text = $(v).html();
