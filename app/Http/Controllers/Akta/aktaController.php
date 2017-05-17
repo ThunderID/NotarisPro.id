@@ -37,7 +37,7 @@ class aktaController extends Controller
 	public function index()
 	{
 		// init
-		$this->page_attributes->title		= 'Data Akta';
+		$this->page_attributes->title		= 'Akta Dokumen';
 
 		//filter&search
 		$query                             	= $this->getQueryString(['q', 'status', 'sort', 'page']);
@@ -514,7 +514,7 @@ class aktaController extends Controller
 	public function trash()
 	{
 		// init
-		$this->page_attributes->title       = 'Keranjang Sampah Akta';
+		$this->page_attributes->title       = 'Keranjang Sampah Akta Dokumen';
 		$this->page_attributes->hide['create']	= true;
 
 
