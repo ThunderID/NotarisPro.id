@@ -186,16 +186,25 @@
 				dataType: 'json',
 				data: {template_id: template_id},
 				success: function(result) {
-					var tempGroup = '', i=0;
 					$.each(result['data'], function(k, v) {
-						label = v.substr(1);
-						group = label.split('.');
-						labelNew = label.replace(/_|\./g, ' ');
-						tempForm = $('<div class="form-group"></div>');
-						tempForm.append('<label>' + labelNew + '</label>');
-						tempForm.append($('<input type="text" value="" />')
-						.attr('name', 'mentionable['+ v +']').attr('class', 'form-control'));
-						//tempForm.prepend('<h5>' + group[0] + '</h5>');
+						tempForm = $('<div class="form-group pb-3" style="border-bottom: 1px solid #ccc; margin-bottom: 35px;"></div>');
+						tempForm.append('<h5 class="mb-2 pb-2 text-capitalize">' +k.replace(/_/g, ' ')+ '</h5>');
+						$.each(v, function (k2, v2) {
+							linkCollapse = $('<a class="text-muted mb-0" data-toggle="collapse" href="#collapse-' +k+'-'+k2+ '" aria-expanded="true" aria-controls="collapse-' +k+'-'+k2+ '"></a>');
+							linkCollapse.html(k2);
+							linkCollapse.css('display', 'block');
+							linkCollapse.append('<span class="float-right text-primary"><i class="fa fa-angle-down mt-1"></i></span>');
+							linkCollapse.css('display', 'block-inline');
+							tempForm.append(linkCollapse);
+							divCollapse = $('<div id="collapse-' +k+'-'+k2+ '" class="collapse pt-3 pb-3 mb-2" role="tabpanel"></div>');
+							$.each(v2,function (k3, v3) {
+								tempTitle = v3.split('.');
+								divCollapse.append('<label>' +tempTitle[3].replace(/_/g, ' ')+ '</label');
+								divCollapse.append($('<input type="text" value="" />')
+								.attr('name', 'mentionable['+ v3 +']').attr('class', 'form-control mb-3'));
+							});
+							tempForm.append(divCollapse);
+						});
 
 						$('.content-fillable-template').append(tempForm);
 					});
@@ -219,15 +228,16 @@
 				data: {template_id: template_id},
 				success: function(result) {
 					$.each(result['data'], function(k, v) {
-						tempForm = $('<div class="form-group mb-3 pb-3"></div>');
-						tempForm.append('<h5 class="mb-2">' +k.replace(/_/g, ' ')+ '</h5>');
+						tempForm = $('<div class="form-group pb-3" style="border-bottom: 1px solid #ccc; margin-bottom: 35px;"></div>');
+						tempForm.append('<h5 class="mb-2 pb-2 text-capitalize">' +k.replace(/_/g, ' ')+ '</h5>');
 						$.each(v, function (k2, v2) {
-							linkCollapse = $('<a class="text-muted mb-3" data-toggle="collapse" href="#collapse-' +k+'-'+k2+ '" aria-expanded="true" aria-controls="collapse-' +k+'-'+k2+ '"></a>');
+							linkCollapse = $('<a class="text-muted mb-0" data-toggle="collapse" href="#collapse-' +k+'-'+k2+ '" aria-expanded="true" aria-controls="collapse-' +k+'-'+k2+ '"></a>');
 							linkCollapse.html(k2);
+							linkCollapse.css('display', 'block');
 							linkCollapse.append('<span class="float-right text-primary"><i class="fa fa-angle-down mt-1"></i></span>');
 							linkCollapse.css('display', 'block-inline');
 							tempForm.append(linkCollapse);
-							divCollapse = $('<div id="collapse-' +k+'-'+k2+ '" class="collapse pt-3" role="tabpanel"></div>');
+							divCollapse = $('<div id="collapse-' +k+'-'+k2+ '" class="collapse pt-3 pb-3 mb-2" role="tabpanel"></div>');
 							$.each(v2,function (k3, v3) {
 								tempTitle = v3.split('.');
 								divCollapse.append('<label>' +tempTitle[3].replace(/_/g, ' ')+ '</label');
@@ -237,16 +247,6 @@
 							tempForm.append(divCollapse);
 						});
 
-						// label = v.substr(1);
-						// group = label.split('.');
-						// labelNew = label.replace(/_|\./g, ' ');
-						// tempForm = $('<div class="form-group"></div>');
-						// tempForm.append('<label>' + labelNew + '</label>');
-						// tempForm.append($('<input type="text" value="" />')
-						// .attr('name', 'mentionable['+ v +']').attr('class', 'form-control'));
-						//tempForm.prepend('<h5>' + group[0] + '</h5>');
-
-						// $('.content-fillable-template').append(tempForm);
 						$('.content-fillable-template').append(tempForm);
 					});
 				}

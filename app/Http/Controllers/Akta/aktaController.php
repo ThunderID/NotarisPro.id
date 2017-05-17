@@ -101,8 +101,7 @@ class aktaController extends Controller
 			$tanggal_pertemuan 			= date_create($input['tanggal_pertemuan']);
 			$input['tanggal_pertemuan']	= date_format($tanggal_pertemuan, 'd/m/Y H:i');
 
-			$akta						= new BuatAktaBaru($input['klien']['id'], $input['klien']['nama'], 
-														$input['klien']['telepon'], $input['tanggal_pertemuan'], 
+			$akta						= new BuatAktaBaru($input['tanggal_pertemuan'], 
 														$input['judul'], $template['paragraf'], 
 														$input['mentionable'], $input['template_id']);
 

@@ -35,4 +35,15 @@ trait TanggalTrait {
 		return $value->toDateTime()->format('d/m/Y');
 		return Carbon::parse($value)->format('d/m/Y');
 	}
+
+	/**
+	 * parse output tanggal
+	 * @param Y-m-d $value 
+	 * @return d/m/Y $value 
+	 */
+	public function formatCarbonDateTo($value)
+	{
+		// return $value->toDateTime()->format('d/m/Y');
+		return Carbon::parse($value)->format('d/m/Y');
+	}
 }
