@@ -37,6 +37,8 @@ class TagService
 			'imb'				=> ['nomor', 'alamat', 'atas_nama'],
 			'pbb'				=> ['nomor', 'alamat', 'nama_wajib_pajak'],
 			'hpl'				=> ['nomor'],
+			'bpkb'				=> ['nomor', 'nomor_polisi', 'merek', 'tipe', 'jenis', 'model', 'tahun_pembuatan', 'tahun_perakitan', 'isi_silinder', 'warna', 'nomor_rangka', 'nomor_mesin', 'jumlah_sumbu', 'jumlah_roda', 'bahan_bakar', 'dikeluarkan_tanggal', 'nama_pemilik', 'alamat_pemilik'],
+			'stnk'				=> ['nomor', 'nomor_polisi', 'merek', 'tipe', 'jenis', 'model', 'tahun_pembuatan', 'tahun_perakitan', 'isi_silinder', 'warna', 'nomor_rangka', 'nomor_mesin', 'jumlah_sumbu', 'jumlah_roda', 'bahan_bakar', 'dikeluarkan_tanggal', 'nama_pemilik', 'alamat_pemilik'],
 		];
 
 		return $dok_mention;

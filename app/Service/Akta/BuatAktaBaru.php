@@ -37,11 +37,8 @@ class BuatAktaBaru
 	 *
 	 * @return void
 	 */
-	public function __construct($klien_id, $klien_nama, $klien_telepon, $tanggal_pertemuan, $judul, array $isi_akta, array $mentionable, $template_id)
+	public function __construct($tanggal_pertemuan, $judul, array $isi_akta, array $mentionable, $template_id)
 	{
-		$this->klien_id				= $klien_id;
-		$this->klien_nama			= $klien_nama;
-		$this->klien_telepon		= $klien_telepon;
 		$this->tanggal_pertemuan	= $tanggal_pertemuan;
 		$this->judul				= $judul;
 		$this->isi_akta				= $isi_akta;
@@ -64,17 +61,6 @@ class BuatAktaBaru
 			$notaris 			= Kantor::find($activeOffice['kantor']['id']);
 
 			//1. simpan klien
-			if(is_null($this->klien_id))
-			{
-				$klien 			= new Klien;
-			}
-			else
-			{
-				$klien 			= Klien::find($this->klien_id);
-			}
-
-			$klien->fill(['nama' => $this->klien_nama, 'kantor' => ['id' => $activeOffice['kantor']['id'], 'nama' => $activeOffice['kantor']['nama'], 'telepon' => $this->klien_telepon]]);
-			$klien->save();
 
 			//2. simpan akta
 			$call				= new DaftarTemplateAkta;
@@ -86,10 +72,6 @@ class BuatAktaBaru
 			$akta['pemilik']['kantor']['id'] 		= $activeOffice['kantor']['id'];
 			$akta['pemilik']['kantor']['nama'] 		= $activeOffice['kantor']['nama'];
 
-			$akta['pemilik']['klien']['id'] 		= $klien['id'];
-			$akta['pemilik']['klien']['nama'] 		= $klien['nama'];
-			$akta['pemilik']['klien']['telepon'] 	= $klien['telepon'];
-
 			$akta['penulis']['id'] 					= $loggedUser['id'];
 			$akta['penulis']['nama'] 				= $loggedUser['nama'];
 
@@ -100,13 +82,41 @@ class BuatAktaBaru
 			$akta['dokumen_objek']					= $template['dokumen_objek'];
 			$akta['dokumen_pihak']					= $template['dokumen_pihak'];
 			$akta['dokumen_saksi']					= $template['dokumen_saksi'];
+			$akta['total_perubahan']				= 0;
+
+			$pihak 									= [];
 
 			foreach($akta['mentionable'] as $key => $value)
 			{
 				if(isset($this->mentionable[$value]))
 				{
 					$akta['fill_mention'][str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
+					if(str_is('@pihak.*.ktp.*', $value))
+					{
+						$pihaks 		= str_replace('@', '', $value);
+						$pihaks 		= explode('.', $pihaks);
+
+						$pihak[$pihaks[1]][$pihaks[3]]	= $this->mentionable[$value];
+					}
 				}
+
+			}
+			foreach ($pihak as $key => $value) 
+			{
+				$new_pihak 				= Klien::where('nomor_ktp', $value['nik'])->first();
+
+				if(!$new_pihak)
+				{
+					$new_pihak 			= new Klien;
+				}
+
+				$new_pihak 				= $new_pihak->fill($value);
+				$new_pihak->save();
+
+				$new_pihak 				= $new_pihak->toArray();
+
+				$akta['pemilik']['klien'][$key]['id'] 		= $new_pihak['id'];
+				$akta['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
 			}
 
 			//2b. akta mentionable
@@ -148,9 +158,13 @@ class BuatAktaBaru
 					'judul'			=> 'Deadline '.$this->judul,
 					'waktu'			=> $this->tanggal_pertemuan,
 					'pembuat'		=> ['kantor' => ['id' => $activeOffice['kantor']['id'],'nama' => $activeOffice['kantor']['nama']]],
-					'peserta'		=> [['id' => $klien->id,'nama' => $klien->nama]],
+					// 'peserta'		=> $akta['pemilik']['klien'],
 					'referensi_id'	=> $dokumen->_id,
 				]);
+			if(isset($akta['pemilik']['klien']))
+			{
+				$jadwal->peserta 	= $akta['pemilik']['klien'];
+			}
 			$jadwal 			= $jadwal->save();
 
 			//4. simpan versi

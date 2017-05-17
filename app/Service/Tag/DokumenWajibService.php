@@ -24,6 +24,8 @@ class DokumenWajibService
 			'imb',
 			'pbb',
 			'hpl',
+			'bpkb',
+			'stnk',
 			'lain_lain'
 		];
 	}

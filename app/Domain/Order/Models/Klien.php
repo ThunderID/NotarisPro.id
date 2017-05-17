@@ -56,7 +56,7 @@ class Klien extends BaseModel
 	protected $rules				=	[
 											'nama'					=> 'max:255',
 											'tempat_lahir'			=> 'max:255',
-											'tanggal_lahir'			=> 'date_format:"Y-m-d"',
+											// 'tanggal_lahir'			=> 'date_format:"Y-m-d"',
 											'pekerjaan'				=> 'max:255',
 											'alamat.alamat'			=> 'max:255',
 											'alamat.rt'				=> 'max:255',
@@ -109,7 +109,7 @@ class Klien extends BaseModel
 
 	public function getTanggalLahirAttribute($value = NULL)
 	{
-		return $this->formatDateTo($this->attributes['tanggal_lahir']);
+		return $this->formatCarbonDateTo($this->attributes['tanggal_lahir']);
 	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
