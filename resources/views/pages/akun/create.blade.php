@@ -6,7 +6,7 @@
 @section('content')
 	<div class="row">
 
-		@include('helpers.company_sidebar', ['active' => 'Akun'])
+		@include('helpers.company_sidebar', ['active' => 'Pengaturan Akun'])
 
 		<div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel">
 			<div class="row">

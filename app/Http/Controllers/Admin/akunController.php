@@ -30,7 +30,7 @@ class akunController extends Controller
 
 		$this->page_datas->id				= $id;
 		$this->page_datas->datas			= $this->query->detailed($id);
-		$this->page_attributes->title		= 'Akun Anda';
+		$this->page_attributes->title		= 'Pengaturan Akun';
 
 		$this->view                         = view('pages.akun.create');
 

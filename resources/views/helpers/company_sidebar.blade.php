@@ -1,10 +1,10 @@
 <?php
 	// Sidebar Menu List
-	$list['Kantor'] 	= 	[
+	$list['Profil Kantor'] 	= 	[
 								'url' 	=> route('kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
 								'icon' 	=> 'fa-building',
 							];
-	$list['Akun'] 		= 	[
+	$list['Pengaturan Akun'] 		= 	[
 								'url' 	=> route('akun.edit', $acl_logged_user['id']),
 								'icon' 	=> 'fa-user'
 							];
