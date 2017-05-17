@@ -114,20 +114,20 @@ class templateController extends Controller
 
 			$paragraph		= $this->parse_store($id, $request);
 
-			$akta			= new BuatTemplateBaru($paragraph['judul'], $request->get('deskripsi'), $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), $request->get('dokumen_objek'), $request->get('dokumen_pihak'), $request->get('dokumen_saksi'));
+			$akta			= new BuatTemplateBaru($paragraph['judul'], $request->get('deskripsi'), $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), $request->get('jumlah_saksi'), $request->get('dokumen_objek'), $request->get('dokumen_pihak'), $request->get('dokumen_saksi'));
 	
 			$akta 			= $akta->handle();		
 
 		} catch (Exception $e) {
-			$this->page_attributes->msg['error']    = $e->getMessage();
+			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
 
 		//return view
 		if($id == null){
-			$this->page_attributes->msg['success']         = ['Data template telah ditambahkan'];
+			$this->page_attributes->msg['success']	= ['Data template telah ditambahkan'];
 			return $this->generateRedirect(route('akta.template.edit', ['id' => $akta['id']]));
 		}else{
-			$this->page_attributes->msg['success']         = ['Data template telah diperbarui'];
+			$this->page_attributes->msg['success']	= ['Data template telah diperbarui'];
 			return $this->generateRedirect(route('akta.template.create'));
 		}
 	}

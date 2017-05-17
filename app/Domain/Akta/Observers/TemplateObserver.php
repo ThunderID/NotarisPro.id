@@ -24,7 +24,7 @@ class TemplateObserver
 		//check
 		$judul 			= Template::where('judul', $model->judul)->notid($model->_id)->kantor($model->pemilik['kantor']['id'])->first();
 
-		if($judul->count())
+		if($judul)
 		{
 			throw new Exception('Duplikasi Judul', 1);
 

@@ -49,6 +49,7 @@ class Template extends BaseModel
 											'status'				,
 											'mentionable'			,
 											'jumlah_pihak'			,
+											'jumlah_saksi'			,
 											'dokumen_objek'			,
 											'dokumen_pihak'			,
 											'dokumen_saksi'			,
