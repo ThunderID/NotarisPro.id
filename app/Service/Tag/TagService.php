@@ -53,8 +53,6 @@ class TagService
 		$dok['notaris']['notaris']	= ['@notaris.nama', '@notaris.daerah_kerja', '@notaris.nomor_sk', '@notaris.tanggal_pengangkatan', '@notaris.alamat', '@notaris.telepon'];
 
 		$dok['objek']	= [];
-		$dok['saksi']	= [];
-		$dok['pihak_1']	= [];
 
 		//@shgb.nomor
 		foreach ($dokumen_objek as $key => $value) 
@@ -68,18 +66,30 @@ class TagService
 			}
 		}
 
+		$dok['saksi_1']	= [];
 		//@ktp.nik
 		foreach ($dokumen_saksi as $key => $value) 
 		{
-			if(isset($doks[$value]))
+			foreach ($value as $key2 => $value2) 
 			{
-				foreach ($doks[$value] as $key2 => $value2) 
+				if(isset($doks[$value2]))
 				{
-					$dok['saksi'][$value][$key2]	= '@saksi.'.$value.'.'.$value2;
+					foreach ($doks[$value2] as $key3 => $value3) 
+					{
+						$dok["saksi_$key"][$value2][$key3]	= '@saksi.'.$key.'.'.$value2.'.'.$value3;
+					}
+				}
+				elseif(str_is('ktp_*', $value2))
+				{
+					foreach ($doks['ktp'] as $key3 => $value3) 
+					{
+						$dok["saksi_$key"][$value2][$key3]	= '@saksi.'.$key.'.'.$value2.'.'.$value3;
+					}
 				}
 			}
 		}
 
+		$dok['pihak_1']	= [];
 		//@pihak.1.ktp.nik
 		foreach ($dokumen_pihak as $key => $value) 
 		{
