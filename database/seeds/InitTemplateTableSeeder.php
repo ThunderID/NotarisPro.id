@@ -26,7 +26,7 @@ class InitTemplateTableSeeder extends Seeder
 		foreach (range(0, 19) as $key) 
 		{
 			$isi				= [
-				'judul'			=> $j_akta[0],
+				'judul'			=> $j_akta[0].$key,
 				'deskripsi'		=> $d_akta[0],
 				'paragraf'		=> [
 					['konten' 	=> '<h4 class="text-center"><br></h4>'],
@@ -74,7 +74,7 @@ class InitTemplateTableSeeder extends Seeder
 				'dokumen_saksi'	=> []
 			];
 
-			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
+			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, 0, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
 			$akta 			= $akta->handle();
 		}
 
@@ -95,7 +95,7 @@ class InitTemplateTableSeeder extends Seeder
 		foreach (range(0, 19) as $key) 
 		{
 			$isi				= [
-				'judul'			=> $j_akta[0],
+				'judul'			=> $j_akta[0].($key+20),
 				'deskripsi'		=> $d_akta[0],
 				'paragraf'		=> [
 					['konten' 	=> '<h4 class="text-center"><br></h4>'],
@@ -143,7 +143,7 @@ class InitTemplateTableSeeder extends Seeder
 				'dokumen_saksi'	=> []
 			];
 
-			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
+			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, 0, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
 			$akta 			= $akta->handle();
 		}
 
