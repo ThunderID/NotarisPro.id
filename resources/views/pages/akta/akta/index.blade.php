@@ -142,8 +142,8 @@
 						<tr>
 							<th>Dokumen</th>
 							<th style="width: 15%;"">Status</th>
-							<th style="width: 20%;">Tanggal Sunting</th>
-							<th style="width: 20%;">Tanggal Pembuatan</th>
+							<th style="width: 20%;">Pihak</th>
+							<th style="width: 20%;">Dokumen</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -158,7 +158,13 @@
 								{{ $data['status'] }}
 							</td>
 							<td>
-								{{ $data['tanggal_sunting'] }}
+								@if(isset($data['pemilik']['klien']))
+									<ol>
+										@foreach($data['pemilik']['klien'] as $key => $value)
+											<li> {{ $value['nama'] }} </li>
+										@endforeach
+									</ol>
+								@endif
 							</td>
 							<td>
 								{{ $data['tanggal_pembuatan'] }}

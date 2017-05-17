@@ -103,7 +103,7 @@ class BuatAktaBaru
 			}
 			foreach ($pihak as $key => $value) 
 			{
-				$new_pihak 				= Klien::where('nomor_ktp', $value['nik'])->first();
+				$new_pihak 				= Klien::where('nomor_ktp', $value['nomor_ktp'])->first();
 
 				if(!$new_pihak)
 				{
