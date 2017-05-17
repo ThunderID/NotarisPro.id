@@ -85,4 +85,89 @@ class uacController extends Controller
 		//function from parent to redirecting
 		return redirect(URL::previous());
 	}
+
+	public function doSendEmailResetPassword(Request $request){
+		$input			= $request::only('email');
+
+		// service reset
+		try
+		{
+			//do service reset password
+
+			// send email
+		}
+		catch(Exception $e)
+		{
+			if(is_array($e->getMessage()))
+			{
+				$this->page_attributes->msg['error'] 	= $e->getMessage();
+			}
+			else
+			{
+				$this->page_attributes->msg['error'] 	= [$e->getMessage()];
+			}
+		}
+
+		//return view
+		$this->page_attributes->msg['success']		= ['Email reset password telah dikirimkan ke email Anda'];
+		return $this->generateRedirect(route('uac.login'));
+	}
+
+	public function resetPassword($token){
+
+		$this->page_datas->datas		= null;
+		$this->page_datas->token		= $token;
+
+		// validate token reset password
+		$result = true;
+
+		if($result == true){
+			// display reset password form
+			$this->page_attributes->title	= 'Reset Password';
+			
+			$this->view						= view('pages.uac.reset');
+		}else{
+			// display invalid token
+			$this->page_attributes->title	= 'Invalid Token';
+
+			$this->view						= view('pages.uac.invalid');
+		}
+
+		// return view
+		return $this->generateView(); 
+	}
+
+
+	public function doResetPassword($token, Request $request){
+		$input			= $request::only('password', 'confirm_password');
+
+		// validation
+		if($input['password'] == $input['confirm_password']){
+			// service reset
+			try
+			{
+				//do service reset password
+
+				// send email
+			}
+			catch(Exception $e)
+			{
+				if(is_array($e->getMessage()))
+				{
+					$this->page_attributes->msg['error'] 	= $e->getMessage();
+				}
+				else
+				{
+					$this->page_attributes->msg['error'] 	= [$e->getMessage()];
+				}
+			}
+		}else{
+			$this->page_attributes->msg['error'] 	= ['Password dan konfirmasi password tidak cocok'];
+		}
+
+
+		//return view
+		$this->page_attributes->msg['success']		= ['Password telah diganti'];
+		return $this->generateRedirect(route('uac.login'));
+	}
 }
