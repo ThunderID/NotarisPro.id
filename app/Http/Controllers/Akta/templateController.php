@@ -388,7 +388,8 @@ class templateController extends Controller
 	public function trash()
 	{
 				// init
-		$this->page_attributes->title       = 'Template Akta';
+		$this->page_attributes->title       = 'Keranjang Sampah Template Akta';
+		$this->page_attributes->hide['create']	= true;
 
 		//filter&search
 		$query                              = $this->getQueryString(['q','status', 'page']);
