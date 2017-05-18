@@ -36,6 +36,12 @@ Route::get('/test', function ()
 // UAC
 Route::get('/login',			['uses' => 'uacController@login', 			'as' => 'uac.login']);
 Route::post('/login', 			['uses' => 'uacController@doLogin', 		'as' => 'uac.login.post']);
+Route::post('/reset-password/send-email',	['uses' => 'uacController@doSendEmailResetPassword', 	'as' => 'uac.reset.send']);
+
+
+Route::get('/token/{token}/reset-password/',	['uses' => 'uacController@resetPassword', 	'as' => 'uac.reset']);
+Route::post('/token/{token}/reset-password/',	['uses' => 'uacController@doResetPassword', 	'as' => 'uac.reset.post']);
+
 
 Route::group(['middleware' => ['authenticated']], function()
 {
