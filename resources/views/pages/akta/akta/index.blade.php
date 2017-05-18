@@ -141,8 +141,8 @@
 					<thead>
 						<tr>
 							<th>Dokumen</th>
+							<th style="width: 15%;">Pihak</th>
 							<th style="width: 15%;"">Status</th>
-							<th style="width: 20%;">Pihak</th>
 							<th style="width: 20%;">Dokumen</th>
 						</tr>
 					</thead>
@@ -155,16 +155,16 @@
 								{{ $data['judul'] }}
 							</td>
 							<td>
-								{{ $data['status'] }}
-							</td>
-							<td>
 								@if(isset($data['pemilik']['klien']))
-									<ol>
+									<ol style="padding-left: 5px;margin-bottom: 0px;">
 										@foreach($data['pemilik']['klien'] as $key => $value)
 											<li> {{ $value['nama'] }} </li>
 										@endforeach
 									</ol>
 								@endif
+							</td>
+							<td>
+								{{ $data['status'] }}
 							</td>
 							<td>
 								{{ $data['tanggal_pembuatan'] }}
