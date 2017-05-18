@@ -70,25 +70,25 @@
 						@if(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
 								<a class="nav-link text-danger text-center" href="" data-toggle="modal" data-target="#deleteModal">
-									<i class="fa fa-trash"></i> 
-									<span class="hidden-md-down"> Hapus</span>
-									<span class="hidden-md-up"> Hapus</span>
+									<i class="fa fa-trash"></i>&nbsp;
+									<span class="hidden-md-down">Hapus</span>
+									<span class="hidden-md-up">Hapus</span>
 								</a>
 							</li>
 						
 							<li class="nav-item hidden-sm-down">
 								<a class="nav-link text-center" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" >
-									<i class="fa fa-edit"></i> 
-									<span class="hidden-md-down"> Edit</span>
-									<span class="hidden-md-up"> Edit</span>
+									<i class="fa fa-edit"></i>&nbsp;
+									<span class="hidden-md-down">Edit</span>
+									<span class="hidden-md-up">Edit</span>
 								</a>
 							</li>
 
 							<li class="nav-item">
 								<a class="nav-link text-center" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" >
-									<i class="fa fa-check"></i> 
-									<span class="hidden-md-down"> Publish</span>
-									<span class="hidden-md-up"> Publish</span>
+									<i class="fa fa-check"></i>&nbsp;
+									<span class="hidden-md-down">Publish</span>
+									<span class="hidden-md-up">Publish</span>
 								</a>
 							</li>
 						@elseif(str_is($page_datas->datas['status'], 'publish'))
