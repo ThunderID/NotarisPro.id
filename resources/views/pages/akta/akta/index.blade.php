@@ -156,7 +156,7 @@
 							</td>
 							<td>
 								@if(isset($data['pemilik']['klien']))
-									<ol style="padding-left: 5px;">
+									<ol style="padding-left: 5px;margin-bottom: 0px;">
 										@foreach($data['pemilik']['klien'] as $key => $value)
 											<li> {{ $value['nama'] }} </li>
 										@endforeach
