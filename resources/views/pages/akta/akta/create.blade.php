@@ -66,7 +66,7 @@
 						<div class="d-flex justify-content-center mx-auto">
 							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm; ">
 								<textarea name="template" class="editor">
-								<div class="editor" id="doc-content-mention" style="border: 2px dashed #ececec;min-height: 24.7cm;">
+								<div id="doc-content-mention" style="border: 2px dashed #ececec;min-height: 24.7cm;">
 									@forelse ($page_datas->datas['paragraf'] as $k => $v)
 										@php
 											$temp = explode('<span class="medium-editor-mention-at', $v['konten']);
