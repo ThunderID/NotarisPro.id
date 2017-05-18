@@ -14,7 +14,7 @@
 @endpush  
 
 @section('akta')
-	active
+	{{-- active --}}
 @stop
 
 @section('template-akta')

@@ -13,10 +13,10 @@
 @endpush  
 
 @section('akta')
-	active
+	{{-- active --}}
 @stop
 
-@section('buat-template')
+@section('template-akta')
 	active
 @stop
 
