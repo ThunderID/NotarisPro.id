@@ -58,48 +58,7 @@
 												<i class="fa fa-history float-right" style="margin-top: 0.25em; margin-right: -1.25em;"></i>
 												{!!$value['konten']!!}
 											</div>
-										</a>
-
-
-
-										@component('components.modal', [
-												'id'		=> 'content_' . $key,
-												'title'		=> 'Detail Histori Revisi',
-												'large'		=> true,
-												'settings'	=> [
-													'modal_class'	=> '',
-													'hide_buttons'	=> 'true',
-													'hide_title'	=> 'true',
-												]
-											])
-											<div class="row mb-4">
-												<div class="col-md-12">
-													<h5>Revisi Sebelumnya</h5>
-													<div style="max-height: 25%; border: 1px solid #eceeef;">
-														<div style="background-color: white;padding-left: 25px; padding-right: 10px; padding-top: 10px;">
-															<div class="form-group editor">	
-																{!!$page_datas->datas['original']['paragraf'][$key]['konten']!!}
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="row mb-4">
-												<div class="col-md-12">
-													<h5>Revisi Final</h5>
-													<div style="max-height: 25%; border: 1px solid #eceeef;">
-														<div style="background-color: white;padding-left: 25px; padding-right: 10px; padding-top: 10px;">
-															<div class="form-group editor">	
-																{!!$value['konten']!!}
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>	
-											</div>										
-										@endcomponent											
+										</a>										
 									@endif
 								@endforeach
 							</div>
@@ -110,6 +69,50 @@
 		</div>
 	</div>
 
+	@foreach($page_datas->datas['terbaru']['paragraf'] as $key => $value)
+
+		@if($value['konten'] != $page_datas->datas['original']['paragraf'][$key]['konten'])
+
+			@component('components.modal', [
+					'id'		=> 'content_' . $key,
+					'title'		=> 'Detail Histori Revisi',
+					'large'		=> true,
+					'settings'	=> [
+						'modal_class'	=> '',
+						'hide_buttons'	=> 'true',
+						'hide_title'	=> 'true',
+					]
+				])
+				<div class="row mb-4">
+					<div class="col-md-12">
+						<h5>Revisi Sebelumnya</h5>
+						<div style="max-height: 25%; border: 1px solid #eceeef;">
+							<div style="background-color: white;padding-left: 25px; padding-right: 10px; padding-top: 10px;">
+								<div class="form-group editor">	
+									{!!$page_datas->datas['original']['paragraf'][$key]['konten']!!}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-12">
+						<h5>Revisi Final</h5>
+						<div style="max-height: 25%; border: 1px solid #eceeef;">
+							<div style="background-color: white;padding-left: 25px; padding-right: 10px; padding-top: 10px;">
+								<div class="form-group editor">	
+									{!!$value['konten']!!}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>	
+				</div>										
+			@endcomponent	
+		@endif
+	@endforeach				
 @stop
 
 @push('scripts')
