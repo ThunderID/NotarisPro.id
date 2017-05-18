@@ -26,37 +26,86 @@
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			{{-- COMPONENT MENUBAR --}}
 			<div class="row bg-faded">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+				{{-- Back Button md up --}}
+				<div class="hidden-sm-down col-md-3 col-lg-4 pl-md-0 pl-lg-0 pl-xl-0">
 					<ul class="nav menu-content justify-content-start">
 						<li class="nav-item">
-							<span class="navbar-text">{{ isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '' }}</span>
+							<a class="nav-link" href="{{ route('akta.template.index') }}">
+								<i class="fa fa-angle-left"></i>
+								 Kembali
+							</a>
+						</li>
+					</ul>
+				</div>				
+
+				{{-- Title mobile, tablet, md screens --}}
+				<div class="col-12 col-md-6 col-lg-4 text-center text-md-center text-lg-center text-xl-center">
+					<div style="text-overflow:ellipsis; width:100%;">
+						<span class="navbar-text mb-0">
+							@if(str_is($page_datas->datas['status'], 'publish'))
+								<span class="text-success">[Published]</span>
+							@endif					
+							{{ isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '' }}
+						</span>
+					</div>
+				</div>
+
+				{{-- Back Button sm down --}}
+				<div class="hidden-md-up col-4 pl-1">
+					<ul class="nav menu-content justify-content-start">
+						<li class="nav-item">
+							<a class="nav-link" href="{{ route('akta.template.index') }}">
+								<i class="fa fa-angle-left"></i>
+								 Kembali
+							</a>
 						</li>
 					</ul>
 				</div>
-				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
+
+
+				{{-- Menu Buttons --}}
+				<div class="col-8 col-md-3 col-lg-4 pr-2">
 					<ul class="nav menu-content justify-content-end">
 						@if(str_is($page_datas->datas['status'], 'draft'))
 							<li class="nav-item">
-								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
+								<a class="nav-link text-danger text-center" href="" data-toggle="modal" data-target="#deleteModal">
+									<i class="fa fa-trash"></i> 
+									<span class="hidden-md-down"> Hapus</span>
+									<span class="hidden-md-up"> Hapus</span>
+								</a>
 							</li>
 						
 							<li class="nav-item hidden-sm-down">
-								<a class="nav-link" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
+								<a class="nav-link text-center" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" >
+									<i class="fa fa-edit"></i> 
+									<span class="hidden-md-down"> Edit</span>
+									<span class="hidden-md-up"> Edit</span>
+								</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-cloud-upload"></i> Publish</a>
+								<a class="nav-link text-center" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" >
+									<i class="fa fa-check"></i> 
+									<span class="hidden-md-down"> Publish</span>
+									<span class="hidden-md-up"> Publish</span>
+								</a>
 							</li>
 						@elseif(str_is($page_datas->datas['status'], 'publish'))
 							<li class="nav-item">
-								<a class="nav-link" href="{{ route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]) }}"><i class="fa fa-plus-square"></i> &nbsp;Buat Akta dengan Template ini</a>
+								<a class="nav-link" href="{{ route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]) }}"><i class="fa fa-file-text-o"></i> &nbsp;Buat Akta{{-- dengan Template ini--}}</a>
 							</li>
+							{{--
 							<li class="nav-item">
 								<span class="nav-link">Published</span>
 							</li>
+							--}}
 						@endif
 					</ul>
 				</div>
+
+
+
 			</div>
 			{{-- END COMPONENT MENUBAR --}}
 		</div>
@@ -93,6 +142,7 @@
 	/* call plugin */
 	window.formUI.init();
 
+	{{--
 	/* Auto Page Break */
 	$(document).ready(function(){
 		/* Adapter */
@@ -103,6 +153,7 @@
 		ep.pageHeight =  editorPaging.convertPX(29.7);
 		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
 	});
+	--}}
 
 	/* Script call modal delete */
 	$('#deleteModal').on('shown.bs.modal', function(e) {
