@@ -72,18 +72,18 @@ class TagService
 		{
 			foreach ($value as $key2 => $value2) 
 			{
-				if(isset($doks[$key2]))
+				if(isset($doks[$value2]))
 				{
-					foreach ($doks[$key2] as $key3 => $value3) 
+					foreach ($doks[$value2] as $key3 => $value3) 
 					{
-						$dok["saksi_$key"][$key2][$key3]	= '@saksi.'.$key.'.'.$key2.'.'.$value3;
+						$dok["saksi_$key"][$value2][$key3]	= '@saksi.'.$key.'.'.$value2.'.'.$value3;
 					}
 				}
-				elseif(str_is('ktp_*', $key2))
+				elseif(str_is('ktp_*', $value2))
 				{
 					foreach ($doks['ktp'] as $key3 => $value3) 
 					{
-						$dok["saksi_$key"][$key2][$key3]	= '@saksi.'.$key.'.'.$key2.'.'.$value3;
+						$dok["saksi_$key"][$value2][$key3]	= '@saksi.'.$key.'.'.$value2.'.'.$value3;
 					}
 				}
 			}
@@ -96,18 +96,18 @@ class TagService
 		{
 			foreach ($value as $key2 => $value2) 
 			{
-				if(isset($doks[$key2]))
+				if(isset($doks[$value2]))
 				{
-					foreach ($doks[$key2] as $key3 => $value3) 
+					foreach ($doks[$value2] as $key3 => $value3) 
 					{
-						$dok["pihak_$key"][$key2][$key3]	= '@pihak.'.$key.'.'.$key2.'.'.$value3;
+						$dok["pihak_$key"][$value2][$key3]	= '@pihak.'.$key.'.'.$value2.'.'.$value3;
 					}
 				}
-				elseif(str_is('ktp_*', $key2))
+				elseif(str_is('ktp_*', $value2))
 				{
 					foreach ($doks['ktp'] as $key3 => $value3) 
 					{
-						$dok["pihak_$key"][$key2][$key3]	= '@pihak.'.$key.'.'.$key2.'.'.$value3;
+						$dok["pihak_$key"][$value2][$key3]	= '@pihak.'.$key.'.'.$value2.'.'.$value3;
 					}
 				}
 			}
