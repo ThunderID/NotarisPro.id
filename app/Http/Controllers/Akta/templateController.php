@@ -116,7 +116,7 @@ class templateController extends Controller
 
 			$akta			= new BuatTemplateBaru($paragraph['judul'], $request->get('deskripsi'), $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), $request->get('jumlah_saksi'), $request->get('dokumen_objek'), $request->get('dokumen_pihak'), $request->get('dokumen_saksi'));
 	
-			$akta 			= $akta->handle();		
+			$akta 			= $akta->save();		
 
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();

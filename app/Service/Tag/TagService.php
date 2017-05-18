@@ -46,7 +46,7 @@ class TagService
 
 	public static function fill_mention($dokumen_objek, $dokumen_pihak, $dokumen_saksi)
 	{
-		$doks 			= self::all();
+		$doks 			= self::all()['isi'];
 
 		//generate docs
 		$dok['akta']['akta']		= ['@akta.nomor', '@akta.tanggal'];

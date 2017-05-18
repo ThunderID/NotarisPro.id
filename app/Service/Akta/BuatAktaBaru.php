@@ -84,6 +84,8 @@ class BuatAktaBaru
 			$akta['dokumen_pihak']					= $template['dokumen_pihak'];
 			$akta['dokumen_saksi']					= $template['dokumen_saksi'];
 			$akta['total_perubahan']				= 0;
+			
+			$akta['template']['id']					= $template_id;
 
 			$pihak 									= [];
 

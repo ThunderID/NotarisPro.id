@@ -53,6 +53,10 @@ class Template extends BaseModel
 											'dokumen_objek'			,
 											'dokumen_pihak'			,
 											'dokumen_saksi'			,
+											'penambahan_paragraf'	,
+											'pengurangan_paragraf'	,
+											'perubahan_paragraf'	,
+											'watermarking'			,
 										];
 	/**
 	 * Basic rule of database
