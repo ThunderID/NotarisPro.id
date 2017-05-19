@@ -31,7 +31,7 @@
 			'update_url' 	=> route('akta.template.update', ['id' => $page_datas->id]), 
 			'class'			=> 'form-template mb-0  form'
 		])
-			<div class="row">
+			<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 			@include('components.submenu', [
 				'title' 		=> isset($page_datas->id) ? $page_datas->datas['judul'] : '',
 				'back_route'	=> route('akta.template.edit',['id' => $page_datas->id]),
