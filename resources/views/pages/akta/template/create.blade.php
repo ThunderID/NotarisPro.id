@@ -31,21 +31,18 @@
 			'update_url' 	=> route('akta.template.update', ['id' => $page_datas->id]), 
 			'class'			=> 'form-template mb-0  form'
 		])
-			<div class="row bg-faded action-bar">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-					<ul class="nav menu-content justify-content-start">
-						<li class="nav-item">
-							<span class="navbar-text">{{ isset($page_datas->id) ? $page_datas->datas['judul'] : '' }}</span>
-						</li>
-					</ul>
-				</div>
-				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
-					<ul class="nav menu-content justify-content-end">
-						<li class="nav-item">
-							<a class="nav-link input-submit save-content" href="#"><i class="fa fa-save"></i> Simpan</a>
-						</li>
-					</ul>
-				</div>
+			<div class="row">
+			@include('components.submenu', [
+				'title' 		=> isset($page_datas->id) ? $page_datas->datas['judul'] : '',
+				'back_route'	=> route('akta.template.edit',['id' => $page_datas->id]),
+				'menus' 		=> [
+					[
+						"title" 			=> "Simpan",	
+						"class" 			=> "input-submit save-content",	
+						"icon" 				=> "fa-save",
+					]
+				]
+			])
 			</div>
 			<div class="row">
 				<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 pl-0 scrollable_panel subset-2menu">

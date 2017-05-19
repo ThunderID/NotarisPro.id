@@ -67,7 +67,8 @@
 		?>
 		@include('components.submenu', [
 			'title' 		=> $title,
-			'back_route'	=> route('akta.template.index')
+			'back_route'	=> route('akta.template.index'),
+			'menus' 		=> $menus
 		])
 
 		<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu"">
