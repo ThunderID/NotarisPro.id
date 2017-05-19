@@ -51,11 +51,11 @@
 						</div>
 						<div class="form-group">
 							<label>Jumlah Pihak</label>
-							<input type="text" name="jumlah_pihak" class="form-control mask-number" placeholder="0">
+							<input type="text" name="jumlah_pihak" class="form-control mask-number-with-min text-left" placeholder="2">
 						</div>
 						<div class="form-group">
 							<label>Jumlah Saksi</label>
-							<input type="text" name="jumlah_saksi" class="form-control mask-number" placeholder="0">
+							<input type="text" name="jumlah_saksi" class="form-control mask-number-with-min text-left" placeholder="2">
 						</div>
 						<div class="clearfix">&nbsp;</div>
 					</div>
@@ -180,8 +180,10 @@
 		$(window).resize();
 	});
 
-	var number = new Inputmask({
-		mask: "9{1,5}", 
+	// mask number with minimun value
+	var number = new Inputmask('numeric', {
+		mask: "9{1,5}",
+		min: 2,
 	});
-	number.mask($('.mask-number'));
+	number.mask($('.mask-number-with-min'));
 @endpush 

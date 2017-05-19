@@ -49,22 +49,6 @@
 	},
 	
 	init: function (url, form, param) {
-		// init: function () {
-		// 	window.Editor.Extension.prototype.init.apply(this, arguments);
-
-		//     this.initThrottledMethods();
-		//     var newToolbar = $(this.getToolbarElement());
-		//     // newToolbar.find('#medium-editor-toolbar-1').remove();
-		//     // console.log($(this.getToolbarElement()).find('#medium-editor-toolbar-1').removeAttr('style'));
-		//     $('#toolbarMedium').append(newToolbar);
-		//     $('#toolbarMedium').find('.medium-editor-toolbar').attr('data-hes', 'halo');
-		//     // $('#toolbarMedium').find('.medium')
-		//     // $('#toolbarMedium').find('#medium-editor-toolbar-1').attr('style', '');
-		//     // this.getEditorOption('#toolbarMediume').appendChild(this.getToolbarElement());
-		// },
-		// hideToolbar: function () {
-
-		// }
 		var editor = new window.Editor("textarea.editor", {
 			// button on toolbar medium-editor
 			toolbar: {
@@ -122,10 +106,10 @@
 			}
 		});
 
-		// in input able remove color and style color
+		// in input able remove color and style color on ready page
 		editor.elements.forEach(function (element) {
-			$(element).find('*').attr('color', '').css('color', 'none').css('font-size', '');
-			$(element).find('span').each(function (k, v) {
+			$(element).find('*').each(function (k, v) {
+				$(v).removeAttr('color', '').css('color', 'inherit').css('font-size', 'inherit');
 				if ($(v).hasClass('medium-editor-mention-at')) {
 					text = $(v).html();
 					if (text.charAt(0) != '@') {
@@ -135,6 +119,31 @@
 			});
 		});
 
+		editor.subscribe('editableInput', function (event, editable) {
+		   $(editable).find('*').each(function (k, v) {
+				$(v).removeAttr('color', '');
+				text = $(v).html();
+
+				if (text.charAt(0) == '@') {
+					$(v).addClass('medium-editor-mention-at text-danger');
+				}
+
+				if ($(v)[0].style.removeProperty) {
+				    $(v)[0].style.removeProperty('color');
+				    $(v)[0].style.removeProperty('font-size');
+				} else {
+				    $(v)[0].style.removeAttribute('color');
+				    $(v)[0].style.removeAttribute('font-size');
+				}
+
+				if ($(v).hasClass('medium-editor-mention-at')) {
+					text = $(v).html();
+					if (text.charAt(0) != '@') {
+						$(v).removeClass('medium-editor-mention-at medium-editor-mention-at-active text-danger text-primary');
+					}
+				}
+			});
+		});
 
 		try {
 			window.editorUI.autoSave(editor, url, form);
