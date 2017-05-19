@@ -21,94 +21,55 @@
 	active
 @stop
 
+
 @section('content')
 	<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			{{-- COMPONENT MENUBAR --}}
-			<div class="row bg-faded">
 
-				{{-- Back Button md up --}}
-				<div class="hidden-sm-down col-md-3 col-lg-4 pl-md-0 pl-lg-0 pl-xl-0">
-					<ul class="nav menu-content justify-content-start">
-						<li class="nav-item">
-							<a class="nav-link" href="{{ route('akta.template.index') }}">
-								<i class="fa fa-angle-left"></i>
-								 Kembali
-							</a>
-						</li>
-					</ul>
-				</div>				
+		{{-- Predefine Sub Menu --}}
+		<?php
+			$title = isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '';
 
-				{{-- Title mobile, tablet, md screens --}}
-				<div class="col-12 col-md-6 col-lg-4 text-center text-md-center text-lg-center text-xl-center">
-					<div style="text-overflow:ellipsis; width:100%;">
-						<span class="navbar-text mb-0">
-							@if(str_is($page_datas->datas['status'], 'publish'))
-								<span class="text-success">[Published]</span>
-							@endif					
-							{{ isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '' }}
-						</span>
-					</div>
-				</div>
+			if(str_is($page_datas->datas['status'], 'publish')){
+				// badge title
+				$title 		= "<span class='text-success'>[Published]</span> " . $title;
 
-				{{-- Back Button sm down --}}
-				<div class="hidden-md-up col-4 pl-1">
-					<ul class="nav menu-content justify-content-start">
-						<li class="nav-item">
-							<a class="nav-link" href="{{ route('akta.template.index') }}">
-								<i class="fa fa-angle-left"></i>
-								 Kembali
-							</a>
-						</li>
-					</ul>
-				</div>
+				// menu
+				$menus 		= [
+					[
+						"title" 			=> "Buat Akta",	
+						"route" 			=> route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]),
+						"icon" 				=> "fa-file-text-o",
+					]
+				];
+			}else{
+				// menu
+				$menus 		= [
+					[
+						"title" 			=> "Hapus",	
+						"class" 			=> "text-danger",	
+						"trigger_modal" 	=> "#deleteModal",
+						"icon" 				=> "fa-trash",
+					],
+					[
+						"title" 			=> "Edit",	
+						"hide_on" 			=> "hidden-sm-down",	
+						"route" 			=> route('akta.template.edit', ['id' => $page_datas->datas['id']]),
+						"icon" 				=> "fa-edit",
+					],
+					[
+						"title" 			=> "Publish",	
+						"route" 			=> route('akta.template.publish', ['id' => $page_datas->datas['id']]),
+						"icon" 				=> "fa-check",
+					],						
+				];
+			}
 
+		?>
+		@include('components.submenu', [
+			'title' 		=> $title,
+			'back_route'	=> route('akta.template.index')
+		])
 
-				{{-- Menu Buttons --}}
-				<div class="col-8 col-md-3 col-lg-4 pr-2">
-					<ul class="nav menu-content justify-content-end">
-						@if(str_is($page_datas->datas['status'], 'draft'))
-							<li class="nav-item">
-								<a class="nav-link text-danger text-center" href="" data-toggle="modal" data-target="#deleteModal">
-									<i class="fa fa-trash"></i>&nbsp;
-									<span class="hidden-md-down">Hapus</span>
-									<span class="hidden-md-up">Hapus</span>
-								</a>
-							</li>
-						
-							<li class="nav-item hidden-sm-down">
-								<a class="nav-link text-center" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" >
-									<i class="fa fa-edit"></i>&nbsp;
-									<span class="hidden-md-down">Edit</span>
-									<span class="hidden-md-up">Edit</span>
-								</a>
-							</li>
-
-							<li class="nav-item">
-								<a class="nav-link text-center" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" >
-									<i class="fa fa-check"></i>&nbsp;
-									<span class="hidden-md-down">Publish</span>
-									<span class="hidden-md-up">Publish</span>
-								</a>
-							</li>
-						@elseif(str_is($page_datas->datas['status'], 'publish'))
-							<li class="nav-item">
-								<a class="nav-link" href="{{ route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]) }}"><i class="fa fa-file-text-o"></i> &nbsp;Buat Akta{{-- dengan Template ini--}}</a>
-							</li>
-							{{--
-							<li class="nav-item">
-								<span class="nav-link">Published</span>
-							</li>
-							--}}
-						@endif
-					</ul>
-				</div>
-
-
-
-			</div>
-			{{-- END COMPONENT MENUBAR --}}
-		</div>
 		<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu"">
 			<div id="page-breaker" class="row page-breaker"></div>
 			<div class="row">
