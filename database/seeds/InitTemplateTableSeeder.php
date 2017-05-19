@@ -71,11 +71,11 @@ class InitTemplateTableSeeder extends Seeder
 				],
 				'dokumen_objek'	=> [],
 				'dokumen_pihak'	=> [1 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']], 2 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']]],
-				'dokumen_saksi'	=> []
+				'dokumen_saksi'	=> [1 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']], 2 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']]]
 			];
 
-			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, 0, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
-			$akta 			= $akta->handle();
+			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, 2, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
+			$akta 			= $akta->save();
 		}
 
 		//init publish
@@ -84,7 +84,7 @@ class InitTemplateTableSeeder extends Seeder
 		foreach ($dokumen as $key => $value) 
 		{
 			$akta 			= new App\Service\Akta\PublishTemplate($value->id);
-			$akta->handle();
+			$akta->save();
 		}
 
 
@@ -140,11 +140,11 @@ class InitTemplateTableSeeder extends Seeder
 				],
 				'dokumen_objek'	=> [],
 				'dokumen_pihak'	=> [1 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']], 2 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']]],
-				'dokumen_saksi'	=> []
+				'dokumen_saksi'	=> [1 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']], 2 => ['ktp' => ['nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat','nomor_ktp', 'deskripsi']]]
 			];
 
-			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, 0, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
-			$akta 			= $akta->handle();
+			$akta 			= new  App\Service\Akta\BuatTemplateBaru($isi['judul'], $isi['deskripsi'], $isi['paragraf'], $isi['mentionable'], 2, 2, $isi['dokumen_objek'], $isi['dokumen_pihak'], $isi['dokumen_saksi']);
+			$akta 			= $akta->save();
 		}
 
 		//init publish
@@ -153,7 +153,7 @@ class InitTemplateTableSeeder extends Seeder
 		foreach ($dokumen as $key => $value) 
 		{
 			$akta 			= new App\Service\Akta\PublishTemplate($value->id);
-			$akta->handle();
+			$akta->save();
 		}
 	}
 }

@@ -12,9 +12,11 @@ class DatabaseSeeder extends Seeder
 	public function run()
 	{
 		$this->call(InitNotarisTableSeeder::class);
+		$this->call(InitTipeDokumenTableSeeder::class);
 		$this->call(InitTemplateTableSeeder::class);
-		// $this->call(InitKlienTableSeeder::class);
 		$this->call(InitAktaTableSeeder::class);
+		
+		// $this->call(InitKlienTableSeeder::class);
 		// $this->call(InitJadwalTableSeeder::class);
 		// $this->call(InitTagihanTableSeeder::class);
 		// $this->call(IndonesiaTableSeeder::class);

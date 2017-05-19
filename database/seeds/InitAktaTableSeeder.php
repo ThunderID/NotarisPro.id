@@ -124,11 +124,11 @@ class InitAktaTableSeeder extends Seeder
 			];
 
 			$tmplate 		= App\Domain\Akta\Models\Template::first();
-			$akta 			= new App\Service\Akta\BuatAktaBaru($tlg_lengkap, $isi['judul'], $isi['paragraf'], $isi['mentionable'], $tmplate->_id);
-			$akta 			= $akta->handle();
+			$akta 			= new App\Service\Akta\BuatAktaBaru($isi['judul'], $isi['paragraf'], $isi['fill_mention'], $tmplate->_id);
+			$akta 			= $akta->save();
 
-			$aktas 			= new App\Service\Akta\SimpanAkta($akta['id'], $akta['judul'], $akta['paragraf'], $isi['fill_mention']);
-			$aktas->handle();
+			// $aktas 			= new App\Service\Akta\SimpanAkta($akta['id'], $akta['judul'], $akta['paragraf'], $isi['fill_mention']);
+			// $aktas->handle();
 
 		}
 
@@ -243,11 +243,11 @@ class InitAktaTableSeeder extends Seeder
 			];
 
 			$tmplate 		= App\Domain\Akta\Models\Template::first();
-			$akta 			= new App\Service\Akta\BuatAktaBaru($tlg_lengkap, $isi['judul'], $isi['paragraf'], $isi['mentionable'], $tmplate->_id);
-			$akta 			= $akta->handle();
+			$akta 			= new App\Service\Akta\BuatAktaBaru($isi['judul'], $isi['paragraf'], $isi['fill_mention'], $tmplate->_id);
+			$akta 			= $akta->save();
 
-			$aktas 			= new App\Service\Akta\SimpanAkta($akta['id'], $akta['judul'], $akta['paragraf'], $isi['fill_mention']);
-			$aktas->handle();
+			// $aktas 			= new App\Service\Akta\SimpanAkta($akta['id'], $akta['judul'], $akta['paragraf'], $isi['fill_mention']);
+			// $aktas->handle();
 
 		}
 

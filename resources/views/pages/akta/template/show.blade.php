@@ -21,45 +21,55 @@
 	active
 @stop
 
+
 @section('content')
 	<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			{{-- COMPONENT MENUBAR --}}
-			<div class="row bg-faded">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-					<ul class="nav menu-content justify-content-start">
-						<li class="nav-item">
-							<span class="navbar-text">{{ isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '' }}</span>
-						</li>
-					</ul>
-				</div>
-				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
-					<ul class="nav menu-content justify-content-end">
-						@if(str_is($page_datas->datas['status'], 'draft'))
-							<li class="nav-item">
-								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
-							</li>
-						
-							<li class="nav-item hidden-sm-down">
-								<a class="nav-link" href="{{route('akta.template.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
-							</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.template.publish', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-cloud-upload"></i> Publish</a>
-							</li>
-						@elseif(str_is($page_datas->datas['status'], 'publish'))
-							<li class="nav-item">
-								<a class="nav-link" href="{{ route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]) }}"><i class="fa fa-plus-square"></i> &nbsp;Buat Akta dengan Template ini</a>
-							</li>
-							<li class="nav-item">
-								<span class="nav-link">Published</span>
-							</li>
-						@endif
-					</ul>
-				</div>
-			</div>
-			{{-- END COMPONENT MENUBAR --}}
-		</div>
+		{{-- Predefine Sub Menu --}}
+		<?php
+			$title = isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '';
+
+			if(str_is($page_datas->datas['status'], 'publish')){
+				// badge title
+				$title 		= "<span class='text-success'>[Published]</span> " . $title;
+
+				// menu
+				$menus 		= [
+					[
+						"title" 			=> "Buat Akta",	
+						"route" 			=> route('akta.akta.choose.template', ['template_id' => $page_datas->datas['id']]),
+						"icon" 				=> "fa-file-text-o",
+					]
+				];
+			}else{
+				// menu
+				$menus 		= [
+					[
+						"title" 			=> "Hapus",	
+						"class" 			=> "text-danger",	
+						"trigger_modal" 	=> "#deleteModal",
+						"icon" 				=> "fa-trash",
+					],
+					[
+						"title" 			=> "Edit",	
+						"hide_on" 			=> "hidden-sm-down",	
+						"route" 			=> route('akta.template.edit', ['id' => $page_datas->datas['id']]),
+						"icon" 				=> "fa-edit",
+					],
+					[
+						"title" 			=> "Publish",	
+						"route" 			=> route('akta.template.publish', ['id' => $page_datas->datas['id']]),
+						"icon" 				=> "fa-check",
+					],						
+				];
+			}
+
+		?>
+		@include('components.submenu', [
+			'title' 		=> $title,
+			'back_route'	=> route('akta.template.index')
+		])
+
 		<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu"">
 			<div id="page-breaker" class="row page-breaker"></div>
 			<div class="row">
@@ -93,6 +103,7 @@
 	/* call plugin */
 	window.formUI.init();
 
+	{{--
 	/* Auto Page Break */
 	$(document).ready(function(){
 		/* Adapter */
@@ -103,6 +114,7 @@
 		ep.pageHeight =  editorPaging.convertPX(29.7);
 		ep.autoAdjustHeight(page_editor, editorPaging.convertPX(2), editor, 0);
 	});
+	--}}
 
 	/* Script call modal delete */
 	$('#deleteModal').on('shown.bs.modal', function(e) {

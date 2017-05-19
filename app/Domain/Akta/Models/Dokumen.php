@@ -54,6 +54,8 @@ class Dokumen extends BaseModel
 											'dokumen_objek'			,
 											'dokumen_pihak'			,
 											'dokumen_saksi'			,
+
+											'template'				,
 										];
 	/**
 	 * Basic rule of database

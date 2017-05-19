@@ -4,21 +4,34 @@ namespace App\Service\Akta;
 
 use App\Domain\Akta\Models\Template;
 
-use Exception, TAuth, Carbon\Carbon;
+use Exception, TAuth;
 
+/**
+ * Service untuk update template yang sudah ada
+ *
+ * Auth : 
+ * 	1. hanya penulis @authorize
+ * Validasi :
+ * 	1. dapat di hapus, status draft @deleteable
+ *
+ * @author     C Mooy <chelsy@thunderlab.id>
+ */
 class HapusTemplate
 {
 	protected $id;
+	private $template;
+	private $loggedUser;
+	private $activeOffice;
 
 	/**
 	 * Create a new job instance.
 	 *
-	 * @param  $id
-	 * @return void
+	 * @param 	string $id
+	 * @return 	void
 	 */
 	public function __construct($id)
 	{
-		$this->id		= $id;
+		$this->id				= $id;
 	}
 
 	/**
@@ -26,33 +39,20 @@ class HapusTemplate
 	 *
 	 * @return void
 	 */
-	public function handle()
+	public function save()
 	{
 		try
 		{
-			//1a. pastikan akta exists
-			$akta 		= Template::findorfail($this->id);
-
-			//1b. check status akta 
-			if(!str_is($akta->status, 'draft'))
-			{
-				throw new Exception("Status Harus draft", 1);
-			}
-
-			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
-			if(!in_array(TAuth::loggedUser()['id'], [$akta->penulis['id']]))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk template ini", 1);
-			}
+			// Auth : 
+			// 1. hanya penulis @authorize
+			$this->authorize();
 			
-			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk template ini", 1);
-			}
+			// Validasi :
+			// 	1. dapat diedit, status draft @deleteable
+			$this->deleteable();
 
-			//2. hapus Akta
-			$akta->delete();
+			//2. simpan dokumen
+			$this->template->delete();
 
 			return true;
 		}
@@ -60,5 +60,58 @@ class HapusTemplate
 		{
 			throw $e;
 		}
+	}
+
+	/**
+	 * Authorization user
+	 *
+	 * MELALUI HTTP
+	 * 1. User harus login
+	 *
+	 * MELALUI CONSOLE
+	 * belum ada
+	 *
+	 * @return Exception 'Invalid User'
+	 * @return boolean true
+	 */
+	private function authorize()
+	{
+		//MELALUI HTTP
+		
+		//demi menghemat resource
+		$this->loggedUser 	= TAuth::loggedUser();
+		$this->activeOffice = TAuth::activeOffice();
+
+		//1a. pastikan akta exists
+		$this->template 	= Template::id($this->id)->where('penulis.id', $this->loggedUser['id'])->kantor($this->activeOffice['kantor']['id'])->first();
+
+		if(!$this->template)
+		{
+			throw new Exception("Template tidak ditemukan", 1);
+		}
+
+		return true;
+	
+		//MELALUI CONSOLE
+	}
+
+
+	/**
+	 * publishable content
+	 *
+	 * hanya status draft
+	 *
+	 * @return Exception 'Invalid User'
+	 * @return boolean true
+	 */
+	private function deleteable()
+	{
+		//1. check status template 
+		if(!str_is($this->template->status, 'draft'))
+		{
+			throw new Exception("Dokumen tidak bisa dihapus", 1);
+		}
+
+		return true;
 	}
 }

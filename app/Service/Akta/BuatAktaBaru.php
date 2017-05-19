@@ -6,180 +6,351 @@ use App\Domain\Akta\Models\Versi;
 use App\Domain\Akta\Models\Dokumen;
 
 use App\Domain\Order\Models\Klien;
-use App\Domain\Order\Models\Jadwal;
 
 use App\Domain\Admin\Models\Kantor;
 
-use Exception, DB, TAuth, Carbon\Carbon;
+use Exception, TAuth;
 
+/**
+ * Service untuk membuat akta baru
+ *
+ * Auth : 
+ * 	1. Siapa pun yang teregistrasi dalam sistem @authorize
+ * Policy : 
+ * 	1. Restorasi Isi Paragraf @restorasi_isi_akta
+ * 	2. Restorasi Data mention @restorasi_isi_mentionable
+ * 	3. Validate template @validasi_template
+ * Smart System : 
+ * 	1. Auto Assign Writer @assign_writer
+ * 	2. Auto Assign Owner @assign_owner
+ * 	3. Auto fill mentionable notaris @fill_mention_notaris
+ * 	4. parse mentionable @parse_mentionable
+ * 	5. Update data klien @enhance_klien
+ * 	6. Watermarking @watermarking
+ * 	7. Versioning @versioning
+ *
+ * @author     C Mooy <chelsy@thunderlab.id>
+ */
 class BuatAktaBaru
 {
-	protected $klien_id;
-	protected $klien_nama;
-	protected $klien_telepon;
-	protected $tanggal_pertemuan;
 	protected $judul;
 	protected $isi_akta;
 	protected $mentionable;
 	protected $template_id;
 
+	private $activeOffice;
+	private $loggedUser;
+	private $notaris;
+	private $template;
+	private $pihak;
+
 	/**
-	 * Create a new job instance.
+	 * Create new instance.
 	 *
-	 * @param  $klien_id
-	 * @param  $klien_nama
-	 * @param  $klien_telepon
-	 * @param  $tanggal_pertemuan
-	 * @param  $judul
-	 * @param  $isi_akta
-	 * @param  $mentionable
-	 * @param  $template_id
-	 *
-	 * @return void
+	 * @param  string $judul
+	 * @param  string $deskripsi
+	 * @param  array $isi_akta
+	 * @param  array $mentionable
+	 * @param  string $template_id
+	 * @return BuatAktaBaru $akta
 	 */
-	public function __construct($tanggal_pertemuan, $judul, array $isi_akta, array $mentionable, $template_id)
+	public function __construct($judul, array $isi_akta, array $mentionable, $template_id)
 	{
-		$this->tanggal_pertemuan	= $tanggal_pertemuan;
-		$this->judul				= $judul;
-		$this->isi_akta				= $isi_akta;
-		$this->mentionable			= $mentionable;
-		$this->template_id			= $template_id;
+		$this->judul			= $judul;
+		$this->isi_akta			= $isi_akta;
+		$this->mentionable		= $mentionable;
+		$this->template_id		= $template_id;
 	}
 
 	/**
-	 * Execute the job.
+	 * Simpan akta baru
 	 *
-	 * @return void
+	 * @return array $akta
 	 */
-	public function handle()
+	public function save()
 	{
 		try
 		{
-			//0. get logged data
-			$loggedUser 		= TAuth::loggedUser();
-			$activeOffice 		= TAuth::activeOffice();
-			$notaris 			= Kantor::find($activeOffice['kantor']['id']);
+			// Auth : 
+		 	// 1. Siapa pun yang teregistrasi dalam sistem @authorize
+			$this->authorize();
 
-			//1. simpan klien
+			// Policy : 
+		 	// 1. Restorasi Isi Paragraf @restorasi_isi_akta
+		 	$variable['paragraf']		= $this->restorasi_isi_akta();
 
-			//2. simpan akta
-			$call				= new DaftarTemplateAkta;
-			$template			= $call->detailed($this->template_id);
+		 	// 2. Restorasi Data mention @restorasi_isi_mentionable
+		 	$variable['mentionable']	= $this->restorasi_isi_mentionable();
 
-			$akta['pemilik']['orang'][0]['id'] 		= $loggedUser['id'];
-			$akta['pemilik']['orang'][0]['nama'] 	= $loggedUser['nama'];
+		 	// 3. Validate template @validasi_template
+		 	$this->validasi_template();
 
-			$akta['pemilik']['kantor']['id'] 		= $activeOffice['kantor']['id'];
-			$akta['pemilik']['kantor']['nama'] 		= $activeOffice['kantor']['nama'];
+			// Smart System : 
+			// 1. Auto Assign Writer @assign_writer
+			$variable['penulis'] 		= $this->assign_writer();
 
-			$akta['penulis']['id'] 					= $loggedUser['id'];
-			$akta['penulis']['nama'] 				= $loggedUser['nama'];
+		 	// 2. Auto Assign Owner @assign_owner
+			$variable['pemilik'] 		= $this->assign_owner();
 
-			$akta['mentionable']					= $template['mentionable'];
-			$akta['judul']							= $this->judul;
+		 	// 3. Parse mentionable untuk mentionable @parse_mentionable
+			$variable['fill_mention'] 	= $this->parse_mentionable();
 
-			$akta['jumlah_pihak']					= $template['jumlah_pihak'];
-			$akta['jumlah_saksi']					= $template['jumlah_saksi'];
-			$akta['dokumen_objek']					= $template['dokumen_objek'];
-			$akta['dokumen_pihak']					= $template['dokumen_pihak'];
-			$akta['dokumen_saksi']					= $template['dokumen_saksi'];
-			$akta['total_perubahan']				= 0;
+		 	// 4. auto fill mentionable notaris @fill_mention_notaris
+			$variable['fill_mention'] 	= array_merge($variable['fill_mention'], $this->fill_mention_notaris());
 
-			$pihak 									= [];
+			// 5. enhance klien @enhance_klien
+			$variable['pemilik'] 		= array_merge($variable['pemilik'], $this->enhance_klien());
 
-			foreach($akta['mentionable'] as $key => $value)
-			{
-				if(isset($this->mentionable[$value]))
-				{
-					$akta['fill_mention'][str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
-					if(str_is('@pihak.*.ktp.*', $value))
-					{
-						$pihaks 		= str_replace('@', '', $value);
-						$pihaks 		= explode('.', $pihaks);
+		 	// 6. Watermarking @watermarking
+			$variable['watermarking']	= $this->watermarking();
 
-						$pihak[$pihaks[1]][$pihaks[3]]	= $this->mentionable[$value];
-					}
-				}
+			// STORE
+			//1. init akta
+			$akta 						= new Dokumen;
 
-			}
-			foreach ($pihak as $key => $value) 
-			{
-				$new_pihak 				= Klien::where('nomor_ktp', $value['nomor_ktp'])->first();
+			//2. parse variable
+			$variable['mentionable']	= $this->template['mentionable'];
+			$variable['judul']			= $this->judul;
 
-				if(!$new_pihak)
-				{
-					$new_pihak 			= new Klien;
-				}
+			$variable['jumlah_pihak']	= $this->template['jumlah_pihak'];
+			$variable['jumlah_saksi']	= $this->template['jumlah_saksi'];
+			$variable['dokumen_objek']	= $this->template['dokumen_objek'];
+			$variable['dokumen_pihak']	= $this->template['dokumen_pihak'];
+			$variable['dokumen_saksi']	= $this->template['dokumen_saksi'];
+			$variable['total_perubahan']= 0;
+			
+			$variable['template']['id']	= $this->template_id;
 
-				$new_pihak 				= $new_pihak->fill($value);
-				$new_pihak->save();
+			//3. simpan value yang ada
+			$akta						= $akta->fill($variable);
 
-				$new_pihak 				= $new_pihak->toArray();
+			//4. set status akta
+			$akta->status 				= 'dalam_proses';
 
-				$akta['pemilik']['klien'][$key]['id'] 		= $new_pihak['id'];
-				$akta['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
-			}
+			//5. simpan akta
+			$akta->save();
 
-			//2b. akta mentionable
-			if(in_array('@notaris.nama', $akta['mentionable']))
-			{
-				$akta['fill_mention']['notaris-+nama'] 					= $notaris['notaris']['nama'];
-			}
-			if(in_array('@notaris.daerah_kerja', $akta['mentionable']))
-			{
-				$akta['fill_mention']['notaris-+daerah_kerja'] 			= $notaris['notaris']['daerah_kerja'];
-			}
-			if(in_array('@notaris.nomor_sk', $akta['mentionable']))
-			{
-				$akta['fill_mention']['notaris-+nomor_sk'] 				= $notaris['notaris']['nomor_sk'];
-			}
-			if(in_array('@notaris.tanggal_pengangkatan', $akta['mentionable']))
-			{
-				$akta['fill_mention']['notaris-+tanggal_pengangkatan'] 	= $notaris['notaris']['tanggal_pengangkatan'];
-			}
-			if(in_array('@notaris.alamat', $akta['mentionable']))
-			{
-				$akta['fill_mention']['notaris-+alamat'] 				= $notaris['notaris']['alamat'];
-			}
-			if(in_array('@notaris.telepon', $akta['mentionable']))
-			{
-				$akta['fill_mention']['notaris-+telepon'] 				= $notaris['notaris']['telepon'];
-			}
+		 	// 7. versioning
+			$this->versioning($akta->_id, $variable);
 
-			$akta['paragraf']	= $this->isi_akta;
-			$akta['status']		= 'dalam_proses';
+			$daftar_akta 				= new DaftarAkta;
 
-			$dokumen 			= new Dokumen;
-			$dokumen 			= $dokumen->fill($akta);
-			$dokumen->save();
-
-			//3. simpan jadwal pertemuan
-			$jadwal 			= new Jadwal;
-			$jadwal->fill([
-					'judul'			=> 'Deadline '.$this->judul,
-					'waktu'			=> $this->tanggal_pertemuan,
-					'pembuat'		=> ['kantor' => ['id' => $activeOffice['kantor']['id'],'nama' => $activeOffice['kantor']['nama']]],
-					// 'peserta'		=> $akta['pemilik']['klien'],
-					'referensi_id'	=> $dokumen->_id,
-				]);
-			if(isset($akta['pemilik']['klien']))
-			{
-				$jadwal->peserta 	= $akta['pemilik']['klien'];
-			}
-			$jadwal 			= $jadwal->save();
-
-			//4. simpan versi
-			$versi 				= new Versi;
-			$versi				= $versi->fill($akta);
-			$versi->original_id	= $dokumen->_id;
-			$versi->versi 		= 1;
-			$versi->save();
-
-			return $dokumen->toArray();
+			return $daftar_akta->detailed($akta->_id);
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
+	}
+
+	/**
+	 * Authorization user
+	 *
+	 * MELALUI HTTP
+	 * 1. User harus login
+	 *
+	 * MELALUI CONSOLE
+	 * belum ada
+	 *
+	 * @return Exception 'Invalid User'
+	 * @return boolean true
+	 */
+	private function authorize()
+	{
+		//MELALUI HTTP
+
+		//demi menghemat resource
+		$this->activeOffice 	= TAuth::activeOffice();
+		$this->loggedUser 		= TAuth::loggedUser();
+		$this->notaris 			= Kantor::find($this->activeOffice['kantor']['id']);
+
+		return true;
+	
+		//MELALUI CONSOLE
+	}
+
+	/**
+	 * Validasi Judul
+	 *
+	 * 1. Judul harus unique
+	 *
+	 * @return Exception 'Judul sudah pernah dipakai'
+	 * @return boolean true
+	 */
+	private function validasi_template()
+	{
+		$this->template	= new DaftarTemplateAkta;;
+		$this->template = $this->template->detailed($this->template_id);
+
+		return true;
+	}
+
+	/**
+	 * restorasi isi akta
+	 *
+	 * @return array $isi_akta
+	 */
+	private function restorasi_isi_akta()
+	{
+		return $this->isi_akta;
+	}
+
+	/**
+	 * restorasi isi mentionable
+	 *
+	 * @return array $mentionable
+	 */
+	private function restorasi_isi_mentionable()
+	{
+		return $this->mentionable;
+	}
+
+	/**
+	 * assign writer
+	 *
+	 * @return array $writer
+	 */
+	private function assign_writer()
+	{
+		$akta['penulis']['id'] 					= $this->loggedUser['id'];
+		$akta['penulis']['nama'] 				= $this->loggedUser['nama'];
+
+		return $akta['penulis'];
+	}
+
+	/**
+	 * assign owner
+	 *
+	 * @return array $owner
+	 */
+	private function assign_owner()
+	{
+		$akta['pemilik']['orang'][0]['id'] 		= $this->loggedUser['id'];
+		$akta['pemilik']['orang'][0]['nama'] 	= $this->loggedUser['nama'];
+
+		$akta['pemilik']['kantor']['id'] 		= $this->activeOffice['kantor']['id'];
+		$akta['pemilik']['kantor']['nama'] 		= $this->activeOffice['kantor']['nama'];
+
+		return $akta['pemilik'];
+	}
+
+	/**
+	 * fill mention notaris
+	 * learn new type of document
+	 *
+	 * @return array $tag
+	 */
+	private function fill_mention_notaris()
+	{
+		$akta['fill_mention']		= [];
+
+		if(in_array('@notaris.nama', $this->template['mentionable']))
+		{
+			$akta['fill_mention']['notaris-+nama'] 					= $this->notaris['notaris']['nama'];
+		}
+		if(in_array('@notaris.daerah_kerja', $this->template['mentionable']))
+		{
+			$akta['fill_mention']['notaris-+daerah_kerja'] 			= $this->notaris['notaris']['daerah_kerja'];
+		}
+		if(in_array('@notaris.nomor_sk', $this->template['mentionable']))
+		{
+			$akta['fill_mention']['notaris-+nomor_sk'] 				= $this->notaris['notaris']['nomor_sk'];
+		}
+		if(in_array('@notaris.tanggal_pengangkatan', $this->template['mentionable']))
+		{
+			$akta['fill_mention']['notaris-+tanggal_pengangkatan'] 	= $this->notaris['notaris']['tanggal_pengangkatan'];
+		}
+		if(in_array('@notaris.alamat', $this->template['mentionable']))
+		{
+			$akta['fill_mention']['notaris-+alamat'] 				= $this->notaris['notaris']['alamat'];
+		}
+		if(in_array('@notaris.telepon', $this->template['mentionable']))
+		{
+			$akta['fill_mention']['notaris-+telepon'] 				= $this->notaris['notaris']['telepon'];
+		}
+
+		return $akta['fill_mention'];
+	}
+
+	/**
+	 * parse mentionable 
+	 *
+	 * @return array $tag
+	 */
+	private function parse_mentionable()
+	{
+		$akta['fill_mention']		= [];
+
+		foreach($this->template['mentionable'] as $key => $value)
+		{
+			if(isset($this->mentionable[$value]))
+			{
+				$akta['fill_mention'][str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
+
+				if(str_is('@pihak.*.ktp.*', $value))
+				{
+					$pihaks 		= str_replace('@', '', $value);
+					$pihaks 		= explode('.', $pihaks);
+
+					$this->pihak[$pihaks[1]][$pihaks[3]]	= $this->mentionable[$value];
+				}
+			}
+		}
+
+		return $akta['fill_mention'];
+	}
+
+	/**
+	 * Simpan Data Klien Berdasarkan mention pihak
+	 *
+	 * @return array $pemilik
+	 */
+	private function enhance_klien()
+	{
+		foreach ($this->pihak as $key => $value) 
+		{
+			$new_pihak 				= Klien::where('nomor_ktp', $value['nomor_ktp'])->first();
+
+			if(!$new_pihak)
+			{
+				$new_pihak 			= new Klien;
+			}
+
+			$new_pihak 				= $new_pihak->fill($value);
+			$new_pihak->save();
+
+			$new_pihak 				= $new_pihak->toArray();
+
+			$akta['pemilik']['klien'][$key]['id'] 		= $new_pihak['id'];
+			$akta['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
+		}
+
+		return $akta['pemilik'];
+	}
+
+	/**
+	 * fungsi untuk watermarking data
+	 *
+	 * @return string watermark
+	 */
+	private function watermarking()
+	{
+		return env('APP_WATERMARK', 'APP_WATERMARK');
+	}
+
+	/**
+	 * fungsi untuk versioning data
+	 *
+	 * @return boolean true
+	 */
+	private function versioning($id, $akta)
+	{
+		$versi 				= new Versi;
+		$versi				= $versi->fill($akta);
+		$versi->original_id	= $id;
+		$versi->versi 		= 1;
+		$versi->save();
+
+		return true;
 	}
 }

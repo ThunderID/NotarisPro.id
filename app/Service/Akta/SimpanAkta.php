@@ -60,6 +60,93 @@ class SimpanAkta
 				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
 			}
 
+			//6. demi kenyamanan editing template
+			//jika ada perubahan jumlah paragraf
+			$template 			= Template::id($akta['template_id'])->first();
+			$temp_para 			= $template->toArray();
+
+			$jumlah_paragraf 		= count($temp_para['paragraf']);
+			$jumlah_paragraf_baru  	= count($this->isi_akta);
+
+			//6a. ada penambahan paragraf
+			//check lokasi penambahan
+			$add_para 				= [];
+			if($jumlah_paragraf_baru > $jumlah_paragraf)
+			{
+				foreach ($jumlah_paragraf_baru as $key => $value) 
+				{
+					$para_baru 		= strip_tags($this->isi_akta[$key]);
+					
+					if(isset($akta['paragraf'][$key]))
+					{
+						$para_lama	= strip_tags($temp_para['paragraf'][$key]);
+					}
+					else
+					{
+						$para_lama 	= '';
+					}
+
+					similar_text($para_baru, $para_lama, $percent);
+
+					if($percent > 50)
+					{
+						$add_para[$key-1] = ['akta_id' => $temp_para['id'], 'paragraf' => $key];
+					} 
+				}
+			}
+
+			//6b. ada pengurangan paragraf			
+			//check lokasi pengurangan
+			$rm_para 				= [];
+			if($jumlah_paragraf_baru < $jumlah_paragraf)
+			{
+				foreach ($jumlah_paragraf as $key => $value) 
+				{
+					$para_baru 		= strip_tags($temp_para['paragraf'][$key]);
+					
+					if(isset($this->akta[$key]))
+					{
+						$para_lama	= strip_tags($this->akta[$key]);
+					}
+					else
+					{
+						$para_lama 	= '';
+					}
+
+					similar_text($para_baru, $para_lama, $percent);
+
+					if($percent > 50)
+					{
+						$rm_para[$key+1] = ['akta_id' => $temp_para['id'], 'paragraf' => $key];
+					} 
+				}
+			}
+
+			//6c. perubahan paragraf
+			//check lokasi pengurangan
+			$cg_para 				= [];
+			if($jumlah_paragraf_baru == $jumlah_paragraf)
+			{
+				foreach ($jumlah_paragraf as $key => $value) 
+				{
+					$para_baru 		= strip_tags($temp_para['paragraf'][$key]);
+					$para_lama		= strip_tags($this->akta[$key]);
+
+					similar_text($para_baru, $para_lama, $percent);
+
+					if($percent > 0)
+					{
+						$cg_para[$key] = ['akta_id' => $temp_para['id'], 'paragraf' => $key];
+					} 
+				}
+			}
+
+			//6d. simpan perubahan template
+			$template->penambahan_paragraf 	= array_merge($template->penambahan_paragraf, $add_para);
+			$template->pengurangan_paragraf	= array_merge($template->pengurangan_paragraf, $rm_para);
+			$template->perubahan_paragraf 	= array_merge($template->perubahan_paragraf, $cg_para);
+			$template->save();
+
 			//2. check lock
 			$paragraf	= $akta['paragraf'];
 
