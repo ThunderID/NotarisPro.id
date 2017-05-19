@@ -178,23 +178,12 @@
 			</div>
 			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar sidebar-right subset-2menu">
 				<div class="panel">
-					<h5>List Fillable Mention</h5>
-					<div class="list-group list-widgets">
-						@if (isset($page_datas->datas['mentionable']))
-							@php
-								$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
-							@endphp
-							@forelse ($sort_mentionable as $k => $v)
-								<div class="list-group-item list-group-item-action justify-content-between p-2 mb-2" href="#" data-toggle="modal" data-target="#list-widgets" style="font-size: 14px;" data-widget="{{ $v }}">
-									{{ $v }}
-									<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
-								</div>
-							@empty
-							@endforelse
-						@else
-							<p>Tidak ada fillable mention</p>
-						@endif
-					</div>
+					<p class="text-capitalize text-muted">Status : <span>{{ str_replace('_', ' ', $page_datas->datas['status']) }}</span></p>
+					<p class="text-center mb-3"><i class="fa fa-exclamation-triangle"></i> underconsturction</p>
+					<ol>
+						<li>Template yg dipakai</li>
+						<li>tgl terakhir disunting</li>
+					</ol>
 				</div>
 			</div>				
 		</div>

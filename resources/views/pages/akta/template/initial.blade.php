@@ -35,15 +35,29 @@
 			'store_url' 	=> route('akta.template.store'), 
 			'class'			=> 'mb-0'
 		])
+		<div class="row">
+			<div class="col">&nbsp;</div>
+			<div class="col-12 col-sm-10 col-md-6 col-xl-6 pl-0 pr-0">
+				<ul class="nav nav-pills mt-3 mb-3">
+					<li class="nav-item">
+						<span data-info="#information" class="nav-link active">1. Informasi Template</span>
+					</li>
+					<li class="nav-item">
+						<span data-info="#choice-doc-template" class="nav-link text-muted">2. Dokumen kelengkapan Template Akta</span>
+					</li>
+				</ul>	
+			</div>
+			<div class="col">&nbsp;</div>
+		</div>
 		<div id="information" style="display: block;">
 			<div class="row align-items-center">
 				<div class="col">&nbsp;</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0 mx-auto">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel mb-0 pl-3 mt-0 pb-0 mx-auto" style="max-height: 600px; overflow-y: scroll;">
 					<div class="form">
 						<h4 class="title">Informasi Template</h4>
 						<div class="form-group">
 							<label>Judul</label>
-							<input type="text" name="nama" class="form-control required" placeholder="Judul dari template">
+							<input type="text" name="nama" class="form-control required set-focus" placeholder="Judul dari template">
 						</div>
 						<div class="form-group">
 							<label>Deskripsi</label>
@@ -57,7 +71,6 @@
 							<label>Jumlah Saksi</label>
 							<input type="text" name="jumlah_saksi" class="form-control mask-number-with-min text-left" placeholder="2">
 						</div>
-						<div class="clearfix">&nbsp;</div>
 					</div>
 				</div>
 				<div class="col text-right">
@@ -70,10 +83,10 @@
 				<div class="col">
 					<a href="#information" class="btn btn-primary action-wizard" data-content="#choice-doc-template">Sebelumnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-left"></i></a>
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0 mx-auto scrollable_panel">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel mt-0 pb-0 mx-auto scrollable_panel" style="max-height: 500px; overflow-y: scroll;">
 					<div class="form ml-3">
 						<h4 class="title mb-0 pb-0">Dokumen Kelengkapan Template Akta</h4>
-						<small>Centang dokumen yang dibutuhkan untuk generate template akta</small>
+						<small class="text-muted">Inputkan dokumen yang dibutuhkan untuk generate template akta</small>
 						<div class="clearfix">&nbsp;</div>
 						<div class="content-choice-doc-template"></div>
 						<div class="clearfix">&nbsp;</div>
@@ -91,6 +104,7 @@
 
 @push('scripts')
 	window.selectUI.init();
+	window.formUI.setFocus();
 
 	/**
 	 * event button action wizard
@@ -104,6 +118,9 @@
 		// hide is current content to show current next
 		$(contentNow).hide();
 		$(contentTo).show();
+
+		$('span[data-info="' +contentNow+ '"]').removeClass('active').addClass('text-muted');
+		$('span[data-info="' +contentTo+ '"]').addClass('active').removeClass('text-muted');
 
 		// check if fillable-mention
 		if (contentTo === '#choice-doc-template') {
