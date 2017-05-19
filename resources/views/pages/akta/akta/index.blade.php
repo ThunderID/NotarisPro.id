@@ -141,7 +141,7 @@
 					<thead>
 						<tr>
 							<th>Dokumen</th>
-							<th style="width: 15%;">Pihak</th>
+							<th style="width: 20%;">Pihak</th>
 							<th style="width: 15%;"">Status</th>
 							<th style="width: 20%;">Dokumen</th>
 						</tr>
