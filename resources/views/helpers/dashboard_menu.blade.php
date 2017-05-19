@@ -1,5 +1,9 @@
 <?php
 	// Sidebar Menu List
+	$list['Akta'] 		= 	[
+								'url' 	=> route('user.index'),
+								'icon' 	=> 'fa-file-text-o'
+							];
 	$list['HR Index'] 	= 	[
 								'url' 	=> route('kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
 								'icon' 	=> 'fa-users',
@@ -7,10 +11,6 @@
 	$list['Keuangan']	= 	[
 								'url' 	=> route('akun.edit', $acl_logged_user['id']),
 								'icon' 	=> 'fa-money'
-							];
-	$list['Akta'] 		= 	[
-								'url' 	=> route('user.index'),
-								'icon' 	=> 'fa-file-text-o'
 							];
 
 	// Set Activate Menu

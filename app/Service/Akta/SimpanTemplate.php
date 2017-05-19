@@ -26,7 +26,7 @@ class SimpanTemplate
 {
 	protected $id;
 	protected $isi_template;
-	protected $isi_mentionable;
+	protected $mentionable;
 	private $template;
 	private $loggedUser;
 	private $activeOffice;
@@ -36,14 +36,14 @@ class SimpanTemplate
 	 *
 	 * @param 	string $id
 	 * @param 	array $isi_template
-	 * @param 	array $isi_mentionable
+	 * @param 	array $mentionable
 	 * @return 	void
 	 */
-	public function __construct($id, array $isi_template, array $isi_mentionable)
+	public function __construct($id, array $isi_template, array $mentionable)
 	{
 		$this->id				= $id;
-		$this->isi_template			= $isi_template;
-		$this->isi_mentionable	= $isi_mentionable;
+		$this->isi_template		= $isi_template;
+		$this->mentionable		= $mentionable;
 	}
 
 	/**
@@ -78,7 +78,7 @@ class SimpanTemplate
 			$this->template->save();
 
 			$template 		= new DaftarTemplateAkta;
-			return $template->detailed($id);
+			return $template->detailed($this->id);
 		}
 		catch(Exception $e)
 		{
