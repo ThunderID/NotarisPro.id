@@ -30,8 +30,6 @@
 			$title = isset($page_datas->datas['id']) ? $page_datas->datas['judul'] : '';
 
 			if(str_is($page_datas->datas['status'], 'publish')){
-				// badge title
-				$title 		= "<span class='text-success'>[Published]</span> " . $title;
 
 				// menu
 				$menus 		= [

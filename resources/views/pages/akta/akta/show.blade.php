@@ -17,71 +17,107 @@
 
 @section('content')
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				{{-- COMPONENT MENUBAR --}}
-				<div class="row bg-faded">
-					<div class="col-xs-6 col-sm-5 col-md-6 col-lg-6 pl-0">
-						<ul class="nav menu-content justify-content-start">
-							<li class="nav-item">
-								<span class="nav-link">{{ $page_datas->datas['judul'] }}</span>
-							</li>
-							@if(str_is($page_datas->datas['status'], 'draft'))
-								@if($page_datas->datas['total_perubahan'] * 1 == 0)
-									<li class="nav-item">
-										<span class="nav-link">Status : Belum di Renvoi</span>
-									</li>
-								@else
-									<li class="nav-item">
-										<span class="nav-link">Status : Renvoi ke - {{$page_datas->datas['total_perubahan']}}</span>
-									</li>
-								@endif
-							@endif
-						</ul>
-					</div>
-					<div class="col-xs-12 col-sm-7 col-md-6 col-lg-6 pr-0">
-						<ul class="nav menu-content justify-content-end">
-							@if(str_is($page_datas->datas['status'], 'dalam_proses'))
-							<li class="nav-item">
-								<a class="nav-link text-danger" href="" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Hapus</a>
-							</li>
-						
-							<li class="nav-item hidden-sm-down">
-								<a class="nav-link" href="{{route('akta.akta.edit', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
-							</li>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'draft'])}}" ><i class="fa fa-check"></i> Publish</a>
-							</li>
-							@elseif(str_is($page_datas->datas['status'], 'draft'))
-							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']])}}" ><i class="fa fa-history"></i> History Revisi</a>
-							</li>
-								@if(str_is(acl_active_office['role'], 'notaris'))
-								<li class="nav-item">
-									<a  class="nav-link" href="javascript:void(0);" data-toggle="modal" data-target="#finalize" ><i class="fa fa-file"></i> Final</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'renvoi'])}}" ><i class="fa fa-check"></i> Renvoi</a>
-								</li>
-								@endif
-							@elseif(str_is($page_datas->datas['status'], 'renvoi'))
-							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.akta.edit.renvoi', ['id' => $page_datas->datas['id']])}}" ><i class="fa fa-pencil"></i> Edit</a>
-							</li>
+			{{-- Predefine Sub Menu --}}
+			<?php
+				// Status : Dalam Proses
+				if(str_is($page_datas->datas['status'], 'dalam_proses')){
+					$menus 		= [
+						[
+							"title" 			=> "Hapus",	
+							"class" 			=> "text-danger",	
+							"trigger_modal" 	=> "#deleteModal",
+							"icon" 				=> "fa-trash",
+						],
+						[
+							"title" 			=> "Edit",	
+							"hide_on" 			=> "hidden-sm-down",	
+							"route" 			=> route('akta.akta.edit', ['id' => $page_datas->datas['id']]),
+							"icon" 				=> "fa-edit",
+						],
+						[
+							"title" 			=> "Publish",	
+							"route" 			=> route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'draft']),
+							"icon" 				=> "fa-check",
+						]						
+					];
+				}
+				// Status : Draft
+				else if (str_is($page_datas->datas['status'], 'draft')) {
+					// ACL
+					if(str_is(acl_active_office['role'], 'notaris')){
+						// menu
+						$menus 		= [
+							[
+								"title" 			=> "History Revisi",	
+								"route" 			=> route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']]),
+								"icon" 				=> "fa-history",
+							],
+							[
+								"title" 			=> "Final",	
+								"trigger_modal" 	=> "#finalize",
+								"icon" 				=> "fa-file",
+							],
+							[
+								"title" 			=> "Renvoi",	
+								"route" 			=> route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'renvoi']),
+								"icon" 				=> "fa-check",
+							]							
+						];
+					}else{
+						// menu
+						$menus 		= [
+							[
+								"title" 			=> "History Revisi",	
+								"route" 			=> route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']]),
+								"icon" 				=> "fa-history",
+							],
+						];
+					}
+				}
+				// Status : Renvoi
+				else if(str_is($page_datas->datas['status'], 'renvoi')) {
+					$menus 		= [
+						[
+							"title" 			=> "Hapus",	
+							"class" 			=> "text-danger",	
+							"trigger_modal" 	=> "#deleteModal",
+							"icon" 				=> "fa-trash",
+						],
+						[
+							"title" 			=> "Edit",	
+							"hide_on" 			=> "hidden-sm-down",	
+							"route" 			=> route('akta.akta.edit', ['id' => $page_datas->datas['id']]),
+							"icon" 				=> "fa-edit",
+						],
+						[
+							"title" 			=> "Publish",	
+							"route" 			=> route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'draft']),
+							"icon" 				=> "fa-check",
+						]						
+					];
+				}
+				// Status : Akta
+				else if(str_is($page_datas->datas['status'], 'akta')) {		
+					$menus 		= [
+						[
+							"title" 			=> "Export PDF",	
+							"route" 			=> route('akta.akta.pdf', ['akta_id' => $page_datas->datas['id']] ),
+							"icon" 				=> "fa-file-pdf-o",
+						]						
+					];
+				}else{
+					$menus 		= [];
+				}		
+			?>
 
-							<li class="nav-item">
-								<a class="nav-link" href="{{route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'draft'])}}" ><i class="fa fa-check"></i> Publish</a>
-							</li>
-							@elseif (str_is($page_datas->datas['status'], 'akta'))
-								<li class="nav-item">
-									<a class="nav-link export-pdf" href="{{route('akta.akta.pdf', ['akta_id' => $page_datas->datas['id']] )}}" ><i class="fa fa-file-pdf-o"></i> Export PDF</a>
-								</li>					
-							@endif
-						</ul>
-					</div>
-				</div>
-				{{-- END COMPONENT MENUBAR --}}
-			</div>
+			@include('components.submenu', [
+				'title' 		=> $page_datas->datas['judul'],
+				'back_route'	=> route('akta.akta.index'),
+				'menus' 		=> $menus
+			])
+
+
 			<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
