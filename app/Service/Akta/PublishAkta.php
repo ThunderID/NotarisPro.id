@@ -2,25 +2,45 @@
 
 namespace App\Service\Akta;
 
-use App\Domain\Akta\Models\Versi;
 use App\Domain\Akta\Models\Dokumen;
+use App\Domain\Akta\Models\Versi;
+
 use TImmigration\Pengguna\Models\Pengguna;
 
-use Exception, DB, TAuth, Carbon\Carbon;
+use Exception, TAuth;
 
+/**
+ * Service untuk update akta yang sudah ada
+ *
+ * Auth : 
+ * 	1. hanya penulis @authorize
+ * Validasi :
+ * 	1. dapat di publish, status draft @editable
+ * 	2. mentionable sudah terisi @validasi_mentionable
+ * 	3. assign total perubahan @assign_total_perubahan
+ * 	4. ganti kepemilikan @change_ownership
+ * Smart :
+ * 	1. lock all paragraf @lock_paragraph
+ * 	2. versioning @versioning
+ *
+ * @author     C Mooy <chelsy@thunderlab.id>
+ */
 class PublishAkta
 {
 	protected $id;
+	private $akta;
+	private $loggedUser;
+	private $activeOffice;
 
 	/**
 	 * Create a new job instance.
 	 *
-	 * @param  $id
-	 * @return void
+	 * @param 	string $id
+	 * @return 	void
 	 */
 	public function __construct($id)
 	{
-		$this->id		= $id;
+		$this->id				= $id;
 	}
 
 	/**
@@ -28,114 +48,213 @@ class PublishAkta
 	 *
 	 * @return void
 	 */
-	public function handle()
+	public function save()
 	{
 		try
 		{
-			//1a. pastikan akta exists
-			$akta 		= Dokumen::findorfail($this->id);
+			// Auth : 
+			// 1. hanya penulis @authorize
+			$this->authorize();
+			
+			// Validasi :
+			// 	1. dapat diedit, status draft @editable
+			$this->editable();
 
-			//1b. check status akta 
-			if(!in_array($akta->status, ['dalam_proses', 'renvoi']))
-			{
-				throw new Exception("Status Harus dalam proses atau Renvoi", 1);
-			}
+			//2. mentionable sudah terisi @validasi_mentionable
+			$this->validasi_mentionable();
 
-			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
-			if(!in_array(TAuth::loggedUser()['id'], [$akta->pemilik['orang'][0]['id']]))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
+			//3. assign total perubahan @assign_total_perubahan
+			$this->assign_total_perubahan();
 
-			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
+			//4. ganti kepemilikan @change_ownership
+			$this->change_ownership();
 
-			//2. Lock semua paragraf
-			$paragraf 					= [];
-			foreach ($akta->paragraf as $key => $value) 
-			{
-				$paragraf[$key] 		= $value;
-				$paragraf[$key]['lock']	= Dokumen::createID('lock');
-			}
-			$akta->paragraf 			= $paragraf;
+			//1. lock all paragraf @lock_paragraph
+			$this->lock_paragraph();
 
-			//3. Ganti kepemilikan
-			if(!str_is(TAuth::activeOffice()['role'], 'notaris'))
-			{
-				$owner 					= $akta->pemilik;
-				foreach ($owner['orang'] as $key => $value) 
-				{
-					if(str_is($value['id'], TAuth::loggedUser()['id']))
-					{
-						unset($owner['orang'][$key]);
-					}
-				}
+			//1b. simpan dokumen
+			$this->akta->status 	= 'draft';
+			$this->akta->save();
 
-				$lists 					= Pengguna::where('visas.kantor.id', TAuth::activeOffice()['kantor']['id'])->where('visas.role', 'notaris')->get();
+		 	// 2. versioning
+			$this->versioning($this->id, $this->akta->toArray());
 
-				foreach ($lists as $key => $value) 
-				{
-					$owner['orang'][] 	= ['id' => $value['id'], 'nama' => $value['nama']];
-				}
-
-				$akta->pemilik 			= $owner;
-			}
-
-			//4a. check status renvoi
-			if(str_is($akta->status, 'renvoi'))
-			{
-				$akta->total_perubahan	= ($akta->total_perubahan*1) + 1;
-			}
-			else
-			{
-				$akta->total_perubahan	= 0;
-			}
-
-			//4. check mentionable
-			if(!in_array($akta->status, ['renvoi']))
-			{
-				foreach ($akta->mentionable as $key => $value) 
-				{
-					$fill 	= str_replace('@', '', $value);
-					$fill 	= str_replace('.', '-+', $fill);
-					
-					if(!isset($akta->fill_mention[$fill]) && !str_is('akta-+nomor', $fill))
-					{
-						throw new Exception("Data Akta belum lengkap", 1);
-					}
-				}
-			}
-
-			//5. set status
-			$akta->status 			= 'draft';
-
-			$akta->save();
-
-			$akta 						= $akta->toArray();
-			$to_insert['judul'] 		= $akta['judul'];
-			$to_insert['paragraf'] 		= $akta['paragraf'];
-			$to_insert['status'] 		= $akta['status'];
-			$to_insert['pemilik'] 		= $akta['pemilik'];
-			$to_insert['penulis'] 		= $akta['penulis'];
-			$to_insert['mentionable'] 	= $akta['mentionable'];
-			$to_insert['fill_mention'] 	= $akta['fill_mention'];
-
-			//6. simpan versi
-			$prev_versi 			= Versi::where('original_id', $akta['id'])->orderby('created_at', 'desc')->first();
-			$versi 					= new Versi;
-			$versi 					= $versi->fill($to_insert);
-			$versi->original_id 	= $akta['id'];
-			$versi->versi 			= ($prev_versi->versi*1) + 1;
-			$versi->save();
-
-			return $akta;
+			$akta 		= new DaftarAkta;
+			return $akta->detailed($this->id);
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
+	}
+
+	/**
+	 * Authorization user
+	 *
+	 * MELALUI HTTP
+	 * 1. User harus login
+	 *
+	 * MELALUI CONSOLE
+	 * belum ada
+	 *
+	 * @return Exception 'Invalid User'
+	 * @return boolean true
+	 */
+	private function authorize()
+	{
+		//MELALUI HTTP
+		
+		//demi menghemat resource
+		$this->loggedUser 	= TAuth::loggedUser();
+		$this->activeOffice = TAuth::activeOffice();
+
+		//1a. pastikan akta exists
+		$this->akta 		= Dokumen::id($this->id)->where('pemilik.orang.id', $this->loggedUser['id'])->kantor($this->activeOffice['kantor']['id'])->first();
+
+		if(!$this->akta)
+		{
+			throw new Exception("Akta tidak ditemukan", 1);
+		}
+
+		return true;
+	
+		//MELALUI CONSOLE
+	}
+
+	/**
+	 * editable content
+	 *
+	 * hanya status dalam_proses dan renvoi
+	 *
+	 * @return Exception 'Status Harus dalam proses atau Renvoi'
+	 * @return boolean true
+	 */
+	private function editable()
+	{
+		//1. check status akta 
+		if(!in_array($this->akta->status, ['dalam_proses', 'renvoi']))
+		{
+			throw new Exception("Status Harus dalam proses atau Renvoi", 1);
+		}
+
+		return true;
+	}
+
+	/**
+	 * validasi mentionable
+	 *
+	 * @return Exception 'Data Akta belum lengkap'
+	 * @return boolean true
+	 */
+	private function validasi_mentionable()
+	{
+		if(!in_array($this->akta->status, ['renvoi']))
+		{
+			foreach ($this->akta->mentionable as $key => $value) 
+			{
+				$fill 	= str_replace('@', '', $value);
+				$fill 	= str_replace('.', '-+', $fill);
+				
+				if(!isset($this->akta->fill_mention[$fill]) && !str_is('akta-+nomor', $fill))
+				{
+					throw new Exception("Data Akta belum lengkap", 1);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * assign total perubahan
+	 *
+	 * @return boolean true
+	 */
+	private function assign_total_perubahan()
+	{
+		if(str_is($this->akta->status, 'renvoi'))
+		{
+			$this->akta->total_perubahan	= ($this->akta->total_perubahan*1) + 1;
+		}
+		else
+		{
+			$this->akta->total_perubahan	= 0;
+		}
+
+		return true;
+	}
+
+	/**
+	 * mengganti kepemilikan
+	 *
+	 * @return Exception 'Data Akta belum lengkap'
+	 * @return boolean true
+	 */
+	private function change_ownership()
+	{
+		if(!str_is($this->activeOffice['role'], 'notaris'))
+		{
+			$owner 					= $this->akta->pemilik;
+			foreach ($owner['orang'] as $key => $value) 
+			{
+				if(str_is($value['id'], $this->loggedUser['id']))
+				{
+					unset($owner['orang'][$key]);
+				}
+			}
+
+			$lists 					= Pengguna::where('visas.kantor.id', $this->activeOffice['kantor']['id'])->where('visas.role', 'notaris')->get();
+
+			foreach ($lists as $key => $value) 
+			{
+				$owner['orang'][] 	= ['id' => $value['id'], 'nama' => $value['nama']];
+			}
+
+			$this->akta->pemilik	= $owner;
+		}
+
+		return true;
+	}
+
+	/**
+	 * konci semua paragraf
+	 *
+	 * @return boolean true
+	 */
+	private function lock_paragraph()
+	{
+		$paragraf 					= [];
+		foreach ($this->akta->paragraf as $key => $value) 
+		{
+			$paragraf[$key] 		= $value;
+			$paragraf[$key]['lock']	= Dokumen::createID('lock');
+		}
+		$this->akta->paragraf 			= $paragraf;
+
+		return true;
+	}
+
+	/**
+	 * fungsi untuk versioning data
+	 *
+	 * @return boolean true
+	 */
+	private function versioning($id, $akta)
+	{
+		$to_insert['judul'] 		= $akta['judul'];
+		$to_insert['paragraf'] 		= $akta['paragraf'];
+		$to_insert['status'] 		= $akta['status'];
+		$to_insert['pemilik'] 		= $akta['pemilik'];
+		$to_insert['penulis'] 		= $akta['penulis'];
+		$to_insert['mentionable'] 	= $akta['mentionable'];
+		$to_insert['fill_mention'] 	= $akta['fill_mention'];
+
+		$versi 				= new Versi;
+		$versi				= $versi->fill($to_insert);
+		$versi->original_id	= $id;
+		$versi->versi 		= 1;
+		$versi->save();
+
+		return true;
 	}
 }

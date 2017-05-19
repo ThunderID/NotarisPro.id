@@ -76,7 +76,7 @@
 												@endif
 											@endif
 										@endforeach
-										@if (is_null($v['lock']))
+										@if (!isset($v['lock']))
 											<div>
 												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												<textarea name="template[{{ $k }}]" class="editor">
@@ -90,7 +90,7 @@
 											</div>
 										@endif
 									@else
-										@if (is_null($v['lock']))
+										@if (!isset($v['lock']))
 											<div>
 												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												<textarea name="template[{{ $k }}]" class="editor">

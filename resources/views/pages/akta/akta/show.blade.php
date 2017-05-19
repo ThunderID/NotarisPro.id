@@ -110,7 +110,7 @@
 										@endif
 									@elseif ($page_datas->datas['status'] == 'renvoi')
 										{{-- RENVOI --}}
-										@if (is_null($value['lock']))
+										@if (!isset($value['lock']))
 											{{-- UNLOCKED --}}
 											<div >
 												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>

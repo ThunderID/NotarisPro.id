@@ -2,17 +2,30 @@
 
 namespace App\Service\Akta;
 
-use App\Domain\Akta\Models\Versi;
 use App\Domain\Akta\Models\Dokumen;
-
 use TImmigration\Pengguna\Models\Pengguna;
 
-use Exception, DB, TAuth, Carbon\Carbon;
+use Exception, TAuth;
 
+/**
+ * Service untuk unlock akta yang sudah ada
+ *
+ * Auth : 
+ * 	1. hanya penulis @authorize
+ * Validasi :
+ * 	1. dapat diedit, status draft, atau renvoi @editable
+ * Policy : 
+ * 	1.Unlock Paragraf @unlock
+ *
+ * @author     C Mooy <chelsy@thunderlab.id>
+ */
 class UnlockAkta
 {
 	protected $id;
 	protected $locks;
+	private $akta;
+	private $loggedUser;
+	private $activeOffice;
 
 	/**
 	 * Create a new job instance.
@@ -31,55 +44,28 @@ class UnlockAkta
 	 *
 	 * @return void
 	 */
-	public function unlock()
+	public function save()
 	{
 		try
 		{
-			//1a. pastikan akta exists
-			$akta 		= Dokumen::findorfail($this->id);
+			// Auth : 
+			// 1. hanya penulis @authorize
+			$this->authorize();
+			
+			// Validasi :
+			// 	1. dapat diedit, status draft @editable
+			$this->editable();
 
-			//1b. check status akta 
-			if(!in_array($akta->status, ['draft']))
-			{
-				throw new Exception("Status Harus draft", 1);
-			}
+			// Smart :
+			//1. mentionable sudah terisi @unlock
+			$this->unlock();
 
-			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
-			if(!in_array(TAuth::activeOffice()['role'], ['notaris']))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
+			//2. simpan dokumen
+			$this->akta->status 	= 'renvoi';
+			$this->akta->save();
 
-			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
-
-			//2. Lock semua paragraf
-			$paragraf 					= $akta->paragraf;
-
-			foreach ($akta->paragraf as $key => $value) 
-			{
-				if(in_array($value['lock'], $this->locks))
-				{
-					$paragraf[$key] 			= $value;
-
-					if(isset($paragraf[$key]['unlock']) && $paragraf[$key]['unlock'])
-					{
-						$paragraf[$key]['unlock']	= false;
-					}
-					else
-					{
-						$paragraf[$key]['unlock']	= true;
-					}
-				}
-			}
-			$akta->paragraf 			= $paragraf;
-
-			$akta->save();
-
-			return $akta->toArray();
+			$akta 		= new DaftarAkta;
+			return $akta->detailed($this->id);
 		}
 		catch(Exception $e)
 		{
@@ -88,58 +74,81 @@ class UnlockAkta
 	}
 
 	/**
-	 * Execute the job.
+	 * Authorization user
 	 *
-	 * @return void
+	 * MELALUI HTTP
+	 * 1. User harus login
+	 *
+	 * MELALUI CONSOLE
+	 * belum ada
+	 *
+	 * @return Exception 'Invalid User'
+	 * @return boolean true
 	 */
-	public function handle()
+	private function authorize()
 	{
-		try
+		//MELALUI HTTP
+		
+		//demi menghemat resource
+		$this->loggedUser 	= TAuth::loggedUser();
+		$this->activeOffice = TAuth::activeOffice();
+
+		//1a. pastikan akta exists
+		$this->akta 		= Dokumen::id($this->id)->where('penulis.id', $this->loggedUser['id'])->kantor($this->activeOffice['kantor']['id'])->first();
+
+		if(!$this->akta)
 		{
-			//1a. pastikan akta exists
-			$akta 		= Dokumen::findorfail($this->id);
-
-			//1b. check status akta 
-			if(!in_array($akta->status, ['draft']))
-			{
-				throw new Exception("Status Harus draft", 1);
-			}
-
-			//1c. pastikan akta tersebut dimiliki oleh logged user / akses 
-			if(!in_array(TAuth::loggedUser()['id'], [$akta->pemilik['orang'][0]['id']]))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
-
-			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
-			{
-				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
-			}
-
-			//2. set status
-			$akta->status 			= 'renvoi';
-
-			//3. unlock paragraf
-			$paragraf 				= [];
-			foreach ($akta->paragraf as $key => $value) 
-			{
-				$paragraf[$key]			 	= $value;	
-				if(isset($value['unlock']) && $value['unlock'])
-				{
-					$paragraf[$key]['lock'] = null;	
-					unset($paragraf[$key]['unlock']);
-				}
-			}
-			$akta->paragraf 			= $paragraf;
-
-			$akta->save();
-
-			return $akta->toArray();
+			throw new Exception("Akta tidak ditemukan", 1);
 		}
-		catch(Exception $e)
+
+		return true;
+	
+		//MELALUI CONSOLE
+	}
+
+	/**
+	 * Editable content
+	 *
+	 * hanya status dalam_proses, renvoi yang tidak di lock
+	 *
+	 * @return Exception 'Invalid User'
+	 * @return boolean true
+	 */
+	private function editable()
+	{
+		//1. check status akta 
+		if(!in_array($this->akta->status, ['draft', 'renvoi']))
 		{
-			throw $e;
+			throw new Exception("Dokumen tidak bisa unlock", 1);
 		}
+
+		return true;
+	}
+
+	/**
+	 * Unlock editable
+	 *
+	 * @return boolean true
+	 */
+	private function unlock()
+	{
+		//1. check status akta 
+		$paragraf 						= [];
+		foreach ($this->akta->paragraf as $key => $value) 
+		{
+			$paragraf[$key]				= $value;	
+			if(isset($value['lock']) && in_array($value['lock'], $this->locks))
+			{
+				unset($paragraf[$key]['lock']);
+			}
+			elseif(!isset($value['lock']))
+			{
+				$paragraf[$key]['lock']	= Dokumen::createID('lock');
+			}
+		}
+
+		$this->akta->paragraf 			= $paragraf;
+
+		return true;
 	}
 }

@@ -19,7 +19,7 @@ use App\Service\Akta\FinalizeAkta;
 
 use App\Service\Tag\TagService;
 use App\Service\Admin\DaftarKantor;
-use TAuth, App, PDF;
+use TAuth, App, PDF, Exception;
 
 class aktaController extends Controller
 {
@@ -173,7 +173,6 @@ class aktaController extends Controller
 		//
 		try {
 			$content 	= $this->parse_store($id, $request->only('template'));
-			
 			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
 			$akta		= $akta->save();
 
@@ -456,7 +455,7 @@ class aktaController extends Controller
 
 			// save
 			$data			= new UnlockAkta($akta_id, [$input]);
-			$data 			= $data->unlock();
+			$data 			= $data->save();
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}

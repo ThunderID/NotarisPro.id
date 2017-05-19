@@ -155,7 +155,7 @@ class InitAktaTableSeeder extends Seeder
 		foreach ($dokumen as $key => $value) 
 		{
 			$akta 			= new App\Service\Akta\PublishAkta($value->id);
-			$akta->handle();
+			$akta->save();
 		}
 	}
 }

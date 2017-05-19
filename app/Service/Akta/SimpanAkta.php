@@ -126,7 +126,6 @@ class SimpanAkta
 		//MELALUI CONSOLE
 	}
 
-
 	/**
 	 * Editable content
 	 *
