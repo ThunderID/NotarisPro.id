@@ -38,11 +38,28 @@
 			'store_url' 	=> route('akta.akta.store'), 
 			'class'			=> 'mb-0'
 		])
+		<div class="row">
+			<div class="col">&nbsp;</div>
+			<div class="col-12 col-sm-10 col-md-6 col-xl-6 pl-0 pr-0">
+				<ul class="nav nav-pills mt-3 mb-3">
+					<li class="nav-item">
+						<span data-info="#list-template" class="nav-link active">1. Pilih Template</span>
+					</li>
+					<li class="nav-item">
+						<span data-info="#information" class="nav-link text-muted">2. Informasi Akta</span>
+					</li>
+					<li class="nav-item">
+						<span data-info="#fillable" class="nav-link text-muted">3. Fillable Mention Template</span>
+					</li>
+				</ul>	
+			</div>
+			<div class="col">&nbsp;</div>
+		</div>
 		<div id="list-template" class="mt-1" style="{{ is_null($page_datas->template_id) ? 'display: block;' : 'display: none;' }}">
 			<div class="row align-items-center">
 				<div class="col text-left">&nbsp;
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel" style="height: 90%;">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel" style="height: 80%;">
 					<div class="row">
 						<div class="col-12">
 							<h4 class="title ml-3">{{ $page_attributes->title }}</h4>
@@ -73,23 +90,33 @@
 						@endif
 						<input type="hidden" name="template_id" class="template-id" value="{{ !is_null($page_datas->template_id) ? $page_datas->template_id : null }}">
 					</div>
-					{{-- <div class="clearfix">&nbsp;</div> --}}
-					{{-- <div class="row">
-						<div class="col-6">
-							<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
-						</div>
-						<div class="col-6 text-right">
-							<a href="#fillable" class="btn btn-primary action-wizard" data-content="#list-template">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
-						</div>
-					</div>
-					<div class="clearfix">&nbsp;</div> --}}
 				</div>
 				<div class="col text-right">
-					<a href="#fillable" class="btn btn-primary action-wizard" data-content="#list-template">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
+					<a href="#information" class="btn btn-primary action-wizard" data-content="#list-template">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
 				</div>
 			</div>
 		</div>
-		<div id="fillable" style="{{ is_null($page_datas->template_id) ? 'display: none;' : 'display: block;' }} height: 90%;">
+		<div id="information" style="display: none;">
+			<div class="row align-items-center">
+				<div class="col text-left">
+					<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+				</div>
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
+					<div class="form">
+						<h4 class="title">Informasi Akta</h4>
+						<div class="form-group mb-3 pb-3">
+							<label>Judul Akta</label>
+							<input type="text" name="judul" class="form-control required set-focus" placeholder="Judul dari Akta">
+						</div>
+						<div class="clearfix">&nbsp;</div>
+					</div>
+				</div>
+				<div class="col text-right">
+					<a href="#fillable" class="btn btn-primary action-wizard" data-content="#information">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
+				</div>
+			</div>
+		</div>
+		<div id="fillable" style="{{ is_null($page_datas->template_id) ? 'display: none;' : 'display: block;' }} height: 80%;">
 			<div class="row align-items-center">
 				<div class="col text-left">
 					@if (is_null($page_datas->template_id))
@@ -98,31 +125,8 @@
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3">
 					<div class="form">
-						<h4 class="title">Form Fillable Template</h4>
+						<h4 class="title">Fillable Mention Template</h4>
 						<div class="content-fillable-template"></div>
-					</div>
-				</div>
-				<div class="col text-right">
-					<a href="#information" class="btn btn-primary action-wizard" data-content="#fillable">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
-				</div>
-			</div>
-		</div>
-		<div id="information" style="display: none;">
-			<div class="row align-items-center">
-				<div class="col text-left">
-					<a href="#fillable" class="btn btn-primary action-wizard" data-content="#information"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
-				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
-					<div class="form">
-						<h4 class="title">Form Informasi Akta</h4>
-						<div class="form-group mb-3 pb-3">
-							<label>Judul Akta</label>
-							<input type="text" name="judul" class="form-control required" placeholder="Judul dari Akta">
-						</div>
-						<div class="clearfix">&nbsp;</div>
-						{{-- <div class="form-group text-right pb-3">
-							<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information">Berikutnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-right"></i></a>
-						</div> --}}
 					</div>
 				</div>
 				<div class="col text-right">
@@ -175,12 +179,16 @@
 		$(contentNow).hide();
 		$(contentTo).show();
 
+		// info header active form-wizard
+		$('span[data-info="' +contentNow+ '"]').removeClass('active').addClass('text-muted');
+		$('span[data-info="' +contentTo+ '"]').addClass('active').removeClass('text-muted');
+
 		// check if fillable-mention
 		if (contentTo === '#fillable') {
 			template_id = $('.template-id').val() !== null ? $('.template-id').val() : null;
 			$('.content-fillable-template').html('');
 
-			
+			callListMention(template_id);
 		}
 
 		// trigger event window resize to fix height content
@@ -218,6 +226,7 @@
 			}
 		});
 	}
+
 	@if (!is_null($page_datas->template_id))
 		$(document).ready (function() {
 			template_id = $('.template-id').val() !== null ? $('.template-id').val() : null;

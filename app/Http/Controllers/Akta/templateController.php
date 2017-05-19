@@ -79,7 +79,7 @@ class templateController extends Controller
 
 		// 	// save
 		// 	$data				= new \TCommands\Akta\dalam_prosesingTemplateAkta($input);
-		// 	$data				= $data->handle();
+		// 	$data				= $data->save();
 		// // save
 		// } catch (Exception $e) {
 		// 	$this->page_attributes->msg['error']	= $e->getMessage();
@@ -185,7 +185,7 @@ class templateController extends Controller
 		try {
 			$content 	= $this->parse_store($id, $request);
 			$akta 		= new SimpanTemplate($id, $content['paragraf'], $content['mentionable']);
-			$akta 		= $akta->handle();	
+			$akta 		= $akta->save();	
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']    = $e->getMessage();
 		}
@@ -213,7 +213,7 @@ class templateController extends Controller
 		try {
 			// save
 			$data									= new PublishTemplate($id);
-			$data->handle();
+			$data->save();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -235,7 +235,7 @@ class templateController extends Controller
 		// hapus
 		try {
 			$template								= new HapusTemplate($id);
-			$template								= $template->handle();
+			$template								= $template->save();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMesssage();
 		}            
@@ -254,7 +254,7 @@ class templateController extends Controller
 		try {
 			$content 	= $this->parse_store($id, $request);
 			$akta 		= new SimpanTemplate($id, $content['paragraf'], $content['mentionable']);
-			$akta 		= $akta->handle();
+			$akta 		= $akta->save();
 		} catch (Exception $e) {
 			return response()->json(['status'	=> $e->getMessage()], 200);
 		}
