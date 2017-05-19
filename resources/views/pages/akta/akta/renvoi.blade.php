@@ -23,22 +23,21 @@
 		'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 		'class'			=> 'form-akta mb-0'
 	])
-		<div class="row bg-faded">
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
-				<ul class="nav menu-content justify-content-start">
-					<li class="nav-item">
-						<a class="nav-link" href="{{ route('akta.akta.show', ['id' => $page_datas->akta_id]) }}"><i class="fa fa-angle-left"></i> &nbsp;Kembali</a>
-					</li>
-				</ul>
-			</div>
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
-				<ul class="nav menu-content justify-content-end">
-					<li class="nav-item">
-						<a class="nav-link input-submit" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
-					</li>
-				</ul>
-			</div>
-		</div>
+
+		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
+		@include('components.submenu', [
+			'title' 		=> isset($page_datas->id) ? $page_datas->datas['judul'] : '',
+			'back_route'	=> route('akta.akta.show',['id' => $page_datas->akta_id]),
+			'menus' 		=> [
+				[
+					"title" 			=> "Simpan",	
+					"trigger_modal" 	=> "#form-title",
+					"class" 			=> "input-submit",	
+					"icon" 				=> "fa-save",
+				]
+			]
+		])
+		</div>		
 		<div class="row">
 			<div id="page" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 scrollable_panel subset-2menu">
 				<div id="page-breaker" class="row page-breaker"></div>
@@ -76,7 +75,7 @@
 												@endif
 											@endif
 										@endforeach
-										@if (is_null($v['lock']))
+										@if (!isset($v['lock']))
 											<div>
 												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												<textarea name="template[{{ $k }}]" class="editor">
@@ -90,7 +89,7 @@
 											</div>
 										@endif
 									@else
-										@if (is_null($v['lock']))
+										@if (!isset($v['lock']))
 											<div>
 												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
 												<textarea name="template[{{ $k }}]" class="editor">
