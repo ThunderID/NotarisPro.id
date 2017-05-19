@@ -25,6 +25,7 @@
 			'update_url' 	=> route('akta.akta.update', ['id' => $page_datas->akta_id]), 
 			'class'			=> 'form-akta mb-0'
 		])
+		{{-- 
 			<div class="row bg-faded">
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
 					<ul class="nav menu-content justify-content-start">
@@ -35,7 +36,7 @@
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 pr-0">
 					<ul class="nav menu-content justify-content-end">
-						{{-- <li class="nav-item">
+						<li class="nav-item">
 							<span class="nav-link">Zoom</span>
 						</li>
 						<li class="nav-item">
@@ -47,14 +48,28 @@
 								<a class="dropdown-item" href="#">A4</a>
 								<a class="dropdown-item" href="#">F4</a>
 							</div>
-						</li> --}}
+						</li> 
 						<li class="nav-item">
 							<a class="nav-link input-submit save-content" href="#" data-toggle="modal" data-target="#form-title"><i class="fa fa-save"></i> Simpan</a>
 						</li>
 					</ul>
 				</div>
 			</div>
-			<div class="row">
+			--}}
+
+			<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
+				@include('components.submenu', [
+					'title' 		=> isset($page_datas->id) ? $page_datas->datas['judul'] : '',
+					'back_route'	=> route('akta.akta.show',['id' => $page_datas->akta_id]),
+					'menus' 		=> [
+						[
+							"title" 			=> "Simpan",	
+							"class" 			=> "input-submit save-content",	
+							"icon" 				=> "fa-save",
+						]
+					]
+				])
+
 				<div id="page" class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-2menu">
 					{{-- 
 					<div id="page-breaker" class="row page-breaker"></div>

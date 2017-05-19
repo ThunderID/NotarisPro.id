@@ -52,7 +52,7 @@
 					@if(isset($back_route))
 					<ul class="nav menu-content justify-content-start">
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('akta.template.index') }}">
+							<a class="nav-link" href="{{ isset($back_route) ? $back_route : '#' }}">
 								<i class="fa fa-angle-left"></i>
 								 {{ isset($back_button_title) ? $back_button_title : 'Kembali' }}
 							</a>
@@ -64,7 +64,7 @@
 				{{-- Title mobile, tablet, md screens --}}
 				<div class="col-12 col-md-6 col-lg-4 text-center text-md-center text-lg-center text-xl-center">
 					<div style="text-overflow:ellipsis; width:100%;">
-						<span class="navbar-text mb-0">				
+						<span class="navbar-text mb-0 text-muted">				
 							{!! isset($title) ? $title : '' !!}
 						</span>
 					</div>
@@ -75,7 +75,7 @@
 					@if(isset($back_route))
 					<ul class="nav menu-content justify-content-start">
 						<li class="nav-item">
-							<a class="nav-link" href="{{ route('akta.template.index') }}">
+							<a class="nav-link" href="{{ isset($back_route) ? $back_route : '#' }}">
 								<i class="fa fa-angle-left"></i>
 								 {{ isset($back_button_title) ? $back_button_title : 'Kembali' }}
 							</a>
