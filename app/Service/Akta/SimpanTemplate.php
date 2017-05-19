@@ -25,7 +25,7 @@ use Exception, TAuth;
 class SimpanTemplate
 {
 	protected $id;
-	protected $template;
+	protected $isi_template;
 	protected $isi_mentionable;
 	private $template;
 	private $loggedUser;
@@ -35,14 +35,14 @@ class SimpanTemplate
 	 * Create a new job instance.
 	 *
 	 * @param 	string $id
-	 * @param 	array $template
+	 * @param 	array $isi_template
 	 * @param 	array $isi_mentionable
 	 * @return 	void
 	 */
-	public function __construct($id, array $template, array $isi_mentionable)
+	public function __construct($id, array $isi_template, array $isi_mentionable)
 	{
 		$this->id				= $id;
-		$this->template			= $template;
+		$this->isi_template			= $isi_template;
 		$this->isi_mentionable	= $isi_mentionable;
 	}
 
@@ -113,12 +113,6 @@ class SimpanTemplate
 		{
 			throw new Exception("Template tidak ditemukan", 1);
 		}
-
-			//1b. check status akta 
-			if(!str_is($akta->status, 'draft'))
-			{
-				throw new Exception("Status Harus draft", 1);
-			}
 
 		return true;
 	

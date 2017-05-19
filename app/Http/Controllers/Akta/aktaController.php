@@ -101,11 +101,10 @@ class aktaController extends Controller
 			$tanggal_pertemuan 			= date_create($input['tanggal_pertemuan']);
 			$input['tanggal_pertemuan']	= date_format($tanggal_pertemuan, 'd/m/Y H:i');
 
-			$akta						= new BuatAktaBaru($input['tanggal_pertemuan'], 
-														$input['judul'], $template['paragraf'], 
+			$akta						= new BuatAktaBaru($input['judul'], $template['paragraf'], 
 														$input['mentionable'], $input['template_id']);
 
-			$akta 						= $akta->handle();
+			$akta 						= $akta->save();
 
 			//save tanggal pertemuan
 		} catch (Exception $e) {
@@ -176,7 +175,7 @@ class aktaController extends Controller
 			$content 	= $this->parse_store($id, $request->only('template'));
 			
 			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
-			$akta		= $akta->handle();
+			$akta		= $akta->save();
 
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
@@ -206,7 +205,7 @@ class aktaController extends Controller
 		// hapus
 		try {
 			$akta									= new HapusAkta($id);
-			$akta									= $akta->handle();
+			$akta									= $akta->save();
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMesssage();
 		}            
@@ -242,7 +241,7 @@ class aktaController extends Controller
 			}
 
 			// save
-			$data				= $data->handle();
+			$data				= $data->save();
 
 		// save
 		} catch (Exception $e) {
