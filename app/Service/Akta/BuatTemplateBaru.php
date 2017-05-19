@@ -373,22 +373,19 @@ class BuatTemplateBaru
 		//check dokumen objek
 		foreach ($this->dokumen_objek as $key => $value) 
 		{
-			foreach ($value as $key3 => $value3) 
+			if(!in_array($value, $jenis))
 			{
-				if(!in_array($key3, $jenis))
+				$jenis_doks 		= array_merge($jenis_doks, [$key3 => ['tags' => 'objek']]);
+
+				$isi_doks[$key3]	= [];
+
+				//check isi dokumen baru
+				foreach ($this->mentionable as $key2 => $value2) 
 				{
-					$jenis_doks 		= array_merge($jenis_doks, [$key3 => ['tags' => 'objek']]);
-
-					$isi_doks[$key3]	= [];
-
-					//check isi dokumen baru
-					foreach ($this->mentionable as $key2 => $value2) 
+					if(str_is('*'.$key3.'*', $value2))
 					{
-						if(str_is('*'.$key3.'*', $value2))
-						{
-							$new_content 				= explode('.'.$key3.'.', $value2);
-							$isi_doks[$key3]			= array_merge($isi_doks[$key3], [$new_content[1]]);
-						}
+						$new_content 				= explode('.'.$key3.'.', $value2);
+						$isi_doks[$key3]			= array_merge($isi_doks[$key3], [$new_content[1]]);
 					}
 				}
 			}
