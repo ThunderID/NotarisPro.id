@@ -15,7 +15,7 @@
 	a.choice-template .hover span {
 		color: #fff !important;
 		position: relative;
-		top: 45%;
+		top: 40%;
 		padding: 5px 15px;
 		border: 1px solid #fff;
 	}
@@ -52,7 +52,7 @@
 		<div id="information" style="display: block;">
 			<div class="row align-items-center">
 				<div class="col">&nbsp;</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel mb-0 pl-3 mt-0 pb-0 mx-auto" style="max-height: 600px; overflow-y: scroll;">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel mb-0 pl-3 mt-0 pb-0 mx-auto" style="height: 80%; overflow-y: scroll;">
 					<div class="form">
 						<h4 class="title">Informasi Template</h4>
 						<div class="form-group">
@@ -83,7 +83,7 @@
 				<div class="col">
 					<a href="#information" class="btn btn-primary action-wizard" data-content="#choice-doc-template">Sebelumnya &nbsp;&nbsp;<i class="fa fa-chevron-circle-left"></i></a>
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel mt-0 pb-0 mx-auto scrollable_panel" style="max-height: 500px; overflow-y: scroll;">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel mt-0 mb-0 pb-0 mx-auto scrollable_panel" style="height: 80%; overflow-y: scroll;">
 					<div class="form ml-3">
 						<h4 class="title mb-0 pb-0">Dokumen Kelengkapan Template Akta</h4>
 						<small class="text-muted">Inputkan dokumen yang dibutuhkan untuk generate template akta</small>
