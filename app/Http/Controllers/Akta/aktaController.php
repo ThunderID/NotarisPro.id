@@ -321,7 +321,7 @@ class aktaController extends Controller
 			{
 				foreach ($template['mentionable'] as $key => $value) 
 				{
-					if(!str_is('@notaris.*', $value) && !str_is('@akta.nomor', $value))
+					if(!str_is('@notaris.*', $value) && !str_is('@akta.*', $value))
 					{
 						if(str_is('@objek*', $value))
 						{
@@ -334,7 +334,7 @@ class aktaController extends Controller
 						{
 							$prefix 				= str_replace('@', '', $value);
 							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0]][$prefix[1]][]	= $value;
+							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]][]	= $value;
 						}
 
 						if(str_is('@pihak*', $value))
@@ -343,6 +343,13 @@ class aktaController extends Controller
 							$prefix 				= explode('.', $prefix);
 							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]][]	= $value;
 						}
+					}
+					else
+					{
+						$prefix 				= str_replace('@', '', $value);
+						$prefix 				= explode('.', $prefix);
+						$mentionable[$prefix[0]][$prefix[0]][]	= $value;
+
 					}
 				}
 			}
