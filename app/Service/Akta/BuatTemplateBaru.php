@@ -129,7 +129,7 @@ class BuatTemplateBaru
 			$variable['deskripsi']		= $this->deskripsi;
 			$variable['jumlah_pihak']	= $this->jumlah_pihak;
 			$variable['jumlah_saksi']	= $this->jumlah_saksi;
-		
+
 			//3. simpan value yang ada
 			$template					= $template->fill($variable);
 

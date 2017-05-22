@@ -9,6 +9,10 @@ use App\Domain\Order\Models\Klien;
 
 use App\Domain\Admin\Models\Kantor;
 
+use App\Service\Akta\Traits\EnhanceKlienTrait;
+
+use App\Events\AktaUpdated;
+
 use Exception, TAuth;
 
 /**
@@ -33,6 +37,8 @@ use Exception, TAuth;
  */
 class BuatAktaBaru
 {
+	use EnhanceKlienTrait;
+
 	protected $judul;
 	protected $isi_akta;
 	protected $mentionable;
@@ -99,7 +105,7 @@ class BuatAktaBaru
 			$variable['fill_mention'] 	= array_merge($variable['fill_mention'], $this->fill_mention_notaris());
 
 			// 5. enhance klien @enhance_klien
-			$variable['pemilik'] 		= array_merge($variable['pemilik'], $this->enhance_klien());
+			$variable['pemilik'] 		= array_merge($variable['pemilik'], $this->enhance_klien($this->pihak));
 
 		 	// 6. Watermarking @watermarking
 			$variable['watermarking']	= $this->watermarking();
@@ -134,8 +140,11 @@ class BuatAktaBaru
 			$this->versioning($akta->_id, $variable);
 
 			$daftar_akta 				= new DaftarAkta;
-
-			return $daftar_akta->detailed($akta->_id);
+			$daftar_akta 				= $daftar_akta->detailed($akta->_id);
+			
+			event(new AktaUpdated($daftar_akta));
+			
+			return $daftar_akta;
 		}
 		catch(Exception $e)
 		{
@@ -300,33 +309,6 @@ class BuatAktaBaru
 		return $akta['fill_mention'];
 	}
 
-	/**
-	 * Simpan Data Klien Berdasarkan mention pihak
-	 *
-	 * @return array $pemilik
-	 */
-	private function enhance_klien()
-	{
-		foreach ($this->pihak as $key => $value) 
-		{
-			$new_pihak 				= Klien::where('nomor_ktp', $value['nomor_ktp'])->first();
-
-			if(!$new_pihak)
-			{
-				$new_pihak 			= new Klien;
-			}
-
-			$new_pihak 				= $new_pihak->fill($value);
-			$new_pihak->save();
-
-			$new_pihak 				= $new_pihak->toArray();
-
-			$akta['pemilik']['klien'][$key]['id'] 		= $new_pihak['id'];
-			$akta['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
-		}
-
-		return $akta['pemilik'];
-	}
 
 	/**
 	 * fungsi untuk watermarking data

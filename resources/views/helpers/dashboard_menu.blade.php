@@ -1,15 +1,15 @@
 <?php
 	// Sidebar Menu List
-	$list['Akta'] 		= 	[
-								'url' 	=> route('user.index'),
-								'icon' 	=> 'fa-file-text-o'
+	$list['Klien'] 		= 	[
+								'url' 	=> route('home.dashboard'),
+								'icon' 	=> 'fa-users'
 							];
-	$list['HR Index'] 	= 	[
-								'url' 	=> route('kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
-								'icon' 	=> 'fa-users',
+	$list['KPI'] 		= 	[
+								'url' 	=> route('kpi.dashboard'),
+								'icon' 	=> 'fa-vcard',
 							];
 	$list['Keuangan']	= 	[
-								'url' 	=> route('akun.edit', $acl_logged_user['id']),
+								'url' 	=> route('finance.dashboard'),
 								'icon' 	=> 'fa-money'
 							];
 

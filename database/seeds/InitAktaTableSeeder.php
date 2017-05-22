@@ -144,18 +144,18 @@ class InitAktaTableSeeder extends Seeder
 			$akta 			= new App\Service\Akta\BuatAktaBaru($isi['judul'], $isi['paragraf'], $isi['fill_mention'], $tmplate->_id);
 			$akta 			= $akta->save();
 
-			$aktas 			= new App\Service\Akta\SimpanAkta($akta['id'], $akta['judul'], $updated, $isi['fill_mention']);
-			$aktas->save();
+			// $aktas 			= new App\Service\Akta\SimpanAkta($akta['id'], $akta['judul'], $updated, $isi['fill_mention']);
+			// $aktas->save();
 
 		}
 
 		//init pengajuan
-		$dokumen 		= App\Domain\Akta\Models\Dokumen::skip(0)->take(8)->get();
+		// $dokumen 		= App\Domain\Akta\Models\Dokumen::skip(0)->take(8)->get();
 
-		foreach ($dokumen as $key => $value) 
-		{
-			$akta 			= new App\Service\Akta\PublishAkta($value->id);
-			$akta->save();
-		}
+		// foreach ($dokumen as $key => $value) 
+		// {
+		// 	$akta 			= new App\Service\Akta\PublishAkta($value->id);
+		// 	$akta->save();
+		// }
 	}
 }
