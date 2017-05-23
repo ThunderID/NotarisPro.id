@@ -39,6 +39,8 @@ class BuatAktaBaru
 {
 	use EnhanceKlienTrait;
 
+	public $daftar_akta;
+	
 	protected $judul;
 	protected $isi_akta;
 	protected $mentionable;
@@ -141,9 +143,11 @@ class BuatAktaBaru
 
 			$daftar_akta 				= new DaftarAkta;
 			$daftar_akta 				= $daftar_akta->detailed($akta->_id);
-			
+
 			event(new AktaUpdated($daftar_akta));
 			
+			$this->daftar_akta 			= $daftar_akta;
+
 			return $daftar_akta;
 		}
 		catch(Exception $e)

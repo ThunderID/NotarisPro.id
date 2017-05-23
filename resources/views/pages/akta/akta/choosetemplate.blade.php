@@ -43,10 +43,10 @@
 			<div class="col-12 col-sm-10 col-md-6 col-xl-6 pl-0 pr-0">
 				<ul class="nav nav-pills mt-3 mb-3">
 					<li class="nav-item">
-						<span data-info="#list-template" class="nav-link active">1. Pilih Template</span>
+						<span data-info="#list-template" class="nav-link {{ is_null($page_datas->template_id) ? 'active' : '' }}">1. Pilih Template</span>
 					</li>
 					<li class="nav-item">
-						<span data-info="#information" class="nav-link text-muted">2. Informasi Akta</span>
+						<span data-info="#information" class="nav-link {{ !is_null($page_datas->template_id) ? 'active' : 'text-muted' }}">2. Informasi Akta</span>
 					</li>
 					<li class="nav-item">
 						<span data-info="#fillable" class="nav-link text-muted">3. Fillable Mention Template</span>
@@ -96,10 +96,12 @@
 				</div>
 			</div>
 		</div>
-		<div id="information" style="display: none;">
+		<div id="information" style="{{ is_null($page_datas->template_id) ? 'display: none;' : 'display: block;' }}">
 			<div class="row align-items-center">
 				<div class="col text-left">
-					<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+					@if (is_null($page_datas->template_id))
+						<a href="#list-template" class="btn btn-primary action-wizard" data-content="#information"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
+					@endif
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel pb-0">
 					<div class="form">
@@ -116,12 +118,10 @@
 				</div>
 			</div>
 		</div>
-		<div id="fillable" style="{{ is_null($page_datas->template_id) ? 'display: none;' : 'display: block;' }} height: 80%;">
+		<div id="fillable" style="display: none; height: 80%;">
 			<div class="row align-items-center">
 				<div class="col text-left">
-					@if (is_null($page_datas->template_id))
-						<a href="#list-template" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
-					@endif
+					<a href="#information" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
 				</div>
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3">
 					<div class="form">
@@ -202,19 +202,20 @@
 			dataType: 'json',
 			data: {template_id: templateID},
 			success: function(result) {
-				$.each(result['data'], function(k, v) {
+				$.each(result.data, function(k, v) {
 					tempForm = $('<div class="form-group pb-3" style="border-bottom: 1px solid #ccc; margin-bottom: 35px;"></div>');
 					tempForm.append('<h5 class="mb-2 pb-2 text-capitalize">' +k.replace(/_/g, ' ')+ '</h5>');
 					$.each(v, function (k2, v2) {
 						linkCollapse = $('<a class="text-muted mb-0" data-toggle="collapse" href="#collapse-' +k+'-'+k2+ '" aria-expanded="true" aria-controls="collapse-' +k+'-'+k2+ '"></a>');
-						linkCollapse.html(k2);
+						linkCollapse.html(k2.replace(/_/g, ' '));
 						linkCollapse.css('display', 'block');
 						linkCollapse.append('<span class="float-right text-primary"><i class="fa fa-angle-down mt-1"></i></span>');
 						tempForm.append(linkCollapse);
 						divCollapse = $('<div id="collapse-' +k+'-'+k2+ '" class="collapse pt-3 pb-3 mb-2" role="tabpanel"></div>');
-						$.each(v2,function (k3, v3) {
+						$.each(v2, function (k3, v3) {
 							tempTitle = v3.split('.');
-							divCollapse.append('<label>' +tempTitle[3].replace(/_/g, ' ')+ '</label');
+							label = tempTitle[tempTitle.length - 1];
+							divCollapse.append('<label class="text-capitalize">' +label.replace(/_/g, ' ')+ '</label>');
 							divCollapse.append($('<input type="text" value="" />')
 							.attr('name', 'mentionable['+ v3 +']').attr('class', 'form-control mb-3'));
 						});

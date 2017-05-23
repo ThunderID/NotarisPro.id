@@ -84,40 +84,12 @@
 					<div class="row">
 						<div class="d-flex justify-content-center mx-auto">
 							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm; ">
-								<textarea name="template" class="editor">
+								<div name="template" class="editor">
 									@forelse ($page_datas->datas['paragraf'] as $k => $v)
-										@php
-											$temp = explode('<span class="medium-editor-mention-at', $v['konten']);
-										@endphp
-										@if (!is_null($temp) && !empty($temp))
-											@foreach ($temp as $i => $j)
-												@php
-													$pattern = "/@(.*?)<\/span>/";
-													preg_match($pattern, $j, $match);
-												@endphp
-												@if (!empty($match))
-													@if (isset($match[1]) && !empty($match[1]))
-														@if (array_get($page_datas->datas['fill_mention'], '@'.$match[1]) != null)
-															@php
-																$data_mention 	= array_get($page_datas->datas['fill_mention'], '@'.$match[1]);
-																if (strpos($data_mention, '@') !== false) {
-																	$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
-																} else {
-																	$pattern = '/@(.*?)<\/span>/';
-																	$temp[$i] = preg_replace($pattern, $data_mention. '</span>', $j);
-																}
-															@endphp
-														@endif
-													@endif
-												@endif
-											@endforeach
-											{!! implode('<span class="medium-editor-mention-at', $temp) !!}
-										@else
-											{!! $v['konten'] !!}
-										@endif
+										<div class="text-muted">{!! $v['konten'] !!}</div>
 									@empty
 									@endforelse
-								</textarea>
+								</div>
 							</div>
 						</div>
 					</div>
