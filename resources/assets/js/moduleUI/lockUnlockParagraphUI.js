@@ -8,12 +8,12 @@
 				
 			if ($(this).attr('unlocked') != 'true') {
 				$(this).attr('unlocked', 'true');
-				$(this).parent().addClass('bg-unlocked');
-				$(this).find('i').removeClass('fa-lock').addClass('fa-unlock-alt text-success');
+				$(this).find('i').removeClass('fa-lock').addClass('fa-unlock');
+				$(this).parent().parent().addClass('unlocked');
 			} else {
 				$(this).attr('unlocked', 'false');
-				$(this).parent().removeClass('bg-unlocked');
-				$(this).find('i').removeClass('fa-unlock-alt text-success').addClass('fa-lock');
+				$(this).find('i').removeClass('fa-unlock').addClass('fa-lock');
+				$(this).parent().parent().removeClass('unlocked');
 			}
 		});
 	}
