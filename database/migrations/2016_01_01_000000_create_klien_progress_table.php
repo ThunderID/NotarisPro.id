@@ -19,6 +19,7 @@ class CreateKlienProgressTable extends Migration
             $table->string('akta_id');
             $table->string('template_id');
             $table->string('kantor_id');
+            $table->string('penulis_id');
             $table->datetime('completed_at')->nullable();
             $table->timestamps();
         });

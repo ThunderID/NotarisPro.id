@@ -109,11 +109,11 @@ class KlienProgress extends Model
 
 	public function scopeNewCustomer($query, $variable = 1)
 	{
-		return $query->selectRaw(\DB::raw('COUNT(*) as total'))->havingRaw('COUNT(*) <= '.$variable)->groupby('klien_id');
+		return $query->selectRaw('COUNT(klien_id) as total')->havingRaw('COUNT(*)  <='.$variable)->groupby('klien_id');
 	}
 
 	public function scopeReturningCustomer($query, $variable = 1)
 	{
-		return $query->selectRaw(\DB::raw('COUNT(*) as total'))->havingRaw('COUNT(*) > '.$variable)->groupby('klien_id');
+		return $query->selectRaw('COUNT(klien_id) as total')->havingRaw('COUNT(*) > '.$variable)->groupby('klien_id');
 	}
 }

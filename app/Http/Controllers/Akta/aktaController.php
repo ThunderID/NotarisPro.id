@@ -114,7 +114,7 @@ class aktaController extends Controller
 		//return view
 		$this->page_attributes->msg['success']		= ['Data akta telah ditambahkan'];
 
-		return $this->generateRedirect(route('akta.akta.edit', $akta->daftar_akta['id']));
+		return $this->generateRedirect(route('akta.akta.edit', $akta['id']));
 	}
 
 	/**

@@ -27,16 +27,16 @@
 				<div class="card">
 					<div class="card-block">
 						<div class="card-title">
-							Ongoing Klien
+							Klien Baru
 						</div>
 						<div class="row">
 							<div class="col-sm-6 text-left">
 								<h4>{{$page_datas->ongoing_klien}}</h4>
-								<p><small><small>Ongoing Klien</small></small></p>
+								<p><small><small>Hari Ini</small></small></p>
 							</div>
 							<div class="col-sm-6 text-right">
 								<h4>{{$page_datas->peak_klien}}</h4>
-								<p><small><small>Peak Klien</small></small></p>
+								<p><small><small>Peaked at {{$page_datas->peaked_at}}</small></small></p>
 							</div>
 						</div>
 					</div>
@@ -47,18 +47,18 @@
 				<div class="card">
 					<div class="card-block">
 						<div class="card-title">
-							Overview Hari Ini
+							Overview Klien
 						</div>
 						<div class="row">
 							<div class="col-sm-5 text-left">
 								<h4>{{$page_datas->total_client}}</h4>
-								<p><small><small>Orang</small></small></p>
+								<p><small><small>Total Klien</small></small></p>
 							</div>
 							<div class="col-sm-2 text-center">
 							<h3><i class="fa fa-users"></i></h3>
 							</div>
 							<div class="col-sm-5 text-right">
-								<h4>{{$page_datas->new_client_today}} % </h4>
+								<h4>{{$page_datas->new_client}} % </h4>
 								<p><small><small>Baru</small></small></p>
 							</div>
 						</div>
