@@ -19,6 +19,9 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
+	$data 	= new App\Domain\Stat\Models\KlienProgress;
+	$data 	= $data->Ongoing(TAuth::activeOffice()['kantor']['id']);
+	dD($data);
 	return view('thunder');
 	return view('test');
 	$akta 			= '<span class="medium-editor-mention-at text-danger">@notaris.nama</span> Notaris di <span class="medium-editor-mention-at medium-editor-mention-at-active text-danger">@notaris.alamat</span>. Dengan dihadiri saksi-saksi yang saya, Notaris kenal dan akan disebut bagian akhir akta ini.</span>';
@@ -62,7 +65,9 @@ Route::group(['middleware' => ['authenticated']], function()
 	});
 
 	// general
-	Route::get('/', ['uses' => 'homeController@dashboard', 'as' => 'home.dashboard']);
+	Route::get('/', 		['uses' => 'homeController@dashboard', 	'as' => 'home.dashboard']);
+	Route::get('/kpi',		['uses' => 'homeController@kpi', 		'as' => 'kpi.dashboard']);
+	Route::get('/finance', 	['uses' => 'homeController@finance', 	'as' => 'finance.dashboard']);
 
 	// Akta
 	Route::group(['namespace' => 'Akta\\'], function(){

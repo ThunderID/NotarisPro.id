@@ -19,69 +19,102 @@
 
 <div class="row">
 
-	@include('helpers.dashboard_menu', ['active' => 'Akta'])	
+	@include('helpers.dashboard_menu', ['active' => 'Klien'])	
 
 	<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel pt-4">
 		<div class="row">
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-block">
+						<div class="card-title">
+							Ongoing Klien
+						</div>
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<h4>{{$page_datas->ongoing_klien}}</h4>
+								<p><small><small>Ongoing Klien</small></small></p>
+							</div>
+							<div class="col-sm-6 text-right">
+								<h4>{{$page_datas->peak_klien}}</h4>
+								<p><small><small>Peak Klien</small></small></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-			@include('components.dashboardCard', [
-				'value'	=> $stat_akta_bulan_ini,
-				'title'	=> 'Total Akta Bulan Ini'
-			])
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-block">
+						<div class="card-title">
+							Overview Hari Ini
+						</div>
+						<div class="row">
+							<div class="col-sm-5 text-left">
+								<h4>{{$page_datas->total_client}}</h4>
+								<p><small><small>Orang</small></small></p>
+							</div>
+							<div class="col-sm-2 text-center">
+							<h3><i class="fa fa-users"></i></h3>
+							</div>
+							<div class="col-sm-5 text-right">
+								<h4>{{$page_datas->new_client_today}} % </h4>
+								<p><small><small>Baru</small></small></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-			@include('components.dashboardCard', [
-				'value'	=> $stat_total_drafter,
-				'title'	=> 'Total Drafter'
-			])					
-
-			@include('components.dashboardCard', [
-				'value'	=> $stat_total_klien_baru,
-				'title'	=> 'Total Klien Baru'
-			])
-
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-block">
+						<div class="card-title">
+							New vs Returning
+						</div>
+						<div class="row">
+							<div class="col-sm-6 text-left">
+								<h4>{{$page_datas->new_client}}%</h4>
+								<p><small><small>New</small></small></p>
+							</div>
+							<div class="col-sm-6 text-right">
+								<h4>{{$page_datas->returning_client}}%</h4>
+								<p><small><small>Returning</small></small></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+
+		<div class="clearfix">&nbsp;</div>
 
 		<div class="row">
 			<div class="col-12 col-md-6 pb-4">
 				<div class="card">
 					<div class="card-block">
 
-						<h5 class="card-title pb-2">Akta Menunggu Untuk di Cek</h5>
+						<h5 class="card-title pb-2">Sebaran Jenis Akta Berdasarkan Peminat</h5>
 
 						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th>Dokumen</th>
-									<th>Deadline</th>
+									<th>Judul</th>
+									<th>Total</th>
 								</tr>
 							</thead>
 							<tbody>
-				                @forelse($page_datas->lists_to_check as $key => $value)
-								<tr class="clickable-row" data-href="{{route('akta.akta.show', $value['id'])}}">
-									<td>
-										<i class="fa fa-file"></i>
-										&nbsp;
-										{{ $value['judul'] }}
-									</td>
-									<td>
-										@if(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::now()) > 0)
-											<span class="badge badge-info">
-										@elseif(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::now()) == 0)
-											<span class="badge badge-warning">
-										@else
-											<span class="badge badge-danger">
-										@endif
-											<small>{{$value['tanggal_pembuatan']}}</small>
-										</span>
-									</td>					
-								</tr>
-				                @empty
-				                <tr>
-				                    <td colspan="2" class="text-center">
-				                        Tidak Ada Data
-				                    </td>
-				                </tr>
-				                @endforelse
+				            	@foreach($page_datas->lists_template as $value)
+				            		<tr>
+				            			<td>{{$value['judul']}}</td>
+				            			<td>
+				            				<div class="progress">
+												<div class="progress-bar bg-error" role="progressbar" style="width: {{$value['total']['trashed']/max($value['total']['all'], 1) * 100}}%" aria-valuenow=" {{$value['total']['trashed']/max($value['total']['all'], 1) * 100}}" aria-valuemin="0" aria-valuemax="100"></div>
+												<div class="progress-bar bg-success" role="progressbar" style="width: {{$value['total']['published']/max($value['total']['all'], 1) * 100}}%" aria-valuenow="{{$value['total']['published']/max($value['total']['all'], 1) * 100}}" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+				            			</td>
+				            		</tr>
+				            	@endforeach
 							</tbody>
 						</table>
 
@@ -94,42 +127,22 @@
 				<div class="card">
 					<div class="card-block">
 
-						<h5 class="card-title pb-2">Akta Published Terbaru</h5>
+						<h5 class="card-title pb-2">Sebaran Jenis Akta Berdasarkan Waktu Pengerjaan</h5>
 
 						<table class="table table-hover">
 							<thead>
 								<tr>
 									<th>Dokumen</th>
-									<th>Deadline</th>
+									<th>Lama Pengerjaan (Hari)</th>
 								</tr>
 							</thead>
 							<tbody>
-				                @forelse($page_datas->lists_akta as $key => $value)
-								<tr class="clickable-row" data-href="{{route('akta.akta.show', $value['id'])}}">
-									<td>
-										<i class="fa fa-file"></i>
-										&nbsp;
-										{{ $value['judul'] }}
-									</td>
-									<td>
-										@if(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) > 0)
-											<span class="badge badge-info">
-										@elseif(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_pembuatan'])->diffInDays(Carbon\Carbon::createFromFormat('d/m/Y', $value['tanggal_sunting'])) == 0)
-											<span class="badge badge-warning">
-										@else
-											<span class="badge badge-danger">
-										@endif
-											<small>{{$value['tanggal_sunting']}}</small>
-										</span>
-									</td>					
-								</tr>
-				                @empty
-				                <tr>
-				                    <td colspan="2" class="text-center">
-				                        Tidak Ada Data
-				                    </td>
-				                </tr>
-				                @endforelse
+				                @foreach($page_datas->lists_template as $value)
+				            		<tr>
+				            			<td>{{$value['judul']}}</td>
+				            			<td class="text-right">{{$value['pengerjaan']['total']}}</td>
+				            		</tr>
+				            	@endforeach
 							</tbody>
 						</table>							
 

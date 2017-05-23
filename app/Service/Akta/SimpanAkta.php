@@ -8,6 +8,10 @@ use App\Domain\Order\Models\Klien;
 
 use Exception, TAuth;
 
+use App\Service\Akta\Traits\EnhanceKlienTrait;
+
+use App\Events\AktaUpdated;
+
 /**
  * Service untuk update akta yang sudah ada
  *
@@ -25,6 +29,8 @@ use Exception, TAuth;
  */
 class SimpanAkta
 {
+	use EnhanceKlienTrait;
+	
 	protected $id;
 	protected $judul;
 	protected $isi_akta;
@@ -85,7 +91,11 @@ class SimpanAkta
 			$this->akta->save();
 
 			$akta 		= new DaftarAkta;
-			return $akta->detailed($this->id);
+			$akta 		= $akta->detailed($this->id);
+
+			event(new AktaUpdated($akta));
+
+			return $akta;
 		}
 		catch(Exception $e)
 		{
@@ -204,29 +214,9 @@ class SimpanAkta
 			}
 		}
 
-		foreach ((array)$pihak as $key => $value) 
+		if((array)$pihak)
 		{
-			if(isset($value['nomor_ktp']))
-			{
-				$new_pihak 				= Klien::where('nomor_ktp', $value['nomor_ktp'])->first();
-
-				if(!$new_pihak)
-				{
-					$new_pihak 			= new Klien;
-				}
-
-				$new_pihak 				= $new_pihak->fill($value);
-
-				$new_pihak->save();
-				$new_pihak 				= $new_pihak->toArray();
-				
-				// update data pemilik as new pihak defined
-				$pemilik 				= $this->akta->pemilik;
-				$pemilik['pemilik']['klien'][$key]['id'] 	= $new_pihak['id'];
-				$pemilik['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
-
-				$this->akta->pemilik 	= $pemilik;
-			}
+			$this->akta->pemilik 	= $this->enhance_klien($pihak);
 		}
 
 		return $fill_mention;
