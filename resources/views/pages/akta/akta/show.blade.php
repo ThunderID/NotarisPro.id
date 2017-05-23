@@ -5,6 +5,32 @@
 @endpush
 
 @push('styles')  
+	.page-editor .wrapper {
+	    margin-left: -150px;
+	    margin-bottom: 10px;
+	    padding-top: 10px;
+	    padding-bottom: 10px;
+	    border: 1px solid rgba(0,0,0,.07)!important;
+	}
+	.page-editor .wrapper.unlocked {
+		border: 1px solid rgba(2, 117, 216, 0.58)!important;
+	}
+	.page-editor .wrapper:hover {
+		margin-top: -1px;
+		margin-bottom: 11px;
+		box-shadow: 2px 2px 7px rgba(0,7,10,.2);
+		cursor: default;
+	}
+	.page-editor .wrapper .control {
+	   	width: 149px; 
+	   	height: auto; 
+	   	position: absolute; 
+	   	padding-left: 15px;
+	   	color: #EDEDED;
+	}
+	.page-editor .wrapper .content {
+	    padding-left: 155px;
+	}
 @endpush  
 
 @section('akta')
@@ -124,54 +150,149 @@
 					<div class="d-flex justify-content-center mx-auto">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group editor">
+
+								<?php
+									// dd($page_datas->datas);
+								?>
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
-									@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='draft')
-										{{-- draft --}}
-										@if(isset($value['unlock']) && $value['unlock'])
-											{{-- UNCLOKED --}}
-											<div class="bg-unlocked">
-												<a href="#" style="text-decoration:none; color:inherit;cursor:pointer;" class="lock mt-2" data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
-												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
-													{!!$value['konten']!!}
-												</a>
-											</div>
+									{{-- Dalam Proses --}}
+									@if($page_datas->datas['status']=='dalam_proses')
+
+									<div class="wrapper">
+										<div class="control">
+											<span data-toggle="tooltip" data-placement="right" title="Fitur kunci dokumen belum tersedia. Fitur ini tersedia pada status draft">
+												<i class="fa fa-unlock" aria-hidden="true"></i>
+											</span>
+											&nbsp;|&nbsp;
+											<span data-toggle="tooltip" data-placement="right" title="Fitur riwayat revisi belum tersedia. Fitur ini tersedia pada status draft">
+												<i class="fa fa-history" aria-hidden="true"></i> 0
+											</span>
+										</div>
+										<div class="content">
+											{!!$value['konten']!!}
+										</div>
+									</div>									
+
+									{{-- Draft --}}
+									@elseif($page_datas->datas['status']=='draft')
+
+										@if(str_is(acl_active_office['role'], 'notaris'))
+
+											@if(isset($value['unlock']) && $value['unlock'])
+
+												{{-- UNCLOKED --}}
+												<div class="wrapper unlocked">
+													<div class="control">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" data-lock="{{ $value['lock'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
+															<i class="fa fa-unlock" aria-hidden="true"></i>
+														</a>
+														&nbsp;|&nbsp;
+														<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
+															<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> 0
+														</a>
+													</div>
+													<div class="content">
+														{!!$value['konten']!!}
+													</div>
+												</div>	
+											
+											@else
+
+												{{-- LOCKED --}}
+												<div class="wrapper">
+													<div class="control">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" class="lock"  data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+															<i class="fa fa-lock" aria-hidden="true"></i>
+														</a>
+														&nbsp;|&nbsp;
+														<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
+															<i class="fa fa-history" aria-hidden="true"></i> 0
+														</a>
+													</div>
+													<div class="content">
+														{!!$value['konten']!!}
+													</div>
+												</div>												
+
+											@endif
+
 										@else
-											{{-- LOCKED --}}
-											<div>
-												<a href="#" style="text-decoration:none; color:inherit;cursor:pointer;" class="lock mt-2" data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
-													<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em;"></i>
+
+											<div class="wrapper">
+												<div class="control">
+													<span href="#" data-toggle="tooltip" data-placement="right" title="#">
+														<i class="fa fa-unlock" aria-hidden="true"></i>
+													</span>
+													&nbsp;|&nbsp;
+													<span href="#" data-toggle="tooltip" data-placement="right" title="#">
+														<i class="fa fa-history" aria-hidden="true"></i> 0
+													</span>
+												</div>
+												<div class="content">
 													{!!$value['konten']!!}
-												</a>
+												</div>
 											</div>
-										@endif
-									@elseif ($page_datas->datas['status'] == 'renvoi')
-										{{-- RENVOI --}}
+
+										@endif																		
+
+									{{-- Renvoi --}}
+									@elseif($page_datas->datas['status']=='renvoi')
+
 										@if (!isset($value['lock']))
+
 											{{-- UNLOCKED --}}
-											<div >
-												<i class="fa fa-unlock-alt text-success float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
-												{!!$value['konten']!!}
-											</div>
+											<div class="wrapper unlocked">
+												<div class="control">
+													<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#"
+													class="lock" data-lock="{{ isset($value['lock']) ? $value['lock'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked= "true" >
+														<i class="fa fa-unlock" aria-hidden="true"></i>
+													</a>
+													&nbsp;|&nbsp;
+													<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
+														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> 0
+													</a>
+												</div>
+												<div class="content">
+													{!!$value['konten']!!}
+												</div>
+											</div>	
+
 										@else
 											{{-- LOCKED --}}
-											<div class="bg-faded text-muted" style="cursor:not-allowed;">
-												<i class="fa fa-lock text-muted float-right" style="margin-top: 0.15em; margin-right: -1em; cursor:not-allowed;"></i>
-												{!!$value['konten']!!}
+											<div class="wrapper">
+												<div class="control">
+													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-lock="{{ isset($value['lock']) ? $value['lock'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+														<i class="fa fa-lock" aria-hidden="true"></i>
+													</a>
+													&nbsp;|&nbsp;
+													<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
+														<i class="fa fa-history" aria-hidden="true"></i> 0
+													</a>
+												</div>
+												<div class="content">
+													{!!$value['konten']!!}
+												</div>
 											</div>
+
 										@endif
+
+
+									{{-- Akta --}}
+									@elseif($page_datas->datas['status']=='akta')
+										{!!$value['konten']!!}
+
+									{{-- Minuta --}}
+									@elseif($page_datas->datas['status']=='minuta')
+										{!!$value['konten']!!}
+
+									{{-- Lainnya --}}
 									@else
 										{!!$value['konten']!!}
 									@endif
+
+
 								@endforeach
 							</div>
-
-							@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='draft')
-								<div class="form-group editor-hidden" style="display:none;">
-									@foreach($page_datas->datas['paragraf'] as $key => $value)
-										{!!$value['konten']!!}
-									@endforeach
-								</div>
-							@endif
 						</div>
 					</div>
 				</div>
@@ -242,7 +363,21 @@
 				<button id="finalize_submit" type="submit" data-save="true" hidden>save</button>
 			</div>
 		</form>	
-	@endcomponent	
+	@endcomponent
+
+
+	@component('components.modal', [
+			'id'		=> 'content_',
+			'title'		=> 'Detail Histori Revisi',
+			'large'		=> true,
+			'settings'	=> [
+				'modal_class'	=> '',
+				'hide_buttons'	=> 'true',
+				'hide_title'	=> 'true',
+			]
+		])
+		<h4>Histori</h4>									
+	@endcomponent		
 
 
 	@include('components.deleteModal',[
@@ -253,6 +388,9 @@
 @stop
 
 @push('scripts')
+
+	/*	Call plugin */
+	window.formUI.init();
 
 	/* Finalize */ 
 	$('#finalize_ok').click(function( event ) {
@@ -276,9 +414,6 @@
 	/*	Start Lock */
 	    window.lockedUnlockedParagraphUI.init();
 	/*	End Lock */
-
-	/*	Call plugin */
-	window.formUI.init();
 
 	{{-- 
 	/* Auto Page Break */
@@ -333,5 +468,10 @@
 
 		footer.updateDisplay();
 	}
+
+	// Tooltips
+	$(document).ready(function() {
+	    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+	});
 
 @endpush 
