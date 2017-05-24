@@ -109,6 +109,7 @@ class aktaController extends Controller
 			//save tanggal pertemuan
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.create'));
 		}
 
 		//return view
