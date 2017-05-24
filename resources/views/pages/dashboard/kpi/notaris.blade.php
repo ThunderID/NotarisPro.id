@@ -178,7 +178,10 @@
 													<span class="text-danger"><small><small><i class="fa fa-arrow-down"></i>{{abs($percent)}}%</small></small></span>
 												@endif
 				            					<br/>
-				            					{{gmdate('H:i', $value['performance'])}} / Akta
+				            					@php
+				            						list($h, $i)	= explode(':', gmdate('H:i', $value['performance']))
+				            					@endphp
+				            					{{$h}} jam, {{$i}} menit / akta
 				            				</p>
 				            			</td>
 				            		</tr>

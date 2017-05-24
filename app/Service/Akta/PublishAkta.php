@@ -228,6 +228,7 @@ class PublishAkta
 		{
 			$paragraf[$key] 		= $value;
 			$paragraf[$key]['lock']	= Dokumen::createID('lock');
+			$paragraf[$key]['key']	= Dokumen::createID('key');
 		}
 		$this->akta->paragraf 			= $paragraf;
 
