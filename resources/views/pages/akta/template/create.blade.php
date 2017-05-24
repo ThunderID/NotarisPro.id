@@ -22,7 +22,7 @@
 
 @section('content')
 	@php
-		// dd($page_datas);
+		{{-- dd($page_datas); --}}
 	@endphp
 	<div class="hidden-sm-down">
 		@component('components.form', [ 
@@ -111,15 +111,16 @@
 																	</span>
 																</a>
 																<div id="collapse-{{ $temp[0].'-'.$temp[1].'-'.$temp[2] }}" class="collapse ml-2" role="tabpanel" aria-labelledby="headingOne">
+																	<a href="#" class="add-variable-mention text-primary mt-1 mb-1 text-lowercase d-block" style="font-size: 12px; word-break: break-word; ">{{ $v3 }}</a>
 														@elseif (array_last($v2) == $v3)
+																	<a href="#" class="add-variable-mention text-primary mt-1 mb-1 text-lowercase d-block" style="font-size: 12px; word-break: break-word; ">{{ $v3 }}</a>
 																</div>
 															</div>
 														@else
-															<a href="#" class="add-variable-mention text-primary mt-1 mb-1 text-lowercase" style="font-size: 12px; word-break: break-word; ">{{ $v3 }}</a>
+															<a href="#" class="add-variable-mention text-primary mt-1 mb-1 text-lowercase d-block" style="font-size: 12px; word-break: break-word; ">{{ $v3 }}</a>
 														@endif
-
 													@else
-														<a href="#" class="add-variable-mention text-primary mt-1 mb-1 text-lowercase" style="font-size: 12px; word-break: break-word;">{{ $v3 }}</a>
+														<a href="#" class="add-variable-mention text-primary mt-1 mb-1 text-lowercase d-block" style="font-size: 12px; word-break: break-word;">{{ $v3 }}</a>
 													@endif
 												@endforeach
 											@endforeach
@@ -156,9 +157,39 @@
 	});
 
 
-	//	functions
-	/* Hotkeys */
-	//var res = window.hotkey.init($('.editor'));
+	function pasteHtmlAtCaret(html) {
+		var sel, range;
+		if (window.getSelection) {
+			// IE9 and non-IE
+			sel = window.getSelection();
+			if (sel.getRangeAt && sel.rangeCount) {
+				range = sel.getRangeAt(0);
+				range.deleteContents();
+
+				// Range.createContextualFragment() would be useful here but is
+				// non-standard and not supported in all browsers (IE9, for one)
+				var el = document.createElement("div");
+				el.innerHTML = html;
+				var frag = document.createDocumentFragment(), node, lastNode;
+				while ( (node = el.firstChild) ) {
+					lastNode = frag.appendChild(node);
+				}
+				range.insertNode(frag);
+				
+				// Preserve the selection
+				if (lastNode) {
+					range = range.cloneRange();
+					range.setStartAfter(lastNode);
+					range.collapse(true);
+					sel.removeAllRanges();
+					sel.addRange(range);
+				}
+			}
+		} else if (document.selection && document.selection.type != "Control") {
+			// IE < 9
+			document.selection.createRange().pasteHTML(html);
+		}
+	}
 
 	/**
 	 * add variable mention to editor
@@ -171,6 +202,7 @@
 		textMention = $(this).html();
 		tagMention = '<span>'+textMention+'</span>&nbsp;';
 		$('.editor').focus();
-		document.execCommand('insertHTML', false, tagMention);
+		pasteHtmlAtCaret("<span class='medium-editor-mention-at text-danger'>"+textMention+"</span>&nbsp;");
+		{/*document.execCommand('insertHTML', true, "<span>tes</span>");*/}
 	});
 @endpush 

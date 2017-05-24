@@ -8,6 +8,7 @@ use App\Domain\Akta\Models\ReadOnlyAkta;
 
 use TImmigration\Pengguna\Models\Pengguna;
 
+use App\Events\AktaUpdated;
 use Exception, TAuth;
 
 /**
@@ -79,7 +80,11 @@ class FinalizeAkta
 			$this->versioning($this->id, $this->akta->toArray());
 
 			$akta 		= new DaftarAkta;
-			return $akta->detailed($this->id);
+			$akta 		= $akta->detailed($this->id);
+			
+			event(new AktaUpdated($akta));
+
+			return $akta;
 		}
 		catch(Exception $e)
 		{

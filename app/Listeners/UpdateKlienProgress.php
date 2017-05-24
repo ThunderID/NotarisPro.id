@@ -26,7 +26,7 @@ class UpdateKlienProgress
 	 */
 	public function handle(AktaUpdated $akta)
 	{
-		if(in_array($akta->akta['status'], ['dalam_proses', 'draft', 'renvoi']))
+		if(in_array($akta->akta['status'], ['dalam_proses', 'draft', 'renvoi']) && isset($akta->akta['pemilik']['klien']))
 		{
 			foreach ($akta->akta['pemilik']['klien'] as $key => $value) 
 			{
@@ -39,6 +39,7 @@ class UpdateKlienProgress
 					$klienz->akta_id		= $akta->akta['id'];
 					$klienz->template_id	= $akta->akta['template']['id'];
 					$klienz->kantor_id		= $akta->akta['pemilik']['kantor']['id'];
+					$klienz->penulis_id		= $akta->akta['penulis']['id'];
 					$klienz->save();
 				}
 

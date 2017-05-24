@@ -155,7 +155,7 @@ class SimpanAkta
 		//2. check lock
 		foreach ($this->isi_akta as $key => $value) 
 		{
-			if(isset($this->akta['paragraf'][$key]['lock']) && !is_null($this->akta['paragraf'][$key]['lock']))
+			if(isset($this->akta['paragraf'][$key]['lock']) && isset($this->akta['paragraf'][$key]['unlock']) && $this->akta['paragraf'][$key]['unlock'])
 			{
 				throw new Exception("Dokumen tidak bisa diubah", 1);
 			}

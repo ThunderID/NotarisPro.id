@@ -19,7 +19,9 @@ trait EnhanceKlienTrait {
 	 */
 	private function enhance_klien($pihak)
 	{
-		foreach ($pihak as $key => $value) 
+		$akta['pemilik']				= [];
+		
+		foreach ((array)$pihak as $key => $value) 
 		{
 			$is_new 					= false;
 
