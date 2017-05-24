@@ -43,7 +43,7 @@ return [
             'driver' => 'mysql',
             'host' => '128.199.145.173',
             'port' => '8700',
-            'database' => 'notarispro',
+            'database' => 'notarispro_2',
             'username' => 'root',
             'password' => 'admin',
             'unix_socket' => env('DB_SOCKET', ''),

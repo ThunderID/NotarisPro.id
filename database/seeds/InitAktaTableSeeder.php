@@ -11,6 +11,7 @@ class InitAktaTableSeeder extends Seeder
 	public function run()
 	{
 		DB::table('akta_dokumen')->truncate();
+		DB::table('notaris_klien')->truncate();
 
 		$credentials[0]	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 		$credentials[1]	= ['email' => 'drafter@notaris.id', 'password' => 'admin'];
