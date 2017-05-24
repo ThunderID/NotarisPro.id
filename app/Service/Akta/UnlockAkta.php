@@ -137,13 +137,15 @@ class UnlockAkta
 		foreach ($this->akta->paragraf as $key => $value) 
 		{
 			$paragraf[$key]				= $value;	
-			if(isset($value['lock']) && in_array($value['lock'], $this->locks))
+			if(!isset($value['unlock']) && in_array($value['lock'], $this->locks))
 			{
-				unset($paragraf[$key]['lock']);
+				$paragraf[$key]['unlock']	= true;
+				// unset($paragraf[$key]['lock']);
 			}
-			elseif(!isset($value['lock']))
+			elseif(isset($value['unlock']))
 			{
-				$paragraf[$key]['lock']	= Dokumen::createID('lock');
+				unset($paragraf[$key]['unlock']);
+				// $paragraf[$key]['lock']	= Dokumen::createID('lock');
 			}
 		}
 
