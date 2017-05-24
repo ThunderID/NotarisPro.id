@@ -26,7 +26,7 @@ class HapusAkta
 	 *
 	 * @return void
 	 */
-	public function handle()
+	public function save()
 	{
 		try
 		{

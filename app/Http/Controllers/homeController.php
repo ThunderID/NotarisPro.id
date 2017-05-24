@@ -11,6 +11,7 @@ use App\Service\Admin\DaftarPengguna;
 use App\Service\Order\DaftarKlien;
 
 use App\Domain\Stat\Models\KlienProgress;
+use App\Domain\Stat\Models\UserAttendance;
 
 use App\Domain\Order\Models\Klien;
 
@@ -45,63 +46,14 @@ class homeController extends Controller
     	
     	if($role['role']=='notaris')
     	{
-			$query[]	= 	[
-			'$match' 					=> 	[
-				'kantor.id' 			=> 	['$eq' => $role['kantor']['id']]
-				]
-			];
+    		//area stat klien
+    		$this->getStatKlien($role);
 
-			$query[]	= 	[
-				'$group'					=> 	[
-					"_id" 					=> 	[
-						'$dayOfYear'		=> 	'$created_at'
-					],
-					"numbers" 				=> 	[
-						'$sum'				=> 	1
-					],
-					"tanggal"				=> ['$min'	=> '$created_at']
-				]
-			];
+    		//area net retention
+    		$this->getNetRetention($role);
 
-    		$data_client 					= collect(Klien::raw(function ($collection) use ($query)
-					    						{ 
-					    							return $collection->aggregate($query); 
-					    						})->toArray());
-    		
-    		$this->page_datas->ongoing_klien	= (int)$data_client->where('created_at', '>=', new UTCDateTime(strtotime(Carbon::now()->startOfDay()->format('Y-m-d H:i:s'))))->first()['numbers'];
-
-    		$this->page_datas->peak_klien		= (int)$data_client->max('numbers');
-    		$this->page_datas->peaked_at 		= $data_client->where('numbers', $this->page_datas->peak_klien)->first()['tanggal']->toDateTime()->format('d/m/Y');
-
-    		$this->page_datas->total_client		= Klien::kantor($role['kantor']['id'])->count();
-
-    		$this->page_datas->new_client		= count(KlienProgress::kantor($role['kantor']['id'])->NewCustomer(1)->get())/ max(1,$this->page_datas->total_client) * 100;
-
-    		$this->page_datas->returning_client	= count(KlienProgress::kantor($role['kantor']['id'])->ReturningCustomer(1)->get())/ max(1,$this->page_datas->total_client) * 100;
-
-    		$lists_template						= Template::kantor($role['kantor']['id'])->where('status', 'publish')->get(['judul', 'created_at', 'updated_at'])->toArray();
-
-    		foreach ($lists_template as $key => $value) 
-    		{
-    			$lists_template[$key]['total']['published']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->where('status', 'akta')->count();
-    			$lists_template[$key]['total']['drafted']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->whereIn('status', ['draft', 'dalam_proses', 'renvoi'])->count();
-
-    			$lists_template[$key]['total']['trashed']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->onlyTrashed()->count();
-    			$lists_template[$key]['total']['all']		= $lists_template[$key]['total']['published'] + $lists_template[$key]['total']['drafted'] + $lists_template[$key]['total']['trashed'];
-
-    			$input_data 					= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->where('status', 'akta')->orderby('created_at', 'desc')->first();
-
-    			if($input_data)
-    			{
-	    			$lists_template[$key]['pengerjaan']['total']= max(Carbon::createFromFormat('d/m/Y', $input_data['tanggal_pembuatan'])->diffInDays(Carbon::createFromFormat('d/m/Y', $input_data['tanggal_sunting'])), 1);
-    			}
-    			else
-    			{
-	    			$lists_template[$key]['pengerjaan']['total']= 0;
-    			}
-    		}
-
-    		$this->page_datas->lists_template 	= $lists_template;
+    		//sebaran berdasarkan peminat
+    		$this->statPeminat($role);
 
 			//initialize view
 			$this->view		= view('pages.dashboard.notaris');
@@ -124,10 +76,191 @@ class homeController extends Controller
 
 		// init
 		$this->page_attributes->title		= 'Dashboard';
+
+		$this->getStatDrafter($role);
+		
+		$this->getStatStreak($role);
+	
+		$this->getPerformance($role);
+		
+		$this->view			= view('pages.dashboard.kpi.notaris');
+		return $this->generateView();  
+    }
+
+    public function finance()
+    {
+		$role				= TAuth::activeOffice();
+
+		// init
+		$this->page_attributes->title		= 'Dashboard';
     	
-		$this->page_datas->active_drafter	= Pengguna::kantor($role['kantor']['id'])->count();
+		$this->page_datas->female_drafter	= Pengguna::kantor($role['kantor']['id'])->count();
+		$this->page_datas->male_drafter		= Pengguna::kantor($role['kantor']['id'])->count();
     	
-    	$query[]	= 	[
+		$this->page_datas->female_drafter_turnover		= Pengguna::kantor($role['kantor']['id'])->count();
+		$this->page_datas->male_drafter_turnover		= Pengguna::kantor($role['kantor']['id'])->count();
+
+		$this->view			= view('pages.dashboard.finance.notaris');
+		return $this->generateView();  
+    }
+
+	private function getStatKlien($role)
+	{
+		$query[]	= 	[
+		'$match' 					=> 	[
+			'kantor.id' 			=> 	['$eq' => $role['kantor']['id']],
+			'deleted_at' 			=> 	['$eq' => null]
+			]
+		];
+
+		$query[]	= 	[
+			'$group'					=> 	[
+				"_id" 					=> 	[
+					'$dayOfYear'		=> 	'$created_at'
+				],
+				"numbers" 				=> 	[
+					'$sum'				=> 	1
+				],
+				"tanggal"				=> ['$min'	=> '$created_at']
+			]
+		];
+
+		$data_client 					= collect(Klien::raw(function ($collection) use ($query)
+				    						{ 
+				    							return $collection->aggregate($query); 
+				    						})->toArray());
+		
+		$this->page_datas->stat_new_today	= (int)$data_client->where('created_at', '>=', new UTCDateTime(strtotime(Carbon::now()->startOfDay()->format('Y-m-d H:i:s'))))->first()['numbers'];
+
+		$this->page_datas->stat_peak_amount	= (int)$data_client->max('numbers');
+		$this->page_datas->stat_peaked_at 	= $data_client->where('numbers', $this->page_datas->stat_peak_amount)->first()['tanggal']->toDateTime()->format('d/m/Y');
+
+		$this->page_datas->stat_total_client= Klien::kantor($role['kantor']['id'])->count();
+
+		$this->page_datas->stat_new			= count(KlienProgress::kantor($role['kantor']['id'])->NewCustomer(1)->get())/ max(1,$this->page_datas->stat_total_client) * 100;
+
+		$this->page_datas->stat_returning	= count(KlienProgress::kantor($role['kantor']['id'])->ReturningCustomer(1)->get())/ max(1,$this->page_datas->stat_total_client) * 100;
+
+		return true;
+	}
+
+	private function getNetRetention($role)
+	{
+		$query[]	= 	[
+		'$match' 						=> 	[
+			'pemilik.kantor.id' 		=> 	['$eq' => $role['kantor']['id']]
+			]
+		];
+
+		$query[]	= 	[
+			'$group'					=> 	[
+				"_id" 					=> 	'$status',
+				"numbers" 				=> 	[
+					'$sum'				=> 	1
+				],
+			]
+		];
+
+		$data_dokumen 					= collect(Dokumen::raw(function ($collection) use ($query)
+				    						{ 
+				    							return $collection->aggregate($query); 
+				    						}));
+
+		$this->page_datas->net_retent_ongoing 	= 0;
+		$this->page_datas->net_retent_completed = 0;
+		
+		$total_akta 					= 0;
+
+		foreach ($data_dokumen as $key => $value) 
+		{
+			if(str_is('akta', $value['_id']))
+			{
+				$this->page_datas->net_retent_completed = $this->page_datas->net_retent_completed + $value['numbers'];
+			}
+			else
+			{
+				$this->page_datas->net_retent_ongoing 	= $this->page_datas->net_retent_ongoing + $value['numbers'];
+			}
+
+			$total_akta 								= $total_akta + $value['numbers'];
+		}
+
+		$this->page_datas->net_retent_canceled			= Dokumen::kantor($role['kantor']['id'])->onlyTrashed()->count();
+
+		$total_akta 					= $total_akta + $this->page_datas->net_retent_canceled;
+
+		$this->page_datas->net_retent_ongoing_percentage 	= round($this->page_datas->net_retent_ongoing / max($total_akta, 1) * 100);
+		$this->page_datas->net_retent_completed_percentage 	= round($this->page_datas->net_retent_completed / max($total_akta, 1) * 100);
+		$this->page_datas->net_retent_canceled_percentage 	= round($this->page_datas->net_retent_canceled / max($total_akta, 1) * 100);
+		return true;
+	}
+
+	private function statPeminat($role)
+	{
+		$lists_template			= Template::kantor($role['kantor']['id'])->where('status', 'publish')->get(['judul', 'created_at', 'updated_at'])->toArray();
+
+		//get lists last 3 months
+		// $month[]		= Carbon::now()->format('M`y');
+		$month[]		= Carbon::parse('-2 months');//->format('M`y');
+		$month[]		= Carbon::parse('-1 month');//->format('M`y');
+
+		$now 			= new UTCDateTime(strtotime(Carbon::parse('first day of this month')->startOfDay()));
+
+		foreach ($lists_template as $key => $value) 
+		{
+
+			foreach ($month as $key2 => $value2) 
+			{
+				$lists_template[$key]['compare'][$value2->format('M`y')]['total']['published']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->where('status', 'akta')->where('updated_at', '>=', new UTCDateTime(strtotime($value2)))->where('updated_at', '<', $now)->count();
+
+				$lists_template[$key]['compare'][$value2->format('M`y')]['total']['drafted']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->whereIn('status', ['draft', 'dalam_proses', 'renvoi'])->where('updated_at', '>=', new UTCDateTime(strtotime($value2)))->where('updated_at', '<', $now)->count();
+
+				$lists_template[$key]['compare'][$value2->format('M`y')]['total']['trashed']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->onlyTrashed()->where('deleted_at', '>=', new UTCDateTime(strtotime($value2)))->where('deleted_at', '<', $now)->count();
+
+				$lists_template[$key]['compare'][$value2->format('M`y')]['total']['all']		= $lists_template[$key]['compare'][$value2->format('M`y')]['total']['published'] + $lists_template[$key]['compare'][$value2->format('M`y')]['total']['drafted'] + $lists_template[$key]['compare'][$value2->format('M`y')]['total']['trashed'];
+
+				$input_data 					= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->where('status', 'akta')->orderby('created_at', 'desc')->first();
+			}
+
+			$lists_template[$key]['pivot']['total']['published']= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->where('status', 'akta')->where('updated_at', '>=', $now)->count();
+
+			$lists_template[$key]['pivot']['total']['drafted']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->whereIn('status', ['draft', 'dalam_proses', 'renvoi'])->where('updated_at', '>=', $now)->count();
+
+			$lists_template[$key]['pivot']['total']['trashed']	= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->onlyTrashed()->where('deleted_at', '>=', $now)->count();
+
+
+			$lists_template[$key]['pivot']['total']['all']		= $lists_template[$key]['pivot']['total']['published'] + $lists_template[$key]['pivot']['total']['drafted'] + $lists_template[$key]['pivot']['total']['trashed'];
+
+			$input_data 					= Dokumen::kantor($role['kantor']['id'])->where('template.id', $value['id'])->where('status', 'akta')->orderby('created_at', 'desc')->first();
+		}
+
+		$this->page_datas->sebaran_peminat 	= $lists_template;
+		$this->page_datas->sebaran_bulan 	= $month;
+
+		return true;
+	}
+
+	private function getStatDrafter($role)
+	{
+		$now 		= new UTCDateTime(strtotime(Carbon::parse('first day of this month')->startOfDay()));
+		$lmonth 	= new UTCDateTime(strtotime(Carbon::parse('first day of last month')->startOfDay()));
+
+		$this->page_datas->stat_active_drafter		= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'drafter')->count();
+
+		$this->page_datas->stat_drafter_baru		= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'drafter')->where('created_at', '>=',$now)->count();
+
+		$this->page_datas->stat_drafter_keluar		= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'drafter')->where('deleted_at', '>=', $now)->onlyTrashed()->count();
+	
+		$this->page_datas->stat_active_drafter_lm	= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'drafter')->withTrashed()->where('created_at', '<', $now)->count();
+	
+		$this->page_datas->stat_drafter_baru_lm		= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'drafter')->where('created_at', '>=',$lmonth)->where('created_at', '<', $now)->count();
+
+		$this->page_datas->stat_drafter_keluar_lm	= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'drafter')->where('deleted_at', '>=', $lmonth)->where('deleted_at', '<', $now)->onlyTrashed()->count();
+	}
+
+	public function getStatStreak($role)
+	{
+		$query[]	= 	[
 			'$match' 					=> 	[
 				'pemilik.kantor.id' 	=> 	['$eq' => $role['kantor']['id']],
 				'status' 				=> 	['$eq' => 'akta'],
@@ -151,78 +284,65 @@ class homeController extends Controller
 				    							return $collection->aggregate($query); 
 				    						}));
 
-		$this->page_datas->longest_streak	= $dokumen->max('numbers');
-		$this->page_datas->longest_at		= $dokumen->where('numbers', $this->page_datas->longest_streak)->first()['tanggal']->toDateTime()->format('d/m/Y');
+		$this->page_datas->stat_total_akta		= $dokumen->sum('numbers');
+		$this->page_datas->stat_longest_streak	= $dokumen->max('numbers');
+		$this->page_datas->stat_longest_at		= $dokumen->where('numbers', $this->page_datas->stat_longest_streak)->first()['tanggal']->toDateTime()->format('d/m/Y');
 
-		$this->page_datas->baru_turnover	= Pengguna::kantor($role['kantor']['id'])->where('created_at', '>=', new UTCDateTime(strtotime(Carbon::parse('first day of this month')->startOfDay()->format('Y-m-d H:i:s'))))->count();
-		$this->page_datas->keluar_turnover	= Pengguna::kantor($role['kantor']['id'])->where('deleted_at', '>=', new UTCDateTime(strtotime(Carbon::parse('first day of this month')->startOfDay()->format('Y-m-d H:i:s'))))->onlyTrashed()->count();
-
-		$aktas 								= Dokumen::kantor($role['kantor']['id'])->where('status', 'akta')->get(['created_at', 'updated_at']);
+		$aktas 									= Dokumen::kantor($role['kantor']['id'])->where('status', 'akta')->get(['created_at', 'updated_at']);
 
 		$rerata 			= 0;
 		foreach ($aktas as $key => $value) 
 		{
 			$rerata 		= ($rerata + $value['created_at']->diffInHours($value['updated_at']) + 1)/($key + 1);
 		}
-		$this->page_datas->rerata		= $rerata;
 
-		//Akta Yang di selesaikan
-		$lists_karyawan					= Pengguna::kantor($role['kantor']['id'])->get(['nama'])->toArray();
+		$this->page_datas->stat_average_streak	= $rerata;
 
-		foreach ($lists_karyawan as $key => $value) 
-		{
-			$lists_karyawan[$key]['total']['published']	= Dokumen::kantor($role['kantor']['id'])->where('penulis.id', $value['id'])->where('status', 'akta')->count();
-			$lists_karyawan[$key]['total']['drafted']	= Dokumen::kantor($role['kantor']['id'])->where('penulis.id', $value['id'])->whereIn('status', ['draft', 'dalam_proses', 'renvoi'])->count();
+		return true;
+	}
 
-			$lists_karyawan[$key]['total']['trashed']	= Dokumen::kantor($role['kantor']['id'])->where('penulis.id', $value['id'])->onlyTrashed()->count();
-			$lists_karyawan[$key]['total']['all']		= $lists_karyawan[$key]['total']['published'] + $lists_karyawan[$key]['total']['drafted'] + $lists_karyawan[$key]['total']['trashed'];
-
-			$input_data 					= Dokumen::kantor($role['kantor']['id'])->where('penulis.id', $value['id'])->where('status', 'akta')->orderby('created_at', 'desc')->first();
-
-			if($input_data)
-			{
-    			$lists_karyawan[$key]['pengerjaan']['total']= collect(KlienProgress::kantor($role['kantor']['id'])->where('penulis_id', $value['id'])->selectRaw(\DB::raw('SUM(UNIX_TIMESTAMP(updated_at) - UNIX_TIMESTAMP(created_at)) as time_milis'))->groupby('akta_id')->get())->avg('time_milis');
-			}
-			else
-			{
-    			$lists_karyawan[$key]['pengerjaan']['total']= 0;
-			}
-		}
-
-		$this->page_datas->lists_karyawan 	= $lists_karyawan;
-		
-		$this->view			= view('pages.dashboard.kpi.notaris');
-		return $this->generateView();  
-    }
-
-    public function finance()
-    {
-		$role				= TAuth::activeOffice();
-
-		// init
-		$this->page_attributes->title		= 'Dashboard';
-    	
-		$this->page_datas->female_drafter	= Pengguna::kantor($role['kantor']['id'])->count();
-		$this->page_datas->male_drafter		= Pengguna::kantor($role['kantor']['id'])->count();
-    	
-		$this->page_datas->female_drafter_turnover		= Pengguna::kantor($role['kantor']['id'])->count();
-		$this->page_datas->male_drafter_turnover		= Pengguna::kantor($role['kantor']['id'])->count();
-
-		$this->view			= view('pages.dashboard.finance.notaris');
-		return $this->generateView();  
-    }
-
-	public function totalTagihan($users)
+	private function getPerformance($role)
 	{
-		if(count($users)<=2)
+		$lists_drafter	= Pengguna::kantor($role['kantor']['id'])->where('visas.role', 'notaris')->get(['nama'])->toArray();
+
+		$start_of_month	= Carbon::parse('first day of this month')->startOfDay();
+		$end_of_month	= Carbon::parse('last day of this month')->endOfDay();
+	
+		$start_of_lm	= Carbon::parse('first day of last month')->startOfDay();
+		$end_of_lm		= Carbon::parse('last day of last month')->endOfDay();
+
+		$som 			= new UTCDateTime(strtotime($start_of_month));
+		$eom 			= new UTCDateTime(strtotime($end_of_month));
+
+		$som_lm 		= new UTCDateTime(strtotime($start_of_lm));
+		$eom_lm 		= new UTCDateTime(strtotime($end_of_lm));
+
+		$ideal_rate 	= 8 * 60 *60; 
+		foreach ($lists_drafter as $key => $value) 
 		{
-			return 'Rp 500,000';
+			//hadir monthly
+			$lists_drafter[$key]['hari_hadir'] 		= UserAttendance::kantor($role['kantor']['id'])->where('pengguna_id', $value['id'])->where('jam_masuk', '>=', $start_of_month)->where('jam_masuk', '<=', $end_of_month)->count();
+
+			$lists_drafter[$key]['akta_published']	= Dokumen::kantor($role['kantor']['id'])->where('penulis.id', $value['id'])->where('status', 'akta')->where('updated_at', '>=', $som)->count();
+
+			$lists_drafter[$key]['performance']		= UserAttendance::selectRaw(\DB::raw("SUM(TIME_TO_SEC(TIMEDIFF( jam_keluar, jam_masuk))) as total"))->kantor($role['kantor']['id'])->where('jam_masuk', '>=', $start_of_month)->where('jam_masuk', '<=', $end_of_month)->where('pengguna_id', $value['id'])->first()['total'];
+
+			$lists_drafter[$key]['hari_hadir_lm'] 		= UserAttendance::kantor($role['kantor']['id'])->where('pengguna_id', $value['id'])->where('jam_masuk', '>=', $start_of_lm)->where('jam_masuk', '<=', $end_of_lm)->count();
+
+			$lists_drafter[$key]['akta_published_lm']	= Dokumen::kantor($role['kantor']['id'])->where('penulis.id', $value['id'])->where('status', 'akta')->where('updated_at', '>=', $som_lm)->where('updated_at', '<', $som)->count();
+			
+			$lists_drafter[$key]['performance_lm']		= UserAttendance::selectRaw(\DB::raw("SUM(TIME_TO_SEC(TIMEDIFF( jam_keluar, jam_masuk))) as total"))->kantor($role['kantor']['id'])->where('jam_masuk', '>=', $start_of_lm)->where('jam_masuk', '<=', $end_of_lm)->where('pengguna_id', $value['id'])->first()['total'];
+
+			$lists_drafter[$key]['hour_perakta']		= round($lists_drafter[$key]['akta_published'] / max(1, $lists_drafter[$key]['performance']));
+
+			$lists_drafter[$key]['hour_perakta_lm']		= round($lists_drafter[$key]['akta_published_lm'] / max(1, $lists_drafter[$key]['performance_lm']));
+
+			$lists_drafter[$key]['effective_rate']		= round($ideal_rate / max($lists_drafter[$key]['hour_perakta'],$ideal_rate)) * 100;	
+			$lists_drafter[$key]['effective_rate_lm']	= round($ideal_rate / max($lists_drafter[$key]['hour_perakta_lm'],$ideal_rate)) * 100;
 		}
 
-		$billing 	= 250000;
+		$this->page_datas->performance_drafter 		= $lists_drafter;
 
-		$total 		= $billing * count($users);
-
-		return 'Rp '.number_format($total);
+		return true;
 	}
 }

@@ -7,7 +7,9 @@ namespace App\Service\Admin;
 ///////////////
 use App\Domain\Admin\Models\Pengguna;
 
-use Hash, Exception, Session;
+use Hash, Exception, Session, TAuth;
+
+use App\Events\UserLogged;
 
 /**
  * Class Services Web
@@ -33,7 +35,6 @@ class SessionBasedAuthenticator
 	 */
 	public function login($credentials)
 	{
-		// $event 	= (new \App\Jobs\FireEventUserLogged(['test']));
 
 		$user 	= $this->model->email($credentials['email'])->first();
 
@@ -50,6 +51,7 @@ class SessionBasedAuthenticator
 		Session::put('logged.id', $user->id);
 		Session::put('accesses.idx', $user->visas[0]['id']);
 	
+		event(new UserLogged($user->toArray()));
 		// dispatch($event);
 
 		return true;
@@ -88,8 +90,6 @@ class SessionBasedAuthenticator
 
 		$user 	= $user->toArray();
 
-		Session::put('activating', $user);
-
 		return $user;
 	}
 
@@ -119,6 +119,8 @@ class SessionBasedAuthenticator
 	 */
 	public static function signoff()
 	{
+		event(new UserLogged(TAuth::loggedUser()));
+
 		Session::forget('logged.id');
 
 		return true;

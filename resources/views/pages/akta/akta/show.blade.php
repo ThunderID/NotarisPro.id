@@ -46,6 +46,7 @@
 
 			{{-- Predefine Sub Menu --}}
 			<?php
+				// dd($page_datas);
 				// Status : Dalam Proses
 				if(str_is($page_datas->datas['status'], 'dalam_proses')){
 					$menus 		= [
