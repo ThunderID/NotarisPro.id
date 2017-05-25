@@ -41,7 +41,7 @@
 	}	
 
 	.sidebar-right {
-	    padding: 0.5vw;
+	    padding: 0vw;
 	    overflow-x: hidden;
 	    width: 350px;
 	}
@@ -83,6 +83,13 @@
 @stop
 
 @section('content')
+<?php
+	// dd($page_datas->datas);
+
+	// getting status 
+	$status_array = ['dalam_proses', 'draft', 'renvoi', 'minuta', 'akta']; 
+	$status_doc = array_search($page_datas->datas['status'] ,$status_array);
+?>
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 
 			{{-- Predefine Sub Menu --}}
@@ -186,7 +193,7 @@
 			])
 
 
-			<div id="page" class="{{-- col-xs-12 col-sm-12 col-md-9 col-lg-9 --}} scrollable_panel subset-2menu" style="width: calc(100vw - 350px);">
+			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 350px);">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
 					<div class="d-flex justify-content-center mx-auto">
@@ -295,6 +302,9 @@
 													</a>
 												</div>
 												<div class="content">
+													<?php
+														var_dump($value['konten']);
+													?>
 													{!!$value['konten']!!}
 												</div>
 											</div>	
@@ -339,7 +349,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="hidden-sm-down {{-- col-md-3 col-lg-3 col-xl-3 --}} sidebar sidebar-right subset-2menu">
+
+			<div class="hidden-sm-down sidebar sidebar-right subset-2menu">
 
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item">
@@ -356,80 +367,94 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div class="tab-pane active" id="kelengkapan" role="tabpanel">
-							...
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
+								<p>ajshdajshjdkah</p>
+							</div>
 						</div>
-						<div class="tab-pane" id="info" role="tabpanel">...</div>
-						<div class="tab-pane" id="status" role="tabpanel">
+
+						<div class="tab-pane" id="info" role="tabpanel">
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
+								<p>ajshdajshjdkah</p>
+							</div>
+						</div>
+
+						<div class="tab-pane" id="info" role="tabpanel">
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
+								<p>ajshdajshjdkah</p>
+							</div>
+						</div>
+
+						<div class="tab-pane" id="status" role="tabpanel">					
 							
-	<section id="cd-timeline" class="cd-container">
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-active">
-			</div> <!-- cd-timeline-img -->
+							<section id="cd-timeline" class="cd-container">
+								<div class="cd-timeline-block">
+									<div class="cd-timeline-img {{ $status_doc >= 0 ? 'cd-active' : '' }}">
+									</div> <!-- cd-timeline-img -->
 
-			<div class="cd-timeline-content">
-				<h4>1. Dalam Proses</h4>
-				<p>Published By: John Doe<br>12 Dec 2017</p>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
+									<div class="cd-timeline-content {{ $status_doc >= 0 ? '' : 'disabled' }}">
+										<h4>1. Dalam Proses</h4>
+										<p>Published By: John Doe<br>12 Dec 2017</p>
+									</div> <!-- cd-timeline-content -->
+								</div> <!-- cd-timeline-block -->
 
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-active">
-			</div> <!-- cd-timeline-img -->
+								<div class="cd-timeline-block">
+									<div class="cd-timeline-img {{ $status_doc >= 1 ? 'cd-active' : 'cd-disabled' }}">
+									</div> <!-- cd-timeline-img -->
 
-			<div class="cd-timeline-content">
-				<h4>2. Draft</h4>
-				<p>Published By: John Doe<br>13 Dec 2017</p>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
+									<div class="cd-timeline-content {{ $status_doc >= 1 ? '' : 'disabled' }}">
+										<h4>2. Draft</h4>
+										<p>Published By: John Doe<br>13 Dec 2017</p>
+									</div> <!-- cd-timeline-content -->
+								</div> <!-- cd-timeline-block -->
 
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-active">
-			</div> <!-- cd-timeline-img -->
+								<div class="cd-timeline-block">
+									<div class="cd-timeline-img {{ $status_doc >= 2 ? 'cd-active' : 'cd-disabled' }}">
+									</div> <!-- cd-timeline-img -->
 
-			<div class="cd-timeline-content">
-				<h4>3. Renvoi</h4>
-				<p>Published By: John Doe<br>16 Dec 2017</p>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
+									<div class="cd-timeline-content {{ $status_doc >= 2 ? '' : 'disabled' }}">
+										<h4>3. Renvoi</h4>
+										<p>Published By: John Doe<br>16 Dec 2017</p>
+									</div> <!-- cd-timeline-content -->
+								</div> <!-- cd-timeline-block -->
 
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-disabled">
-			</div> <!-- cd-timeline-img -->
+								<div class="cd-timeline-block">
+									<div class="cd-timeline-img {{ $status_doc >= 3 ? 'cd-active' : 'cd-disabled' }}">
+									</div> <!-- cd-timeline-img -->
 
-			<div class="cd-timeline-content disabled">
-				<h4>4. Minuta</h4>
-				<p>Not Published Yet</p>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
+									<div class="cd-timeline-content {{ $status_doc >= 3 ? '' : 'disabled' }}">
+										<h4>4. Minuta</h4>
+										<p>Not Published Yet</p>
+									</div> <!-- cd-timeline-content -->
+								</div> <!-- cd-timeline-block -->
 
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-disabled">
-			</div> <!-- cd-timeline-img -->
+								<div class="cd-timeline-block">
+									<div class="cd-timeline-img {{ $status_doc >= 4 ? 'cd-active' : 'cd-disabled' }}">
+									</div> <!-- cd-timeline-img -->
 
-			<div class="cd-timeline-content disabled">
-				<h4>5.Akta</h4>
-				<p>Not Published Yet</p>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
+									<div class="cd-timeline-content {{ $status_doc >= 4 ? '' : 'disabled' }}">
+										<h4>5.Akta</h4>
+										<p>Not Published Yet</p>
+									</div> <!-- cd-timeline-content -->
+								</div> <!-- cd-timeline-block -->
 
-	</section> <!-- cd-timeline -->					
+							</section> <!-- cd-timeline -->					
 
 						</div>
 					</div>
 			
-				<div class="panel">
 					{{--
-					<p class="text-capitalize text-muted">Status : <span>{{ str_replace('_', ' ', $page_datas->datas['status']) }}</span></p>
-					<p class="text-center mb-3"><i class="fa fa-exclamation-triangle"></i> underconsturction</p>
-					<ol>
-						<li>Template yg dipakai</li>
-						<li>tgl terakhir disunting</li>
-					</ol>
+					<div class="panel">
+						<p class="text-capitalize text-muted">Status : <span>{{ str_replace('_', ' ', $page_datas->datas['status']) }}</span></p>
+						<p class="text-center mb-3"><i class="fa fa-exclamation-triangle"></i> underconsturction</p>
+						<ol>
+							<li>Template yg dipakai</li>
+							<li>tgl terakhir disunting</li>
+						</ol>
+					</div>
 					--}}
-
-
-
-				</div>
 			</div>				
 		</div>
 
@@ -500,7 +525,40 @@
 				'hide_title'	=> 'true',
 			]
 		])
-		<h4>Histori</h4>									
+		<div class="col-12">
+		<section id="cd-timeline" class="cd-container large">
+			<div class="cd-timeline-block">
+				<div class="cd-timeline-img large {{ $status_doc >= 0 ? 'cd-active' : '' }}">
+				</div> 
+
+				<div class="cd-timeline-content pt-0 {{ $status_doc >= 0 ? '' : 'disabled' }}" style="width:100%; left:35px;">
+					<p>12 Dec 2017<br><small>By: John Doe</small></p>
+
+					<div class="pb-2 pt-2">
+						ini text apa aja lahha asdhashdah
+					</div>
+
+					<hr style="border-bottom: 1px solid rgba(0,0,0,.07)!important;">
+				</div> 
+			</div> 
+
+			<div class="cd-timeline-block">
+				<div class="cd-timeline-img large {{ $status_doc >= 0 ? 'cd-active' : '' }}">
+				</div> 
+
+				<div class="cd-timeline-content pt-0 {{ $status_doc >= 0 ? '' : 'disabled' }}" style="width:100%; left:35px;">
+					<p>14 Dec 2017<br><small>By: John Doe</small></p>
+
+					<div class="pb-2 pt-2">
+						ini text apa aja lahha
+					</div>
+
+					<hr style="border-bottom: 1px solid rgba(0,0,0,.07)!important;">
+				</div> 
+			</div> 
+
+		</section> 		
+		</div>						
 	@endcomponent		
 
 

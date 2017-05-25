@@ -18787,10 +18787,6 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -18835,9 +18831,8 @@ module.exports = function(module) {
 /***/ }),
 
 /***/ "./resources/assets/js/app.js":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 // PLUGINS
 // medium-editor
 window.Editor = __webpack_require__("./resources/assets/js/plugins/medium-editor/medium-editor.js");
@@ -18892,9 +18887,8 @@ __webpack_require__("./resources/assets/js/plugins/footerGenerator.js");
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 // module typography
 __webpack_require__("./resources/assets/js/moduleUI/typographyUI.js");
 // module editor UI
