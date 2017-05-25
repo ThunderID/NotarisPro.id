@@ -74,7 +74,7 @@ class Klien extends BaseModel
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'tanggal_lahir'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
 	
 	/**
 	 * data hidden
@@ -95,10 +95,10 @@ class Klien extends BaseModel
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
-	public function setTanggalLahirAttribute($value)
-	{
-		$this->attributes['tanggal_lahir'] = $this->formatDateFrom($value);
-	}
+	// public function setTanggalLahirAttribute($value)
+	// {
+	// 	$this->attributes['tanggal_lahir'] = $this->formatDateFrom($value);
+	// }
 
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
 	
@@ -107,10 +107,10 @@ class Klien extends BaseModel
 		return $this->attributes['_id'];
 	}
 
-	public function getTanggalLahirAttribute($value = NULL)
-	{
-		return $this->formatCarbonDateTo($this->attributes['tanggal_lahir']);
-	}
+	// public function getTanggalLahirAttribute($value = NULL)
+	// {
+	// 	return $this->formatCarbonDateTo($this->attributes['tanggal_lahir']);
+	// }
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
