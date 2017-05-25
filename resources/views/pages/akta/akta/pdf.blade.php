@@ -10,10 +10,8 @@
 		margin-top: 0;
 		margin-bottom: 0;
 	}
-	h4{
-		text-align: left !important;
-		padding:0px !important; 
-		margin:0px !important; 
+	h4 span{
+		font-size: 1.4rem !Important;
 	}
 
 	body {
@@ -103,5 +101,7 @@
 			<!-- <div class="col-md-12" style="padding-top: 3cm;"></div>	 -->
 		</div>	
 	</div>
-
+	<?php
+		dd(1);
+	?>	
 @stop

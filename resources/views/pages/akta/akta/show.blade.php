@@ -24,13 +24,54 @@
 	.page-editor .wrapper .control {
 	   	width: 149px; 
 	   	height: auto; 
-	   	position: absolute; 
 	   	padding-left: 15px;
 	   	color: #EDEDED;
+	   	/* position: absolute; */ 
 	}
 	.page-editor .wrapper .content {
 	    padding-left: 155px;
 	}
+
+	.sidebar p{
+	    font-size: 0.8rem;
+	}
+
+	.sidebar h4{
+	    font-size: 1rem;
+	}	
+
+	.sidebar-right {
+	    padding: 0.5vw;
+	    overflow-x: hidden;
+	    width: 350px;
+	}
+	.sidebar ul {
+		border-bottom: 1px solid rgb(2, 117, 216);
+	}
+
+	.sidebar ul li{
+	    width: 33vw;
+	    text-align: center;
+	    font-size: 0.8rem;
+	}
+
+	.nav-tabs .nav-link{
+		border: none;
+		border-top-right-radius: 0px;
+		border-top-left-radius: 0px;
+	}
+
+	.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+	    border-color: transperant;
+    }
+
+    .nav-tabs .nav-link.active{
+	    color: #ffffff;
+	    background-color: #0275d8;
+	    border-color: transperant;
+    }
+
+
 @endpush  
 
 @section('akta')
@@ -144,11 +185,11 @@
 			])
 
 
-			<div id="page" class="col-xs-12 col-sm-12 col-md-9 col-lg-9 scrollable_panel subset-2menu">
+			<div id="page" class="{{-- col-xs-12 col-sm-12 col-md-9 col-lg-9 --}} scrollable_panel subset-2menu" style="width: calc(100vw - 350px);">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<div class="row">
 					<div class="d-flex justify-content-center mx-auto">
-						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 0cm; padding-left: 5cm; padding-right: 1cm;">
+						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group editor">
 
 								<?php
@@ -297,14 +338,96 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 sidebar sidebar-right subset-2menu">
+			<div class="hidden-sm-down {{-- col-md-3 col-lg-3 col-xl-3 --}} sidebar sidebar-right subset-2menu">
+
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" data-toggle="tab" href="#kelengkapan" role="tab">Kelengkapan</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#info" role="tab">Info</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#status" role="tab">Status</a>
+						</li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="kelengkapan" role="tabpanel">
+							...
+						</div>
+						<div class="tab-pane" id="info" role="tabpanel">...</div>
+						<div class="tab-pane" id="status" role="tabpanel">
+							
+	<section id="cd-timeline" class="cd-container">
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-active">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+				<h4>1. Dalam Proses</h4>
+				<p>Published By: John Doe<br>12 Dec 2017</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-active">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+				<h4>2. Draft</h4>
+				<p>Published By: John Doe<br>13 Dec 2017</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-active">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+				<h4>3. Renvoi</h4>
+				<p>Published By: John Doe<br>16 Dec 2017</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-disabled">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content disabled">
+				<h4>4. Minuta</h4>
+				<p>Not Published Yet</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-disabled">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content disabled">
+				<h4>5.Akta</h4>
+				<p>Not Published Yet</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+	</section> <!-- cd-timeline -->					
+
+						</div>
+					</div>
+			
 				<div class="panel">
+					{{--
 					<p class="text-capitalize text-muted">Status : <span>{{ str_replace('_', ' ', $page_datas->datas['status']) }}</span></p>
 					<p class="text-center mb-3"><i class="fa fa-exclamation-triangle"></i> underconsturction</p>
 					<ol>
 						<li>Template yg dipakai</li>
 						<li>tgl terakhir disunting</li>
 					</ol>
+					--}}
+
+
+
 				</div>
 			</div>				
 		</div>
