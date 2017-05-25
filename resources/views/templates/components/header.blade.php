@@ -11,7 +11,7 @@
 <nav class="navbar navbar-toggleable-sm navbar-inverse bg-primary text fixed-top">
 
 	<button id="togleCollapseNavbarAccount" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavbarAccount" aria-controls="navbarNavbarAccount" aria-expanded="false" aria-label="Toggle navigation">
-			<i class="fa fa-user-o"></i>
+		<i class="fa fa-user-o"></i>
 	</button>
 
 	<a class="navbar-brand text-center text-lg-left text-xl-left" href="{{route('home.dashboard')}}">{{ str_replace("_", " ", env('APP_NAME')) }}</a>
@@ -23,19 +23,6 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			{{-- 
-			<li class="nav-item">
-				<div class="dropdown">
-					<a class="nav-link @yield('akta')" href="javascript:void(0);" data-toggle="dropdown" id="dropdownMenuAkta" aria-haspopup="true" aria-expanded="false">Akta</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuAkta">
-						<a class="dropdown-item @yield('buat-akta') hidden-sm-down" href="{{ route('akta.akta.choose.template') }}">Buat Akta</a>
-						<a class="dropdown-item @yield('data-akta')" href="{{ route('akta.akta.index') }}">Akta Dokumen</a>
-						<a class="dropdown-item @yield('buat-template') hidden-sm-down" href="{{ route('akta.template.create') }}">Buat Template</a>
-						<a class="dropdown-item @yield('template-akta')" href="{{ route('akta.template.index') }}">Template Akta</a>
-					</div>
-				</div>
-			</li>
-			--}}
 			<li class="nav-item @yield('template-akta')">
 				<a class="nav-link" href="{{route('akta.template.index')}}">Template</a>
 			</li>				
@@ -81,7 +68,6 @@
 			</li>			
 		</ul>
 	</div>
-
 </nav>
 
 @push('scripts') 

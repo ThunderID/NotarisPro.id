@@ -153,8 +153,8 @@ class aktaController extends Controller
 		$this->page_attributes->title       = 'Edit Akta';
 
 		$this->page_datas->akta_id 			= $id;
-		$this->page_datas->template_id 		= '';
 		$this->page_datas->datas			= $this->query->detailed($id);
+		$this->page_datas->template_id 		= $this->page_datas->datas['template']['id'];
 
 		//initialize view
 		$this->view                         = view('pages.akta.akta.create');
