@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "medium-editor": "^5.23.0",
-    "medium-editor-tc-mention": "^2.2.4"
+    "medium-editor-tc-mention": "^2.2.4",
+    "select2": "^4.0.3"
   }
 }

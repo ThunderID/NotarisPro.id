@@ -22,7 +22,7 @@ use Exception, TAuth;
 class UnlockAkta
 {
 	protected $id;
-	protected $locks;
+	protected $keys;
 	private $akta;
 	private $loggedUser;
 	private $activeOffice;
@@ -33,10 +33,10 @@ class UnlockAkta
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct($id, array $locks)
+	public function __construct($id, array $keys)
 	{
 		$this->id		= $id;
-		$this->locks	= $locks;
+		$this->keys		= $keys;
 	}
 
 	/**
@@ -137,17 +137,15 @@ class UnlockAkta
 		foreach ($this->akta->paragraf as $key => $value) 
 		{
 			$paragraf[$key]				= $value;	
-			if(!isset($value['unlock']) && in_array($value['lock'], $this->locks))
+			if(isset($value['lock']) && in_array($value['key'], $this->keys))
 			{
-				$paragraf[$key]['unlock']	= true;
 				$paragraf[$key]['revise']	= (isset($paragraf[$key]['revise']) ? $paragraf[$key]['revise'] : 0) + 1;
-				// unset($paragraf[$key]['lock']);
+				unset($paragraf[$key]['lock']);
 			}
-			elseif(isset($value['unlock']))
+			elseif(!isset($value['lock']) && in_array($value['key'], $this->keys))
 			{
-				unset($paragraf[$key]['unlock']);
 				$paragraf[$key]['revise']	= (isset($paragraf[$key]['revise']) ? $paragraf[$key]['revise'] : 1) - 1;
-				// $paragraf[$key]['lock']	= Dokumen::createID('lock');
+				$paragraf[$key]['lock']		= Dokumen::createID('lock');
 			}
 		}
 

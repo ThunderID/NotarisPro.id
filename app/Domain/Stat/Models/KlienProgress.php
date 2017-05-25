@@ -2,9 +2,6 @@
 
 namespace App\Domain\Stat\Models;
 
-use App\Infrastructure\Traits\GuidTrait;
-use App\Infrastructure\Traits\TanggalTrait;
-
 use Illuminate\Database\Eloquent\Model;
 
 use Validator, Exception;

@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\AktaUpdated;
 
 use App\Domain\Stat\Models\KlienProgress;
+use Carbon\Carbon;
 
 class UpdateKlienProgress
 {

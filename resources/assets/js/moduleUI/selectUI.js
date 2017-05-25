@@ -1,3 +1,4 @@
+import $ from 'jquery';
 ;window.selectUI = {
 	selectMultiple: function () {
 		$('.select-multiple').select2({

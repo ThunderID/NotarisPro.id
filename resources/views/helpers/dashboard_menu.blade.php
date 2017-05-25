@@ -1,10 +1,10 @@
 <?php
 	// Sidebar Menu List
-	$list['Klien'] 		= 	[
+	$list['Market'] 		= 	[
 								'url' 	=> route('home.dashboard'),
 								'icon' 	=> 'fa-users'
 							];
-	$list['KPI'] 		= 	[
+	$list['HR'] 		= 	[
 								'url' 	=> route('kpi.dashboard'),
 								'icon' 	=> 'fa-vcard',
 							];

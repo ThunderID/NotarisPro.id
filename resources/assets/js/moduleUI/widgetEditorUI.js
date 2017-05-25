@@ -1,10 +1,10 @@
 ; window.widgetEditorUI = {
-	init: function () {
+	init: function (url) {
 		$('.modal').on('click', "button[data-save=true]" , function(e) {
 			e.preventDefault();
 			field 			= $(this).attr('data-parsing');
-			value 			= $('#list-widgets').find('input').val();
-			isi_template  	= document.getElementById("doc-content-mention").value;
+			value 			= $('#fill-mention').find('input').val();
+			isi_template  	= $('#doc-content-mention').val();
 			
 			window.widgetEditorUI.replaceContentWithData(field, value);
 
@@ -14,7 +14,7 @@
 
 			// call ajax add fill mention
 			/* function ajax required url, type method, data */
-			window.ajaxCall.withoutSuccess(urlFillMention, 'POST', {mention: field, isi_mention: value, template: isi_template});
+			window.ajaxCall.withoutSuccess(url, 'POST', {mention: field, isi_mention: value, template: isi_template});
 
 			setTimeout( function (){
 				loadingAnimation.loadingStop();
@@ -23,7 +23,7 @@
 
 			window.widgetEditorUI.isActive(field);
 
-			$('#list-widgets').modal('hide');
+			$('#fill-mention').modal('hide');
 		});
 	},
 	replaceContentWithData: function (param, data) {
@@ -31,6 +31,7 @@
 		$.each(mention, function(k, v) {
 			if (($(v).html() == param) || ($(v).attr('data-mention') == param)) {
 				$(v).attr('data-mention', param);
+				$(v).attr('data-value', data);
 				$(v).removeClass('text-danger').addClass('text-primary');
 				$(v).html(data);
 			}

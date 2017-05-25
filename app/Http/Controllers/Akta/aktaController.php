@@ -105,10 +105,10 @@ class aktaController extends Controller
 														$input['mentionable'], $input['template_id']);
 
 			$akta 						= $akta->save();
-
 			//save tanggal pertemuan
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.create'));
 		}
 
 		//return view
@@ -152,8 +152,8 @@ class aktaController extends Controller
 		$this->page_attributes->title       = 'Edit Akta';
 
 		$this->page_datas->akta_id 			= $id;
-		$this->page_datas->template_id 		= '';
 		$this->page_datas->datas			= $this->query->detailed($id);
+		$this->page_datas->template_id 		= $this->page_datas->datas['template']['id'];
 
 		//initialize view
 		$this->view                         = view('pages.akta.akta.create');
@@ -176,7 +176,6 @@ class aktaController extends Controller
 			$content 	= $this->parse_store($id, $request->only('template'));
 			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
 			$akta		= $akta->save();
-
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
@@ -440,9 +439,10 @@ class aktaController extends Controller
 			$content 		= [$input['mention'] => $input['isi_mention']];
 
 			// save
+			// $this->parse_store($akta_id, $request->only('template'));
 			$data 			= new SimpanAkta($akta_id, $check_status['judul'], $check_status['paragraf'], $content);
+			$data 			= $data->save();
 
-			$this->parse_store($akta_id, $request->only('template'));
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}

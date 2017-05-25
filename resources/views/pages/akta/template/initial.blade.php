@@ -88,7 +88,9 @@
 						<h4 class="title mb-0 pb-0">Dokumen Kelengkapan Template Akta</h4>
 						<small class="text-muted">Inputkan dokumen yang dibutuhkan untuk generate template akta</small>
 						<div class="clearfix">&nbsp;</div>
-						<div class="content-choice-doc-template"></div>
+						<div class="content-choice-doc-template">
+							<i></i>
+						</div>
 						<div class="clearfix">&nbsp;</div>
 					</div>
 				</div>
