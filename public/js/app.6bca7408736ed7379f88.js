@@ -18835,8 +18835,9 @@ module.exports = function(module) {
 /***/ }),
 
 /***/ "./resources/assets/js/app.js":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 // PLUGINS
 // medium-editor
 window.Editor = __webpack_require__("./resources/assets/js/plugins/medium-editor/medium-editor.js");
@@ -18891,8 +18892,9 @@ __webpack_require__("./resources/assets/js/plugins/footerGenerator.js");
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 // module typography
 __webpack_require__("./resources/assets/js/moduleUI/typographyUI.js");
 // module editor UI
@@ -19236,16 +19238,21 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 /***/ }),
 
 /***/ "./resources/assets/js/moduleUI/selectUI.js":
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 
 ;window.selectUI = {
 	selectMultiple: function selectMultiple() {
-		$('.select-multiple').select2({
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.select-multiple').select2({
 			tokenSeparators: [',', ' ']
 		});
 	},
 	selectTag: function selectTag() {
-		$('.select-tag').select2({
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.select-tag').select2({
 			tokenSeparators: [',', ' '],
 			tags: true
 		});
