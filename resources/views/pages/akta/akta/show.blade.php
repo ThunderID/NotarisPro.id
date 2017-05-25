@@ -46,6 +46,7 @@
 
 			{{-- Predefine Sub Menu --}}
 			<?php
+				// dd($page_datas);
 				// Status : Dalam Proses
 				if(str_is($page_datas->datas['status'], 'dalam_proses')){
 					$menus 		= [
@@ -178,12 +179,12 @@
 
 										@if(str_is(acl_active_office['role'], 'notaris'))
 
-											@if(isset($value['unlock']) && $value['unlock'])
+											@if(!isset($value['lock']))
 
 												{{-- UNCLOKED --}}
 												<div class="wrapper unlocked">
 													<div class="control">
-														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" data-lock="{{ $value['lock'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" data-lock="{{ $value['key'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
 															<i class="fa fa-unlock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
@@ -201,7 +202,7 @@
 												{{-- LOCKED --}}
 												<div class="wrapper">
 													<div class="control">
-														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" class="lock"  data-lock="{{ $value['lock'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" class="lock"  data-lock="{{ $value['key'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 															<i class="fa fa-lock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
@@ -244,7 +245,7 @@
 											<div class="wrapper unlocked">
 												<div class="control">
 													<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#"
-													class="lock" data-lock="{{ isset($value['lock']) ? $value['lock'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked= "true" >
+													class="lock" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked= "true" >
 														<i class="fa fa-unlock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
@@ -261,7 +262,7 @@
 											{{-- LOCKED --}}
 											<div class="wrapper">
 												<div class="control">
-													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-lock="{{ isset($value['lock']) ? $value['lock'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 														<i class="fa fa-lock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
