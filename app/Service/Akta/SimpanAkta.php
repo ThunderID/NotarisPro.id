@@ -162,7 +162,7 @@ class SimpanAkta
 
 
 			//demi menghemat resource, versioning lies here
-			$para_lama 		= strip_tags($value);
+			$para_lama 		= strip_tags($value['konten']);
 			$para_baru 		= strip_tags($this->akta['paragraf'][$key]['konten']);
 			similar_text($para_lama, $para_baru, $percent);
 
