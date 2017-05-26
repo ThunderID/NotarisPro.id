@@ -133,11 +133,11 @@ class aktaController extends Controller
 		$this->page_datas->doc_inspector	= $this->doc_inspector($this->page_datas->datas);
 		$this->page_datas->notaris			= $notaris;
 		$data 								= collect($this->page_datas->datas['riwayat_status']);
-		$this->page_datas->status_dalam_proses 	= $data->where('status', 'dalam_proses')->toArray();
-		$this->page_datas->status_draft 		= $data->where('status', 'draft')->toArray();
-		$this->page_datas->status_renvoi 		= $data->where('status', 'renvoi')->toArray();
-		$this->page_datas->status_akta 			= $data->where('status', 'akta')->toArray();
-		$this->page_datas->status_minuta 		= $data->where('status', 'minuta')->toArray();
+		$this->page_datas->status_dalam_proses 	= $data->where('status', 'dalam_proses')->sortByDesc('tanggal')->toArray();
+		$this->page_datas->status_draft 		= $data->where('status', 'draft')->sortByDesc('tanggal')->toArray();
+		$this->page_datas->status_renvoi 		= $data->where('status', 'renvoi')->sortByDesc('tanggal')->toArray();
+		$this->page_datas->status_akta 			= $data->where('status', 'akta')->sortByDesc('tanggal')->toArray();
+		$this->page_datas->status_minuta 		= $data->where('status', 'minuta')->sortByDesc('tanggal')->toArray();
 
 		$this->page_datas->template			= new DaftarTemplateAkta;
 		$this->page_datas->template 		= $this->page_datas->template->thinning($this->page_datas->datas['template']['id']);
