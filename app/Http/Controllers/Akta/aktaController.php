@@ -130,6 +130,7 @@ class aktaController extends Controller
 		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
 
 		$this->page_datas->datas			= $this->query->detailed($id);
+		$this->page_datas->doc_inspector	= $this->doc_inspector($this->page_datas->datas);
 		$this->page_datas->notaris			= $notaris;
 		$this->page_attributes->title		= $this->page_datas->datas['judul'];
 
@@ -442,7 +443,6 @@ class aktaController extends Controller
 			// $this->parse_store($akta_id, $request->only('template'));
 			$data 			= new SimpanAkta($akta_id, $check_status['judul'], $check_status['paragraf'], $content);
 			$data 			= $data->save();
-
 		} catch (Exception $e) {
 			return JSend::error($e->getMessage())->asArray();
 		}
@@ -554,5 +554,16 @@ class aktaController extends Controller
 
 		//function from parent to generate view
 		return $this->generateView();  
-	}	
+	}
+
+	private function doc_inspector(array $doc)
+	{
+		$required 	= [];
+		foreach ($doc['mentionable'] as $key => $value) 
+		{
+
+		}
+
+		return $required;
+	}
 }

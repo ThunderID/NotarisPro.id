@@ -19,7 +19,7 @@ trait EnhanceKlienTrait {
 	 */
 	private function enhance_klien($pihak)
 	{
-		$akta['pemilik']				= [];
+		$akta['klien']				= [];
 		
 		foreach ((array)$pihak as $key => $value) 
 		{
@@ -39,11 +39,11 @@ trait EnhanceKlienTrait {
 				$new_pihak['kantor']		= ['id' => $this->activeOffice['kantor']['id'],'nama' => $this->activeOffice['kantor']['nama']];
 				$new_pihak->save();
 
-				$akta['pemilik']['klien'][$key]['id'] 		= $new_pihak['id'];
-				$akta['pemilik']['klien'][$key]['nama'] 	= $new_pihak['nama'];
+				$akta['klien'][$key]['id']	= $new_pihak['id'];
+				$akta['klien'][$key]['nama']= $new_pihak['nama'];
 			}
 		}
 
-		return $akta['pemilik'];
+		return $akta['klien'];
 	}
 }

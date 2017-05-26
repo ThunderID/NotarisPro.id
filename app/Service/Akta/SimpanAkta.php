@@ -75,7 +75,7 @@ class SimpanAkta
 			// Policy : 
 			// 1. Restorasi Isi Paragraf @restorasi_isi_akta
 			$this->akta->paragraf 		= $this->restorasi_isi_akta();
-			
+
 			// Smart System : 
 			// 	1. Smartly updating mentionable @parse_mentionable
 			$this->akta->fill_mention	= $this->parse_mentionable();
@@ -233,7 +233,15 @@ class SimpanAkta
 
 		if((array)$pihak)
 		{
-			$this->akta->pemilik 	= $this->enhance_klien($pihak);
+			$pemilik 				= $this->akta->pemilik;
+
+			$klien					= $this->enhance_klien($pihak);
+
+			if((array)$klien)
+			{
+				$pemilik['klien']	= $klien;
+			}
+			$this->akta->pemilik 	= $pemilik;
 		}
 
 		return $fill_mention;
