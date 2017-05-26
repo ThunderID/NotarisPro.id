@@ -6,7 +6,7 @@ use App\Domain\Akta\Models\Dokumen;
 use App\Domain\Akta\Models\Template;
 use App\Domain\Order\Models\Klien;
 
-use Exception, TAuth;
+use Exception, TAuth, Carbon\Carbon;
 
 use App\Service\Akta\Traits\EnhanceKlienTrait;
 
@@ -172,8 +172,8 @@ class SimpanAkta
 				{
 					$this->isi_akta[$key]['version']	= $this->akta['paragraf'][$key]['version'];
 				}
-				
-				$this->isi_akta[$key]['version'][]	= $this->akta['paragraf'][$key]['konten'];
+
+				$this->isi_akta[$key]['version'][]	= ['konten' => $this->akta['paragraf'][$key]['konten'], 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
 			}
 
 		}
