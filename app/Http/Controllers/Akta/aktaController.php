@@ -132,6 +132,10 @@ class aktaController extends Controller
 		$this->page_datas->datas			= $this->query->detailed($id);
 		$this->page_datas->doc_inspector	= $this->doc_inspector($this->page_datas->datas);
 		$this->page_datas->notaris			= $notaris;
+		
+		$this->page_datas->template			= new DaftarTemplateAkta;
+		$this->page_datas->template 		= $this->page_datas->template->thinning($this->page_datas->datas['template']['id']);
+
 		$this->page_attributes->title		= $this->page_datas->datas['judul'];
 
 		//initialize view
@@ -606,7 +610,7 @@ class aktaController extends Controller
 				} 
 			}
 		}
-dd($required);
+
 		return $required;
 	}
 }

@@ -105,6 +105,22 @@ class DaftarTemplateAkta
 	 * 
 	 * @return UserDTODataTransformer $data
 	 */
+	public function thinning($id)
+	{
+		$queries['penulis']['id']	= TAuth::loggedUser()['id'];
+		$model 						= $this->model->id($id)->draftOrPublished($queries)->first(['judul', 'deskripsi', 'pemilik', 'penulis', 'status', 'mentionable', 
+			'dokumen_objek', 'dokumen_pihak', 'dokumen_saksi', 'penambahan_paragraf', 'pengurangan_paragraf', 'perubahan_paragraf', 'created_at', 'updated_at', 'deleted_at']);
+		$model 						= $model->toArray();
+
+		return $model;
+	}
+
+	/**
+	 * this function mean keep executing
+	 * @param array $data
+	 * 
+	 * @return UserDTODataTransformer $data
+	 */
 	public function count($queries = [])
 	{
 		$model 		= $this->queries($queries);
