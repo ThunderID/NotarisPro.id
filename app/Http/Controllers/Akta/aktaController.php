@@ -611,7 +611,7 @@ class aktaController extends Controller
 				{
 					if(str_is($key2, $value))
 					{
-						$required['objek'][$mentions[1]]	= true;
+						$required['objek'][0][$mentions[1]]	= true;
 					}
 				} 
 			}
