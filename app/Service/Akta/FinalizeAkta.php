@@ -9,7 +9,7 @@ use App\Domain\Akta\Models\ReadOnlyAkta;
 use TImmigration\Pengguna\Models\Pengguna;
 
 use App\Events\AktaUpdated;
-use Exception, TAuth;
+use Exception, TAuth, Carbon\Carbon;
 
 /**
  * Service untuk update akta yang sudah ada
@@ -73,6 +73,7 @@ class FinalizeAkta
 			$this->fill_nomor_akta();
 
 			//2b. simpan dokumen
+			$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'akta', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]]);
 			$this->akta->status 	= 'akta';
 			$this->akta->save();
 

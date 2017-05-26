@@ -88,6 +88,7 @@ class SimpanAkta
 			{
 				$this->akta->judul 			= $this->judul;
 			}
+
 			$this->akta->save();
 
 			$akta 		= new DaftarAkta;
@@ -163,7 +164,16 @@ class SimpanAkta
 
 			//demi menghemat resource, versioning lies here
 			$para_baru 		= strip_tags($value['konten']);
-			$para_lama 		= strip_tags($this->akta['paragraf'][$key]['konten']);
+			if(isset($this->akta['paragraf'][$key]['konten']))
+			{
+				$para_lama 	= strip_tags($this->akta['paragraf'][$key]['konten']);
+				$para 		= $this->akta['paragraf'][$key]['konten'];
+			}
+			else
+			{
+				$para_lama 	= '';
+				$para 		= '';
+			}
 			
 			similar_text($para_baru, $para_lama, $percent);
 
@@ -174,7 +184,7 @@ class SimpanAkta
 					$this->isi_akta[$key]['version']	= $this->akta['paragraf'][$key]['version'];
 				}
 
-				$this->isi_akta[$key]['version'][]	= ['konten' => $this->akta['paragraf'][$key]['konten'], 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
+				$this->isi_akta[$key]['version'][]	= ['konten' => $para, 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
 			}
 
 		}
@@ -238,7 +248,7 @@ class SimpanAkta
 
 			$klien					= $this->enhance_klien($pihak);
 
-			if((array)$klien)
+			if(!empty($klien))
 			{
 				$pemilik['klien']	= $klien;
 			}

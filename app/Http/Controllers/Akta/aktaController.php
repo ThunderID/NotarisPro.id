@@ -128,7 +128,7 @@ class aktaController extends Controller
 		//get data notaris
 		$notaris 				= new DaftarKantor;
 		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
-
+		
 		$this->page_datas->datas			= $this->query->detailed($id);
 		$this->page_datas->doc_inspector	= $this->doc_inspector($this->page_datas->datas);
 		$this->page_datas->notaris			= $notaris;
@@ -561,9 +561,52 @@ class aktaController extends Controller
 		$required 	= [];
 		foreach ($doc['mentionable'] as $key => $value) 
 		{
+			if(str_is('@pihak.*', $value))
+			{
+				$mention 		= str_replace('@', '', $value);
+				$mentions 		= explode('.', $mention);
+				$required['pihak'][$mentions[1]][$mentions[2]]			= false;
 
+				foreach ($doc['fill_mention'] as $key2 => $value2)
+				{
+					if(str_is($key2, $value))
+					{
+						$required['pihak'][$mentions[1]][$mentions[2]]	= true;
+					}
+				} 
+			}
+
+			elseif(str_is('@saksi.*', $value))
+			{
+				$mention 		= str_replace('@', '', $value);
+				$mentions 		= explode('.', $mention);
+				$required['saksi'][$mentions[1]][$mentions[2]]			= false;
+
+				foreach ($doc['fill_mention'] as $key2 => $value2)
+				{
+					if(str_is($key2, $value))
+					{
+						$required['saksi'][$mentions[1]][$mentions[2]]	= true;
+					}
+				} 
+			}
+
+			elseif(str_is('@objek.*', $value))
+			{
+				$mention 		= str_replace('@', '', $value);
+				$mentions 		= explode('.', $mention);
+				$required['objek'][$mentions[1]]			= false;
+
+				foreach ($doc['fill_mention'] as $key2 => $value2)
+				{
+					if(str_is($key2, $value))
+					{
+						$required['objek'][$mentions[1]]	= true;
+					}
+				} 
+			}
 		}
-
+dd($required);
 		return $required;
 	}
 }

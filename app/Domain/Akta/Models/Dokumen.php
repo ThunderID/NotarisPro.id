@@ -48,6 +48,7 @@ class Dokumen extends BaseModel
 											'mentionable'			,
 											'fill_mention'			,
 											'total_perubahan'		,
+											'riwayat_status'		,
 											
 											'jumlah_pihak'			,
 											'jumlah_saksi'			,
