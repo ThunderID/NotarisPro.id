@@ -29,24 +29,20 @@
 			<li class="nav-item @yield('akta')">
 				<a class="nav-link" href="{{route('akta.akta.index')}}">Akta</a>
 			</li>	
+
 			<li class="nav-item">
 				<div class="dropdown">
-					<a class="nav-link yield('jadwal')" href="javascript::void(0);" data-toggle="dropdown" id="dropdownMenuJadwal" aria-haspopup="true" aria-expanded="false">Jadwal</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuJadwal">
-						<a class="dropdown-item @yield('jadwal-bpn')" href="{{ route('jadwal.bpn.index') }}">BPN</a>
-						<a class="dropdown-item @yield('jadwal-klien')" href="{{ route('jadwal.klien.index') }}">Klien</a>
+					<a class="nav-link yield('pos')" href="javascript::void(0);" data-toggle="dropdown" id="dropdownMenuPOS" aria-haspopup="true" aria-expanded="false">POS</a>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuPOS">
+						<a class="dropdown-item @yield('pos-bkk')" href="{{ route('pos.bkk.index') }}">Kas Keluar</a>
+						<a class="dropdown-item @yield('pos-bkm')" href="{{ route('pos.bkm.index') }}">Kas Masuk</a>
+						<a class="dropdown-item @yield('pos-billing')" href="{{ route('pos.billing.index') }}">Tagihan</a>
 					</div>
 				</div>				
 			</li>	
-			<li class="nav-item @yield('klien')">
+			<!-- <li class="nav-item @yield('klien')">
 				<a class="nav-link" href="{{route('klien.index')}}">Klien</a>
-			</li>	
-			<li class="nav-item">
-				<a class="nav-link" href="{{route('klien.index')}}">Billing</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{route('klien.index')}}">Employee</a>
-			</li>											
+			</li> -->
 		</ul>
 	</div>
 

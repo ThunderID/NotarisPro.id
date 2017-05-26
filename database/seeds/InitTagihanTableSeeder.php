@@ -5,14 +5,16 @@ use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
 
-use TKlien\Klien\Models\Klien;
-use TTagihan\Tagihan\Models\Tagihan;
+use App\Domain\Order\Models\HeaderTransaksi;
+use App\Domain\Order\Models\DetailTransaksi;
+use App\Domain\Order\Models\Klien;
 
 class InitTagihanTableSeeder extends Seeder
 {
 	public function run()
 	{
-		DB::table('tagihan')->truncate();
+		DB::connection('mysql')->table('header_transaksi')->truncate();
+		DB::connection('mysql')->table('detail_transaksi')->truncate();
 
 		$credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 		$login 			= TAuth::login($credentials);
@@ -20,29 +22,41 @@ class InitTagihanTableSeeder extends Seeder
 		$faker			= \Faker\Factory::create();
 
 		$deskripsi 		= ['Akta Jual Beli', 'Akta Pemberian Hak Tanggungan', 'Akta Fidusia', 'Akta Perjanjian Sewa'];
+		$harga_satuan 	= [1000000,1500000,2000000,3000000];
 
-		//init draft
+		//init transaksi
 		foreach (range(0, 19) as $key) 
 		{
-			$klien 		= Klien::kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first();
+			$klien 		= Klien::kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
 
+			$parse_month 	= rand(-12, -2);
 			$data 			= [
-				'nomor'					=> Tagihan::createID('nomor'),
-				'tanggal_dikeluarkan'	=> Carbon::parse(rand(-15, 15).' days')->format('d/m/Y'),
-				'details'				=> [[
-					'deskripsi'			=> 'Pesanan '.$deskripsi[rand(0,3)],
-					'harga_satuan'		=> 'Rp '.rand(1,10).'.000.000',
-					'diskon_satuan'		=> 'Rp '.number_format(rand(0,250000),0, "," ,"."),
-					'jumlah_item'		=> rand(1,3),
-				]],
-				'oleh'					=> TAuth::activeOffice()['kantor'],
-				'untuk'					=> ['id' => $klien['id'], 'nama' => $klien['nama']],
+				'klien_id'				=> $klien['id'],
+				'klien_nama'			=> $klien['nama'],
+				'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
+				'nomor_transaksi'		=> rand(234289849248924,999999999999999),
+				'tipe'					=> 'billing_out',
+				'tanggal_dikeluarkan'	=> Carbon::parse($parse_month.' months')->format('Y-m-d H:i:s'),
+				'tanggal_jatuh_tempo'	=> Carbon::parse($parse_month.' months')->addMonths(1)->format('Y-m-d H:i:s'),
 			];
 
-			$data['tanggal_jatuh_tempo']	= Carbon::createFromFormat('d/m/Y', $data['tanggal_dikeluarkan'])->addDays(rand(0,60))->format('d/m/Y');
+			$tagihan 	= new HeaderTransaksi;
+			$tagihan->fill($data);
+			$tagihan->save();
 
-			$tagihan 			= new \TCommands\Tagihan\BuatTagihan($data);
-			$tagihan->handle();
+			//details
+			$data_detail 			= [
+				'header_transaksi_id'		=> $tagihan->id,
+				'item'						=> 'Jasa Pembuatan Akta',
+				'deskripsi'					=> $deskripsi[rand(0,3)],
+				'kuantitas'					=> 1,
+				'harga_satuan'				=> $harga_satuan[rand(0,3)],
+				'diskon_satuan'				=> $harga_satuan[rand(0,3)] *0.25,
+			];
+
+			$tdetail 	= new DetailTransaksi;
+			$tdetail->fill($data_detail);
+			$tdetail->save();
 		}
 	}
 }

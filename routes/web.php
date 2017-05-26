@@ -19,6 +19,10 @@ Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mention
 
 Route::get('/test', function () 
 {
+	$data 	= new App\Domain\Stat\Models\UserAttendance;
+	$data 	= $data->get();
+	dD($data);
+
 	$data 	= new App\Domain\Stat\Models\KlienProgress;
 	$data 	= $data->Ongoing(TAuth::activeOffice()['kantor']['id']);
 	dD($data);
@@ -169,6 +173,43 @@ Route::group(['middleware' => ['authenticated']], function()
 			'destroy' 	=> 'klien.destroy' //post 
 		]]);
 	});
+
+	// pos
+	Route::group(['namespace' => 'POS\\'], function(){
+		//bkk
+		Route::resource('/pos/bkk', 'bkkPOSController', ['names' => [
+			'index' 	=> 'pos.bkk.index', //get
+			'create'	=> 'pos.bkk.create', //get
+			'store' 	=> 'pos.bkk.store', //post
+			'show' 		=> 'pos.bkk.show', //get
+			'edit' 		=> 'pos.bkk.edit', //get
+			'update' 	=> 'pos.bkk.update', //patch
+			'destroy' 	=> 'pos.bkk.destroy' //post 
+		]]);
+
+		//bkm
+		Route::resource('/pos/bkm', 'bkmPOSController', ['names' => [
+			'index' 	=> 'pos.bkm.index', //get
+			'create'	=> 'pos.bkm.create', //get
+			'store' 	=> 'pos.bkm.store', //post
+			'show' 		=> 'pos.bkm.show', //get
+			'edit' 		=> 'pos.bkm.edit', //get
+			'update' 	=> 'pos.bkm.update', //patch
+			'destroy' 	=> 'pos.bkm.destroy' //post 
+		]]);	
+
+		//billing
+		Route::resource('/pos/billing', 'billingPOSController', ['names' => [
+			'index' 	=> 'pos.billing.index', //get
+			'create'	=> 'pos.billing.create', //get
+			'store' 	=> 'pos.billing.store', //post
+			'show' 		=> 'pos.billing.show', //get
+			'edit' 		=> 'pos.billing.edit', //get
+			'update' 	=> 'pos.billing.update', //patch
+			'destroy' 	=> 'pos.billing.destroy' //post 
+		]]);
+	});
+
 
 	//kantor
 	Route::group(['namespace' => 'Admin\\'], function(){
