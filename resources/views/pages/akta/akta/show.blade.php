@@ -5,32 +5,7 @@
 @endpush
 
 @push('styles')  
-	.page-editor .wrapper {
-	    margin-left: -150px;
-	    margin-bottom: 10px;
-	    padding-top: 10px;
-	    padding-bottom: 10px;
-	    border: 1px solid rgba(0,0,0,.07)!important;
-	}
-	.page-editor .wrapper.unlocked {
-		border: 1px solid rgba(2, 117, 216, 0.58)!important;
-	}
-	.page-editor .wrapper:hover {
-		margin-top: -1px;
-		margin-bottom: 11px;
-		box-shadow: 2px 2px 7px rgba(0,7,10,.2);
-		cursor: default;
-	}
-	.page-editor .wrapper .control {
-	   	width: 149px; 
-	   	height: auto; 
-	   	padding-left: 15px;
-	   	color: #EDEDED;
-	   	/* position: absolute; */ 
-	}
-	.page-editor .wrapper .content {
-	    padding-left: 155px;
-	}
+	
 
 	.sidebar p{
 	    font-size: 0.8rem;
@@ -55,23 +30,6 @@
 	    font-size: 0.8rem;
 	}
 
-	.nav-tabs .nav-link{
-		border: none;
-		border-top-right-radius: 0px;
-		border-top-left-radius: 0px;
-	}
-
-	.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
-	    border-color: transperant;
-    }
-
-    .nav-tabs .nav-link.active{
-	    color: #ffffff;
-	    background-color: #0275d8;
-	    border-color: transperant;
-    }
-
-
 @endpush  
 
 @section('akta')
@@ -82,14 +40,17 @@
 	active
 @stop
 
-@section('content')
+{{-- init --}}
 <?php
-	// dd($page_datas->datas);
-
-	// getting status 
 	$status_array = ['dalam_proses', 'draft', 'renvoi', 'minuta', 'akta']; 
 	$status_doc = array_search($page_datas->datas['status'] ,$status_array);
 ?>
+
+@include('functions.listRenderer')
+
+@section('content')
+
+
 		<div class="row" style="background-color: rgba(0, 0, 0, 0.075);">
 
 			{{-- Predefine Sub Menu --}}
@@ -123,21 +84,23 @@
 					if(str_is(acl_active_office['role'], 'notaris')){
 						// menu
 						$menus 		= [
+							/*
 							[
 								"title" 			=> "History Revisi",	
 								"route" 			=> route('akta.akta.versioning', ['akta_id' => $page_datas->datas['id']]),
 								"icon" 				=> "fa-history",
 							],
-							[
-								"title" 			=> "Final",	
-								"trigger_modal" 	=> "#finalize",
-								"icon" 				=> "fa-file",
-							],
+							*/
 							[
 								"title" 			=> "Renvoi",	
 								"route" 			=> route('akta.akta.status', ['id' => $page_datas->datas['id'], 'status' => 'renvoi']),
+								"icon" 				=> "fa-pencil",
+							],
+							[
+								"title" 			=> "Final",	
+								"trigger_modal" 	=> "#finalize",
 								"icon" 				=> "fa-check",
-							]							
+							],
 						];
 					}else{
 						// menu
@@ -195,7 +158,7 @@
 
 			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 350px);">
 				<div id="page-breaker" class="row page-breaker"></div>
-				<div class="row">
+				<!-- <div class="row"> -->
 					<div class="d-flex justify-content-center mx-auto">
 						<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 							<div class="form-group editor">
@@ -207,29 +170,46 @@
 									{{-- Dalam Proses --}}
 									@if($page_datas->datas['status']=='dalam_proses')
 
-									<div class="wrapper">
-										<div class="control">
-											<span data-toggle="tooltip" data-placement="right" title="Fitur kunci dokumen belum tersedia. Fitur ini tersedia pada status draft">
-												<i class="fa fa-unlock" aria-hidden="true"></i>
-											</span>
-											&nbsp;|&nbsp;
-											<span data-toggle="tooltip" data-placement="right" title="Fitur riwayat revisi belum tersedia. Fitur ini tersedia pada status draft">
-												<i class="fa fa-history" aria-hidden="true"></i> 0
-											</span>
+										{{-- Render List --}}
+										<?php 
+											$konten = listRenderer($value['konten']);
+										?>
+
+										{!! is_null($konten['open']) ? '' : $konten['open'] !!}
+
+										<div class="wrapper">
+											<div class="control">
+												<span data-toggle="tooltip" data-placement="right" title="Fitur kunci dokumen belum tersedia. Fitur ini tersedia pada status draft">
+													<i class="fa fa-unlock" aria-hidden="true"></i>
+												</span>
+												&nbsp;|&nbsp;
+												<span data-toggle="tooltip" data-placement="right" title="Fitur riwayat revisi belum tersedia. Fitur ini tersedia pada status draft">
+													<i class="fa fa-history" aria-hidden="true"></i> 0
+												</span>
+											</div>
+											<div class="content">
+												{!!$konten['text']!!}
+											</div>
 										</div>
-										<div class="content">
-											{!!$value['konten']!!}
-										</div>
-									</div>									
+
+										{!! is_null($konten['close']) ? '' : $konten['close'] !!}
 
 									{{-- Draft --}}
 									@elseif($page_datas->datas['status']=='draft')
+
+										{{-- Render List --}}
+										<?php 
+											$konten = listRenderer($value['konten']);
+										?>
+
+										{!! is_null($konten['open']) ? '' : $konten['open'] !!}
 
 										@if(str_is(acl_active_office['role'], 'notaris'))
 
 											@if(!isset($value['lock']))
 
 												{{-- UNCLOKED --}}
+
 												<div class="wrapper unlocked">
 													<div class="control">
 														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" data-lock="{{ $value['key'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
@@ -241,13 +221,14 @@
 														</a>
 													</div>
 													<div class="content">
-														{!!$value['konten']!!}
+														{!! $konten['text'] !!}
 													</div>
 												</div>	
 											
 											@else
 
 												{{-- LOCKED --}}
+
 												<div class="wrapper">
 													<div class="control">
 														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" class="lock"  data-lock="{{ $value['key'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
@@ -259,9 +240,9 @@
 														</a>
 													</div>
 													<div class="content">
-														{!!$value['konten']!!}
+														{!! $konten['text'] !!}
 													</div>
-												</div>												
+												</div>	
 
 											@endif
 
@@ -282,14 +263,24 @@
 												</div>
 											</div>
 
-										@endif																		
+										@endif
+
+										{!! is_null($konten['close']) ? '' : $konten['close'] !!}
 
 									{{-- Renvoi --}}
 									@elseif($page_datas->datas['status']=='renvoi')
 
+										{{-- Render List --}}
+										<?php 
+											$konten = listRenderer($value['konten']);
+										?>
+
+										{{ is_null($konten['open']) ? $konten['open'] : '' }}									
+
 										@if (!isset($value['lock']))
 
 											{{-- UNLOCKED --}}
+
 											<div class="wrapper unlocked">
 												<div class="control">
 													<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#"
@@ -302,15 +293,14 @@
 													</a>
 												</div>
 												<div class="content">
-													<?php
-														var_dump($value['konten']);
-													?>
-													{!!$value['konten']!!}
+													{{ $konten['text'] }}											
 												</div>
 											</div>	
 
 										@else
+
 											{{-- LOCKED --}}
+
 											<div class="wrapper">
 												<div class="control">
 													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
@@ -321,13 +311,14 @@
 														<i class="fa fa-history" aria-hidden="true"></i> 0
 													</a>
 												</div>
-												<div class="content">
-													{!!$value['konten']!!}
+												<div class="content">											
+													{!! $konten['text'] !!}
 												</div>
 											</div>
 
 										@endif
 
+										{{ is_null($konten['close']) ? $konten['close'] : '' }}
 
 									{{-- Akta --}}
 									@elseif($page_datas->datas['status']=='akta')
@@ -347,7 +338,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				<!-- </div> -->
 			</div>
 
 			<div class="hidden-sm-down sidebar sidebar-right subset-2menu">
@@ -368,8 +359,9 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="kelengkapan" role="tabpanel">
 							<div class="col-md-12 pt-3">
-								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
-								<p>ajshdajshjdkah</p>
+								<h5 class="text-capitalize mb-0">KTP</h5>
+								<p class="mt-1 mb-0">KTP Pihak 1</p>
+								<p class="mt-1 mb-0">KTP Pihak 2</p>
 							</div>
 						</div>
 
