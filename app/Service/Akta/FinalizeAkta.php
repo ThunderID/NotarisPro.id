@@ -73,7 +73,7 @@ class FinalizeAkta
 			$this->fill_nomor_akta();
 
 			//2b. simpan dokumen
-			$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'akta', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]]);
+			$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'akta', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s'), 'petugas' => ['id' => $this->loggedUser['id'], 'nama' => $this->loggedUser['nama']]]]);
 			$this->akta->status 	= 'akta';
 			$this->akta->save();
 

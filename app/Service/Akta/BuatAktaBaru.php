@@ -134,7 +134,7 @@ class BuatAktaBaru
 
 			//4. set status akta
 			$akta->status 				= 'dalam_proses';
-			$akta->riwayat_status		= [['status' => 'dalam_proses', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]];
+			$akta->riwayat_status		= [['status' => 'dalam_proses', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s'), 'petugas' => ['id' => $this->loggedUser['id'], 'nama' => $this->loggedUser['nama']]]];
 
 			//5. simpan akta
 			$akta->save();
