@@ -7,7 +7,7 @@ use App\Domain\Akta\Models\Versi;
 
 use TImmigration\Pengguna\Models\Pengguna;
 
-use Exception, TAuth;
+use Exception, TAuth, Carbon\Carbon;
 
 /**
  * Service untuk update akta yang sudah ada
@@ -73,6 +73,15 @@ class PublishAkta
 			$this->lock_paragraph();
 
 			//1b. simpan dokumen
+			if($this->akta->status == 'dalam_proses')
+			{
+				$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'draft', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]]);
+			}
+			if($this->akta->status == 'renvoi')
+			{
+				$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'renvoi', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]]);
+			}
+
 			$this->akta->status 	= 'draft';
 			$this->akta->save();
 

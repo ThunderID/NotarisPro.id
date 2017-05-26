@@ -6,7 +6,7 @@ use App\Domain\Akta\Models\Dokumen;
 use App\Domain\Akta\Models\Template;
 use App\Domain\Order\Models\Klien;
 
-use Exception, TAuth;
+use Exception, TAuth, Carbon\Carbon;
 
 use App\Service\Akta\Traits\EnhanceKlienTrait;
 
@@ -75,7 +75,7 @@ class SimpanAkta
 			// Policy : 
 			// 1. Restorasi Isi Paragraf @restorasi_isi_akta
 			$this->akta->paragraf 		= $this->restorasi_isi_akta();
-			
+
 			// Smart System : 
 			// 	1. Smartly updating mentionable @parse_mentionable
 			$this->akta->fill_mention	= $this->parse_mentionable();
@@ -88,6 +88,7 @@ class SimpanAkta
 			{
 				$this->akta->judul 			= $this->judul;
 			}
+
 			$this->akta->save();
 
 			$akta 		= new DaftarAkta;
@@ -159,6 +160,33 @@ class SimpanAkta
 			{
 				throw new Exception("Dokumen tidak bisa diubah", 1);
 			}
+
+
+			//demi menghemat resource, versioning lies here
+			$para_baru 		= strip_tags($value['konten']);
+			if(isset($this->akta['paragraf'][$key]['konten']))
+			{
+				$para_lama 	= strip_tags($this->akta['paragraf'][$key]['konten']);
+				$para 		= $this->akta['paragraf'][$key]['konten'];
+			}
+			else
+			{
+				$para_lama 	= '';
+				$para 		= '';
+			}
+			
+			similar_text($para_baru, $para_lama, $percent);
+
+			if(100 - $percent > 0)
+			{
+				if(isset($this->akta['paragraf'][$key]['version']))
+				{
+					$this->isi_akta[$key]['version']	= $this->akta['paragraf'][$key]['version'];
+				}
+
+				$this->isi_akta[$key]['version'][]	= ['konten' => $para, 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
+			}
+
 		}
 
 		return true;
@@ -216,7 +244,15 @@ class SimpanAkta
 
 		if((array)$pihak)
 		{
-			$this->akta->pemilik 	= $this->enhance_klien($pihak);
+			$pemilik 				= $this->akta->pemilik;
+
+			$klien					= $this->enhance_klien($pihak);
+
+			if(!empty($klien))
+			{
+				$pemilik['klien']	= $klien;
+			}
+			$this->akta->pemilik 	= $pemilik;
 		}
 
 		return $fill_mention;

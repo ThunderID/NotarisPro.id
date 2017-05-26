@@ -13,7 +13,7 @@ use App\Service\Akta\Traits\EnhanceKlienTrait;
 
 use App\Events\AktaUpdated;
 
-use Exception, TAuth;
+use Exception, TAuth, Carbon\Carbon;
 
 /**
  * Service untuk membuat akta baru
@@ -134,6 +134,7 @@ class BuatAktaBaru
 
 			//4. set status akta
 			$akta->status 				= 'dalam_proses';
+			$akta->riwayat_status		= [['status' => 'dalam_proses', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]];
 
 			//5. simpan akta
 			$akta->save();
