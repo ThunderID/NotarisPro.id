@@ -164,7 +164,7 @@
 							<div class="form-group editor">
 
 								<?php
-									// dd($page_datas->datas);
+									// dd($page_datas);
 								?>
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
 									{{-- Dalam Proses --}}
@@ -358,11 +358,23 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div class="tab-pane active" id="kelengkapan" role="tabpanel">
-							<div class="col-md-12 pt-3">
-								<h5 class="text-capitalize mb-0">KTP</h5>
-								<p class="mt-1 mb-0">KTP Pihak 1</p>
-								<p class="mt-1 mb-0">KTP Pihak 2</p>
+
+							<div class="col-md-12 pt-3 pb-3">
+								<h5 class="text-capitalize mb-0">Kelengkapan Dokumen</h5>
+								<p class="mt-1 mb-0">100%</p>
 							</div>
+
+							@foreach($page_datas->doc_inspector as $key_child1 => $value_child1)
+								@foreach($value_child1 as $key_child2 => $value_child2)
+									<div class="col-md-12 pt-3 pb-3">
+										<h5 class="text-capitalize mb-0">Dokumen {{ $key_child1 }} {{ $key_child2 != 0 ? $key_child2 : '' }}</h5>
+									@foreach($value_child2 as $key_child3 => $value_child3)
+										<p class="mt-1 mb-0">{{ $key_child3 }}</p>
+									@endforeach
+									</div>							
+								@endforeach
+							@endforeach
+
 						</div>
 
 						<div class="tab-pane" id="info" role="tabpanel">
@@ -386,9 +398,13 @@
 									<div class="cd-timeline-img {{ $status_doc >= 0 ? 'cd-active' : '' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 0 ? '' : 'disabled' }}">
+									<div class="cd-timeline-content {{ $status_doc >= 0 ? '' : 'disabled text-muted' }}">
 										<h4>1. Dalam Proses</h4>
-										<p>Published By: John Doe<br>12 Dec 2017</p>
+										@forelse($page_datas->status_dalam_proses as $key => $value)
+											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+										@empty
+											<p class="mb-2">Belum Ada Data</p>
+										@endforelse
 									</div> <!-- cd-timeline-content -->
 								</div> <!-- cd-timeline-block -->
 
@@ -396,9 +412,13 @@
 									<div class="cd-timeline-img {{ $status_doc >= 1 ? 'cd-active' : 'cd-disabled' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 1 ? '' : 'disabled' }}">
+									<div class="cd-timeline-content {{ $status_doc >= 1 ? '' : 'disabled text-muted' }}">
 										<h4>2. Draft</h4>
-										<p>Published By: John Doe<br>13 Dec 2017</p>
+										@forelse($page_datas->status_draft as $key => $value)
+											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+										@empty
+											<p class="mb-2">Belum Ada Data</p>
+										@endforelse
 									</div> <!-- cd-timeline-content -->
 								</div> <!-- cd-timeline-block -->
 
@@ -406,9 +426,13 @@
 									<div class="cd-timeline-img {{ $status_doc >= 2 ? 'cd-active' : 'cd-disabled' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 2 ? '' : 'disabled' }}">
+									<div class="cd-timeline-content {{ $status_doc >= 2 ? '' : 'disabled text-muted' }}">
 										<h4>3. Renvoi</h4>
-										<p>Published By: John Doe<br>16 Dec 2017</p>
+										@forelse($page_datas->status_renvoi as $key => $value)
+											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+										@empty
+											<p class="mb-2">Belum Ada Data</p>
+										@endforelse
 									</div> <!-- cd-timeline-content -->
 								</div> <!-- cd-timeline-block -->
 
@@ -416,9 +440,13 @@
 									<div class="cd-timeline-img {{ $status_doc >= 3 ? 'cd-active' : 'cd-disabled' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 3 ? '' : 'disabled' }}">
+									<div class="cd-timeline-content {{ $status_doc >= 3 ? '' : 'disabled text-muted' }}">
 										<h4>4. Minuta</h4>
-										<p>Not Published Yet</p>
+										@forelse($page_datas->status_minuta as $key => $value)
+											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+										@empty
+											<p class="mb-2">Belum Ada Data</p>
+										@endforelse
 									</div> <!-- cd-timeline-content -->
 								</div> <!-- cd-timeline-block -->
 
@@ -426,9 +454,13 @@
 									<div class="cd-timeline-img {{ $status_doc >= 4 ? 'cd-active' : 'cd-disabled' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 4 ? '' : 'disabled' }}">
+									<div class="cd-timeline-content {{ $status_doc >= 4 ? '' : 'disabled text-muted' }}">
 										<h4>5.Akta</h4>
-										<p>Not Published Yet</p>
+										@forelse($page_datas->status_akta as $key => $value)
+											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+										@empty
+											<p class="mb-2">Belum Ada Data</p>
+										@endforelse
 									</div> <!-- cd-timeline-content -->
 								</div> <!-- cd-timeline-block -->
 

@@ -226,6 +226,7 @@ header h1 {
 }
 .cd-timeline-content.disabled{
   background-color: rgba(255, 255, 255, 0.36);
+  color: #888 !important;
 }
 .cd-timeline-content.disabled::before{
 border-right-color: rgba(255, 255, 255, 0.36) !important;
@@ -236,7 +237,7 @@ border-right-color: rgba(255, 255, 255, 0.36) !important;
   clear: both;
 }
 .cd-timeline-content h4 {
-  color: #303e49;
+  /* color: #303e49; */
 }
 .cd-timeline-content p, .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
   font-size: 13px;
