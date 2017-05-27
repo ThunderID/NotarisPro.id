@@ -701,10 +701,6 @@
 		var completed =  {{ $ctrCompletedTotal }};
 		var percentage = completed / total * 100;
 
-		console.log(total);
-		console.log(completed);
-		console.log(percentage);
-
 		$('.kelengkapan_dokumen_label').text(percentage + '%');
 		$('.kelengkapan_dokumen_progress').css('width', percentage + '%');
 		$('.kelengkapan_dokumen_progress').text(percentage + ' % Completed');
