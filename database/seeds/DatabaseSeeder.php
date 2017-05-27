@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
 		$this->call(InitTipeDokumenTableSeeder::class);
 		$this->call(InitTemplateTableSeeder::class);
 		$this->call(InitAktaTableSeeder::class);
+		$this->call(InitTagihanTableSeeder::class);
 		
 		// $this->call(InitKlienTableSeeder::class);
 		// $this->call(InitJadwalTableSeeder::class);
-		// $this->call(InitTagihanTableSeeder::class);
 		// $this->call(IndonesiaTableSeeder::class);
 		// $this->call(UsersTableSeeder::class);
 	}
