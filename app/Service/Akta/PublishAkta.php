@@ -80,7 +80,6 @@ class PublishAkta
 			elseif($this->akta->status == 'renvoi')
 			{
 				$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'renvoi', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')], 'petugas' => ['id' => $this->loggedUser['id'], 'nama' => $this->loggedUser['nama']]]);
-				$this->akta->riwayat_status 	= array_merge($this->akta->riwayat_status, [['status' => 'renvoi', 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')]]);
 			}
 
 			$this->akta->status 	= 'draft';

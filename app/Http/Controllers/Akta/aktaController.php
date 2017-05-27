@@ -132,6 +132,8 @@ class aktaController extends Controller
 		$this->page_datas->datas			= $this->query->detailed($id);
 		$this->page_datas->doc_inspector	= $this->doc_inspector($this->page_datas->datas);
 		$this->page_datas->notaris			= $notaris;
+
+		dd($this->page_datas->datas);
 		$data 								= collect($this->page_datas->datas['riwayat_status']);
 		$this->page_datas->status_dalam_proses 	= $data->where('status', 'dalam_proses')->sortByDesc('tanggal')->toArray();
 		$this->page_datas->status_draft 		= $data->where('status', 'draft')->sortByDesc('tanggal')->toArray();
