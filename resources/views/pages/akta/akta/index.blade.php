@@ -13,7 +13,9 @@
 
 @section('content')
 <div class="row">
-
+@php
+	// dd($page_datas);
+@endphp
 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 pt-0 hide-mobile sidebar subset-menu target-menu" style="overflow-y: hidden;">
 		<div class="row" style="padding-top:16px;overflow-y: scroll;height: calc(100% - 39px);">
 			<div class="col-md-12">
@@ -164,7 +166,7 @@
 								@endif
 							</td>
 							<td>
-								{{ $data['status'] }}
+								{{ str_replace('_', ' ', $data['status']) }}
 							</td>
 							<td>
 								{{ $data['tanggal_pembuatan'] }}

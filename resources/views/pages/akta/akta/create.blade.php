@@ -22,7 +22,7 @@
 
 @section('content')
 	@php
-		// dd(json_encode($page_datas->datas['fill_mention']));
+		// dd($page_datas);
 	@endphp
 	<div class="hidden-sm-down">
 		@component('components.form', [ 
