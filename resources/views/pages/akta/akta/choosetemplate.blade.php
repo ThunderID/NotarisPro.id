@@ -126,7 +126,12 @@
 				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3">
 					<div class="form">
 						<h4 class="title">Fillable Mention Template</h4>
-						<div class="content-fillable-template"></div>
+						<div class="content-fillable-template">
+							<div class="text-center pb-3 mb-3">
+								<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+								<span class="sr-only">Loading...</span>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="col text-right">
@@ -186,7 +191,7 @@
 		// check if fillable-mention
 		if (contentTo === '#fillable') {
 			template_id = $('.template-id').val() !== null ? $('.template-id').val() : null;
-			$('.content-fillable-template').html('');
+			//$('.content-fillable-template').html('');
 
 			callListMention(template_id);
 		}
@@ -202,6 +207,7 @@
 			dataType: 'json',
 			data: {template_id: templateID},
 			success: function(result) {
+				$('.content-fillable-template').html('');
 				$.each(result.data, function(k, v) {
 					tempForm = $('<div class="form-group pb-3" style="border-bottom: 1px solid #ccc; margin-bottom: 35px;"></div>');
 					tempForm.append('<h5 class="mb-2 pb-2 text-capitalize">' +k.replace(/_/g, ' ')+ '</h5>');

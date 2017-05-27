@@ -22,7 +22,7 @@
 
 @section('content')
 	@php
-		// dd($page_datas);
+		// dd(json_encode($page_datas->datas['fill_mention']));
 	@endphp
 	<div class="hidden-sm-down">
 		@component('components.form', [ 
@@ -49,8 +49,13 @@
 						<div class="d-flex justify-content-center mx-auto">
 							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm; ">
 								<div name="template" class="editor" id="doc-content-mention">
+									@php $i=0; @endphp
 									@forelse ($page_datas->datas['paragraf'] as $k => $v)
-										<span class="text-muted">{!! $v['konten'] !!}</span>
+											@php
+												// $newText = preg_replace('/<span(.*?)>(.*?)<\/span>/', '$2', $v['konten']);
+											@endphp
+											<span class="text-muted">{!! $v['konten'] !!}</span>
+										@php $i++; @endphp
 									@empty
 									@endforelse
 								</div>
@@ -65,12 +70,21 @@
 							@if (isset($page_datas->datas['mentionable']))
 								@php
 									$sort_mentionable = array_sort_recursive($page_datas->datas['mentionable']);
+									// $i=0;
 								@endphp
 								@forelse ($sort_mentionable as $k => $v)
+									@php
+										// if ($i==2) {
+										// 	dd(explode('.', $v));
+										// }
+									@endphp
 									<a class="list-group-item list-group-item-action justify-content-between p-2 mb-2" href="#" data-toggle="modal" data-target="#fill-mention" style="font-size: 14px;" data-widget="{{ $v }}">
 										{{ $v }}
 										<span class="{{ (array_has($page_datas->datas['fill_mention'], $v)) ? 'active' : '' }}"><i class="fa fa-check"></i></span>
 									</a>
+									@php
+										// $i++;
+									@endphp
 								@empty
 								@endforelse
 							@else
@@ -113,6 +127,8 @@
 	var urlAutoSave = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.automatic.store', ['id' => $page_datas->akta_id]) : route('akta.akta.automatic.store')  }}";
 	var form = $('.form-akta');
 	var urlFillMention = "{{ (!is_null($page_datas->akta_id)) ? route('akta.akta.simpan.mention', ['akta_id' => $page_datas->akta_id]) : route('akta.akta.simpan.mention')  }}";
+	var listFillMention = {!! json_encode($page_datas->datas['fill_mention']) !!};
+	
 	window.editorUI.init(urlAutoSave, form, {disable: true});
 	window.loadingAnimation.init();
 
@@ -129,4 +145,16 @@
 	});
 
 	window.modalUI.init();
+
+	$(document).ready( function() {
+		$('.editor').find('span.medium-editor-mention-at').each( function(k, v) {
+			value = $(v).html();
+			$(v).html(listFillMention[value]).attr('data-mention', value).attr('data-value', listFillMention[value]);
+
+			if ($(v).attr('data-value')) {
+				console.log('halo');
+				$(v).removeClass('text-danger').addClass('text-primary');
+			}
+		});
+	});
 @endpush 

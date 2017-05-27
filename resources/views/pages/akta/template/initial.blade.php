@@ -89,7 +89,10 @@
 						<small class="text-muted">Inputkan dokumen yang dibutuhkan untuk generate template akta</small>
 						<div class="clearfix">&nbsp;</div>
 						<div class="content-choice-doc-template">
-							<i></i>
+							<div class="text-center pb-3 mb-3">
+								<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+								<span class="sr-only">Loading...</span>
+							</div>
 						</div>
 						<div class="clearfix">&nbsp;</div>
 					</div>

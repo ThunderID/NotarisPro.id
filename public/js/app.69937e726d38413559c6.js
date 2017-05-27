@@ -18787,6 +18787,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -19030,7 +19034,10 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 								selectMentionCallback($(this).html());
 							}
 						});
-						$('span.medium-editor-mention-at').addClass('text-danger').removeClass('medium-editor-mention-at-active');
+						spanMention = $('span.medium-editor-mention-at');
+						spanMention.attr('data-mention', spanMention.html());
+						console.log(spanMention.html());
+						spanMention.addClass('text-danger').removeClass('medium-editor-mention-at-active');
 					},
 					destroyPanelContent: function destroyPanelContent(panelEl) {
 						$(panelEl).remove();
@@ -19055,6 +19062,20 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 
 		editor.subscribe('editableInput', function (event, editable) {
 			$(editable).find('*').each(function (k, v) {
+
+				if ($(v).hasClass('medium-editor-mention-at')) {
+					dataValue = $(v).attr('data-value');
+					dataMention = $(v).attr('data-mention');
+					value = $(v).html();
+
+					if (typeof dataValue !== 'undefined' && typeof dataMention !== 'undefined') {
+						if (value !== dataValue) {
+							console.log('value');
+							$(v).html(dataValue);
+						}
+					}
+				}
+
 				$(v).removeAttr('color', '');
 				text = $(v).html();
 

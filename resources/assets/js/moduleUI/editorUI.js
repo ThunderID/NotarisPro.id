@@ -96,7 +96,10 @@
 								selectMentionCallback($(this).html());
 							}
 						});
-						$('span.medium-editor-mention-at').addClass('text-danger').removeClass('medium-editor-mention-at-active');
+						spanMention = $('span.medium-editor-mention-at');
+						spanMention.attr('data-mention', spanMention.html());
+						console.log(spanMention.html());
+						spanMention.addClass('text-danger').removeClass('medium-editor-mention-at-active');
 					},
 					destroyPanelContent: function (panelEl) {
 						$(panelEl).remove();
@@ -121,6 +124,20 @@
 
 		editor.subscribe('editableInput', function (event, editable) {
 		   $(editable).find('*').each(function (k, v) {
+
+		   		if ($(v).hasClass('medium-editor-mention-at')) {
+		   			dataValue = $(v).attr('data-value');
+		   			dataMention = $(v).attr('data-mention');
+		   			value = $(v).html();
+
+		   			if ((typeof dataValue !== 'undefined') && (typeof dataMention !== 'undefined')){
+			   			if (value !== dataValue) {
+			   				console.log('value');
+			   				$(v).html(dataValue);
+			   			}
+		   			}
+		   		}
+
 				$(v).removeAttr('color', '');
 				text = $(v).html();
 
