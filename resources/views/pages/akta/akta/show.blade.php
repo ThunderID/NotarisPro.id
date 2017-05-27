@@ -156,7 +156,7 @@
 			])
 
 
-			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 350px);">
+			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 365px);">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<!-- <div class="row"> -->
 					<div class="d-flex justify-content-center mx-auto">
@@ -402,18 +402,11 @@
 						<div class="tab-pane fade" id="info" role="tabpanel">
 							<div class="col-md-12 pt-3">
 								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
-								<p>ajshdajshjdkah</p>
+								<p>Under Construction</p>
 							</div>
 						</div>
 
-						<div class="tab-pane fade" id="info" role="tabpanel">
-							<div class="col-md-12 pt-3">
-								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
-								<p>ajshdajshjdkah</p>
-							</div>
-						</div>
-
-						<div class="tab-pane" id="status" role="tabpanel">					
+						<div class="tab-pane fade" id="status" role="tabpanel">					
 							
 							<section id="cd-timeline" class="cd-container">
 								<div class="cd-timeline-block">
