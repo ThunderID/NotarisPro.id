@@ -43,7 +43,7 @@
 
 {{-- init --}}
 <?php
-	$status_array = ['dalam_proses', 'draft', 'renvoi', 'minuta', 'akta']; 
+	$status_array = ['dalam_proses', 'draft', 'renvoi', 'akta', 'minuta']; 
 	$status_doc = array_search($page_datas->datas['status'] ,$status_array);
 ?>
 
@@ -157,7 +157,7 @@
 			])
 
 
-			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 350px);">
+			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 350px); float: right;">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<!-- <div class="row"> -->
 					<div class="d-flex justify-content-center mx-auto">
@@ -213,7 +213,7 @@
 
 												<div class="wrapper unlocked">
 													<div class="control">
-														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-animation="false" data-lock="{{ $value['key'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-animation="false" data-lock="{{ $value['key'] }}" class="lock active" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
 															<i class="fa fa-unlock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
@@ -232,11 +232,11 @@
 
 												<div class="wrapper">
 													<div class="control">
-														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-animation="false" class="lock"  data-lock="{{ $value['key'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-animation="false" class="lock active" data-lock="{{ $value['key'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 															<i class="fa fa-lock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
-														<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
+														<a href="javascript:void(0);" class="disabled" data-toggle="modal" data-target="#content_">
 															<i class="fa fa-history" aria-hidden="true"></i> 0
 														</a>
 													</div>
@@ -285,16 +285,16 @@
 											<div class="wrapper unlocked">
 												<div class="control">
 													<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi."
-													class="lock" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked= "true" >
+													class="lock active" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked= "true" >
 														<i class="fa fa-unlock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
-													<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
+													<a href="javascript:void(0);" class="disabled" data-toggle="modal" data-target="#content_">
 														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> 0
 													</a>
 												</div>
 												<div class="content">
-													{{ $konten['text'] }}											
+													{!! $konten['text'] !!}											
 												</div>
 											</div>	
 
@@ -304,7 +304,7 @@
 
 											<div class="wrapper">
 												<div class="control">
-													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+													<a class="lock active" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 														<i class="fa fa-lock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
@@ -403,18 +403,11 @@
 						<div class="tab-pane fade" id="info" role="tabpanel">
 							<div class="col-md-12 pt-3">
 								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
-								<p>ajshdajshjdkah</p>
+								<p>Under Construction</p>
 							</div>
 						</div>
 
-						<div class="tab-pane fade" id="info" role="tabpanel">
-							<div class="col-md-12 pt-3">
-								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
-								<p>ajshdajshjdkah</p>
-							</div>
-						</div>
-
-						<div class="tab-pane" id="status" role="tabpanel">					
+						<div class="tab-pane fade" id="status" role="tabpanel">					
 							
 							<section id="cd-timeline" class="cd-container">
 								<div class="cd-timeline-block">
@@ -460,26 +453,26 @@
 								</div> <!-- cd-timeline-block -->
 
 								<div class="cd-timeline-block">
-									<div class="cd-timeline-img {{ $status_doc >= 3 ? 'cd-active' : 'cd-disabled' }}">
+									<div class="cd-timeline-img {{ $status_doc >= 4 ? 'cd-active' : 'cd-disabled' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 3 ? '' : 'disabled text-muted' }}">
-										<h4>4. Minuta</h4>
-										@forelse($page_datas->status_minuta as $key => $value)
+									<div class="cd-timeline-content {{ $status_doc >= 4 ? '' : 'disabled text-muted' }}">
+										<h4>4.Akta</h4>
+										@forelse($page_datas->status_akta as $key => $value)
 											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
 										@endforelse
 									</div> <!-- cd-timeline-content -->
-								</div> <!-- cd-timeline-block -->
+								</div> <!-- cd-timeline-block -->								
 
 								<div class="cd-timeline-block">
-									<div class="cd-timeline-img {{ $status_doc >= 4 ? 'cd-active' : 'cd-disabled' }}">
+									<div class="cd-timeline-img {{ $status_doc >= 3 ? 'cd-active' : 'cd-disabled' }}">
 									</div> <!-- cd-timeline-img -->
 
-									<div class="cd-timeline-content {{ $status_doc >= 4 ? '' : 'disabled text-muted' }}">
-										<h4>5.Akta</h4>
-										@forelse($page_datas->status_akta as $key => $value)
+									<div class="cd-timeline-content {{ $status_doc >= 3 ? '' : 'disabled text-muted' }}">
+										<h4>5. Minuta</h4>
+										@forelse($page_datas->status_minuta as $key => $value)
 											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
@@ -708,10 +701,6 @@
 		var total = {{ $ctrDataTotal }};
 		var completed =  {{ $ctrCompletedTotal }};
 		var percentage = completed / total * 100;
-
-		console.log(total);
-		console.log(completed);
-		console.log(percentage);
 
 		$('.kelengkapan_dokumen_label').text(percentage + '%');
 		$('.kelengkapan_dokumen_progress').css('width', percentage + '%');
