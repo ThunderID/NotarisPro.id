@@ -293,7 +293,7 @@
 													</a>
 												</div>
 												<div class="content">
-													{{ $konten['text'] }}											
+													{!! $konten['text'] !!}											
 												</div>
 											</div>	
 
