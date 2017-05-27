@@ -212,7 +212,7 @@
 
 												<div class="wrapper unlocked">
 													<div class="control">
-														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" data-lock="{{ $value['key'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-animation="false" data-lock="{{ $value['key'] }}" class="lock" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="true">
 															<i class="fa fa-unlock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
@@ -231,7 +231,7 @@
 
 												<div class="wrapper">
 													<div class="control">
-														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-animation="false" class="lock"  data-lock="{{ $value['key'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+														<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-animation="false" class="lock"  data-lock="{{ $value['key'] }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 															<i class="fa fa-lock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
@@ -283,7 +283,7 @@
 
 											<div class="wrapper unlocked">
 												<div class="control">
-													<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#"
+													<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi."
 													class="lock" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked= "true" >
 														<i class="fa fa-unlock" aria-hidden="true"></i>
 													</a>
@@ -303,7 +303,7 @@
 
 											<div class="wrapper">
 												<div class="control">
-													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="#" data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
+													<a class="lock" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="Fitur kunci paragraf. Paragraf yang terkunci tidak dapat di-edit pada saat renvoi." data-lock="{{ isset($value['key']) ? $value['key'] : null }}" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false">
 														<i class="fa fa-lock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
@@ -359,17 +359,39 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="kelengkapan" role="tabpanel">
 
-							<div class="col-md-12 pt-3 pb-3">
-								<h5 class="text-capitalize mb-0">Kelengkapan Dokumen</h5>
-								<p class="mt-1 mb-0">100%</p>
+							<div class="col-md-12 pt-2 pb-3">
+								<h5 class="text-capitalize mb-0">Kelengkapan Dokumen<span class="kelengkapan_dokumen_label" style="float:right;">0%</span></h5>
+								<!-- <p class="mt-1 mb-0">100%</p> -->
+								<div class="progress">
+									<div class="progress-bar progress-bar-striped bg-success kelengkapan_dokumen_progress" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100">0 % Completed</div>
+								</div>								
 							</div>
 
+							<?php
+								$ctrDataTotal = 0;
+								$ctrCompletedTotal = 0;
+							?>
 							@foreach($page_datas->doc_inspector as $key_child1 => $value_child1)
 								@foreach($value_child1 as $key_child2 => $value_child2)
-									<div class="col-md-12 pt-3 pb-3">
+									<div class="col-md-12 pt-2 pb-2">
 										<h5 class="text-capitalize mb-0">Dokumen {{ $key_child1 }} {{ $key_child2 != 0 ? $key_child2 : '' }}</h5>
 									@foreach($value_child2 as $key_child3 => $value_child3)
-										<p class="mt-1 mb-0">{{ $key_child3 }}</p>
+
+										<div class="list-group list-widgets">
+											<span class="list-group-item list-group-item-action justify-content-between p-2 mb-2" style="font-size: 14px;">
+												{{ $key_child3 }}
+												<span class="{{ $value_child3 == true ? 'active' : '' }}"><i class="fa fa-check"></i></span>
+											</span>
+										</div>
+
+										<?php
+											$ctrDataTotal++;
+
+											if($value_child3 == true){
+												$ctrCompletedTotal++;
+											}
+										?>
+
 									@endforeach
 									</div>							
 								@endforeach
@@ -377,14 +399,14 @@
 
 						</div>
 
-						<div class="tab-pane" id="info" role="tabpanel">
+						<div class="tab-pane fade" id="info" role="tabpanel">
 							<div class="col-md-12 pt-3">
 								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
 								<p>ajshdajshjdkah</p>
 							</div>
 						</div>
 
-						<div class="tab-pane" id="info" role="tabpanel">
+						<div class="tab-pane fade" id="info" role="tabpanel">
 							<div class="col-md-12 pt-3">
 								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
 								<p>ajshdajshjdkah</p>
@@ -678,6 +700,22 @@
 	// Tooltips
 	$(document).ready(function() {
 	    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+	});
+
+	// Load Progress
+	$(document).ready(function() {
+		var total = {{ $ctrDataTotal }};
+		var completed =  {{ $ctrCompletedTotal }};
+		var percentage = completed / total * 100;
+
+		console.log(total);
+		console.log(completed);
+		console.log(percentage);
+
+		$('.kelengkapan_dokumen_label').text(percentage + '%');
+		$('.kelengkapan_dokumen_progress').css('width', percentage + '%');
+		$('.kelengkapan_dokumen_progress').text(percentage + ' % Completed');
+
 	});
 
 @endpush 
