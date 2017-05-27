@@ -51,8 +51,8 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{{route('billing.index')}}">
 					<i class="fa fa-cog" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
-					<span class="hidden-md-up">Pengaturan & Tagihan</span>	
-					<span class="hidden-md-down">Pengaturan & Tagihan</span>
+					<span class="hidden-md-up">Pengaturan</span>	
+					<span class="hidden-md-down">Pengaturan</span>
 				</a>
 			</li>
 			<li class="nav-item">
