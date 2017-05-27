@@ -97,8 +97,6 @@
 							}
 						});
 						spanMention = $('span.medium-editor-mention-at');
-						spanMention.attr('data-mention', spanMention.html());
-						console.log(spanMention.html());
 						spanMention.addClass('text-danger').removeClass('medium-editor-mention-at-active');
 					},
 					destroyPanelContent: function (panelEl) {
@@ -109,19 +107,6 @@
 			}
 		});
 
-		// in input able remove color and style color on ready page
-		editor.elements.forEach(function (element) {
-			$(element).find('*').each(function (k, v) {
-				// $(v).removeAttr('color', '').css('color', 'inherit').css('font-size', 'inherit');
-				if ($(v).hasClass('medium-editor-mention-at')) {
-					text = $(v).html();
-					if (text.charAt(0) != '@') {
-						// $(v).removeClass('medium-editor-mention-at medium-editor-mention-at-active text-danger text-primary');
-					}
-				}
-			});
-		});
-
 		editor.subscribe('editableInput', function (event, editable) {
 		   $(editable).find('*').each(function (k, v) {
 
@@ -129,21 +114,14 @@
 		   			dataValue = $(v).attr('data-value');
 		   			dataMention = $(v).attr('data-mention');
 		   			value = $(v).html();
-
-		   			if ((typeof dataValue !== 'undefined') && (typeof dataMention !== 'undefined')){
-			   			if (value !== dataValue) {
-			   				console.log('value');
-			   				$(v).html(dataValue);
-			   			}
+		   			
+		   			if (typeof dataValue !== 'undefined') {
+		   				$(v).html(dataValue);
 		   			}
 		   		}
 
 				$(v).removeAttr('color', '');
 				text = $(v).html();
-
-				// if (text.charAt(0) == '@') {
-				// 	$(v).addClass('medium-editor-mention-at text-danger');
-				// }
 
 				if ($(v)[0].style.removeProperty) {
 				    $(v)[0].style.removeProperty('color');
@@ -152,13 +130,6 @@
 				    $(v)[0].style.removeAttribute('color');
 				    $(v)[0].style.removeAttribute('font-size');
 				}
-
-				// if ($(v).hasClass('medium-editor-mention-at')) {
-				// 	text = $(v).html();
-				// 	if (text.charAt(0) != '@') {
-				// 		$(v).removeClass('medium-editor-mention-at medium-editor-mention-at-active text-danger text-primary');
-				// 	}
-				// }
 			});
 		});
 
