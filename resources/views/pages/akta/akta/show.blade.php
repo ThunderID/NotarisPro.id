@@ -44,6 +44,7 @@
 <?php
 	$status_array = ['dalam_proses', 'draft', 'renvoi', 'akta', 'minuta']; 
 	$status_doc = array_search($page_datas->datas['status'] ,$status_array);
+	// dd($page_datas);
 ?>
 
 @include('functions.listRenderer')
@@ -336,6 +337,14 @@
 
 								@endforeach
 							</div>
+
+							@if (str_is(acl_active_office['role'], 'notaris') && $page_datas->datas['status']=='draft')
+								<div class="form-group editor-hidden" style="display:none;">
+									@foreach($page_datas->datas['paragraf'] as $key => $value)
+										{!!$value['konten']!!}
+									@endforeach
+								</div>
+							@endif							
 						</div>
 					</div>
 				<!-- </div> -->
