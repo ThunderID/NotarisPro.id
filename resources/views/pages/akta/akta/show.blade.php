@@ -1,3 +1,4 @@
+
 @extends('templates.basic')
 
 @push('fonts')

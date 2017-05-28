@@ -48,7 +48,7 @@
 					<div class="row">
 						<div class="d-flex justify-content-center mx-auto">
 							<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm; ">
-								<div name="template" class="editor" id="doc-content-mention">
+								<textarea name="template" class="editor" id="doc-content-mention">
 									@php $i=0; @endphp
 									@forelse ($page_datas->datas['paragraf'] as $k => $v)
 											@php
@@ -58,7 +58,7 @@
 										@php $i++; @endphp
 									@empty
 									@endforelse
-								</div>
+								</textarea>
 							</div>
 						</div>
 					</div>
@@ -149,11 +149,16 @@
 	$(document).ready( function() {
 		$('.editor').find('span.medium-editor-mention-at').each( function(k, v) {
 			value = $(v).html();
+			mentionValue = $(v).attr('data-value');
+
 			$(v).html(listFillMention[value]).attr('data-mention', value).attr('data-value', listFillMention[value]);
 
+			// check data value
 			if ($(v).attr('data-value')) {
-				console.log('halo');
 				$(v).removeClass('text-danger').addClass('text-primary');
+			}
+			else {
+				$(v).addClass('text-danger');
 			}
 		});
 	});
