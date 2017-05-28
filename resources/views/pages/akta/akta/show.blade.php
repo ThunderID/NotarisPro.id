@@ -168,12 +168,13 @@
 									// dd($page_datas);
 								?>
 								@foreach($page_datas->datas['paragraf'] as $key => $value)
+
 									{{-- Dalam Proses --}}
 									@if($page_datas->datas['status']=='dalam_proses')
 
 										{{-- Render List --}}
 										<?php 
-											$konten = listRenderer($value['konten']);
+											// $konten = listRenderer($value['konten']);
 										?>
 
 										{!! is_null($konten['open']) ? '' : $konten['open'] !!}
@@ -217,9 +218,15 @@
 															<i class="fa fa-unlock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
-														<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
-															<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> 0
+														@if(isset($value['revise']) && $value['revise'] > 0)
+														<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+															<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 														</a>
+														@else
+															<span data-toggle="tooltip" data-placement="right" title="Bagian ini belum pernah di-edit.">
+																<i class="fa fa-history" aria-hidden="true"></i> 0
+															</span>														
+														@endif
 													</div>
 													<div class="content">
 														{!! $konten['text'] !!}
@@ -236,9 +243,15 @@
 															<i class="fa fa-lock" aria-hidden="true"></i>
 														</a>
 														&nbsp;|&nbsp;
-														<a href="javascript:void(0);" class="disabled" data-toggle="modal" data-target="#content_">
-															<i class="fa fa-history" aria-hidden="true"></i> 0
+														@if(isset($value['revise']) && $value['revise'] > 0)
+														<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+															<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 														</a>
+														@else
+															<span data-toggle="tooltip" data-placement="right" title="Bagian ini belum pernah di-edit.">
+																<i class="fa fa-history" aria-hidden="true"></i> 0
+															</span>														
+														@endif
 													</div>
 													<div class="content">
 														{!! $konten['text'] !!}
@@ -289,9 +302,15 @@
 														<i class="fa fa-unlock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
-													<a href="javascript:void(0);" class="disabled" data-toggle="modal" data-target="#content_">
-														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> 0
+													@if(isset($value['revise']) && $value['revise'] > 0)
+													<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 													</a>
+													@else
+														<span data-toggle="tooltip" data-placement="right" title="Bagian ini belum pernah di-edit.">
+															<i class="fa fa-history" aria-hidden="true"></i> 0
+														</span>														
+													@endif
 												</div>
 												<div class="content">
 													{!! $konten['text'] !!}											
@@ -308,9 +327,15 @@
 														<i class="fa fa-lock" aria-hidden="true"></i>
 													</a>
 													&nbsp;|&nbsp;
-													<a href="javascript:void(0);" data-toggle="modal" data-target="#content_">
-														<i class="fa fa-history" aria-hidden="true"></i> 0
+													@if(isset($value['revise']) && $value['revise'] > 0)
+													<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 													</a>
+													@else
+														<span data-toggle="tooltip" data-placement="right" title="Bagian ini belum pernah di-edit.">
+															<i class="fa fa-history" aria-hidden="true"></i> 0
+														</span>														
+													@endif
 												</div>
 												<div class="content">											
 													{!! $konten['text'] !!}
@@ -354,10 +379,10 @@
 
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item">
-							<a class="nav-link active" data-toggle="tab" href="#kelengkapan" role="tab">Kelengkapan</a>
+							<a class="nav-link" data-toggle="tab" href="#kelengkapan" role="tab">Kelengkapan</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" data-toggle="tab" href="#info" role="tab">Info</a>
+							<a class="nav-link active" data-toggle="tab" href="#info" role="tab">Info</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" data-toggle="tab" href="#status" role="tab">Status</a>
@@ -366,9 +391,9 @@
 
 					<!-- Tab panes -->
 					<div class="tab-content">
-						<div class="tab-pane active" id="kelengkapan" role="tabpanel">
+						<div class="tab-pane fade" id="kelengkapan" role="tabpanel">
 
-							<div class="col-md-12 pt-2 pb-3">
+							<div class="col-md-12 pt-3 pb-3">
 								<h5 class="text-capitalize mb-0">Kelengkapan Dokumen<span class="kelengkapan_dokumen_label" style="float:right;">0%</span></h5>
 								<!-- <p class="mt-1 mb-0">100%</p> -->
 								<div class="progress">
@@ -408,11 +433,56 @@
 
 						</div>
 
-						<div class="tab-pane fade" id="info" role="tabpanel">
+						<div class="tab-pane active" id="info" role="tabpanel">
 							<div class="col-md-12 pt-3">
-								<h5 class="text-capitalize mb-0">Deskripsi Template</h5>
-								<p>Under Construction</p>
+								<h5 class="text-capitalize mb-0">Judul Akta</h5>
+								<p>{{ $page_datas->datas['judul'] }}</p>
 							</div>
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Penulis</h5>
+								<p>{{ $page_datas->datas['penulis']['nama'] }}</p>
+							</div>
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Tanggal Pembuatan</h5>
+								<p>{{ $page_datas->datas['tanggal_pembuatan'] }}</p>
+							</div>
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Tanggal Sunting</h5>
+								<p>{{ $page_datas->datas['tanggal_sunting'] }}</p>
+							</div>
+							<div class="col-md-12 pt-3">
+								<h5 class="text-capitalize mb-0">Informasi Template</h5>
+								<p class="mb-1">
+									{{ $page_datas->template['judul'] }}
+								</p>
+
+								<div class="row">
+									<div class="col-3">
+										<small><b>Penulis</b></small>
+									</div>
+									<div class="col-9">
+										<small>{{ $page_datas->template['penulis']['nama'] }}</small>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-3">
+										<small><b>Pada</b></small>
+									</div>
+									<div class="col-9">
+										<small>{{ $page_datas->template['tanggal_pembuatan'] }}</small>
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col-3">
+										<small><b>Deskripsi</b></small>
+									</div>
+									<div class="col-9">
+										<small>{{ $page_datas->template['deskripsi'] }}</small>
+									</div>
+								</div>																			
+							</div>	
+							<br>						
+							<br>						
 						</div>
 
 						<div class="tab-pane fade" id="status" role="tabpanel">					
