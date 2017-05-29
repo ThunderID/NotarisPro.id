@@ -157,7 +157,7 @@
 			])
 
 
-			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 350px); float: right;">
+			<div id="page" class="scrollable_panel subset-2menu full-on-mobile" style="width: calc(100vw - 340px); float: right;">
 				<div id="page-breaker" class="row page-breaker"></div>
 				<!-- <div class="row"> -->
 					<div class="d-flex justify-content-center mx-auto">
