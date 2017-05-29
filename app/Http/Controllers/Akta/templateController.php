@@ -95,10 +95,9 @@ class templateController extends Controller
 	{
 		//
 		try {
-
 			$paragraph		= $this->parse_store($id, $request);
 
-			$akta			= new BuatTemplateBaru($paragraph['judul'], $request->get('deskripsi'), $paragraph['paragraf'], $paragraph['mentionable'], $request->get('jumlah_pihak'), $request->get('jumlah_saksi'), $request->get('dokumen_objek'), $request->get('dokumen_pihak'), $request->get('dokumen_saksi'));
+			$akta			= new BuatTemplateBaru($paragraph['judul'], $request->get('deskripsi'), $paragraph['paragraf'], $paragraph['mentionable'], (!is_null($request->get('jumlah_pihak')) ? $request->get('jumlah_pihak') : 0), (!is_null($request->get('jumlah_saksi')) ? $request->get('jumlah_saksi') : 0), (!is_null($request->get('dokumen_objek')) ? $request->get('dokumen_objek'): []), (!is_null($request->get('dokumen_pihak')) ? $request->get('dokumen_pihak'): []), (!is_null($request->get('dokumen_saksi')) ? $request->get('dokumen_saksi'): []));
 	
 			$akta 			= $akta->save();		
 
