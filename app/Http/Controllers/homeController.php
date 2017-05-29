@@ -51,12 +51,12 @@ class homeController extends Controller
     		//area stat 
     		$this->page_datas->stat_template 	= Template::where('penambahan_paragraf', '>', 10)->orwhere('pengurangan_paragraf', '>', 10)->orwhere('perubahan_paragraf', '>', 10)->kantor($role['kantor']['id'])->count();
     		$this->page_datas->stat_akta 		= $this->query->count(['status' => 'draft']);
-    		$this->page_datas->stat_billing 	= HeaderTransaksi::where('sudah_dibayar', false)->kantor($role['kantor']['id'])->count();
+    		$this->page_datas->stat_billing 	= HeaderTransaksi::where('sudah_dibayar', false)->where('tipe', 'billing_out')->kantor($role['kantor']['id'])->count();
 
 
     		$this->page_datas->akta_to_check 		= $this->query->get(['status' => 'draft', 'per_page' => 10]);
     		$this->page_datas->template_to_check 	= Template::where('penambahan_paragraf', '>', 10)->orwhere('pengurangan_paragraf', '>', 10)->orwhere('perubahan_paragraf', '>', 10)->kantor($role['kantor']['id'])->take(10)->get();
-    		$this->page_datas->billing_to_check 	= HeaderTransaksi::where('sudah_dibayar', false)->kantor($role['kantor']['id'])->take(10)->get();
+    		$this->page_datas->billing_to_check 	= HeaderTransaksi::where('sudah_dibayar', false)->where('tipe', 'billing_out')->kantor($role['kantor']['id'])->take(10)->get();
 
 			//initialize view
 			$this->view		= view('pages.dashboard.notaris');

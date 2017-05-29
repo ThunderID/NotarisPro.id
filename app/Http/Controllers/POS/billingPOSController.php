@@ -6,26 +6,28 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Service\Helpers\JSend;
 
-use App\Domain\Order\Models\HeaderTransaksi as Query;
+use App\Domain\Order\Models\HeaderTransaksi;
 
 use TAuth, App, PDF, Exception;
 
 class billingPOSController extends Controller
 {
-	public function __construct(Query $query)
+	private $active_office;
+
+	public function __construct(HeaderTransaksi $query)
 	{
 		parent::__construct();
 		
-		$active_office 			= \TAuth::activeOffice();
+		$this->active_office	= \TAuth::activeOffice();
 		
-		$this->query            = $query->where('tipe', 'billing_out')->where('kantor_id', $active_office['kantor']['id']);
+		$this->query            = $query->where('tipe', 'billing_out')->where('kantor_id', $this->active_office['kantor']['id']);
 	}    
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
 		// init
 		$this->page_attributes->title		= 'Tagihan';
@@ -33,7 +35,7 @@ class billingPOSController extends Controller
 		//filter&search
 		$query                             	= $this->getQueryString(['q', 'status', 'sort', 'page']);
 		$query['per_page']                 	= (int)env('DATA_PERPAGE');
-		
+		$query['page']  	               	= max($request->get('page'), 1);
 		// special treat judul
 		if(isset($query['q'])){
 			$query['judul']					= $query['q'];
@@ -51,9 +53,10 @@ class billingPOSController extends Controller
 		}
 
 		//get data from database
-		$this->page_datas->datas			= $this->query->get()->toArray();
+		$this->page_datas->datas 			= HeaderTransaksi::kantor($this->active_office['kantor']['id'])->take($query['per_page'])->skip($query['per_page'] * $query['page'])->get()->toArray();
+
 		//paginate
-		$this->paginate(null, $this->query->count(), (int)env('DATA_PERPAGE'));
+		$this->paginate(null, HeaderTransaksi::kantor($this->active_office['kantor']['id'])->count(), (int)env('DATA_PERPAGE'));
 
 		//initialize view
 		$this->view							= view('pages.pos.billing.index');

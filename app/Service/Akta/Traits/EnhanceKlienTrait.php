@@ -53,8 +53,16 @@ trait EnhanceKlienTrait {
 			$new_pihak->kantor				= ['id' => $this->activeOffice['kantor']['id'],'nama' => $this->activeOffice['kantor']['nama']];
 			$new_pihak->save();
 
-			$akta['klien'][$key]['id']	= $new_pihak['id'];
-			$akta['klien'][$key]['nama']= $new_pihak['nama'];
+			if(isset($value['ktp']['nomor_ktp']))
+			{
+				$akta['klien'][$key]['id']	= $new_pihak['id'];
+				$akta['klien'][$key]['nama']= $new_pihak['ktp']['nama'];
+			}
+			else
+			{
+				$akta['klien'][$key]['id']	= $new_pihak['id'];
+				$akta['klien'][$key]['nama']= $new_pihak['akta_pendirian']['nama'];
+			}
 		}
 
 		return $akta['klien'];

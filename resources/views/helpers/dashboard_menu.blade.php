@@ -29,7 +29,7 @@
 									];
 
 	$list_2['Buat Akta']		= 	[
-										'url' 	=> route('akta.akta.create'),
+										'url' 	=> route('akta.akta.choose.template'),
 										'icon' 	=> ''
 									];
 ?>
