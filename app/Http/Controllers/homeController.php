@@ -183,9 +183,9 @@ class homeController extends Controller
 
 		$this->page_datas->stat_total_client= Klien::kantor($role['kantor']['id'])->count();
 
-		$this->page_datas->stat_new			= count(KlienProgress::kantor($role['kantor']['id'])->NewCustomer(1)->get())/ max(1,$this->page_datas->stat_total_client) * 100;
+		$this->page_datas->stat_new			= round(count(KlienProgress::kantor($role['kantor']['id'])->NewCustomer(1)->get())/ max(1,$this->page_datas->stat_total_client) * 100);
 
-		$this->page_datas->stat_returning	= count(KlienProgress::kantor($role['kantor']['id'])->ReturningCustomer(1)->get())/ max(1,$this->page_datas->stat_total_client) * 100;
+		$this->page_datas->stat_returning	= round(count(KlienProgress::kantor($role['kantor']['id'])->ReturningCustomer(1)->get())/ max(1,$this->page_datas->stat_total_client) * 100);
 
 		return true;
 	}
