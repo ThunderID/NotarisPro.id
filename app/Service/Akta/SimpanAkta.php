@@ -185,6 +185,7 @@ class SimpanAkta
 				}
 
 				$this->isi_akta[$key]['version'][]	= ['konten' => $para, 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
+				$this->isi_akta[$key]['revise']		= $this->isi_akta[$key]['revise'] + 1;
 			}
 
 		}

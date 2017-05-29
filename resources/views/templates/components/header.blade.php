@@ -25,19 +25,16 @@
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item @yield('template-akta')">
 				<a class="nav-link" href="{{route('akta.template.index')}}">Template</a>
-			</li>				
+			</li>
 			<li class="nav-item @yield('akta')">
 				<a class="nav-link" href="{{route('akta.akta.index')}}">Akta</a>
 			</li>	
 
 			<li class="nav-item">
 				<div class="dropdown">
-					<a class="nav-link yield('pos')" href="javascript::void(0);" data-toggle="dropdown" id="dropdownMenuPOS" aria-haspopup="true" aria-expanded="false">POS</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuPOS">
-						<a class="dropdown-item @yield('pos-bkk')" href="{{ route('pos.bkk.index') }}">Kas Keluar</a>
-						<a class="dropdown-item @yield('pos-bkm')" href="{{ route('pos.bkm.index') }}">Kas Masuk</a>
-						<a class="dropdown-item @yield('pos-billing')" href="{{ route('pos.billing.index') }}">Tagihan</a>
-					</div>
+					<li class="nav-item @yield('template-akta')">
+						<a class="nav-link @yield('pos-billing')" href="{{ route('pos.billing.index') }}">Tagihan</a>
+					</li>
 				</div>				
 			</li>	
 			<!-- <li class="nav-item @yield('klien')">

@@ -139,12 +139,12 @@ class UnlockAkta
 			$paragraf[$key]				= $value;	
 			if(isset($value['lock']) && in_array($value['key'], $this->keys))
 			{
-				$paragraf[$key]['revise']	= (isset($paragraf[$key]['revise']) ? $paragraf[$key]['revise'] : 0) + 1;
+				$paragraf[$key]['revise']	= (isset($paragraf[$key]['revise']) ? $paragraf[$key]['revise']: 0);
 				unset($paragraf[$key]['lock']);
 			}
 			elseif(!isset($value['lock']) && in_array($value['key'], $this->keys))
 			{
-				$paragraf[$key]['revise']	= (isset($paragraf[$key]['revise']) ? $paragraf[$key]['revise'] : 1) - 1;
+				$paragraf[$key]['revise']	= (isset($paragraf[$key]['revise']) ? $paragraf[$key]['revise']: 0);
 				$paragraf[$key]['lock']		= Dokumen::createID('lock');
 			}
 		}

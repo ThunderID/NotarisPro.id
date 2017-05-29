@@ -20,6 +20,8 @@ use App\Domain\Akta\Models\Dokumen;
 
 use App\Domain\Admin\Models\Pengguna;
 
+use App\Domain\Order\Models\HeaderTransaksi;
+
 use MongoDB\BSON\UTCDateTime;
 
 use TAuth;
@@ -46,6 +48,40 @@ class homeController extends Controller
     	
     	if($role['role']=='notaris')
     	{
+    		//area stat 
+    		$this->page_datas->stat_template 	= Template::where('penambahan_paragraf', '>', 10)->orwhere('pengurangan_paragraf', '>', 10)->orwhere('perubahan_paragraf', '>', 10)->kantor($role['kantor']['id'])->count();
+    		$this->page_datas->stat_akta 		= $this->query->count(['status' => 'draft']);
+    		$this->page_datas->stat_billing 	= HeaderTransaksi::where('sudah_dibayar', false)->kantor($role['kantor']['id'])->count();
+
+
+    		$this->page_datas->akta_to_check 		= $this->query->get(['status' => 'draft', 'per_page' => 10]);
+    		$this->page_datas->template_to_check 	= Template::where('penambahan_paragraf', '>', 10)->orwhere('pengurangan_paragraf', '>', 10)->orwhere('perubahan_paragraf', '>', 10)->kantor($role['kantor']['id'])->take(10)->get();
+    		$this->page_datas->billing_to_check 	= HeaderTransaksi::where('sudah_dibayar', false)->kantor($role['kantor']['id'])->take(10)->get();
+
+			//initialize view
+			$this->view		= view('pages.dashboard.notaris');
+    	}
+    	else
+    	{
+			$this->view		= view('pages.dashboard.drafter');
+    	}
+
+		//get data from database
+		$this->page_datas->datas            = null;
+		
+		//function from parent to generate view
+		return $this->generateView();  
+    }
+
+    public function market()
+    {
+    	$role 				= TAuth::activeOffice();
+
+		// init
+		$this->page_attributes->title			= 'Dashboard';
+    	
+    	if($role['role']=='notaris')
+    	{
     		//area stat klien
     		$this->getStatKlien($role);
 
@@ -56,11 +92,11 @@ class homeController extends Controller
     		$this->statPeminat($role);
 
 			//initialize view
-			$this->view		= view('pages.dashboard.notaris');
+			$this->view		= view('pages.dashboard.market.notaris');
     	}
     	else
     	{
-			$this->view		= view('pages.dashboard.drafter');
+			$this->view		= view('pages.dashboard.market.drafter');
     	}
 
 		//get data from database
@@ -286,7 +322,15 @@ class homeController extends Controller
 
 		$this->page_datas->stat_total_akta		= $dokumen->sum('numbers');
 		$this->page_datas->stat_longest_streak	= $dokumen->max('numbers');
-		$this->page_datas->stat_longest_at		= $dokumen->where('numbers', $this->page_datas->stat_longest_streak)->first()['tanggal']->toDateTime()->format('d/m/Y');
+		if($this->page_datas->stat_longest_streak)
+		{
+			$this->page_datas->stat_longest_at		= $dokumen->where('numbers', $this->page_datas->stat_longest_streak)->first()['tanggal']->toDateTime()->format('d/m/Y');
+		}
+		else
+		{
+			$this->page_datas->stat_longest_streak	= 0;
+			$this->page_datas->stat_longest_at		= Carbon::now()->format('d/m/Y');
+		}
 
 		$aktas 									= Dokumen::kantor($role['kantor']['id'])->where('status', 'akta')->get(['created_at', 'updated_at']);
 

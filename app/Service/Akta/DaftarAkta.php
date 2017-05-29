@@ -207,7 +207,18 @@ class DaftarAkta
 		//1.allow status
 		if(isset($queries['status']))
 		{
-			if(!in_array($queries['status'], $this->statusLists($active_office['role'])))
+			if(is_array($queries['status']))
+			{
+				foreach ($queries['status'] as $key => $value) 
+				{
+					if(!in_array($value, $this->statusLists($active_office['role'])))
+					{
+						throw new Exception("Forbidden", 1);
+						
+					}				
+				}
+			}
+			elseif(!in_array($queries['status'], $this->statusLists($active_office['role'])))
 			{
 				throw new Exception("Forbidden", 1);
 				

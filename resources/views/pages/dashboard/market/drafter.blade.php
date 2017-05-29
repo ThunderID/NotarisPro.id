@@ -10,12 +10,46 @@
 	<div class="row">
 		<div class="col-sm-12 col-sm-12 col-md-12 col-lg-12">
 			<div class="clearfix">&nbsp;</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="card card-inverse card-success mb-3 text-center">
+						<div class="card-block">
+							<blockquote class="card-blockquote">
+								<h1>{{$page_datas->stat_draft_akta}}</h1>
+								<footer>Queue Draft Akta</footer>
+							</blockquote>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="card card-inverse card-danger mb-3 text-center">
+						<div class="card-block">
+							<blockquote class="card-blockquote">
+								<h1>{{$page_datas->stat_renvoi_akta}}</h1>
+								<footer>Queue Renvoi</footer>
+							</blockquote>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="card card-inverse card-warning mb-3 text-center">
+						<div class="card-block">
+							<blockquote class="card-blockquote">
+								<h1>{{$page_datas->stat_template}}</h1>
+								<footer>Queue Draft Template</footer>
+							</blockquote>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix">&nbsp;</div>
 
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="card">
 						<div class="card-block">
-							<h4 class="card-title">Akta Yang Perlu Di Cek</h4>
+							<h4 class="card-title">Draft Akta Untuk di Selesaikan</h4>
 							<ul class="list-group list-group-flush">
 								@foreach($page_datas->draft_to_check as $key => $value)
 									<li class="list-group-item">

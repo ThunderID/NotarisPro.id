@@ -70,6 +70,7 @@ Route::group(['middleware' => ['authenticated']], function()
 
 	// general
 	Route::get('/', 		['uses' => 'homeController@dashboard', 	'as' => 'home.dashboard']);
+	Route::get('/market', 	['uses' => 'homeController@market', 	'as' => 'market.dashboard']);
 	Route::get('/kpi',		['uses' => 'homeController@kpi', 		'as' => 'kpi.dashboard']);
 	Route::get('/finance', 	['uses' => 'homeController@finance', 	'as' => 'finance.dashboard']);
 
@@ -176,28 +177,6 @@ Route::group(['middleware' => ['authenticated']], function()
 
 	// pos
 	Route::group(['namespace' => 'POS\\'], function(){
-		//bkk
-		Route::resource('/pos/bkk', 'bkkPOSController', ['names' => [
-			'index' 	=> 'pos.bkk.index', //get
-			'create'	=> 'pos.bkk.create', //get
-			'store' 	=> 'pos.bkk.store', //post
-			'show' 		=> 'pos.bkk.show', //get
-			'edit' 		=> 'pos.bkk.edit', //get
-			'update' 	=> 'pos.bkk.update', //patch
-			'destroy' 	=> 'pos.bkk.destroy' //post 
-		]]);
-
-		//bkm
-		Route::resource('/pos/bkm', 'bkmPOSController', ['names' => [
-			'index' 	=> 'pos.bkm.index', //get
-			'create'	=> 'pos.bkm.create', //get
-			'store' 	=> 'pos.bkm.store', //post
-			'show' 		=> 'pos.bkm.show', //get
-			'edit' 		=> 'pos.bkm.edit', //get
-			'update' 	=> 'pos.bkm.update', //patch
-			'destroy' 	=> 'pos.bkm.destroy' //post 
-		]]);	
-
 		//billing
 		Route::resource('/pos/billing', 'billingPOSController', ['names' => [
 			'index' 	=> 'pos.billing.index', //get

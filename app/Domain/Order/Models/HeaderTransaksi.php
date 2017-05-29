@@ -35,6 +35,7 @@ class HeaderTransaksi extends Model
 											'referensi_id'			,
 											'nomor_transaksi'		,
 											'tipe'					,
+											'sudah_dibayar'			,
 											'tanggal_dikeluarkan'	,
 											'tanggal_jatuh_tempo'	,
 										];
