@@ -32,8 +32,8 @@
 
 			<li class="nav-item">
 				<div class="dropdown">
-					<li class="nav-item @yield('template-akta')">
-						<a class="nav-link @yield('pos-billing')" href="{{ route('pos.billing.index') }}">Tagihan</a>
+					<li class="nav-item @yield('pos-billing')">
+						<a class="nav-link" href="{{ route('pos.billing.index') }}">Tagihan</a>
 					</li>
 				</div>				
 			</li>	

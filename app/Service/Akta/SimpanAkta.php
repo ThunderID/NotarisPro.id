@@ -185,7 +185,7 @@ class SimpanAkta
 				}
 
 				$this->isi_akta[$key]['version'][]	= ['konten' => $para, 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
-				$this->isi_akta[$key]['revise']		= $this->isi_akta[$key]['revise'] + 1;
+				$this->isi_akta[$key]['revise']		= (isset($this->isi_akta[$key]['revise']) ? $this->isi_akta[$key]['revise'] : 0) + 1;
 			}
 
 		}
@@ -232,13 +232,29 @@ class SimpanAkta
 				//here is where parse new param happen
 				$fill_mention[str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
 
-				//here is how we defining data
+				//here is how we defining data from people
 				if(str_is('@pihak.*.ktp.*', $value))
 				{
 					$pihaks 		= str_replace('@', '', $value);
 					$pihaks 		= explode('.', $pihaks);
 
-					$pihak[$pihaks[1]][$pihaks[3]]	= $this->mentionable[$value];
+					$pihak[$pihaks[1]]['tipe']		= 'perorangan';
+					$pihak[$pihaks[1]]['ktp'][$pihaks[3]]				= $this->mentionable[$value];
+				}
+				elseif(str_is('@pihak.*.akta_pendirian.*', $value))
+				{
+					$pihaks 		= str_replace('@', '', $value);
+					$pihaks 		= explode('.', $pihaks);
+
+					$pihak[$pihaks[1]]['tipe']		= 'perusahaan';
+					$pihak[$pihaks[1]]['akta_pendirian'][$pihaks[3]]	= $this->mentionable[$value];
+				}
+				elseif(str_is('@pihak.*', $value))
+				{
+					$pihaks 		= str_replace('@', '', $value);
+					$pihaks 		= explode('.', $pihaks);
+
+					$pihak[$pihaks[1]]['dokumen'][$pihaks[2]][$pihaks[3]]	= $this->mentionable[$value];
 				}
 			}
 		}

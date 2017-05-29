@@ -33,12 +33,13 @@ class InitTagihanTableSeeder extends Seeder
 			$parse_month 	= rand(-12, -2);
 			$data 			= [
 				'klien_id'				=> $klien['id'],
-				'klien_nama'			=> $klien['nama'],
+				'klien_nama'			=> (isset($klien['ktp']['nama']) ? $klien['ktp']['nama'] : $klien['akta_pendirian']['nama']),
 				'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
 				'nomor_transaksi'		=> rand(234289849248924,999999999999999),
 				'tipe'					=> 'billing_out',
 				'tanggal_dikeluarkan'	=> Carbon::parse($parse_month.' months')->format('Y-m-d H:i:s'),
 				'tanggal_jatuh_tempo'	=> Carbon::parse($parse_month.' months')->addMonths(1)->format('Y-m-d H:i:s'),
+				'sudah_dibayar'			=> false,
 			];
 
 			$tagihan 	= new HeaderTransaksi;

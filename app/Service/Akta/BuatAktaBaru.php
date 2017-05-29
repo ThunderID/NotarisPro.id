@@ -301,13 +301,31 @@ class BuatAktaBaru
 			{
 				$akta['fill_mention'][str_replace('.','-+',str_replace('@','', $value))] = $this->mentionable[$value];
 
+				//here is how we defining data from people
 				if(str_is('@pihak.*.ktp.*', $value))
 				{
 					$pihaks 		= str_replace('@', '', $value);
 					$pihaks 		= explode('.', $pihaks);
 
-					$this->pihak[$pihaks[1]][$pihaks[3]]	= $this->mentionable[$value];
+					$this->pihak[$pihaks[1]]['tipe']		= 'perorangan';
+					$this->pihak[$pihaks[1]]['ktp'][$pihaks[3]]				= $this->mentionable[$value];
 				}
+				elseif(str_is('@pihak.*.akta_pendirian.*', $value))
+				{
+					$pihaks 		= str_replace('@', '', $value);
+					$pihaks 		= explode('.', $pihaks);
+
+					$this->pihak[$pihaks[1]]['tipe']		= 'perusahaan';
+					$this->pihak[$pihaks[1]]['akta_pendirian'][$pihaks[3]]	= $this->mentionable[$value];
+				}
+				elseif(str_is('@pihak.*', $value))
+				{
+					$pihaks 		= str_replace('@', '', $value);
+					$pihaks 		= explode('.', $pihaks);
+
+					$this->pihak[$pihaks[1]]['dokumen'][$pihaks[2]][$pihaks[3]]	= $this->mentionable[$value];
+				}
+
 			}
 		}
 

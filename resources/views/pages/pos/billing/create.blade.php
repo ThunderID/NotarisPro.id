@@ -40,7 +40,7 @@
 					</tr>
 					<tr>
 						<th><span contenteditable>Date</span></th>
-						<td><span contenteditable>January 1, 2012</span></td>
+						<td><input name="tanggal" contenteditable value="{{Carbon\Carbon::now()->format('d/m/Y')}}" style="max-width:90%;"></input></td>
 					</tr>
 					<tr>
 						<th><span contenteditable>Amount Due</span></th>

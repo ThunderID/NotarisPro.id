@@ -39,13 +39,10 @@ class Klien extends BaseModel
 
 	protected $fillable				=	[
 											'_id'					,
-											'nama'					,
-											'telepon'				,
-											'tempat_lahir'			,
-											'tanggal_lahir'			,
-											'pekerjaan'				,
-											'alamat'				,
-											'nomor_ktp'				,
+											'tipe'					,
+											'ktp'					,
+											'akta_pendirian'		,
+											'dokumen'				,
 											'kantor'				,
 										];
 	/**
@@ -54,19 +51,7 @@ class Klien extends BaseModel
 	 * @var array
 	 */
 	protected $rules				=	[
-											'nama'					=> 'max:255',
-											'tempat_lahir'			=> 'max:255',
-											// 'tanggal_lahir'			=> 'date_format:"Y-m-d"',
-											'pekerjaan'				=> 'max:255',
-											'alamat.alamat'			=> 'max:255',
-											'alamat.rt'				=> 'max:255',
-											'alamat.rw'				=> 'max:255',
-											'alamat.desa'			=> 'max:255',
-											'alamat.distrik'		=> 'max:255',
-											'alamat.regensi'		=> 'max:255',
-											'alamat.provinsi'		=> 'max:255',
-											'alamat.negara'			=> 'max:255',
-											'nomor_ktp'				=> 'max:255',
+											
 										];
 
 	/**

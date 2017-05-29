@@ -25,7 +25,7 @@ class InitTipeDokumenTableSeeder extends Seeder
 			'akta_cerai'		=> ['nomor', 'stbld', 'tempat_cerai', 'tanggal_cerai', 'nama_suami', 'nama_istri', 'nomor_akta_perkawinan', 'tanggal_perkawinan'],
 			'akta_kematian'		=> ['nomor', 'stbld', 'tempat_kematian', 'tanggal_kematian', 'nama', 'tempat_lahir', 'tanggal_lahir', 'alamat_terakhir', 'nama_ibu'],
 			'akta_waris'		=> ['nomor', 'stbld', 'nama_ahli_waris', 'tanggal_lahir'],
-			'akta_pendirian'	=> ['nomor', 'stbld', 'nama_pihak'],
+			'akta_pendirian'	=> ['nomor', 'nama', 'stbld', 'nama_pihak'],
 			'pengesahan_depkumham'		=> ['nomor', 'ditetapkan_di', 'ditetapkan_tanggal'],
 			'akta_perubahan_terakhir'	=> ['nomor'],
 			'shgb'				=> ['nomor', 'alamat', 'atas_nama'],
