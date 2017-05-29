@@ -24,7 +24,7 @@
 	$list[$active]['active'] = 'active';								
 
 	$list_2['Buat Template']	= 	[
-										'url' 	=> route('akta.template.create'),
+										'url' 	=> route('akta.template.initial'),
 										'icon' 	=> ''
 									];
 
