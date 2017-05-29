@@ -126,7 +126,7 @@
 						[
 							"title" 			=> "Edit",	
 							"hide_on" 			=> "hidden-sm-down",	
-							"route" 			=> route('akta.akta.edit', ['id' => $page_datas->datas['id']]),
+							"route" 			=> route('akta.akta.edit.renvoi', ['id' => $page_datas->datas['id']]),
 							"icon" 				=> "fa-edit",
 						],
 						[
@@ -219,7 +219,7 @@
 														</a>
 														&nbsp;|&nbsp;
 														@if(isset($value['revise']) && $value['revise'] > 0)
-														<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+														<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_{{$key}}">
 															<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 														</a>
 														@else
@@ -244,7 +244,7 @@
 														</a>
 														&nbsp;|&nbsp;
 														@if(isset($value['revise']) && $value['revise'] > 0)
-														<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+														<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_{{$key}}">
 															<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 														</a>
 														@else
@@ -281,6 +281,7 @@
 
 										{!! is_null($konten['close']) ? '' : $konten['close'] !!}
 
+
 									{{-- Renvoi --}}
 									@elseif($page_datas->datas['status']=='renvoi')
 
@@ -289,7 +290,7 @@
 											$konten = listRenderer($value['konten']);
 										?>
 
-										{{ is_null($konten['open']) ? $konten['open'] : '' }}									
+										{!! is_null($konten['open']) ? '' : $konten['open'] !!}									
 
 										@if (!isset($value['lock']))
 
@@ -303,7 +304,7 @@
 													</a>
 													&nbsp;|&nbsp;
 													@if(isset($value['revise']) && $value['revise'] > 0)
-													<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+													<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_{{$key}}">
 														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 													</a>
 													@else
@@ -328,7 +329,7 @@
 													</a>
 													&nbsp;|&nbsp;
 													@if(isset($value['revise']) && $value['revise'] > 0)
-													<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_">
+													<a href="javascript:void(0);" class="active" data-toggle="modal" data-target="#content_{{ $key }}">
 														<i class="fa fa-history" aria-hidden="true" data-url="{{ route('akta.akta.tandai.renvoi', $page_datas->datas['id']) }}" unlocked="false"></i> {{ $value['revise'] }}
 													</a>
 													@else
@@ -344,7 +345,8 @@
 
 										@endif
 
-										{{ is_null($konten['close']) ? $konten['close'] : '' }}
+										{!! is_null($konten['close']) ? $konten['close'] : '' !!}
+									
 
 									{{-- Akta --}}
 									@elseif($page_datas->datas['status']=='akta')
@@ -495,7 +497,11 @@
 									<div class="cd-timeline-content {{ $status_doc >= 0 ? '' : 'disabled text-muted' }}">
 										<h4>1. Dalam Proses</h4>
 										@forelse($page_datas->status_dalam_proses as $key => $value)
-											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+											<p class="mb-2">
+												{{ $value['tanggal'] }}
+											<br>
+												{{ $value['petugas']['nama'] }}
+											</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
 										@endforelse
@@ -509,7 +515,11 @@
 									<div class="cd-timeline-content {{ $status_doc >= 1 ? '' : 'disabled text-muted' }}">
 										<h4>2. Draft</h4>
 										@forelse($page_datas->status_draft as $key => $value)
-											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+											<p class="mb-2">
+												{{ $value['tanggal'] }}
+											<br>
+												{{ $value['petugas']['nama'] }}
+											</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
 										@endforelse
@@ -523,7 +533,11 @@
 									<div class="cd-timeline-content {{ $status_doc >= 2 ? '' : 'disabled text-muted' }}">
 										<h4>3. Renvoi</h4>
 										@forelse($page_datas->status_renvoi as $key => $value)
-											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+											<p class="mb-2">
+												{{ $value['tanggal'] }}
+											<br>
+												{{ $value['petugas']['nama'] }}
+											</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
 										@endforelse
@@ -537,7 +551,11 @@
 									<div class="cd-timeline-content {{ $status_doc >= 4 ? '' : 'disabled text-muted' }}">
 										<h4>4.Akta</h4>
 										@forelse($page_datas->status_akta as $key => $value)
-											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+											<p class="mb-2">
+												{{ $value['tanggal'] }}
+											<br>
+												{{ $value['petugas']['nama'] }}
+											</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
 										@endforelse
@@ -551,7 +569,11 @@
 									<div class="cd-timeline-content {{ $status_doc >= 3 ? '' : 'disabled text-muted' }}">
 										<h4>5. Minuta</h4>
 										@forelse($page_datas->status_minuta as $key => $value)
-											<p class="mb-2">Petugas: {{ $value['petugas']['nama'] }}<br>{{ $value['tanggal'] }}</p>
+											<p class="mb-2">
+												{{ $value['tanggal'] }}
+											<br>
+												{{ $value['petugas']['nama'] }}
+											</p>
 										@empty
 											<p class="mb-2">Belum Ada Data</p>
 										@endforelse
@@ -630,53 +652,6 @@
 				<button id="finalize_submit" type="submit" data-save="true" hidden>save</button>
 			</div>
 		</form>	
-	@endcomponent
-
-
-	@component('components.modal', [
-			'id'		=> 'content_',
-			'title'		=> 'Detail Histori Revisi',
-			'large'		=> true,
-			'settings'	=> [
-				'modal_class'	=> '',
-				'hide_buttons'	=> 'true',
-				'hide_title'	=> 'true',
-			]
-		])
-		<div class="col-12">
-		<section id="cd-timeline" class="cd-container large">
-			<div class="cd-timeline-block">
-				<div class="cd-timeline-img large {{ $status_doc >= 0 ? 'cd-active' : '' }}">
-				</div> 
-
-				<div class="cd-timeline-content pt-0 {{ $status_doc >= 0 ? '' : 'disabled' }}" style="width:100%; left:35px;">
-					<p>12 Dec 2017<br><small>By: John Doe</small></p>
-
-					<div class="pb-2 pt-2">
-						ini text apa aja lahha asdhashdah
-					</div>
-
-					<hr style="border-bottom: 1px solid rgba(0,0,0,.07)!important;">
-				</div> 
-			</div> 
-
-			<div class="cd-timeline-block">
-				<div class="cd-timeline-img large {{ $status_doc >= 0 ? 'cd-active' : '' }}">
-				</div> 
-
-				<div class="cd-timeline-content pt-0 {{ $status_doc >= 0 ? '' : 'disabled' }}" style="width:100%; left:35px;">
-					<p>14 Dec 2017<br><small>By: John Doe</small></p>
-
-					<div class="pb-2 pt-2">
-						ini text apa aja lahha
-					</div>
-
-					<hr style="border-bottom: 1px solid rgba(0,0,0,.07)!important;">
-				</div> 
-			</div> 
-
-		</section> 		
-		</div>						
 	@endcomponent		
 
 
@@ -684,6 +659,16 @@
 		'title' => 'Menghapus Akta',
 		'route' => route('akta.akta.destroy', ['id' => $page_datas->datas['id']])
 	])
+
+	@foreach($page_datas->datas['paragraf'] as $key => $value)
+		@if( $page_datas->datas['status']=='renvoi' || $page_datas->datas['status']=='draft' )
+			@if( isset($value['revise']) && $value['revise'] > 0 )
+				@include('helpers.modalRevision',[
+					'id' => $key
+				])
+			@endif
+		@endif
+	@endforeach
 
 @stop
 
