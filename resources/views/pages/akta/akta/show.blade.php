@@ -174,7 +174,7 @@
 
 										{{-- Render List --}}
 										<?php 
-											// $konten = listRenderer($value['konten']);
+											$konten = listRenderer($value['konten']);
 										?>
 
 										{!! is_null($konten['open']) ? '' : $konten['open'] !!}
