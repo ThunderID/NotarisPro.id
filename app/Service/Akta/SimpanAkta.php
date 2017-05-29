@@ -156,18 +156,16 @@ class SimpanAkta
 		//2. check lock
 		foreach ($this->isi_akta as $key => $value) 
 		{
-			if(isset($this->akta['paragraf'][$key]['lock']))
-			{
-				throw new Exception("Dokumen tidak bisa diubah", 1);
-			}
-
-
 			//demi menghemat resource, versioning lies here
-			$para_baru 		= strip_tags($value['konten']);
+			// $para_baru 		= strip_tags(str_replace('&nbsp;', '', $value['konten']));
+			// $para_baru 		= str_replace(' ', '', $para_baru);
+			$para_baru 		= $value['konten'];
 			if(isset($this->akta['paragraf'][$key]['konten']))
 			{
-				$para_lama 	= strip_tags($this->akta['paragraf'][$key]['konten']);
+				// $para_lama	= strip_tags(str_replace('&nbsp;', '', $this->akta['paragraf'][$key]['konten']));
+				// $para_lama 	= str_replace(' ', '', $para_lama);
 				$para 		= $this->akta['paragraf'][$key]['konten'];
+				$para_lama	= $this->akta['paragraf'][$key]['konten'];
 			}
 			else
 			{
@@ -175,19 +173,33 @@ class SimpanAkta
 				$para 		= '';
 			}
 			
-			similar_text($para_baru, $para_lama, $percent);
+			similar_text($para_lama, $para_baru, $percent);
 
-			if(100 - $percent > 0)
+			if($percent < 95)
 			{
 				if(isset($this->akta['paragraf'][$key]['version']))
 				{
-					$this->isi_akta[$key]['version']	= $this->akta['paragraf'][$key]['version'];
+					$this->isi_akta[$key]['version']		= $this->akta['paragraf'][$key]['version'];
 				}
 
 				$this->isi_akta[$key]['version'][]	= ['konten' => $para, 'tanggal' => Carbon::now()->format('Y-m-d H:i:s')];
 				$this->isi_akta[$key]['revise']		= (isset($this->isi_akta[$key]['revise']) ? $this->isi_akta[$key]['revise'] : 0) + 1;
 			}
 
+			if(isset($this->akta['paragraf'][$key]['key']))
+			{
+				$this->isi_akta[$key]['key']	= $this->akta['paragraf'][$key]['key'];
+			}
+
+			if(isset($this->akta['paragraf'][$key]['lock']))
+			{
+				$this->isi_akta[$key]['lock']	= $this->akta['paragraf'][$key]['lock'];
+			}
+
+			if($percent < 90 && isset($this->akta['paragraf'][$key]['lock']))
+			{
+				throw new Exception("Dokumen tidak bisa diubah", 1);
+			}
 		}
 
 		return true;

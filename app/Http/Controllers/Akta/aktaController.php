@@ -189,6 +189,7 @@ class aktaController extends Controller
 			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
 			$akta		= $akta->save();
 		} catch (Exception $e) {
+			dD($e);
 			$this->page_attributes->msg['error']	= $e->getMessage();
 		}
 
@@ -379,7 +380,7 @@ class aktaController extends Controller
 	{
 		$check_status 								= $this->query->detailed($id);
 		$input['id']								= $id;
-		
+
 		if(is_array($template['template']) && $check_status['status']=='renvoi')
 		{
 			$input['paragraf']						= $check_status['paragraf'];
@@ -394,7 +395,7 @@ class aktaController extends Controller
 				$input['paragraf'][$key]['konten']	= $value;
 			}
 		}
-		elseif($check_status['status']=='dalam_proses')
+		elseif($check_status['status']=='dalam_proses' || $check_status['status']=='renvoi')
 		{
 			// get data
 			$pattern		= "/\/t.*?<h.*?>(.*?)<\/h.*?>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";

@@ -124,7 +124,6 @@ class InitAktaTableSeeder extends Seeder
 
 
 			$updated		= [
-					['konten' 	=> '<h4 class="text-center"><br></h4>'],
 					['konten' 	=> '<h4 class="text-center"><b style="color: rgb(41, 43, 44); font-size: 1rem;">PEJABAT PEMBUAT AKTA TANAH</b></h4>'],
 					['konten' 	=> '<h4 class="text-center"><b>(PPAT)</b></h4>'],
 					['konten' 	=> '<h4 class="text-center"><span class="medium-editor-mention-at medium-editor-mention-at" data-mention="@notaris.nama">'.$notaris_aktif['notaris']['nama'].'</span>&nbsp;</h4>'],
