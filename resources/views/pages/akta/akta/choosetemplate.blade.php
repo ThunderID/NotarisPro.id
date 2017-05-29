@@ -59,7 +59,7 @@
 			<div class="row align-items-center">
 				<div class="col text-left">&nbsp;
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel" style="height: 80%;">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 input_panel m-0 pt-0 pb-0 scrollable_panel" style="max-height: 510px; overflow-y: scroll;">
 					<div class="row">
 						<div class="col-12">
 							<h4 class="title ml-3">{{ $page_attributes->title }}</h4>
@@ -123,7 +123,7 @@
 				<div class="col text-left">
 					<a href="#information" class="btn btn-primary action-wizard" data-content="#fillable"><i class="fa fa-chevron-circle-left"></i>&nbsp;&nbsp; Sebelumnya</a>
 				</div>
-				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3">
+				<div class="col-12 col-sm-10 col-md-6 col-xl-6 mx-auto input_panel pb-0 scrollable_panel m-0 pt-0 pb-0 pl-3" style="max-height: 510px; overflow-y: scroll;">
 					<div class="form">
 						<h4 class="title">Fillable Mention Template</h4>
 						<div class="content-fillable-template">

@@ -2,19 +2,19 @@
 	p, ul, ol, h5 {
 		margin-top: 0;
 		margin-bottom: 0;
+		font-size: 12pt !important;
 	}
 	h4 {
 		margin-top: 5px;
 		margin-bottom: 5px;
 		color: inherit;
-		font-size: 16px !important;
+		font-size: 14pt !important;
 		b {
 			font-weight: bold;
 		}
 	},
 	h5 {
 		color: inherit;
-		font-size: 14px !important;
 		b {
 			font-weight: bold;
 		}
@@ -63,6 +63,7 @@
 	}
 	.wrapper.unlocked {
 		border: 1px solid rgba(2, 117, 216, 0.58)!important;
+		background-color: rgba(2, 117, 216, 0.06);		
 	}
 	.wrapper:hover {
 		margin-top: -1px;
@@ -74,8 +75,19 @@
 	   	width: 149px; 
 	   	height: auto; 
 	   	padding-left: 15px;
-	   	color: #EDEDED;
 	   	float: left;
+	   	color: #EDEDED;
+
+	   	a{
+		   	color: #EDEDED;
+	   	}
+	   	
+	   	.active{
+		   	color: #0275D8;
+	   	}
+	   	a.active{
+		   	color: #0275D8;
+	   	}
 	}
 	.wrapper .content {
 	    padding-left: 155px;

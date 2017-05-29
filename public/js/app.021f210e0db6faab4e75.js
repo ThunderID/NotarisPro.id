@@ -19035,8 +19035,6 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 							}
 						});
 						spanMention = $('span.medium-editor-mention-at');
-						spanMention.attr('data-mention', spanMention.html());
-						console.log(spanMention.html());
 						spanMention.addClass('text-danger').removeClass('medium-editor-mention-at-active');
 					},
 					destroyPanelContent: function destroyPanelContent(panelEl) {
@@ -19047,19 +19045,6 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 			}
 		});
 
-		// in input able remove color and style color on ready page
-		editor.elements.forEach(function (element) {
-			$(element).find('*').each(function (k, v) {
-				// $(v).removeAttr('color', '').css('color', 'inherit').css('font-size', 'inherit');
-				if ($(v).hasClass('medium-editor-mention-at')) {
-					text = $(v).html();
-					if (text.charAt(0) != '@') {
-						// $(v).removeClass('medium-editor-mention-at medium-editor-mention-at-active text-danger text-primary');
-					}
-				}
-			});
-		});
-
 		editor.subscribe('editableInput', function (event, editable) {
 			$(editable).find('*').each(function (k, v) {
 
@@ -19068,20 +19053,13 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 					dataMention = $(v).attr('data-mention');
 					value = $(v).html();
 
-					if (typeof dataValue !== 'undefined' && typeof dataMention !== 'undefined') {
-						if (value !== dataValue) {
-							console.log('value');
-							$(v).html(dataValue);
-						}
+					if (typeof dataValue !== 'undefined') {
+						$(v).html(dataValue);
 					}
 				}
 
 				$(v).removeAttr('color', '');
 				text = $(v).html();
-
-				// if (text.charAt(0) == '@') {
-				// 	$(v).addClass('medium-editor-mention-at text-danger');
-				// }
 
 				if ($(v)[0].style.removeProperty) {
 					$(v)[0].style.removeProperty('color');
@@ -19090,13 +19068,6 @@ __webpack_require__("./resources/assets/js/moduleUI/selectUI.js");
 					$(v)[0].style.removeAttribute('color');
 					$(v)[0].style.removeAttribute('font-size');
 				}
-
-				// if ($(v).hasClass('medium-editor-mention-at')) {
-				// 	text = $(v).html();
-				// 	if (text.charAt(0) != '@') {
-				// 		$(v).removeClass('medium-editor-mention-at medium-editor-mention-at-active text-danger text-primary');
-				// 	}
-				// }
 			});
 		});
 
@@ -19328,7 +19299,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	replaceContentWithData: function replaceContentWithData(param, data) {
 		mention = $('div.editor').find('span.medium-editor-mention-at');
 		$.each(mention, function (k, v) {
-			if ($(v).html() == param || $(v).attr('data-mention') == param) {
+			if ($(v).html() == param | $(v).attr('data-mention') == param) {
 				$(v).attr('data-mention', param);
 				$(v).attr('data-value', data);
 				$(v).removeClass('text-danger').addClass('text-primary');
