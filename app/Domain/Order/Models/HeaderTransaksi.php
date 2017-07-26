@@ -45,7 +45,7 @@ class HeaderTransaksi extends Model
 	 * @var array
 	 */
 	protected $rules				=	[
-										
+											'status'			=> 'in:pending,lunas',
 										];
 	/**
 	 * Date will be returned as carbon

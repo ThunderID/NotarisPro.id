@@ -3,183 +3,309 @@
 namespace App\Http\Controllers\Klien;
 
 use Illuminate\Http\Request;
-use App\Service\Order\DaftarKlien as Query;
+use App\Domain\Order\Models\Klien as Query;
 
 use App\Http\Controllers\Controller;
 
-use Exception;
+use App\Infrastructure\Traits\GuidTrait;
+
+use TAuth, Exception;
 
 class klienController extends Controller
 {
-    public function __construct(Query $query)
-    {
-        parent::__construct();
-        
-        $this->query            = $query;
-    }    
+	use GuidTrait;
 
-	public function index()
-    {
-        // init
-        $this->page_attributes->title       = 'Klien';
+	public function __construct(Query $query)
+	{
+		parent::__construct();
+		
+		$this->query			= $query;
+		$this->per_page 		= (int)env('DATA_PERPAGE');
+	}    
 
-        // filter & search
-        $query                              = $this->getQueryString(['q', 'urutkan', 'page']);
-        $query['per_page']                  = (int)env('DATA_PERPAGE');
+	public function index(Request $request)
+	{
+		//0. set active office
+		$this->active_office                = TAuth::activeOffice();
 
-        //get data from database
-        $this->page_datas->datas            = $this->query->get($query);
+		// 1. set page attributes
+		$this->page_attributes->title       = 'Klien';
 
-        //initialize view
-        $this->view                         = view('pages.klien.index');
+		// 2. call all tagihans data needed
+		//2a. parse query searching
+		$query                              = $request->only('cari', 'filter', 'urutkan', 'page');
 
-        //paginate
-        $this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));        
+		//2b. retrieve all klien
+		$this->retrieveKlien($query);
 
+		//2c. get all filter 
+		$this->page_datas->filters          = $this->retrieveKlienFilter();
+		
+		//2d. get all urutan 
+		$this->page_datas->urutkan          = $this->retrieveKlienUrutkan();
 
-        //function from parent to generate view
-        return $this->generateView(); 
-    }
+		//3.initialize view
+		$this->view                         = view('pages.klien.klien.index');
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($id = null)
-    {
-        if(!is_null($id)){
-            // init
-            $this->page_attributes->title   = 'Edit Data Klien';
-            $this->page_datas->id           = $id;          
+		return $this->generateView();
+	}
 
-            //get data from database
-            $this->page_datas->datas        = $this->query->detailed($id);
-        }else{
-            // init
-            $this->page_attributes->title   = 'Tambah Data Klien';
-            $this->page_datas->id           = null;          
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Request $request, $id)
+	{
+		$this->active_office 				= TAuth::activeOffice();
 
-            $this->page_datas->datas        = null;
-        }
+		// 1. set page attributes
+		$this->page_attributes->title       = 'Klien';
 
-        //initialize view
-        $this->view                         = view('pages.klien.create');
+		// 2. call all tagihans data needed
+		//2a. parse query searching
+		$query 								= $request->only('cari', 'filter', 'urutkan', 'page');
 
-        //function from parent to generate view
-        return $this->generateView();           
-    }
+		//2b. retrieve all klien
+		$this->retrieveKlien($query);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store($id = null, Request $request)
-    {
-        try {
-            // get data
-            $input                              = $request->only(
-                                                        'nama', 
-                                                        'tempat_lahir', 
-                                                        'tanggal_lahir', 
-                                                        'pekerjaan', 
-                                                        'nomor_ktp', 
-                                                        'alamat'
-                                                    );
+		//2c. get all filter 
+		$this->page_datas->filters 			= $this->retrieveKlienFilter();
+		
+		//2d. get all urutan 
+		$this->page_datas->urutkan 			= $this->retrieveKlienUrutkan();
 
-            //is edit?
-            if(!is_null($id)){
-                $input['id']                     = $id;
-            }
+		//2e. get show document
+		$this->page_datas->klien 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 
-            // save
-            $data                               = new \TCommands\Klien\SimpanKlien([]);
-            $data->handle();            
-        } catch (Exception $e) {
-            $this->page_attributes->msg['error']       = $e->getMessage();
-        }
+		//3.initialize view
+		$this->view							= view('pages.klien.klien.show');
+		
+		return $this->generateView();  
+	}
 
-        //return view
-        if($id == null){
-            $this->page_attributes->msg['success']         = ['Data klien telah ditambahkan'];
-            return $this->generateRedirect(route('klien.index'));
-        }else{
-            $this->page_attributes->msg['success']         = ['Data klien telah diperbarui'];
-            return $this->generateRedirect(route('klien.show', ['id' => $id]));
-        }
-    }
+	public function create(Request $request, $id = null)
+	{
+		//set this function
+		$this->active_office 				= TAuth::activeOffice();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //get data from database
-        $this->page_datas->datas            = $this->query->detailed($id);
+		//1. set page attributes
+		$this->page_attributes->title       = 'Klien';
 
-        //set id
-        $this->page_datas->id               = $id;
+		//2. get show document
+		$this->page_datas->klien 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
 
-        // init
-        $this->page_attributes->title       = 'Data Klien ' . $this->page_datas->datas['nama'] ;        
+		$this->view							= view('pages.klien.klien.create');
+		
+		return $this->generateView();  
+	}
 
-        //initialize view
-        $this->view                         = view('pages.klien.show');
+	public function store(Request $request, $id)
+	{
+		try {
+			//set this function
+			$this->active_office 				= TAuth::activeOffice();
 
+			//2. get store document
+			$klien				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
+			
+			if($request->has('ktp'))
+			{
+				$klien->tipe 	= 'perorangan';
+				$klien->ktp 	= $request->get('ktp');
+			}
 
-        //function from parent to generate view
-        return $this->generateView(); 
-    }
+			if($request->has('akta_pendirian'))
+			{
+				$klien->tipe			= 'perusahaan';
+				$klien->akta_pendirian	= $request->get('akta_pendirian');
+			}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        return $this->create($id);
-    }
+			if($request->has('dokumen'))
+			{
+				$adding_doc 			= $request->get('dokumen');
+				foreach ($adding_doc as $key => $value) 
+				{
+					$adding_doc[$key]['id']		= self::createID('doku'); 
+				}
+				$dokumen 				= $klien->dokumen;
+				$dokumen 				= array_merge($dokumen, $adding_doc);
+				$klien->dokumen 		= $dokumen;
+			}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        return $this->store($id, $request);
-    }
+			$klien->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        // cek apa password benar
+			$this->page_attributes->msg['success']		= ['Klien Berhasil Disimpan'];
+	
+			return $this->generateRedirect(route('klien.klien.show', $klien->id));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+	
+			return $this->generateRedirect(route('klien.klien.create', ['id' => $id]));
+		}
+	}
 
-        // hapus
-        try {
-            $klien                                      = new \TCommands\Klien\HapusKlien($id);
-            $klien                                      = $klien->handle();
-        } catch (Exception $e) {
-            $this->page_attributes->msg['error']        = $e->getMesssage();
-        }            
+	public function edit(Request $request, $id)
+	{
+		return $this->create($request, $id);
+	}
 
-        $this->page_attributes->msg['success']         = ['Data klien telah dihapus'];
+	public function update(Request $request, $id)
+	{
+		return $this->store($request, $id);
+	}
 
-        //return view
-        return $this->generateRedirect(route('klien.index'));
-    }
+	public function destroy(Request $request, $id)
+	{
+		try {
+			//set this function
+			$this->active_office	= TAuth::activeOffice();
+
+			//2. get store document
+			$klien					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
+
+			$klien->delete();
+
+			$this->page_attributes->msg['success']		= ['Klien Berhasil Dihapus'];
+	
+			return $this->generateRedirect(route('klien.klien.index'));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+	
+			return $this->generateRedirect(route('klien.klien.show', ['id' => $id]));
+		}	
+	}
+
+	public function addDokumen(Request $request, $id)
+	{
+		try {
+			//set this function
+			$this->active_office	= TAuth::activeOffice();
+
+			//2. get store document
+			$klien					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
+			$dokumen 				= $klien->dokumen;
+
+			if(isset($request->get('dokumen')['id']))
+			{
+				foreach ($dokumen as $key => $value) 
+				{
+					if($value['id'] == $request->get('dokumen')['id'])
+					{
+						$dokumen[$key]	= $request->get('dokumen');
+					}
+				}
+			}
+			else
+			{
+				$add_doku 			= $request->get('dokumen');
+				$add_doku['id']		= self::createID('doku');
+				$dokumen[]			= $add_doku;
+			}
+
+			$klien->dokumen 		= $dokumen;
+
+			$klien->save();
+
+			$this->page_attributes->msg['success']		= ['Dokumen Berhasil Disimpan'];
+	
+			return $this->generateRedirect(route('klien.klien.index'));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+	
+			return $this->generateRedirect(route('klien.klien.show', ['id' => $id]));
+		}	
+	}
+
+	public function removeDokumen(Request $request, $id, $dokumen_id)
+	{
+		try {
+			//set this function
+			$this->active_office	= TAuth::activeOffice();
+
+			//2. get store document
+			$klien					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
+			$dokumen 				= $klien->dokumen;
+
+			foreach ($dokumen as $key => $value) 
+			{
+				if($value['id'] == $dokumen_id)
+				{
+					unset($dokumen[$key]);
+				}
+			}
+
+			$klien->dokumen 		= $dokumen;
+			$klien->save();
+
+			$this->page_attributes->msg['success']		= ['Dokumen Berhasil Disimpan'];
+	
+			return $this->generateRedirect(route('klien.klien.index'));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+	
+			return $this->generateRedirect(route('klien.klien.show', ['id' => $id]));
+		}	
+	}
+
+	private function retrieveKlien($query = [])
+	{
+		//1. pastikan berasal dari kantor yang sama
+		$data		= $this->query->kantor($this->active_office['kantor']['id']);
+
+		//2. cari sesuai query
+		if(isset($query['cari']))
+		{
+			$data			= $data->where(function($q)use($query){$q->where('akta_pendirian.nama', 'like', '%'.$query['cari'].'%')->orwhere('ktp.nama', 'like', '%'.$query['cari'].'%');});
+		}
+
+		//3. filter 
+		foreach ((array)$query['filter'] as $key => $value) 
+		{
+			if(in_array($key, ['jenis']))
+			{
+				$data   	= $data->where('tipe', $value);               
+			}
+		}
+
+		//4. urutkan
+		if(isset($query['urutkan']))
+		{
+			$explode        = explode('-', $query['urutkan']);
+			if(in_array($explode[0], ['nama']) && in_array($explode[1], ['asc', 'desc']))
+			{
+				$data       = $data->orderby('akta_pendirian.nama', $value)->orderby('ktp.nama', $value);
+			}
+		}
+
+		//5. page
+		$skip				= 0;
+		if(isset($query['page']))
+		{
+			$skip			= ((1 * $query['page']) - 1) * $this->per_page;
+		}
+		//set datas
+		$this->paginate(null, $data->count(), $this->per_page);
+		$this->page_datas->kliens	= $data->skip($skip)->take($this->per_page)->get(['_id', 'tipe', 'ktp', 'akta_pendirian'])->toArray();
+	}
+
+	private function retrieveKlienFilter()
+	{
+		//1. jenis
+		$filter['jenis']	= ['perusahaan', 'perorangan'];
+
+		return $filter;
+	}
+	
+	private function retrieveKlienUrutkan()
+	{
+		//1a.cari urutan
+		$sort   =   [
+						'nama-desc'   => 'Nama A - Z',
+						'nama-asc'    => 'Nama Z - A',
+					];
+
+		return $sort;
+	}
+
 }

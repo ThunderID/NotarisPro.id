@@ -124,6 +124,7 @@ trait TextParseTrait
 						{
 							$klien 	= new Klien;
 						}
+						$klien->tipe 			= 'perorangan';
 						$klien->ktp 			= $value2['ktp'];
 						$klien->kantor 			= $this->active_office['kantor'];
 						unset($value2['ktp']);
@@ -139,6 +140,7 @@ trait TextParseTrait
 						{
 							$klien 	= new Klien;
 						}
+						$klien->tipe 			= 'perusahaan';
 						$klien->akta_pendirian 	= $value2['akta_pendirian'];
 						$klien->kantor 			= $this->active_office['kantor'];
 						unset($value2['akta_pendirian']);
@@ -162,6 +164,7 @@ trait TextParseTrait
 						{
 							$objek 	= new Objek;
 						}
+						$klien->tipe 			= 'kendaraan';
 						$objek->bpkb 			= $value3['bpkb'];
 						$objek->kantor 			= $this->active_office['kantor'];
 						unset($value3['bpkb']);
@@ -177,7 +180,8 @@ trait TextParseTrait
 						{
 							$objek 	= new Objek;
 						}
-						$objek->shm 		= $value3['shm'];
+						$klien->tipe 			= 'tanah_bangunan';
+						$objek->shm 			= $value3['shm'];
 						$objek->kantor 			= $this->active_office['kantor'];
 						unset($value3['shm']);
 						$objek->dokumen 		= $value3;
@@ -192,7 +196,8 @@ trait TextParseTrait
 						{
 							$objek 	= new Objek;
 						}
-						$objek->shgb 		= $value3['shgb'];
+						$klien->tipe 			= 'bangunan';
+						$objek->shgb 			= $value3['shgb'];
 						$objek->kantor 			= $this->active_office['kantor'];
 						unset($value3['shgb']);
 						$objek->dokumen 		= $value3;

@@ -9,7 +9,7 @@ use App\Service\Helpers\JSend;
 
 use Illuminate\Http\Request;
 
-use TAuth;
+use TAuth, Exception;
 
 class tagihanController extends Controller
 {
@@ -28,9 +28,6 @@ class tagihanController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$credentials 		= ['email' => 'admin@notaris.id', 'password' => 'admin'];
-		TAuth::login($credentials);
-
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -117,43 +114,128 @@ class tagihanController extends Controller
 
 	public function store(Request $request, $id = null, $status = 'pending')
 	{
+		try {
+			$this->active_office 	= TAuth::activeOffice();
+			
+			//store header transaksi
+			$tagihan		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->firstornew();
+			if(!is_null($id))
+			{
+				$status 	= $tagihan['status'];
+			}
+
+			$klien 			= Klien::findorfail($input['klien_id']);
+
+			$input 			= $request->only('tanggal_dikeluarkan', 'details', 'referensi_id', 'klien_id');
+			$tagihan->tanggal_dikeluarkan 	= $input['tanggal_dikeluarkan'];
+			$tagihan->tanggal_jatuh_tempo 	= Carbon::parseFromFormat($input['tanggal_jatuh_tempo'])->addMonths(3)->format('d/m/Y');
+			$tagihan->status 				= $status;
+			$tagihan->referensi_id 			= $input['referensi_id'];
+			$tagihan->tipe 					= 'bukti_kas_masuk';
+			$tagihan->kantor_id				= $this->active_office['kantor']['id'];
+			$tagihan->klien_id 				= $input['klien_id'];
+
+			if(isset($klien['akta_pendirian']))
+			{
+				$tagihan->klien_nama 		= $klien['akta_pendirian']['nama'];
+			}
+			else
+			{
+				$tagihan->klien_nama 		= $klien['ktp']['nama'];
+			}
+
+			$tagihan->save();
+
+			$tagihan->details()->delete();
+
+			foreach ($input['details'] as $key => $value) 
+			{
+				$t_detail 						= new DetailTransaksi;
+				$t_detail->item 				= $value['item'];
+				$t_detail->deskripsi 			= $value['deskripsi'];
+				$t_detail->kuantitas 			= $value['kuantitas'];
+				$t_detail->harga_satuan 		= $value['harga_satuan'];
+				$t_detail->diskon_satuan 		= $value['diskon_satuan'];
+				$t_detail->header_transaksi_id 	= $tagihan->id;
+				$t_detail->save();
+			}
+
+			$this->page_attributes->msg['success']		= ['Tagihan Berhasil Disimpan'];
+			return $this->generateRedirect(route('tagihan.tagihan.show', $tagihan->id));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+			return $this->generateRedirect(route('tagihan.tagihan.create', ['id' => $id]));
+		}
+	}
+
+	public function update(Request $request, $id)
+	{
+		return $this->store($request, $id);
+	}
+
+	public function destroy(Request $request, $id)
+	{
 		$this->active_office 	= TAuth::activeOffice();
 		
-		//store header transaksi
-		$tagihan		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->firstornew();
-		if(!is_null($id))
-		{
-			$status 	= $tagihan['status'];
+		try {
+			//store header transaksi
+			$tagihan		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->firstorfail();
+			$tagihan->details->delete();
+			$tagihan->delete();
+
+			$this->page_attributes->msg['success']		= ['Tagihan Berhasil Dihapus'];
+			return $this->generateRedirect(route('tagihan.tagihan.index'));
+
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+			return $this->generateRedirect(route('tagihan.tagihan.show', $id));
 		}
+	}
 
-		$klien 			= Klien::findorfail($input['klien_id']);
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function print(Request $request, $id)
+	{
+		$this->active_office 				= TAuth::activeOffice();
 
-		$input 			= $request->only('tanggal_dikeluarkan', 'details', 'referensi_id', 'klien_id');
-		$tagihan->tanggal_dikeluarkan 	= $input['tanggal_dikeluarkan'];
-		$tagihan->tanggal_jatuh_tempo 	= Carbon::parseFromFormat($input['tanggal_jatuh_tempo'])->addMonths(3)->format('d/m/Y');
-		$tagihan->status 				= $status;
-		$tagihan->referensi_id 			= $input['referensi_id'];
-		$tagihan->tipe 					= 'bukti_kas_masuk';
-		$tagihan->kantor_id				= $this->active_office['kantor']['id'];
-		$tagihan->klien_id 				= $input['klien_id'];
+		// 1. set page attributes
+		$this->page_attributes->title		= 'Tagihan';
 
-		if(isset($klien['akta_pendirian']))
-		{
-			$tagihan->klien_nama 		= $klien['akta_pendirian']['nama'];
+		//2. get show document
+		$this->page_datas->tagihan 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->first();
+
+		//3.initialize view
+		$this->view							= view('pages.tagihan.tagihan.print');
+		
+		return $this->generateView();  
+	}
+
+	public function status(Request $request, $id, $status)
+	{
+		try {
+			//1. get active office
+			$this->active_office 	= TAuth::activeOffice();
+
+			//2. get show document
+			$tagihan 				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->first();
+
+			//3. update status
+			$tagihan->status 		= $status;
+
+			//4. simpan tagihan
+			$tagihan->save();
+
+			$this->page_attributes->msg['success']		= ['Tagihan Berhasil Dihapus'];
+			
+			return $this->generateRedirect(route('tagihan.tagihan.show', $id));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+
+			return $this->generateRedirect(route('tagihan.tagihan.show', $id));
 		}
-		else
-		{
-			$tagihan->klien_nama 		= $klien['ktp']['nama'];
-		}
- 	
-		// 'klien_id'				,
-		// 'klien_nama'			,
-		// 'kantor_id'				,
-		// 'referensi_id'			,
-		// 'nomor_transaksi'		,
-		// 'tipe'					,
-		// 'status'				,
-
 	}
 
 	private function retrieveTagihan($query)
@@ -207,6 +289,7 @@ class tagihanController extends Controller
 	
 		return $filter;
 	}
+
 	private function retrieveTagihanUrutkan()
 	{
 		//1a.cari urutan
@@ -219,5 +302,4 @@ class tagihanController extends Controller
 
 		return $sort;
 	}
-
 }

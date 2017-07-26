@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\UAC;
 
 use TAuth, Redirect, Request, URL;
 
-class uacController extends Controller
+class loginController extends Controller
 {
+	//fungsi login
 	public function login()
 	{
 		// init
