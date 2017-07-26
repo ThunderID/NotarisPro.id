@@ -40,23 +40,19 @@ class Dokumen extends BaseModel
 	protected $fillable				=	[
 											'_id'					,
 											'judul'					,
+											'jenis'					,
 											'paragraf'				,
 											'status'				,
-											// 'versi'					,
-											'pemilik'				,
+											'versi'					,
 											'penulis'				,
-											'mentionable'			,
-											'fill_mention'			,
-											'total_perubahan'		,
-											'riwayat_status'		,
-											
-											'jumlah_pihak'			,
-											'jumlah_saksi'			,
-											'dokumen_objek'			,
-											'dokumen_pihak'			,
-											'dokumen_saksi'			,
+											'pemilik'				,
 
-											'template'				,
+											'mentionable'			,
+											'dokumen'				,
+
+											'prev'					,
+											'next'					,
+											'required_documents'	,
 										];
 	/**
 	 * Basic rule of database
@@ -65,19 +61,18 @@ class Dokumen extends BaseModel
 	 */
 	protected $rules				=	[
 											'judul'					=> 'required',
-											'jenis'					=> 'max:255',
-											'paragraf.*.konten'		=> 'required',
-											'paragraf.*.lock'		=> 'max:255',
-											// 'paragraf.*.key'		=> 'max:255',
+											// 'paragraf.*.konten'		=> 'required',
+											// 'paragraf.*.lock'		=> 'max:255',
+											// 'paragraf.*.key'			=> 'max:255',
 											// 'paragraf.*.padlock'	=> 'max:255',
-											'status'				=> 'in:dalam_proses,draft,renvoi,akta,minuta'
+											'status'				=> 'in:dalam_proses,draft,minuta,salinan'
 										];
 	/**
 	 * Date will be returned as carbon
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'tanggal_pertemuan'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
 	
 	/**
 	 * data hidden
@@ -91,7 +86,7 @@ class Dokumen extends BaseModel
 											'deleted_at', 
 										];
 
-	protected $appends 				= ['id', 'tanggal_pembuatan', 'tanggal_sunting', ''];
+	protected $appends 				= ['id', 'tanggal_pembuatan', 'tanggal_sunting'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
@@ -106,6 +101,18 @@ class Dokumen extends BaseModel
 		return $this->attributes['_id'];
 	}
 	
+	public function getMentionableAttribute($value = NULL)
+	{
+		$mentionable 		= [];
+
+		foreach ($this->attributes['mentionable'] as $key => $value) 
+		{
+			$mentionable[str_replace('[at]', '@', str_replace('[dot]', '.', $key))] = $value;
+		}
+
+		return $mentionable;
+	}
+
 	public function getTanggalPembuatanAttribute($value = NULL)
 	{
 		return $this->formatDateTo($this->attributes['created_at']);

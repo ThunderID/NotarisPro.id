@@ -3,23 +3,21 @@
 namespace App\Http\Controllers\Akta;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Domain\Akta\Models\Dokumen as Query;
+use App\Domain\Akta\Models\TipeDokumen;
+
+use App\Service\Akta\BuatAktaBaru;
+use App\Service\Akta\UpdateAkta;
+use App\Service\Akta\UpdateStatusAkta;
+use App\Service\Akta\HapusAkta;
+use App\Service\Akta\DuplikasiAkta;
+use App\Service\Akta\LockAkta;
+
 use App\Service\Helpers\JSend;
 
-use App\Service\Akta\DaftarTemplateAkta;
+use Illuminate\Http\Request;
 
-use App\Service\Akta\DaftarAkta as Query;
-use App\Service\Akta\BuatAktaBaru;
-use App\Service\Akta\SimpanAkta;
-use App\Service\Akta\HapusAkta;
-
-use App\Service\Akta\UnlockAkta;
-use App\Service\Akta\PublishAkta;
-use App\Service\Akta\FinalizeAkta;
-
-use App\Service\Tag\TagService;
-use App\Service\Admin\DaftarKantor;
-use TAuth, App, PDF, Exception;
+use TAuth;
 
 class aktaController extends Controller
 {
@@ -28,595 +26,461 @@ class aktaController extends Controller
 		parent::__construct();
 		
 		$this->query            = $query;
-	}    
+		$this->per_page 		= (int)env('DATA_PERPAGE');
+	}   
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		// init
+		$credentials 						= ['email' => 'admin@notaris.id', 'password' => 'admin'];
+		TAuth::login($credentials);
+
+		$this->active_office 				= TAuth::activeOffice();
+
+		// 1. set page attributes
 		$this->page_attributes->title		= 'Akta Dokumen';
 
-		//filter&search
-		$query                             	= $this->getQueryString(['q', 'status', 'sort', 'page']);
-		$query['per_page']                 	= (int)env('DATA_PERPAGE');
+		// 2. call all aktas data needed
+		//2a. parse query searching
+		$query 								= $request->only('cari', 'filter', 'urutkan', 'page');
+
+		//2b. retrieve all akta
+		$this->retrieveAkta($query);
+
+		//2c. get all filter 
+		$this->page_datas->filters 			= $this->retrieveAktaFilter();
 		
-		// special treat judul
-		if(isset($query['q'])){
-			$query['judul']					= $query['q'];
-			unset($query['q']);    	
-		}
+		//2d. get all urutan 
+		$this->page_datas->urutkan 			= $this->retrieveAktaUrutkan();
 
-		// special treat sort
-		if(isset($query['urutkan'])){
-			try{
-				$sort 						= explode("-", $query['urutkan']);
-				$query['urutkan'] 			= [ $sort[0] => $sort[1]]; 
-			} catch (Exception $e) {
-				// display error?
-			}
-		}
-
-		//get data from database
-		$this->page_datas->datas			= $this->query->get($query);
-
-		//paginate
-		$this->paginate(null, $this->query->count($query), (int)env('DATA_PERPAGE'));
-
-		//initialize view
+		//3.initialize view
 		$this->view							= view('pages.akta.akta.index');
 
-		//function from parent to generate view
 		return $this->generateView();  
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Request $request, $id)
+	{
+		$this->active_office 					= TAuth::activeOffice();
+
+		//1. call all aktas data needed
+		//1a. parse query searching
+		$query 									= $request->only('cari', 'filter', 'urutkan', 'page');
+
+		//1b. retrieve all akta
+		$this->retrieveAkta($query);
+
+		//1c. get all filter 
+		$this->page_datas->filters 				= $this->retrieveAktaFilter();
+		
+		//1d. get all urutan 
+		$this->page_datas->urutkan 				= $this->retrieveAktaUrutkan();
+
+		//1e. get show document
+		$this->page_datas->akta 				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+
+		//1f. generate checker
+		$this->page_datas->akta['incomplete']	= $this->checkInclompeteData($this->page_datas->akta['dokumen']);
+
+		//2. set page attributes
+		$this->page_attributes->title			= 'Akta Dokumen';
+
+		//3.initialize view
+		$this->view								= view('pages.akta.akta.show');
+
+		return $this->generateView();  
+	}
+
+	/**
+	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create(Request $request)
 	{
-		//return view
-		return $this->generateRedirect(route('akta.akta.create'));
-	}
+		$this->active_office 				= TAuth::activeOffice();
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store($id = null, Request $request)
-	{
-		try 
-		{
-			$input						= $request->only('klien', 'tanggal_pertemuan', 'judul', 'template', 'mentionable', 'template_id');
-			$template					= new DaftarTemplateAkta;
-			$template					= $template->detailed($input['template_id']);
-	
-			$input['klien']['id'] 		= (isset($input['klien']['id']) && !is_null($input['klien']['id'])) ? $input['klien']['id'] : null;
-			$tanggal_pertemuan 			= date_create($input['tanggal_pertemuan']);
-			$input['tanggal_pertemuan']	= date_format($tanggal_pertemuan, 'd/m/Y H:i');
+		//1. parse data needed based on category
+		// $this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
 
-			$akta						= new BuatAktaBaru($input['judul'], $template['paragraf'], 
-														$input['mentionable'], $input['template_id']);
+		//2. init akta as null
+		$this->page_datas->akta 			= null;
 
-			$akta 						= $akta->save();
-			//save tanggal pertemuan
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']	= $e->getMessage();
-			return $this->generateRedirect(route('akta.akta.create'));
-		}
+		//2. set page attributes
+		$this->page_attributes->title		= 'Akta Dokumen';
 
-		//return view
-		$this->page_attributes->msg['success']		= ['Data akta telah ditambahkan'];
+		//3.initialize view
+		$this->view							= view('pages.akta.akta.create');
 
-		return $this->generateRedirect(route('akta.akta.edit', $akta['id']));
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		//get data notaris
-		$notaris 				= new DaftarKantor;
-		$notaris 				= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
-		
-		$this->page_datas->datas			= $this->query->detailed($id);
-		$this->page_datas->doc_inspector	= $this->doc_inspector($this->page_datas->datas);
-		$this->page_datas->notaris			= $notaris;
-
-		$data 								= collect($this->page_datas->datas['riwayat_status']);
-		$this->page_datas->status_dalam_proses 	= $data->where('status', 'dalam_proses')->sortByDesc('tanggal')->toArray();
-		$this->page_datas->status_draft 		= $data->where('status', 'draft')->sortByDesc('tanggal')->toArray();
-		$this->page_datas->status_renvoi 		= $data->where('status', 'renvoi')->sortByDesc('tanggal')->toArray();
-		$this->page_datas->status_akta 			= $data->where('status', 'akta')->sortByDesc('tanggal')->toArray();
-		$this->page_datas->status_minuta 		= $data->where('status', 'minuta')->sortByDesc('tanggal')->toArray();
-
-		$this->page_datas->template			= new DaftarTemplateAkta;
-		$this->page_datas->template 		= $this->page_datas->template->thinning($this->page_datas->datas['template']['id']);
-
-		$this->page_attributes->title		= $this->page_datas->datas['judul'];
-
-		//initialize view
-		$this->view							= view('pages.akta.akta.show');
-
-		//function from parent to generate view
-		return $this->generateView();
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		// init
-		$this->page_attributes->title       = 'Edit Akta';
-
-		$this->page_datas->akta_id 			= $id;
-		$this->page_datas->datas			= $this->query->detailed($id);
-		$this->page_datas->template_id 		= $this->page_datas->datas['template']['id'];
-
-		//initialize view
-		$this->view                         = view('pages.akta.akta.create');
-
-		//function from parent to generate view
 		return $this->generateView();  
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Display a listing of the resource.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
+	public function edit(Request $request, $id)
+	{
+		$this->active_office 				= TAuth::activeOffice();
+
+		//1. parse data needed based on category
+		// $this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
+
+		//2. init akta as null
+		//1e. get show document
+		$this->page_datas->akta 				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+
+		//1f. generate checker
+		$this->page_datas->akta['incomplete']	= $this->checkInclompeteData($this->page_datas->akta['dokumen']);
+
+		//2. set page attributes
+		$this->page_attributes->title		= 'Akta Dokumen';
+
+		//3.initialize view
+		$this->view							= view('pages.akta.akta.create');
+
+		return $this->generateView();  
+	}
+
+	public function store(Request $request)
+	{
+		try {
+			$akta 		= new BuatAktaBaru($request->get('judul'), $request->get('jenis'), $request->get('paragraf'));
+			$akta 		= $akta->save();
+
+			$this->page_attributes->msg['success']		= ['Akta Berhasil di Simpan'];
+			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+		} 
+		catch (Exception $e) {
+			$this->page_attributes->msg['error']       = $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.create'));
+		}
+	}
+
+
 	public function update(Request $request, $id)
 	{
-		//
 		try {
-			$content 	= $this->parse_store($id, $request->only('template'));
-			$akta		= new SimpanAkta($id, $request->get('judul'), $content['paragraf'], []);
-			$akta		= $akta->save();
-		} catch (Exception $e) {
-			dD($e);
-			$this->page_attributes->msg['error']	= $e->getMessage();
-		}
+			$akta 		= new UpdateAkta($id);
 
-		//return view
-		if($id == null){
-			$this->page_attributes->msg['success']         = ['Data akta telah ditambahkan'];
-			return $this->generateRedirect(route('akta.akta.index'));
-		}else{
-			$this->page_attributes->msg['success']         = ['Data akta telah diperbarui'];
-			return $this->generateRedirect(route('akta.akta.show', ['id' => $id]));
-		}
+			if($request->has('judul'))
+			{
+				$akta->setJudul($request->get('judul'));
+			}
 
+			if($request->has('jenis'))
+			{
+				$akta->setJenis($request->get('jenis'));
+			}
+
+			if($request->has('paragraf'))
+			{
+				$akta->setParagraf($request->get('paragraf'));
+			}
+
+			$akta 		= $akta->save();
+
+			$this->page_attributes->msg['success']		= ['Akta Berhasil di Ubah'];
+			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+		} 
+		catch (Exception $e) {
+			$this->page_attributes->msg['error']		= $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.edit', $id));
+		}
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
+	public function destroy(Request $request, $id)
 	{
-		// cek apa password benar
-
-		// hapus
 		try {
-			$akta									= new HapusAkta($id);
-			$akta									= $akta->save();
+			$akta 		= new HapusAkta($id);
+			$akta 		= $akta->save();
+
+			$this->page_attributes->msg['success']		= ['Akta Berhasil di Hapus'];
+			return $this->generateRedirect(route('akta.akta.index'));
 		} catch (Exception $e) {
-			$this->page_attributes->msg['error']	= $e->getMesssage();
-		}            
-
-		$this->page_attributes->msg['success']		= ['Data akta telah dihapus'];
-
-		//return view
-		return $this->generateRedirect(route('akta.akta.index'));
+			$this->page_attributes->msg['error']		= $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.show', $id));
+		}
 	}
 
-	/**
-	 * update status akta
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function status(Request $request, $id, $status)
-	{	
+	public function mentionIndex(Request $request, $id)
+	{
+		$this->active_office	= TAuth::activeOffice();
+	
+		$akta		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+		$mentions 	= [];
+
+		foreach ($akta['mentionable'] as $key => $value) 
+		{
+			$mentions[] 	= str_replace('[dot]', '.', str_replace('[at]', '@', $key));
+		}
+
+		return $mentions;
+	}
+
+	public function versionIndex(Request $request, $id)
+	{
+		$this->active_office	= TAuth::activeOffice();
+		$key 					= 0;
+		$versi 					= [];
+
+		do {
+			$versi[$key]		= $this->query->notid($id)->kantor($this->active_office['kantor']['id'])->where('prev', $id)->first();
+			$id 				= $versi[$key]['id'];
+		} while (isset($versi[$key]) && $versi[$key]['prev'] != null);	
+
+		return $versi;
+	}
+
+	public function versionShow(Request $request, $akta_id, $version_id)
+	{
+		$this->active_office	= TAuth::activeOffice();
+
+		$akta['original']		= $this->query->id($akta_id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+		$akta['versioning']		= $this->query->id($version_id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+
+		return $akta;
+	}
+
+	public function print(Request $request, $akta_id)
+	{
+		$this->active_office	= TAuth::activeOffice();
+
+		$akta					= $this->query->id($akta_id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+
+		return $akta;
+	}
+
+	public function renvoiMark(Request $request, $akta_id, $key, $mode)
+	{
+		$this->active_office	= TAuth::activeOffice();
+
+		$akta 					= new LockAkta($akta_id);
+
+		try {
+			switch (strtolower($mode)) 
+			{
+				case 'add':
+				$akta 	= $akta->addParagrafAfter($key);
+					break;
+				case 'delete':
+				$akta 	= $akta->removeParagrafBefore($key);
+					break;
+				case 'edit':
+				$akta 	= $akta->editable($key);
+					break;
+				default :
+					throw new Exception("Not listed ", 1);
+					break;
+			}
+		} catch (Exception $e) {
+			return JSend::error($akta, $e->getMessage());
+		}
+
+		return JSend::success($akta);
+	}
+
+	public function status(Request $request, $akta_id, $status)
+	{
+		$this->active_office	= TAuth::activeOffice();
+
+		$akta 					= new UpdateStatusAkta($akta_id);
+
 		try {
 			switch (strtolower($status)) 
 			{
-				case 'draft':
-					$data		= new PublishAkta($id);
+				case 'minuta':
+				$akta 	= $akta->toMinuta($key);
 					break;
-				case 'renvoi':
-					$data		= new UnlockAkta($id, []);
+				case 'salinan':
+				$akta 	= $akta->toSalinan($key);
 					break;
-				case 'akta':
-					$data		= new FinalizeAkta($id, $request->get('nomor_akta'), $request->get('template'));
-					break;
-				default:
-					throw new Exception("Status invalid", 1);
+				default :
+					throw new Exception("Not listed ", 1);
 					break;
 			}
-
-			// save
-			$data				= $data->save();
-
-		// save
 		} catch (Exception $e) {
-			$this->page_attributes->msg['error']	= $e->getMessage();
+			return JSend::error($akta, $e->getMessage());
 		}
 
-		$this->page_attributes->msg['success']         = ['Data akta telah di simpan'];
-
-		return $this->generateRedirect(route('akta.akta.show', $id));
+		return JSend::success($akta);
 	}
 
-	/**
-	 * Function to choose template from new akta
-	 */
-	public function choose_template(Request $request)
+	public function copy(Request $request, $akta_id)
 	{
-		// init
-		$this->page_attributes->title       = 'Pilih Template';
+		$this->active_office	= TAuth::activeOffice();
 
-		if ($request->has('template_id'))
-		{
-			$this->page_datas->template_id	= $request->get('template_id');
+		$akta 					= new DuplikasiAkta($akta_id);
+
+		try {
+			$akta 				= $akta->save();
+
+			$this->page_attributes->msg['success']		= ['Akta Berhasil di duplikasi'];
+			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+		} 
+		catch (Exception $e) {
+			$this->page_attributes->msg['error']       = $e->getMessage();
+			return $this->generateRedirect(route('akta.akta.show', $akta_id));
 		}
-		else
-		{
-			$this->page_datas->template_id	= null;	
-			
-			$call 							= new DaftarTemplateAkta;
-			$filter 						= ['status' => 'publish'];
-			$list_template 					= $call->all($filter);
-
-			//get data from database
-			$this->page_datas->datas 		= $list_template;
-		}
-
-		//initialize view
-		$this->view                         = view('pages.akta.akta.choosetemplate');
-
-		//function from parent to generate view
-		return $this->generateView();  
 	}
 
-	/**
-	 * Function show versioning
-	 */
-	public function versioning($akta_id)
-	{	
-		$versioning         				= new \App\Service\Akta\DaftarAkta;
-
-		$this->page_datas->datas			= $versioning->versioning($akta_id);
-		$this->page_attributes->title		= 'Histori Revisi ' . $this->page_datas->datas['terbaru']['judul'];
-
-		$this->page_datas->id				= $akta_id;
-
-
-		//initialize view
-		$this->view							= view('pages.akta.akta.versioning');
-
-		//function from parent to generate view
-		return $this->generateView();		
-	}
-
-	/**
-	 * function get list fillable mention on template
-	 */
-	public function list_widgets(Request $request) 
+	public function dokumenIndex(Request $request)
 	{
-		try 
+		$this->active_office	= TAuth::activeOffice();
+
+		$lists 					= TipeDokumen::kantor($this->active_office['kantor']['id'])->orderby('kategori', 'desc')->get()->toArray();
+
+		return JSend::succesS($lists);
+	}
+
+	/**
+	 * Highly dependant on UI
+	 *
+	 * @param array ['cari' => 'string judul / nama klien', 'filter' => ['jenis' => 'AJB|Fidusia|...', 'status' => 'drafting|minuta'], 'urutkan' => 'created_at-desc', 'page' => 1];
+	 */
+	private function retrieveAkta($query = null)
+	{
+		//1. pastikan berasal dari kantor yang sama
+		$data 	 	= $this->query->kantor($this->active_office['kantor']['id']);
+
+		//2. cari sesuai query
+		if(isset($query['cari']))
 		{
-			$template_id 			= $request->get('template_id'); 
+			$data 	= $data->where(function($q)use($query){$q->where('judul', 'like', '%'.$query['cari'].'%')->orwhere('pemilik.klien.nama', 'like', '%'.$query['cari'].'%');});
+		}
 
-			$call					= new DaftarTemplateAkta;
-			$template 				= $call->detailed($template_id);
-
-			$mentionable			= [];
-
-			if (isset($template['mentionable']))
+		//3. filter 
+		foreach ((array)$query['filter'] as $key => $value) 
+		{
+			if(in_array($key, ['jenis', 'status']))
 			{
-				foreach ($template['mentionable'] as $key => $value) 
+				$data 	= $data->where($key, $value);				
+			}
+		}
+
+		//4. urutkan
+		if(isset($query['urutkan']))
+		{
+			$explode 		= explode('-', $query['urutkan']);
+			if(in_array($explode[0], ['updated_at', 'created_at', 'status', 'jenis']) && in_array($explode[1], ['asc', 'desc']))
+			{
+				$data 		= $data->orderby($key, $value);
+			}
+		}
+
+		//5. page
+		$skip 		= 0;
+		if(isset($query['page']))
+		{
+			$skip 	= ((1 * $query['page']) - 1) * $this->per_page;
+		}
+		//set datas
+		$this->paginate(null, $data->count(), $this->per_page);
+		$this->page_datas->aktas 		= $data->skip($skip)->take($this->per_page)->get(['_id', 'judul', 'jenis', 'status', 'versi', 'penulis', 'pemilik', 'created_at', 'updated_at'])->toArray();
+
+		return $this->page_datas;
+	}
+
+	private function retrieveAktaFilter()
+	{
+		//1a. cari jenis
+		$filter['jenis']	= $this->query->distinct('jenis')->get();
+
+		//2a. status
+		$filter['status']	= $this->query->distinct('status')->get();
+	
+		return $filter;
+	}
+	private function retrieveAktaUrutkan()
+	{
+		//1a.cari urutan
+		$sort	= 	[
+						'created_at-desc' 	=> 'Terbaru dibuat',
+						'created_at-asc' 	=> 'Terlama dibuat',
+						'updated_at-desc' 	=> 'Terbaru diupdate',
+						'updated_at-asc' 	=> 'Terlama diupdate',
+						'status-asc' 		=> 'Status A - Z',
+						'status-desc' 		=> 'Status Z - A',
+						'jenis-asc' 		=> 'Jenis A - Z',
+						'jenis-desc' 		=> 'Jenis Z - A',
+					];
+
+		return $sort;
+	}
+
+	private function checkInclompeteData($document)
+	{
+		$required 			= [];
+		//1. incomplete document
+		if(isset($document['pihak']))
+		{
+			foreach ((array)$document['pihak'] as $d_key => $docs) 
+			{
+				//
+				foreach ($docs as $f_key => $field) 
 				{
-					if(!str_is('@notaris.*', $value) && !str_is('@akta.nomor', $value))
+					$required['pihak'][$d_key][$f_key] 	=	true;
+					
+					foreach ($field as $v_key => $value) 
 					{
-						if(str_is('@objek*', $value))
+						if(empty($value))
 						{
-							$prefix 				= str_replace('@', '', $value);
-							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0]][$prefix[1]][]	= $value;
+							$required['pihak'][$d_key][$f_key] 	=	false;
 						}
+					}
+				}
+			}
+		}
 
-						if(str_is('@saksi*', $value))
+		if(isset($document['objek']))
+		{
+			foreach ((array)$document['objek'] as $d_key => $docs) 
+			{
+				//
+				foreach ($docs as $f_key => $field) 
+				{
+					$required['objek'][$d_key][$f_key] 	=	true;
+		
+					foreach ($field as $v_key => $value) 
+					{
+						if(empty($value))
 						{
-							$prefix 				= str_replace('@', '', $value);
-							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]][]	= $value;
+							$required['objek'][$d_key][$f_key] 	=	false;
 						}
+					}
+				}
+			}
+		}
 
-						if(str_is('@pihak*', $value))
+		if(isset($document['saksi']))
+		{
+			foreach ((array)$document['saksi'] as $d_key => $docs) 
+			{
+				//
+				foreach ($docs as $f_key => $field) 
+				{
+					$required['saksi'][$d_key][$f_key] 	=	true;
+		
+					foreach ($field as $v_key => $value) 
+					{
+						if(empty($value))
 						{
-							$prefix 				= str_replace('@', '', $value);
-							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0].'_'.$prefix[1]][$prefix[2]][]	= $value;
-						}
-
-						if(str_is('@akta*', $value))
-						{
-							$prefix 				= str_replace('@', '', $value);
-							$prefix 				= explode('.', $prefix);
-							$mentionable[$prefix[0]][$prefix[0]][]	= $value;
+							$required['saksi'][$d_key][$f_key] 	=	false;
 						}
 					}
 				}
 			}
 
-			return response()->json(['data' => $mentionable], 200);
-			
-		} catch (Exception $e) {
-			$msg						= $e->getMessage();
-
-			return response()->json(['data' => $msg], 200);
-		}
-	}
-
-	private function parse_store($id, $template)
-	{
-		$check_status 								= $this->query->detailed($id);
-		$input['id']								= $id;
-
-		if(is_array($template['template']) && $check_status['status']=='renvoi')
-		{
-			$input['paragraf']						= $check_status['paragraf'];
-
-			foreach ($template['template'] as $key => $value) 
-			{
-				$value 		= str_replace('&nbsp;', ' ', $value);
-				$value		= preg_replace('/<br.*?><\/li>/i', '</li>', $value);
-				$value		= preg_replace('/<br.*?><\/span>/i', '</span><br>', $value);
-				$value		= preg_replace('/<br.*?><\/b>/i', '</b><br>', $value);
-
-				$input['paragraf'][$key]['konten']	= $value;
-			}
-		}
-		elseif($check_status['status']=='dalam_proses' || $check_status['status']=='renvoi')
-		{
-			// get data
-			$pattern		= "/\/t.*?<h.*?>(.*?)<\/h.*?>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
-			
-			preg_match_all($pattern, $template['template'], $out, PREG_PATTERN_ORDER);
-			// change key index like 'paragraph[*]'
-
-			foreach ($out[0] as $key => $value) 
-			{
-				$value		= preg_replace('/<br.*?><\/li>/i', '</li>', $value);
-				$value		= preg_replace('/<br.*?><\/span>/i', '</span><br>', $value);
-				$value		= preg_replace('/<br.*?><\/b>/i', '</b><br>', $value);
-
-				$input['paragraf'][$key]['konten']	= $value;
-			}
-		}
-		else
-		{
-			throw new Exception("Status invalid", 1);
-		}
-
-		return $input;
-	}
-
-	/**
-	 * function automatic save
-	 */
-	public function automatic_store ($id = null, Request $request)
-	{
-		try {
-			$this->parse_store($id, $request->only('template'));
-		} catch (Exception $e) {
-			return response()->json(['status'	=> $e->getMessage()], 200);
-		}
-
-		//return view
-		$this->page_attributes->msg['success']         = ['Data template tersimpan'];
-		return response()->json(['status'	=> 'success'], 200);
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function mention($akta_id, Request $request)
-	{
-		 try {
-			$check_status	= $this->query->detailed($akta_id);
-
-			// get data
-			$input			= $request->only('mention', 'isi_mention');
-			$content 		= [$input['mention'] => $input['isi_mention']];
-
-			// save
-			// $this->parse_store($akta_id, $request->only('template'));
-			$data 			= new SimpanAkta($akta_id, $check_status['judul'], $check_status['paragraf'], $content);
-			$data 			= $data->save();
-		} catch (Exception $e) {
-			return JSend::error($e->getMessage())->asArray();
-		}
-
-		return JSend::success(['data' => $content])->asArray();
-	}
-
-
-	/**
-	 * menandai renvoi akta
-	 *
-	 */
-	public function tandai_renvoi($akta_id, Request $request)
-	{
-		 try {
-			// get data
-			$input			= $request->get('lock');
-
-			// save
-			$data			= new UnlockAkta($akta_id, [$input]);
-			$data 			= $data->save();
-		} catch (Exception $e) {
-			return JSend::error($e->getMessage())->asArray();
-		}
-
-		return JSend::success(['data' => $input])->asArray();
-	}
-
-	/**
-	 * Show the form for editing the specified resource with status renvoi.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function renvoi($id)
-	{
-		// init
-		$this->page_attributes->title       = 'Edit Akta';
-
-		$this->page_datas->akta_id 			= $id;
-		$this->page_datas->template_id 		= '';
-		$this->page_datas->datas			= $this->query->detailed($id);
-
-		//initialize view
-		$this->view                         = view('pages.akta.akta.renvoi');
-
-		//function from parent to generate view
-		return $this->generateView();  
-	}
-
-	public function pdf($akta_id)
-	{
-		// get data akta
-		$this->page_datas->datas			= $this->query->detailed($akta_id);
-
-		//get data notaris
-		$notaris 							= new DaftarKantor;
-		$notaris 							= $notaris->detailed(TAuth::activeOffice()['kantor']['id']);
-		$this->page_datas->notaris			= $notaris;
-
-		//initialize view
-		$this->view							= view('pages.akta.akta.pdf');
-
-		// generate PDF
-		set_time_limit(600); 
-		return PDF::loadHTML($this->generateView())
-			->setPaper('a4', 'portrait')
-			->setOptions(['defaultFont' => 'courier'])
-			->stream();
-		
-	}
-
-	// Trash Bin
-	public function trash()
-	{
-		// init
-		$this->page_attributes->title       = 'Keranjang Sampah Akta Dokumen';
-		$this->page_attributes->hide['create']	= true;
-
-
-		//filter&search
-		$query                             	= $this->getQueryString(['q', 'status', 'sort', 'page']);
-		$query['per_page']                 	= (int)env('DATA_PERPAGE');
-		
-		// special treat judul
-		if(isset($query['q'])){
-			$query['judul']					= $query['q'];
-			unset($query['q']);    	
-		}
-
-		// special treat sort
-		if(isset($query['urutkan'])){
-			try{
-				$sort 						= explode("-", $query['urutkan']);
-				$query['urutkan'] 			= [ $sort[0] => $sort[1]]; 
-			} catch (Exception $e) {
-				// display error?
-			}
-		}
-
-		//get data from database
-		$this->page_datas->datas			= $this->query->trash($query);
-
-		//paginate
-		$this->paginate(null, $this->query->countTrash($query), (int)env('DATA_PERPAGE'));
-
-		//initialize view
-		$this->view							= view('pages.akta.akta.index');
-
-		//function from parent to generate view
-		return $this->generateView();  
-	}
-
-	private function doc_inspector(array $doc)
-	{
-		$required 	= [];
-		foreach ($doc['mentionable'] as $key => $value) 
-		{
-			if(str_is('@pihak.*', $value))
-			{
-				$mention 		= str_replace('@', '', $value);
-				$mentions 		= explode('.', $mention);
-				$required['pihak'][$mentions[1]][$mentions[2]]			= false;
-
-				foreach ($doc['fill_mention'] as $key2 => $value2)
-				{
-					if(str_is($key2, $value))
-					{
-						$required['pihak'][$mentions[1]][$mentions[2]]	= true;
-					}
-				} 
-			}
-
-			elseif(str_is('@saksi.*', $value))
-			{
-				$mention 		= str_replace('@', '', $value);
-				$mentions 		= explode('.', $mention);
-				$required['saksi'][$mentions[1]][$mentions[2]]			= false;
-
-				foreach ($doc['fill_mention'] as $key2 => $value2)
-				{
-					if(str_is($key2, $value))
-					{
-						$required['saksi'][$mentions[1]][$mentions[2]]	= true;
-					}
-				} 
-			}
-
-			elseif(str_is('@objek.*', $value))
-			{
-				$mention 		= str_replace('@', '', $value);
-				$mentions 		= explode('.', $mention);
-				$required['objek'][$mentions[1]]			= false;
-
-				foreach ($doc['fill_mention'] as $key2 => $value2)
-				{
-					if(str_is($key2, $value))
-					{
-						$required['objek'][0][$mentions[1]]	= true;
-					}
-				} 
-			}
 		}
 
 		return $required;

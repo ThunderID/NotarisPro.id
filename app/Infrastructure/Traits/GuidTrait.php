@@ -11,20 +11,8 @@ namespace App\Infrastructure\Traits;
  * @subpackage TAkta
  * @author     C Mooy <chelsymooy1108@gmail.com>
  */
-trait GuidTrait {
- 	
- 	/**
-	 * Boot the scope.
-	 * 
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->attributes['_id']		= $this->createID('test');
-	}
-
+trait GuidTrait 
+{
 	/**
 	 * Add Event_list to queue
 	 * @param [IEvent_list] $event_list 

@@ -10,235 +10,120 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// 1. AKTA
+Route::group(['namespace' => 'Akta\\'], function(){
+	//akta
+	Route::resource('/akta/akta', 'aktaController', ['names' => [
+		'index' 	=> 'akta.akta.index', //get
+		'create'	=> 'akta.akta.create', //get
+		'store' 	=> 'akta.akta.store', //post
+		'show' 		=> 'akta.akta.show', //get
+		'edit' 		=> 'akta.akta.edit', //get
+		'update' 	=> 'akta.akta.update', //patch
+		'destroy' 	=> 'akta.akta.destroy' //post 
+	]]);
 
-//paragraph things
-Route::get('/paragraph/buat',		['uses' => 'temporaryParagraphController@form', 		'as' => 'temp.graph.form']);
-Route::post('/paragraph/simpan',	['uses' => 'temporaryParagraphController@post', 		'as' => 'temp.graph.post']);
-Route::get('/paragraph/lihat',		['uses' => 'temporaryParagraphController@get',	 		'as' => 'temp.graph.get']);
-Route::any('/mentioned/lists',		['uses' => 'temporaryParagraphController@mentioning', 	'as' => 'temp.mention']);
+	Route::any('/akta/mention/{akta_id}', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
+	Route::any('/akta/versi/{akta_id}', 						['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
+	Route::any('/akta/versi/{akta_id}/compare/{version_id}', 	['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
+	Route::any('/akta/print/{akta_id}',	 						['uses' => 'aktaController@print', 			'as' => 'akta.akta.print']);
 
-Route::get('/test', function () 
-{
-	$data 	= new App\Domain\Stat\Models\UserAttendance;
-	$data 	= $data->get();
-	dD($data);
+	Route::any('/akta/renvoi/{akta_id}/mark/{key}/{mode}', 		['uses' => 'aktaController@renvoiMark', 	'as' => 'akta.renvoi.mark']);
+	Route::any('/akta/status/{akta_id}/{status}',	 			['uses' => 'aktaController@status', 		'as' => 'akta.akta.status']);
+	Route::any('/akta/copy/{akta_id}',	 						['uses' => 'aktaController@copy', 			'as' => 'akta.akta.copy']);
 
-	$data 	= new App\Domain\Stat\Models\KlienProgress;
-	$data 	= $data->Ongoing(TAuth::activeOffice()['kantor']['id']);
-	dD($data);
-	return view('thunder');
-	return view('test');
-	$akta 			= '<span class="medium-editor-mention-at text-danger">@notaris.nama</span> Notaris di <span class="medium-editor-mention-at medium-editor-mention-at-active text-danger">@notaris.alamat</span>. Dengan dihadiri saksi-saksi yang saya, Notaris kenal dan akan disebut bagian akhir akta ini.</span>';
+	Route::any('/akta/required/dokumen',	 					['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
+});
 
-	$pattern3 		= "/<span.*?>|<\/span>/i";
- 
-	$replace 		= preg_replace($pattern3, '', $akta);
+// 2. TAGIHAN
+Route::group(['namespace' => 'Tagihan\\'], function(){
+	//tagihan
+	Route::resource('/tagihan/tagihan', 'tagihanController', ['names' => [
+		'index' 	=> 'tagihan.tagihan.index', //get
+		'create'	=> 'tagihan.tagihan.create', //get
+		'store' 	=> 'tagihan.tagihan.store', //post
+		'show' 		=> 'tagihan.tagihan.show', //get
+		'edit' 		=> 'tagihan.tagihan.edit', //get
+		'update' 	=> 'tagihan.tagihan.update', //patch
+		'destroy' 	=> 'tagihan.tagihan.destroy' //post 
+	]]);
 
-// 	$klien 			= new TQueries\Klien\DaftarKlien;
-// 	$klien 			= $klien->get();
-// 	dd($klien);
+	Route::any('/tagihan/print/{tagihan_id}',	 		['uses' => 'tagihanController@print', 		'as' => 'tagihan.tagihan.print']);
+	Route::any('/tagihan/status/{tagihan_id}',	 		['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
+});
+
+// 3. KLIEN
+Route::group(['namespace' => 'Klien\\'], function(){
+	//klien
+	Route::resource('/klien/klien', 'klienController', ['names' => [
+		'index' 	=> 'klien.klien.index', //get
+		// 'create'	=> 'klien.klien.create', //get
+		// 'store' 	=> 'klien.klien.store', //post
+		'show' 		=> 'klien.klien.show', //get
+		// 'edit' 		=> 'klien.klien.edit', //get
+		// 'update' 	=> 'klien.klien.update', //patch
+		'destroy' 	=> 'klien.klien.destroy' //post 
+	]]);
+
+	Route::get('/klien/orang/create',	 			['uses' => 'klienController@orangCreate', 		'as' => 'klien.orang.create']);
+	Route::get('/klien/perusahaan/create',	 		['uses' => 'klienController@perusahaanCreate', 	'as' => 'klien.perusahaan.create']);
+
+	Route::post('/klien/orang/store',	 			['uses' => 'klienController@orangStore', 		'as' => 'klien.orang.store']);
+	Route::post('/klien/perusahaan/store',	 		['uses' => 'klienController@perusahaanStore', 	'as' => 'klien.perusahaan.store']);
+
+	Route::get('/klien/orang/{id}/edit',	 		['uses' => 'klienController@orangEdit', 		'as' => 'klien.orang.edit']);
+	Route::get('/klien/perusahaan/{id}/edit',		['uses' => 'klienController@perusahaanEdit', 	'as' => 'klien.perusahaan.edit']);
+
+	Route::patch('/klien/orang/{id}/update',	 	['uses' => 'klienController@orangUpdate', 		'as' => 'klien.orang.update']);
+	Route::patch('/klien/perusahaan/{id}/update',	['uses' => 'klienController@perusahaanUpdate', 	'as' => 'klien.perusahaan.update']);
+});
+
+// 4. NOTARIS
+Route::group(['namespace' => 'Notaris\\'], function(){
+	//notaris
+	Route::get('/notaris/notaris',		['uses' => 'notarisController@index', 	'as' => 'notaris.notaris.index']);
 });
 
 
-// UAC
-Route::get('/login',			['uses' => 'uacController@login', 			'as' => 'uac.login']);
-Route::post('/login', 			['uses' => 'uacController@doLogin', 		'as' => 'uac.login.post']);
-Route::post('/reset-password/send-email',	['uses' => 'uacController@doSendEmailResetPassword', 	'as' => 'uac.reset.send']);
+// AREA PENGATURAN //
+Route::group(['namespace' => 'Pengaturan\\'], function(){
+	//5. Subscription
+	Route::any('/pengaturan/subscription',						['uses' => 'subscriptionController@index', 		'as' => 'pengaturan.subscription.index']);
+	Route::any('/pengaturan/subscription/print/{id}',			['uses' => 'subscriptionController@print', 		'as' => 'pengaturan.subscription.print']);
+	Route::any('/pengaturan/subscription/recalculate/{mode}',	['uses' => 'subscriptionController@recalculate','as' => 'pengaturan.subscription.recalculate']);
 
+	//6. User
+	Route::resource('/pengaturan/user', 'userController', ['names' => [
+		'index' 	=> 'pengaturan.user.index', //get
+		'create'	=> 'pengaturan.user.create', //get
+		'store' 	=> 'pengaturan.user.store', //post
+		'show' 		=> 'pengaturan.user.show', //get
+		'edit' 		=> 'pengaturan.user.edit', //get
+		'update' 	=> 'pengaturan.user.update', //patch
+		'destroy' 	=> 'pengaturan.user.destroy' //post 
+	]]);
 
-Route::get('/token/{token}/reset-password/',	['uses' => 'uacController@resetPassword', 	'as' => 'uac.reset']);
-Route::post('/token/{token}/reset-password/',	['uses' => 'uacController@doResetPassword', 	'as' => 'uac.reset.post']);
+	//7. Kantor
+	Route::get('/pengaturan/kantor',		['uses' => 'kantorController@edit', 	'as' => 'pengaturan.kantor.edit']);
+	Route::patch('/pengaturan/kantor',		['uses' => 'kantorController@update', 	'as' => 'pengaturan.kantor.update']);
 
+	//8. Akun
+	Route::get('/pengaturan/akun',			['uses' => 'akunController@edit', 		'as' => 'pengaturan.akun.edit']);
+	Route::patch('/pengaturan/akun',		['uses' => 'akunController@update', 	'as' => 'pengaturan.akun.update']);
+});
 
-Route::group(['middleware' => ['authenticated']], function()
-{
-	//uac after logged in
-	Route::any('/logout', 					['uses' => 'uacController@logout', 			'as' => 'uac.logout.any']);
-	Route::get('activate/{idx}', 			['uses' => 'uacController@activateOffice', 	'as' => 'uac.office.activate']);
-	
-	Route::group(['namespace' => 'Kantor\\'], function(){
-		Route::resource('/notaris/kantor', 'KantorController', ['names' => [
-				'index' 	=> 'notaris.kantor.index', //get
-				'create'	=> 'notaris.kantor.create', //get
-				'store' 	=> 'notaris.kantor.store', //post
-				'show' 		=> 'notaris.kantor.show', //get
-				'edit' 		=> 'notaris.kantor.edit', //get
-				'update' 	=> 'notaris.kantor.update', //patch
-				'destroy' 	=> 'notaris.kantor.destroy' //post 
-			]]);
-	});
+// AREA UAC //
 
-	// general
-	Route::get('/', 		['uses' => 'homeController@dashboard', 	'as' => 'home.dashboard']);
-	Route::get('/market', 	['uses' => 'homeController@market', 	'as' => 'market.dashboard']);
-	Route::get('/kpi',		['uses' => 'homeController@kpi', 		'as' => 'kpi.dashboard']);
-	Route::get('/finance', 	['uses' => 'homeController@finance', 	'as' => 'finance.dashboard']);
+// 9. Login
+Route::group(['namespace' => 'UAC\\'], function(){
+	//Login
+	Route::get('/login',		['uses' => 'loginController@create', 	'as' => 'uac.login.create']);
+	Route::post('/login',		['uses' => 'loginController@store', 	'as' => 'uac.login.store']);
+	Route::get('/logout',		['uses' => 'loginController@destroy', 	'as' => 'uac.login.destroy']);
 
-	// Akta
-	Route::group(['namespace' => 'Akta\\'], function(){
-		//template akta
-		Route::resource('/akta/template', 'templateController', ['names' => [
-			'index' 	=> 'akta.template.index', //get
-			'create'	=> 'akta.template.create', //get
-			'store' 	=> 'akta.template.store', //post
-			'show' 		=> 'akta.template.show', //get
-			'edit' 		=> 'akta.template.edit', //get
-			'update' 	=> 'akta.template.update', //patch
-			'destroy' 	=> 'akta.template.destroy' //post 
-		]]);
-		Route::get('/template/trash', 					['uses' => 'templateController@trash', 'as' => 'akta.template.trash']);
-
-		Route::get('/akta/template/publish/{id}', 		['uses' => 'templateController@publish', 'as' => 'akta.template.publish']);
-
-		Route::any('/akta/template/auto/save/{id}',		['uses' => 'templateController@automatic_store', 'as' => 'akta.template.automatic.store']);
-
-		Route::get('/akta/template/initial/new',		['uses' => 'templateController@initial', 'as' => 'akta.template.initial']);
-
-		// get list dokumen
-		Route::any('/akta/template/list/document',		['uses' => 'templateController@list_document', 'as' => 'akta.template.list.document']);
-
-		//akta
-		Route::resource('/akta/akta', 'aktaController', ['names' => [
-			'index' 	=> 'akta.akta.index', //get
-			'create'	=> 'akta.akta.create', //get
-			'store' 	=> 'akta.akta.store', //post
-			'show' 		=> 'akta.akta.show', //get
-			'edit' 		=> 'akta.akta.edit', //get
-			'update' 	=> 'akta.akta.update', //patch
-			'destroy' 	=> 'akta.akta.destroy' //post 
-		]]);
-
-		Route::get('/akta/trash', 							['uses' => 'aktaController@trash', 'as' => 'akta.akta.trash']);
-
-		Route::any('/akta/akta/status/{id}/{status}', 		['uses' => 'aktaController@status', 'as' => 'akta.akta.status']);
-		
-		// get list widget template in for akta
-		Route::any('/akta/akta/list/mentionable', 			['uses' => 'aktaController@list_widgets', 'as' => 'akta.akta.list.mentionable']);
-
-		// choose template for akta
-		Route::get('/akta/akta/pilih/template', 			['uses' => 'aktaController@choose_template', 'as' => 'akta.akta.choose.template']);
-
-		Route::any('/akta/akta/simpan/mention/{akta_id}', 	['uses' => 'aktaController@mention', 'as' => 'akta.akta.simpan.mention']);
-
-		// tandai renvoi
-		Route::any('/akta/akta/tandai/renvoi/{akta_id}', 	['uses' => 'aktaController@tandai_renvoi', 'as' => 'akta.akta.tandai.renvoi']);
-		
-		Route::any('/akta/akta/{id}/edit/renvoi',			['uses'	=> 'aktaController@renvoi', 'as' => 'akta.akta.edit.renvoi']);
-
-
-		// auto save
-		Route::any('/akta/akta/auto/save/{id}',				['uses'	=> 'aktaController@automatic_store', 'as' => 'akta.akta.automatic.store']);
-
-		// versioning akta
-		Route::get('/akta/akta/{akta_id}/versioning', 		['uses' => 'aktaController@versioning', 'as' => 'akta.akta.versioning']);
-
-		// Export PDF
-		Route::get('/akta/akta/{akta_id}/pdf',				['uses' => 'aktaController@pdf', 'as' => 'akta.akta.pdf']);
-
-	});
-
-	// Jadwal
-	Route::group(['namespace' => 'Jadwal\\'], function(){
-		//bpn
-		Route::resource('/jadwal/bpn', 'bpnJadwalController', ['names' => [
-			'index' 	=> 'jadwal.bpn.index', //get
-			'create'	=> 'jadwal.bpn.create', //get
-			'store' 	=> 'jadwal.bpn.store', //post
-			'show' 		=> 'jadwal.bpn.show', //get
-			'edit' 		=> 'jadwal.bpn.edit', //get
-			'update' 	=> 'jadwal.bpn.update', //patch
-			'destroy' 	=> 'jadwal.bpn.destroy' //post 
-		]]);
-
-		//klien
-		Route::resource('/jadwal/klien', 'klienJadwalController', ['names' => [
-			'index' 	=> 'jadwal.klien.index', //get
-			'create'	=> 'jadwal.klien.create', //get
-			'store' 	=> 'jadwal.klien.store', //post
-			'show' 		=> 'jadwal.klien.show', //get
-			'edit' 		=> 'jadwal.klien.edit', //get
-			'update' 	=> 'jadwal.klien.update', //patch
-			'destroy' 	=> 'jadwal.klien.destroy' //post 
-		]]);	
-	});
-
-	//klien
-	Route::group(['namespace' => 'Klien\\'], function(){
-		Route::resource('/klien', 'klienController', ['names' => [
-			'index' 	=> 'klien.index', //get
-			'create'	=> 'klien.create', //get
-			'store' 	=> 'klien.store', //post
-			'show' 		=> 'klien.show', //get
-			'edit' 		=> 'klien.edit', //get
-			'update' 	=> 'klien.update', //patch
-			'destroy' 	=> 'klien.destroy' //post 
-		]]);
-	});
-
-	// pos
-	Route::group(['namespace' => 'POS\\'], function(){
-		//billing
-		Route::resource('/pos/billing', 'billingPOSController', ['names' => [
-			'index' 	=> 'pos.billing.index', //get
-			'create'	=> 'pos.billing.create', //get
-			'store' 	=> 'pos.billing.store', //post
-			'show' 		=> 'pos.billing.show', //get
-			'edit' 		=> 'pos.billing.edit', //get
-			'update' 	=> 'pos.billing.update', //patch
-			'destroy' 	=> 'pos.billing.destroy' //post 
-		]]);
-	});
-
-
-	//kantor
-	Route::group(['namespace' => 'Admin\\'], function(){
-		Route::resource('/kantor', 'kantorController', ['names' => [
-			'index' 	=> 'kantor.index', //get
-			'create'	=> 'kantor.create', //get
-			'store' 	=> 'kantor.store', //post
-			'show' 		=> 'kantor.show', //get
-			'edit' 		=> 'kantor.edit', //get
-			'update' 	=> 'kantor.update', //patch
-			'destroy' 	=> 'kantor.destroy' //post 
-		]]);
-	});
-
-	//billing
-	Route::group(['namespace' => 'Admin\\'], function(){
-		Route::resource('/billing', 'billingController', ['names' => [
-			'index' 	=> 'billing.index', //get
-			'create'	=> 'billing.create', //get
-			'store' 	=> 'billing.store', //post
-			'show' 		=> 'billing.show', //get
-			'edit' 		=> 'billing.edit', //get
-			'update' 	=> 'billing.update', //patch
-			'destroy' 	=> 'billing.destroy' //post 
-		]]);
-	});
-
-	//akun
-	Route::group(['namespace' => 'Admin\\'], function(){
-		Route::resource('/akun', 'akunController', ['names' => [
-			'index' 	=> 'akun.index', //get
-			'create'	=> 'akun.create', //get
-			'store' 	=> 'akun.store', //post
-			'show' 		=> 'akun.show', //get
-			'edit' 		=> 'akun.edit', //get
-			'update' 	=> 'akun.update', //patch
-			'destroy' 	=> 'akun.destroy' //post 
-		]]);
-	});
-
-	//user
-	Route::group(['namespace' => 'Admin\\'], function(){
-		Route::resource('/user', 'userController', ['names' => [
-			'index' 	=> 'user.index', //get
-			'create'	=> 'user.create', //get
-			'store' 	=> 'user.store', //post
-			'show' 		=> 'user.show', //get
-			'edit' 		=> 'user.edit', //get
-			'update' 	=> 'user.update', //patch
-			'destroy' 	=> 'user.destroy' //post 
-		]]);
-	});
+	//Reset Pass
+	Route::get('/reset/password',			['uses' => 'passwordController@create', 	'as' => 'uac.reset.create']);
+	Route::post('/reset/password',			['uses' => 'passwordController@store',	 	'as' => 'uac.reset.store']);
+	Route::get('/change/password/{token}',	['uses' => 'passwordController@edit', 		'as' => 'uac.reset.edit']);
+	Route::patch('/change/password/{token}',['uses' => 'passwordController@update', 	'as' => 'uac.reset.update']);
 });

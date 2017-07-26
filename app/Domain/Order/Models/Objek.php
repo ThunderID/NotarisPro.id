@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Domain\Akta\Models;
-
-use App\Domain\Akta\Observers\TemplateObserver;
+namespace App\Domain\Order\Models;
 
 use App\Infrastructure\Traits\GuidTrait;
 use App\Infrastructure\Traits\TanggalTrait;
@@ -12,7 +10,7 @@ use App\Infrastructure\Models\BaseModel;
 use Validator, Exception;
 
 /**
- * Model DokumenKunci
+ * Model Objek
  *
  * Digunakan untuk menyimpan data alamat
  * Ketentuan : 
@@ -21,7 +19,7 @@ use Validator, Exception;
  *
  * @author     C Mooy <chelsy@thunderlab.id>
  */
-class Template extends BaseModel
+class Objek extends BaseModel
 {
 	use GuidTrait;
 	use TanggalTrait;
@@ -31,7 +29,7 @@ class Template extends BaseModel
 	 *
 	 * @var string
 	 */
-	protected $table				= 'akta_template';
+	protected $table				= 'notaris_objek';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -41,22 +39,12 @@ class Template extends BaseModel
 
 	protected $fillable				=	[
 											'_id'					,
-											'judul'					,
-											'deskripsi'				,
-											'paragraf'				,
-											'pemilik'				,
-											'penulis'				,
-											'status'				,
-											'mentionable'			,
-											'jumlah_pihak'			,
-											'jumlah_saksi'			,
-											'dokumen_objek'			,
-											'dokumen_pihak'			,
-											'dokumen_saksi'			,
-											'penambahan_paragraf'	,
-											'pengurangan_paragraf'	,
-											'perubahan_paragraf'	,
-											'watermarking'			,
+											'tipe'					,
+											'shgb'					,
+											'shm'					,
+											'bpkb'					,
+											'dokumen'				,
+											'kantor'				,
 										];
 	/**
 	 * Basic rule of database
@@ -64,11 +52,9 @@ class Template extends BaseModel
 	 * @var array
 	 */
 	protected $rules				=	[
-											'judul'					=> 'required',
-											// 'paragraf.*.konten'		=> '',
-											'status'				=> 'in:draft,publish',
-											// 'jumlah_pihak'			=> 'numeric',
+											
 										];
+
 	/**
 	 * Date will be returned as carbon
 	 *
@@ -88,13 +74,17 @@ class Template extends BaseModel
 											'deleted_at', 
 										];
 
-	protected $appends 				= ['id', 'tanggal_pembuatan', 'tanggal_sunting'];
+	protected $appends 				= ['id'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
+	// public function setTanggalLahirAttribute($value)
+	// {
+	// 	$this->attributes['tanggal_lahir'] = $this->formatDateFrom($value);
+	// }
 
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
 	
@@ -102,16 +92,11 @@ class Template extends BaseModel
 	{
 		return $this->attributes['_id'];
 	}
-	
-	public function getTanggalPembuatanAttribute($value = NULL)
-	{
-		return $this->formatDateTo($this->attributes['created_at']);
-	}
 
-	public function getTanggalSuntingAttribute($value = NULL)
-	{
-		return $this->formatDateTo($this->attributes['updated_at']);
-	}
+	// public function getTanggalLahirAttribute($value = NULL)
+	// {
+	// 	return $this->formatCarbonDateTo($this->attributes['tanggal_lahir']);
+	// }
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
@@ -123,44 +108,22 @@ class Template extends BaseModel
 	public static function boot() 
 	{
 		parent::boot();
-
-		Template::observe(new TemplateObserver());
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
 
-	public function scopeStatus($query, $value)
+	public function scopeNama($query, $value)
 	{
-		if(is_array($value))
-		{
-			return $query->whereIn('status', $value);
-		}
-
-		return $query->where('status', $value);
+		return $query->where('nama', 'like', '%'.$value.'%');
 	}
 
 	public function scopeKantor($query, $value)
 	{
 		if(is_array($value))
 		{
-			return $query->whereIn('pemilik.kantor.id', $value);
+			return $query->whereIn('kantor.id', $value);
 		}
 
-		return $query->where('pemilik.kantor.id', $value);
-	}
-
-	public function scopePemilik($query, $value)
-	{
-		return $query->where('pemilik.orang.id', $value);
-	}
-
-	public function scopeDraft($query, $value)
-	{
-		return $query->where(function($query) use ($value){$query->where('status', 'draft')->where('penulis.id', $value);});
-	}
-	
-	public function scopeDraftOrPublished($query, $value)
-	{
-		return $query->where(function($query) use ($value){$query->where('status', 'draft')->where('penulis.id', $value['penulis']['id']);})->orwhere('status', 'publish');
+		return $query->where('kantor.id', $value);
 	}
 }

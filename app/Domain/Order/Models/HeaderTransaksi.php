@@ -35,7 +35,7 @@ class HeaderTransaksi extends Model
 											'referensi_id'			,
 											'nomor_transaksi'		,
 											'tipe'					,
-											'sudah_dibayar'			,
+											'status'				,
 											'tanggal_dikeluarkan'	,
 											'tanggal_jatuh_tempo'	,
 										];
@@ -65,14 +65,29 @@ class HeaderTransaksi extends Model
 											'deleted_at', 
 										];
 
+	protected $appends 				= ['total'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
+	public function details()
+	{
+		return $this->hasMany('App\Domain\Order\Models\DetailTransaksi', 'header_transaksi_id');
+	}
 
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
 
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
+	public function getTotalAttribute()
+	{
+		$total 			= 0;
+		foreach ((array)$this->details as $key => $value) 
+		{
+			$total 		= $total + ($value->kuantitas * ($value->harga_satuan - $value->diskon_satuan));
+		}
+
+		return $this->formatMoneyTo($total);
+	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
@@ -87,6 +102,16 @@ class HeaderTransaksi extends Model
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
+
+	public function scopeId($query, $value)
+	{
+		if(is_array($value))
+		{
+			return $query->whereIn('id', $value);
+		}
+
+		return $query->where('id', $value);
+	}
 
 	public function scopeKantor($query, $value)
 	{

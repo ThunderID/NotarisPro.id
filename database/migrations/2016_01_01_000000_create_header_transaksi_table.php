@@ -20,7 +20,7 @@ class CreateHeaderTransaksiTable extends Migration
             $table->string('kantor_id');
             $table->string('referensi_id')->nullable();
             $table->string('nomor_transaksi');
-            $table->boolean('sudah_dibayar')->nullable();
+            $table->string('status')->nullable();
             $table->enum('tipe', ['billing_in', 'billing_out', 'bukti_kas_keluar', 'bukti_kas_masuk']);
             $table->datetime('tanggal_dikeluarkan');
             $table->datetime('tanggal_jatuh_tempo')->nullable();

@@ -8,14 +8,9 @@ class AuthenticatedMiddleware
 {
 	public function handle($request, Closure $next)
 	{
-		// $credentials 	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
-		// $login 			= TAuth::login($credentials);
-		
-		try 
-		{
-			TAuth::isLogged();
-		} 
-		catch (Exception $e) 
+		$e 	= TAuth::isLogged();
+
+		if($e instanceOf Exception)
 		{
 			if(is_array($e->getMessage()))
 			{

@@ -33,6 +33,7 @@ class TipeDokumen extends BaseModel
 
 	protected $fillable				=	[
 											'_id'					,
+											'kategori'				,
 											'jenis_dokumen'			,
 											'isi'					,
 											'kantor'				,

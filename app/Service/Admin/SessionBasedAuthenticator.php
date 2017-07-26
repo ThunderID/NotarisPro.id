@@ -64,11 +64,13 @@ class SessionBasedAuthenticator
 	 */
 	public function isLogged()
 	{
-		$user 	= $this->model->id(Session::get('logged.id'))->first();
-
-		if(!$user)
+		try 
 		{
-			throw new Exception("Invalid Login!", 1);
+			$user 	= $this->model->findorfail(Session::get('logged.id'));
+		} 
+		catch (Exception $e) 
+		{
+			return $e;
 		}
 
 		return true;

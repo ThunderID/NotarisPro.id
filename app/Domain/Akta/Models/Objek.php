@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Domain\Akta\Models;
+namespace App\Domain\Order\Models;
 
 use App\Infrastructure\Traits\GuidTrait;
+use App\Infrastructure\Traits\TanggalTrait;
 
 use App\Infrastructure\Models\BaseModel;
 
 use Validator, Exception;
 
 /**
- * Model DokumenKunci
+ * Model Objek
  *
  * Digunakan untuk menyimpan data alamat
  * Ketentuan : 
@@ -18,16 +19,17 @@ use Validator, Exception;
  *
  * @author     C Mooy <chelsy@thunderlab.id>
  */
-class Versi extends BaseModel
+class Objek extends BaseModel
 {
 	use GuidTrait;
+	use TanggalTrait;
 
 	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
 	 */
-	protected $table				= 'akta_dokumen_log';
+	protected $table				= 'notaris_objek';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -37,15 +39,12 @@ class Versi extends BaseModel
 
 	protected $fillable				=	[
 											'_id'					,
-											'judul'					,
-											'paragraf'				,
-											'status'				,
-											'original_id'			,
-											'versi'					,
-											'pemilik'				,
-											'penulis'				,
-											'mentionable'			,
-											'fill_mention'			,
+											'tipe'					,
+											'shgb'					,
+											'shm'					,
+											'bpkb'					,
+											'dokumen'				,
+											'kantor'				,
 										];
 	/**
 	 * Basic rule of database
@@ -53,13 +52,9 @@ class Versi extends BaseModel
 	 * @var array
 	 */
 	protected $rules				=	[
-											'judul'					=> 'required',
-											'paragraf.*.konten'		=> 'required',
-											'paragraf.*.lock'		=> 'max:255',
-											// 'paragraf.*.key'		=> 'max:255',
-											// 'paragraf.*.padlock'	=> 'max:255',
-											'status'				=> 'in:dalam_proses,draft,renvoi,akta,minuta'
+											
 										];
+
 	/**
 	 * Date will be returned as carbon
 	 *
@@ -86,6 +81,10 @@ class Versi extends BaseModel
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
+	// public function setTanggalLahirAttribute($value)
+	// {
+	// 	$this->attributes['tanggal_lahir'] = $this->formatDateFrom($value);
+	// }
 
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
 	
@@ -93,6 +92,11 @@ class Versi extends BaseModel
 	{
 		return $this->attributes['_id'];
 	}
+
+	// public function getTanggalLahirAttribute($value = NULL)
+	// {
+	// 	return $this->formatCarbonDateTo($this->attributes['tanggal_lahir']);
+	// }
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
@@ -107,4 +111,19 @@ class Versi extends BaseModel
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
+
+	public function scopeNama($query, $value)
+	{
+		return $query->where('nama', 'like', '%'.$value.'%');
+	}
+
+	public function scopeKantor($query, $value)
+	{
+		if(is_array($value))
+		{
+			return $query->whereIn('kantor.id', $value);
+		}
+
+		return $query->where('kantor.id', $value);
+	}
 }

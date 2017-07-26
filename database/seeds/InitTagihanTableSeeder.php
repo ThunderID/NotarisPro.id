@@ -28,7 +28,7 @@ class InitTagihanTableSeeder extends Seeder
 		//init transaksi
 		foreach (range(0, 19) as $key) 
 		{
-			$klien 		= Klien::kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
+			$klien 			= Klien::kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
 
 			$parse_month 	= rand(-12, -2);
 			$data 			= [
@@ -97,7 +97,7 @@ class InitTagihanTableSeeder extends Seeder
 		//bukti kas masuk
 		foreach(range(0, 5) as $key2)
 		{
-			$ht 		= HeaderTransaksi::where('kantor_id', TAuth::activeOffice()['kantor']['id'])->where('tipe', 'billing_out')->skip(rand(0,19))->first()->toArray();
+			$ht 		= HeaderTransaksi::where('kantor_id', TAuth::activeOffice()['kantor']['id'])->where('tipe', 'billing_out')->skip(rand(0,19))->first();
 			$td 		= DetailTransaksi::where('header_transaksi_id', $ht['id'])->get();
 
 			$bkm 		= new HeaderTransaksi;

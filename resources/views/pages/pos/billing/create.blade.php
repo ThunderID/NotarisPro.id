@@ -31,19 +31,19 @@
 				</h1>
 			</header>
 			<article>
-				<h2>Recipient</h2>
-				<input name="address" contenteditable value="Someone">
+				<h2>Kepada</h2>
+				<input name="klien_nama" contenteditable value="Nama Klien">
 				<table class="meta">
 					<tr>
 						<th><span contenteditable>Invoice #</span></th>
 						<td><input name="nomor_transaksi" contenteditable value="101138" style="max-width:90%;"></input></td>
 					</tr>
 					<tr>
-						<th><span contenteditable>Date</span></th>
-						<td><input name="tanggal" contenteditable value="{{Carbon\Carbon::now()->format('d/m/Y')}}" style="max-width:90%;"></input></td>
+						<th><span contenteditable>Tanggal</span></th>
+						<td><input name="tanggal_dikeluarkan" contenteditable value="{{Carbon\Carbon::now()->format('d/m/Y')}}" style="max-width:90%;"></input></td>
 					</tr>
 					<tr>
-						<th><span contenteditable>Amount Due</span></th>
+						<th><span contenteditable>Total Bayar</span></th>
 						<td><span id="prefix" contenteditable>IDR</span><span>150000.00</span></td>
 					</tr>
 				</table>
@@ -51,16 +51,16 @@
 					<thead>
 						<tr>
 							<th><span contenteditable>Item</span></th>
-							<th><span contenteditable>Description</span></th>
-							<th><span contenteditable>Rate</span></th>
-							<th><span contenteditable>Quantity</span></th>
-							<th><span contenteditable>Price</span></th>
+							<th><span contenteditable>Deskripsi</span></th>
+							<th><span contenteditable>Harga Satuan</span></th>
+							<th><span contenteditable>Kuantitas</span></th>
+							<th><span contenteditable>Subtotal</span></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td><a class="cut">-</a><span contenteditable>Jasa Pembuatan Akta</span></td>
-							<td><span contenteditable>Akta Jual Beli</span></td>
+							<td><a class="cut">-</a><input name="item" contenteditable value="#112524" style="max-width:90%;" contenteditable></td>
+							<td><input name="deskripsi" contenteditable value="Pembuatan Akta Jual Beli" style="max-width:90%;" contenteditable></td>
 							<td><span data-prefix>IDR</span><span contenteditable>150000.00</span></td>
 							<td><span contenteditable>1</span></td>
 							<td><span data-prefix>IDR</span><span>150000.00</span></td>
@@ -74,11 +74,11 @@
 						<td><span data-prefix>IDR</span><span>150000.00</span></td>
 					</tr>
 					<tr>
-						<th><span contenteditable>Amount Paid</span></th>
-						<td><span data-prefix>IDR</span><span contenteditable>0.00</span></td>
+						<th><span contenteditable>Telah Dibayar</span></th>
+						<td><span data-prefix>IDR</span><span>0.00</span></td>
 					</tr>
 					<tr>
-						<th><span contenteditable>Balance Due</span></th>
+						<th><span contenteditable>Belum Dibayar</span></th>
 						<td><span data-prefix>IDR</span><span>150000.00</span></td>
 					</tr>
 				</table>
@@ -324,9 +324,9 @@
 
 		function generateTableRow() {
 			var emptyColumn = document.createElement('tr');
-
-			emptyColumn.innerHTML = '<td><a class="cut">-</a><span contenteditable></span></td>' +
-				'<td><span contenteditable></span></td>' +
+							
+			emptyColumn.innerHTML = '<td><a class="cut">-</a><input name="item" contenteditable value="#112524" style="max-width:90%;" contenteditable></td>' +
+				'<td><input name="deskripsi" contenteditable value="Pembuatan Akta Jual Beli" style="max-width:90%;" contenteditable></td>' +
 				'<td><span data-prefix>IDR</span><span contenteditable>0.00</span></td>' +
 				'<td><span contenteditable>0</span></td>' +
 				'<td><span data-prefix>IDR</span><span>0.00</span></td>';
