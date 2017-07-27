@@ -5,9 +5,12 @@ namespace App\Service\Admin;
 use App\Domain\Admin\Models\Pengguna as Model;
 
 use Exception;
+use App\Infrastructure\Traits\GuidTrait;
 
 class PenggunaBaru
 {
+	use GuidTrait;
+
 	protected $nama;
 	protected $email;
 	protected $password;
@@ -35,6 +38,7 @@ class PenggunaBaru
 		try
 		{
 			$pengguna			= new Model;
+			$pengguna->_id		= self::createID('user');
 			$pengguna->nama		= $this->nama;
 			$pengguna->email	= $this->email;
 			$pengguna->password	= $this->password;
