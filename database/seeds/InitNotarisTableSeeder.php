@@ -31,7 +31,7 @@ class InitNotarisTableSeeder extends Seeder
 			],
 		];
 
-		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->_id, $visa_1['role'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
+		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->id, $visa_1['role'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
 		$grant_v_1 		= $grant_v_1->handle();
 
 
