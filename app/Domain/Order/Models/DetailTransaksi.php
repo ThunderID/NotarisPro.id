@@ -30,6 +30,7 @@ class DetailTransaksi extends Model
 
 	protected $fillable				=	[
 											'header_transaksi_id'	,
+											'referensi_id'			,
 											'item'					,
 											'deskripsi'				,
 											'kuantitas'				,

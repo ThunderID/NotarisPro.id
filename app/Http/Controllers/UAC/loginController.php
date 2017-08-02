@@ -4,25 +4,32 @@ namespace App\Http\Controllers\UAC;
 
 use TAuth, Redirect, Request, URL;
 
+use App\Http\Controllers\Controller;
+
 class loginController extends Controller
 {
 	//fungsi login
-	public function login()
-	{
+	public function create(){
 		// init
-		$this->page_attributes->title	= 'Login';
+		$this->page_attributes->title		= 'Sign In';
+		$this->page_attributes->subtitle	= 'Silahkan isi email dan password Anda untuk mulai menggunakan system';
+
+		if(session('pesan'))
+		{
+			$this->page_attributes->subtitle	= '<div class="alert alert-info">'.session('pesan').'</div>';
+		}
 
 		//get data from database
 		$this->page_datas->datas		= null;
 
 		//initialize view
-		$this->view						= view('pages.uac.login');
+		$this->view						= view('market_web.pages.login.create');
 
 		//function from parent to generate view
 		return $this->generateView(); 
 	}
 
-	public function doLogin(){
+	public function store(){
 		//get input
 		$credentials				= Request::only('email', 'password');
 
@@ -35,140 +42,23 @@ class loginController extends Controller
 		{
 			if(is_array($e->getMessage()))
 			{
-				return Redirect::route('uac.login')->withErrors($e->getMessage());
+				return Redirect::route('uac.login.create')->withErrors($e->getMessage());
 			}
 			else
 			{
-				return Redirect::route('uac.login')->withErrors([$e->getMessage()]);
+				return Redirect::route('uac.login.create')->withErrors([$e->getMessage()]);
 			}
 		}
 
 		//function from parent to redirecting
-		return Redirect::route('home.dashboard');
+		return Redirect::route('dashboard.home.index');
 	}
 
-	public function logout(){
+	public function destroy(){
 		//do authenticate
 		$auth			= TAuth::signoff();
 
 		//function from parent to redirecting
-		return Redirect::route('uac.login');
-	}
-
-	/**
-	 * setting which office should be activate
-	 *
-	 * @return Response
-	 */
-	public function activateOffice($idx)
-	{
-		try
-		{
-			//do authenticate
-			$auth			= TAuth::setOffice($idx);
-		}
-		catch(Exception $e)
-		{
-			if(is_array($e->getMessage()))
-			{
-				$this->page_attributes->msg['error'] 	= $e->getMessage();
-			}
-			else
-			{
-				$this->page_attributes->msg['error'] 	= [$e->getMessage()];
-			}
-
-			return Redirect::back()
-					->with('msg', $this->page_attributes->msg)
-					;
-		}
-
-		//function from parent to redirecting
-		return redirect(URL::previous());
-	}
-
-	public function doSendEmailResetPassword(Request $request){
-		$input			= $request::only('email');
-
-		// service reset
-		try
-		{
-			//do service reset password
-
-			// send email
-		}
-		catch(Exception $e)
-		{
-			if(is_array($e->getMessage()))
-			{
-				$this->page_attributes->msg['error'] 	= $e->getMessage();
-			}
-			else
-			{
-				$this->page_attributes->msg['error'] 	= [$e->getMessage()];
-			}
-		}
-
-		//return view
-		$this->page_attributes->msg['success']		= ['Email reset password telah dikirimkan ke email Anda'];
-		return $this->generateRedirect(route('uac.login'));
-	}
-
-	public function resetPassword($token){
-
-		$this->page_datas->datas		= null;
-		$this->page_datas->token		= $token;
-
-		// validate token reset password
-		$result = true;
-
-		if($result == true){
-			// display reset password form
-			$this->page_attributes->title	= 'Reset Password';
-			
-			$this->view						= view('pages.uac.reset');
-		}else{
-			// display invalid token
-			$this->page_attributes->title	= 'Invalid Token';
-
-			$this->view						= view('pages.uac.invalid');
-		}
-
-		// return view
-		return $this->generateView(); 
-	}
-
-
-	public function doResetPassword($token, Request $request){
-		$input			= $request::only('password', 'confirm_password');
-
-		// validation
-		if($input['password'] == $input['confirm_password']){
-			// service reset
-			try
-			{
-				//do service reset password
-
-				// send email
-			}
-			catch(Exception $e)
-			{
-				if(is_array($e->getMessage()))
-				{
-					$this->page_attributes->msg['error'] 	= $e->getMessage();
-				}
-				else
-				{
-					$this->page_attributes->msg['error'] 	= [$e->getMessage()];
-				}
-			}
-		}else{
-			$this->page_attributes->msg['error'] 	= ['Password dan konfirmasi password tidak cocok'];
-		}
-
-
-		//return view
-		$this->page_attributes->msg['success']		= ['Password telah diganti'];
-		return $this->generateRedirect(route('uac.login'));
+		return Redirect::route('uac.login.create');
 	}
 }

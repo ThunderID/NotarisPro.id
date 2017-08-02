@@ -37,6 +37,7 @@ class Pengguna extends BaseModel
 											'password'				,
 											'nama'					,
 											'visas'					,
+											'reset_token'			,
 										];
 
 	/**
@@ -48,6 +49,9 @@ class Pengguna extends BaseModel
 											'email'					=> 'required|email',
 											'password'				=> 'min:6',
 											'nama'					=> 'max:255',
+											'visas.*.type'			=> 'max:255',
+											'visas.*.expired_at'	=> 'max:255',
+											'visas.*.started_at'	=> 'max:255',
 											'visas.*.role'			=> 'max:255',
 											'visas.*.kantor.id'		=> 'max:255',
 											'visas.*.kantor.nama'	=> 'max:255',
@@ -61,7 +65,7 @@ class Pengguna extends BaseModel
 
 	protected $appends 				= ['id'];
 
-	protected $hidden				= ['created_at', 'updated_at', 'deleted_at', '_id'];
+	protected $hidden				= ['created_at', 'updated_at', 'deleted_at'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 

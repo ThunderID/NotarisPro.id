@@ -48,8 +48,8 @@ Route::group(['namespace' => 'Tagihan\\'], function(){
 		'destroy' 	=> 'tagihan.tagihan.destroy' //post 
 	]]);
 
-	Route::any('/tagihan/print/{tagihan_id}',	 		['uses' => 'tagihanController@print', 		'as' => 'tagihan.tagihan.print']);
-	Route::any('/tagihan/status/{tagihan_id}',	 		['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
+	Route::any('/tagihan/print/{tagihan_id}',	 		['uses' => 'tagihanController@print',	'as' => 'tagihan.tagihan.print']);
+	Route::any('/tagihan/status/{tagihan_id}/{status}',	['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
 });
 
 // 3. KLIEN
@@ -57,25 +57,16 @@ Route::group(['namespace' => 'Klien\\'], function(){
 	//klien
 	Route::resource('/klien/klien', 'klienController', ['names' => [
 		'index' 	=> 'klien.klien.index', //get
-		// 'create'	=> 'klien.klien.create', //get
-		// 'store' 	=> 'klien.klien.store', //post
+		'create'	=> 'klien.klien.create', //get
+		'store' 	=> 'klien.klien.store', //post
 		'show' 		=> 'klien.klien.show', //get
-		// 'edit' 		=> 'klien.klien.edit', //get
-		// 'update' 	=> 'klien.klien.update', //patch
+		'edit' 		=> 'klien.klien.edit', //get
+		'update' 	=> 'klien.klien.update', //patch
 		'destroy' 	=> 'klien.klien.destroy' //post 
 	]]);
 
-	Route::get('/klien/orang/create',	 			['uses' => 'klienController@orangCreate', 		'as' => 'klien.orang.create']);
-	Route::get('/klien/perusahaan/create',	 		['uses' => 'klienController@perusahaanCreate', 	'as' => 'klien.perusahaan.create']);
-
-	Route::post('/klien/orang/store',	 			['uses' => 'klienController@orangStore', 		'as' => 'klien.orang.store']);
-	Route::post('/klien/perusahaan/store',	 		['uses' => 'klienController@perusahaanStore', 	'as' => 'klien.perusahaan.store']);
-
-	Route::get('/klien/orang/{id}/edit',	 		['uses' => 'klienController@orangEdit', 		'as' => 'klien.orang.edit']);
-	Route::get('/klien/perusahaan/{id}/edit',		['uses' => 'klienController@perusahaanEdit', 	'as' => 'klien.perusahaan.edit']);
-
-	Route::patch('/klien/orang/{id}/update',	 	['uses' => 'klienController@orangUpdate', 		'as' => 'klien.orang.update']);
-	Route::patch('/klien/perusahaan/{id}/update',	['uses' => 'klienController@perusahaanUpdate', 	'as' => 'klien.perusahaan.update']);
+	Route::any('/klien/document/{id}/add',		 		['uses' => 'klienController@addDokumen', 		'as' => 'klien.dokumen.add']);
+	Route::any('/klien/document/{id}/remove/{doc_id}',	['uses' => 'klienController@removeDokumen', 	'as' => 'klien.dokumen.remove']);
 });
 
 // 4. NOTARIS
@@ -88,9 +79,9 @@ Route::group(['namespace' => 'Notaris\\'], function(){
 // AREA PENGATURAN //
 Route::group(['namespace' => 'Pengaturan\\'], function(){
 	//5. Subscription
-	Route::any('/pengaturan/subscription',						['uses' => 'subscriptionController@index', 		'as' => 'pengaturan.subscription.index']);
-	Route::any('/pengaturan/subscription/print/{id}',			['uses' => 'subscriptionController@print', 		'as' => 'pengaturan.subscription.print']);
-	Route::any('/pengaturan/subscription/recalculate/{mode}',	['uses' => 'subscriptionController@recalculate','as' => 'pengaturan.subscription.recalculate']);
+	Route::any('/pengaturan/tagihan',						['uses' => 'tagihanController@index', 		'as' => 'pengaturan.tagihan.index']);
+	Route::any('/pengaturan/tagihan/print/{id}',			['uses' => 'tagihanController@print', 		'as' => 'pengaturan.tagihan.print']);
+	Route::any('/pengaturan/tagihan/recalculate/{mode}',	['uses' => 'tagihanController@recalculate',	'as' => 'pengaturan.tagihan.recalculate']);
 
 	//6. User
 	Route::resource('/pengaturan/user', 'userController', ['names' => [
@@ -113,17 +104,47 @@ Route::group(['namespace' => 'Pengaturan\\'], function(){
 });
 
 // AREA UAC //
-
-// 9. Login
 Route::group(['namespace' => 'UAC\\'], function(){
-	//Login
+	// 9. Login
 	Route::get('/login',		['uses' => 'loginController@create', 	'as' => 'uac.login.create']);
 	Route::post('/login',		['uses' => 'loginController@store', 	'as' => 'uac.login.store']);
 	Route::get('/logout',		['uses' => 'loginController@destroy', 	'as' => 'uac.login.destroy']);
 
-	//Reset Pass
+	//10. Reset Pass
 	Route::get('/reset/password',			['uses' => 'passwordController@create', 	'as' => 'uac.reset.create']);
 	Route::post('/reset/password',			['uses' => 'passwordController@store',	 	'as' => 'uac.reset.store']);
+	Route::get('/reset/password/success',	['uses' => 'passwordController@show',	 	'as' => 'uac.reset.show']);
 	Route::get('/change/password/{token}',	['uses' => 'passwordController@edit', 		'as' => 'uac.reset.edit']);
 	Route::patch('/change/password/{token}',['uses' => 'passwordController@update', 	'as' => 'uac.reset.update']);
+
+	// 11. Register free trial
+	Route::group(['prefix' => 'trial'], function(){
+		Route::get('/signup',		['uses' => 'signupController@trialCreate', 	'as' => 'uac.tsignup.create']);
+		Route::post('/signup',		['uses' => 'signupController@trialStore', 	'as' => 'uac.tsignup.store']);
+		Route::post('/upgrade',		['uses' => 'signupController@trialUpdate', 	'as' => 'uac.tsignup.update']);
+	});
+
+	//12. Register with plan
+	Route::group(['prefix' => 'subscription'], function(){
+		Route::get('/signup',		['uses' => 'signupController@create', 	'as' => 'uac.signup.create']);
+		Route::post('/signup',		['uses' => 'signupController@store', 	'as' => 'uac.signup.store']);
+	});
 });
+
+//AREA DASHBOARD//
+Route::group(['namespace' => 'Dashboard\\', 'prefix' => 'dashboard'], function(){
+	//13. DASHBOARD
+	Route::get('/',					['uses' => 'dashboardController@home',	'as' => 'dashboard.home.index']);
+});
+
+//AREA WEB//
+Route::group(['namespace' => 'Web\\', 'prefix' => 'market/web'], function(){
+	// 14. Home
+	Route::get('/',					['uses' => 'webController@home', 		'as' => 'web.home.index']);
+	Route::get('/service',			['uses' => 'webController@service', 	'as' => 'web.service.index']);
+	Route::get('/pricing',			['uses' => 'webController@pricing', 	'as' => 'web.pricing.index']);
+	Route::get('/tutorial',			['uses' => 'webController@tutorial', 	'as' => 'web.tutorial.index']);
+});
+
+// Route::get('/market/web', function () { return view('market_web.pages.home'); });
+

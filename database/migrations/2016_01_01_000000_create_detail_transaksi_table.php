@@ -16,6 +16,9 @@ class CreateDetailTransaksiTable extends Migration
         Schema::connection('mysql')->create('detail_transaksi', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('header_transaksi_id');
+
+            $table->string('referensi_id')->nullable();
+            
             $table->string('item');
             $table->string('deskripsi');
             $table->integer('kuantitas');

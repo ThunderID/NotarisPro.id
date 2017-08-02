@@ -49,8 +49,8 @@ class Kantor extends BaseModel
 	protected $rules				=	[
 											'nama'								=> 'required|max:255',
 											'notaris.nama'						=> 'required|max:255',
-											'notaris.daerah_kerja'				=> 'required|max:255',
-											'notaris.nomor_sk'					=> 'required|max:255',
+											'notaris.daerah_kerja'				=> 'max:255',
+											'notaris.nomor_sk'					=> 'max:255',
 											'notaris.tanggal_pengangkatan '		=> 'date_format:"Y-m-d"',
 											'notaris.alamat'					=> 'required|max:255',
 											'notaris.telepon'					=> 'required|max:255',

@@ -241,7 +241,7 @@ class tagihanController extends Controller
 	private function retrieveTagihan($query)
 	{
 		//1. pastikan berasal dari kantor yang sama
-		$data 	 	= $this->query->kantor($this->active_office['kantor']['id']);
+		$data 	 	= $this->query->kantor($this->active_office['kantor']['id'])->tipe('bukti_kas_masuk');
 
 		//2. cari sesuai query
 		if(isset($query['cari']))

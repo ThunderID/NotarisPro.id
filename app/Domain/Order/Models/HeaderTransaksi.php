@@ -29,13 +29,10 @@ class HeaderTransaksi extends Model
 	 */
 
 	protected $fillable				=	[
-											'klien_id'				,
-											'klien_nama'			,
-											'kantor_id'				,
-											'referensi_id'			,
-											'nomor_transaksi'		,
-											'tipe'					,
+											'klien'					,
+											'nomor'					,
 											'status'				,
+											'tipe'					,
 											'tanggal_dikeluarkan'	,
 											'tanggal_jatuh_tempo'	,
 										];
