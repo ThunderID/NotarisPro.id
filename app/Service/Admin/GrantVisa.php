@@ -5,6 +5,7 @@ namespace App\Service\Admin;
 use App\Domain\Admin\Models\Pengguna;
 
 use Exception;
+use Carbon\Carbon;
 
 class GrantVisa
 {
@@ -19,10 +20,31 @@ class GrantVisa
 	 * @param  $id
 	 * @return void
 	 */
-	public function __construct($id, $role, $kantor_id, $kantor_nama)
+	public function __construct($id, $role, $type, $started_at = null, $expired_at = null, $kantor_id, $kantor_nama)
 	{
 		$this->id			= $id;
 		$this->role			= $role;
+		$this->type			= $type;
+		$this->started_at	= $started_at;
+		$this->expired_at	= $expired_at;
+	
+		if(is_null($started_at))
+		{
+			$this->started_at 	= Carbon::now()->format('Y-m-d H:i:s');			
+		}
+
+		if(is_null($expired_at))
+		{
+			if(str_is($type, 'starter'))
+			{
+				$this->expired_at 	= Carbon::now()->addmonths(1)->format('Y-m-d H:i:s');
+			}
+			else
+			{
+				$this->expired_at 	= Carbon::now()->adddays(14)->format('Y-m-d H:i:s');
+			}
+		}
+
 		$this->kantor_id	= $kantor_id;
 		$this->kantor_nama	= $kantor_nama;
 	}
@@ -37,8 +59,11 @@ class GrantVisa
 		try
 		{
 			$visa 			= [
-				'role'		=> $this->role,
-				'kantor'	=> ['id' => $this->kantor_id, 'nama' => $this->kantor_nama],
+				'role'			=> $this->role,
+				'type'			=> $this->type,
+				'started_at'	=> $this->started_at,
+				'expired_at'	=> $this->expired_at,
+				'kantor'		=> ['id' => $this->kantor_id, 'nama' => $this->kantor_nama],
 			];
 
 			$pengguna		= Pengguna::findorfail($this->id);

@@ -71,8 +71,7 @@
 							</div>
 							<div class="form-group">
 								<label class="sr-only" for="f1-repeat-password">Repeat password</label>
-								<input type="password" name="akun[repeat-password]" placeholder="Repeat password..." 
-													class="f1-repeat-password form-control" id="f1-repeat-password">
+								<input type="password" name="akun[repeat-password]" placeholder="Repeat password..." class="f1-repeat-password form-control" id="f1-repeat-password">
 							</div>
 							<div class="f1-buttons">
 								<button type="button" class="btn btn-previous">Kembali</button>

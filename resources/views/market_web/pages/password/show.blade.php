@@ -19,28 +19,15 @@
 						Email berisi langkah - langkah untuk reset password Anda telah dikirim ke Email Anda.
 					</p>
 					<p>&nbsp;</p>
-					<p>&nbsp;</p>
-					<p>&nbsp;</p>
 					<p>Tidak ada Email masuk ? </p>
-
-					<form class="text-left" action="{{route('uac.reset.store')}}" method="POST">
-
-						<div class="form-group">
-							<!-- <label for="exampleInputEmail1">Email address</label> -->
-							<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email" />
-							<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+					<div class="row">
+						<div class="col-sm-6 text-left">
+							<a href="{{route('uac.reset.create', ['email' => $page_datas->datas->email])}}"> << Cek Email </a>
 						</div>
-
-						<div class="form-group">
-							<div class="row">
-								<div class="col-sm-6 text-left">
-									<a href="{{route('uac.login.create')}}">Sign In</a>
-								</div>
-							</div>
+						<div class="col-sm-6 text-right">
+							<a href="{{route('uac.reset.store', ['email' => $page_datas->datas->email])}}"> Kirim Ulang >> </a>
 						</div>
-
-						<button type="submit" class="btn btn-primary" style="width:100%;">Submit</button>
-					</form>
+					</div>
 				</div>
 			</div>
 		</div>

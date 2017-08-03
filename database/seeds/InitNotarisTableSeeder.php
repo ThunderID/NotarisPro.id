@@ -25,12 +25,15 @@ class InitNotarisTableSeeder extends Seeder
 
 		$visa_1 		= [
 			'role'		=> 'notaris',
+			'expired_at'=> Carbon::now()->addMonths(1)->format('Y-m-d H:i:s'),
+			'started_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+			'type'		=> 'starter',
 			'kantor'	=> [
 				'id'	=> 'PPATANNAWONG',
 				'nama'	=> 'Notaris & PPAT Anna Wong, SH'
 			],
 		];
-		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->id, $visa_1['role'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
+		$grant_v_1 		= new App\Service\Admin\GrantVisa($pengguna->id, $visa_1['role'], $visa_1['type'], $visa_1['started_at'], $visa_1['expired_at'], $visa_1['kantor']['id'], $visa_1['kantor']['nama']);
 		$grant_v_1 		= $grant_v_1->handle();
 
 
@@ -45,13 +48,16 @@ class InitNotarisTableSeeder extends Seeder
 
 		$visa_2 		= [
 			'role'		=> 'drafter',
+			'expired_at'=> Carbon::now()->addMonths(1)->format('Y-m-d H:i:s'),
+			'started_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+			'type'		=> 'starter',
 			'kantor'	=> [
 				'id'	=> 'NOTARISPAULUS',
 				'nama'	=> 'Notaris Paulus Oliver Yoesoef, SH'
 			],
 		];
 
-		$grant_v_2 		= new App\Service\Admin\GrantVisa($usa_2['id'], $visa_2['role'], $visa_2['kantor']['id'], $visa_2['kantor']['nama']);
+		$grant_v_2 		= new App\Service\Admin\GrantVisa($usa_2['id'], $visa_2['role'], $visa_2['type'], $visa_2['started_at'], $visa_2['expired_at'], $visa_2['kantor']['id'], $visa_2['kantor']['nama']);
 		$grant_v_2 		= $grant_v_2->handle();
 
 		$notaris_1 		= [

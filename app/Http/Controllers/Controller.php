@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use Request, Redirect, App, Route;
+use Request, Redirect, App, Route, TAuth;
 
 class Controller extends BaseController
 {
@@ -126,5 +126,10 @@ class Controller extends BaseController
 		{
 			$this->view 				= view('pages.developer.under_construction');
 		}
+	}
+
+	protected function getGlobal()
+	{
+		$this->active_office 	= TAuth::activeOffice();
 	}
 }

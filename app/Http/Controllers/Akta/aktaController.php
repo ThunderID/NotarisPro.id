@@ -36,9 +36,6 @@ class aktaController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$credentials 						= ['email' => 'admin@notaris.id', 'password' => 'admin'];
-		TAuth::login($credentials);
-
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes

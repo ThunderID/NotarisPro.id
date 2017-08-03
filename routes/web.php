@@ -112,10 +112,10 @@ Route::group(['namespace' => 'UAC\\'], function(){
 
 	//10. Reset Pass
 	Route::get('/reset/password',			['uses' => 'passwordController@create', 	'as' => 'uac.reset.create']);
-	Route::post('/reset/password',			['uses' => 'passwordController@store',	 	'as' => 'uac.reset.store']);
-	Route::get('/reset/password/success',	['uses' => 'passwordController@show',	 	'as' => 'uac.reset.show']);
-	Route::get('/change/password/{token}',	['uses' => 'passwordController@edit', 		'as' => 'uac.reset.edit']);
-	Route::patch('/change/password/{token}',['uses' => 'passwordController@update', 	'as' => 'uac.reset.update']);
+	Route::any('/reset/password/store',		['uses' => 'passwordController@store',	 	'as' => 'uac.reset.store']);
+	// Route::get('/reset/password/success',	['uses' => 'passwordController@show',	 	'as' => 'uac.reset.show']);
+	Route::get('/change/password/{rtoken}',		['uses' => 'passwordController@edit', 		'as' => 'uac.reset.edit']);
+	Route::post('/change/password/{rtoken}',	['uses' => 'passwordController@update', 		'as' => 'uac.reset.update']);
 
 	// 11. Register free trial
 	Route::group(['prefix' => 'trial'], function(){

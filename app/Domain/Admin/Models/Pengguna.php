@@ -109,6 +109,9 @@ class Pengguna extends BaseModel
 			'kantor.id'		=> 'required|max:255',
 			'kantor.nama'	=> 'required|max:255',
 			'role'			=> 'required|max:255',
+			'type'			=> 'required|in:starter,trial',
+			'expired_at'	=> 'required|date_format:"Y-m-d H:i:s"',
+			'started_at'	=> 'required|date_format:"Y-m-d H:i:s"',
 		];
 		$validator			= Validator::make($visa, $rules);
 		if(!$validator->passes())

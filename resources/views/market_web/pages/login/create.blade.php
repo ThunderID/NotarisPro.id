@@ -16,7 +16,7 @@
 				<div class="col-sm-4 offset-sm-4 text-center" style="padding-top:75px;padding-bottom:180px;">
 					<h2>{{$page_attributes->title}}</h2>
 					<p> 
-						{{$page_attributes->subtitle}}
+						{!!$page_attributes->subtitle!!}
 					</p>
 
 					<form class="text-left" action="{{route('uac.login.store')}}" method="POST">
