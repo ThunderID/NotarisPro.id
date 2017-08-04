@@ -21,8 +21,8 @@ class dashboardController extends Controller
 
 	public function home()
 	{
-		$data  	= new GenerateTagihanSAAS;
-		$data->bulanan(Carbon::parse('+ 1 month')->startOfDay());
+		// $data  	= new GenerateTagihanSAAS;
+		// $data->bulanan(Carbon::parse('+ 2 month')->startOfDay());
 
 		$this->getGlobal();
 
