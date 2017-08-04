@@ -114,9 +114,13 @@ class HeaderTransaksi extends Model
 	{
 		if(is_array($value))
 		{
-			return $query->whereIn('kantor_id', $value);
+			foreach ($value as $mention) 
+			{
+				$query 	= $query->where('klien', 'like', '%id%'.$mention.'%');
+			}
+			return $query;
 		}
 
-		return $query->where('kantor_id', $value);
+		return $query->where('klien', 'like', '%id%'.$value.'%');
 	}
 }

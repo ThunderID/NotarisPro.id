@@ -7,7 +7,7 @@ use App\Domain\Admin\Models\Kantor as Query;
 
 use App\Http\Controllers\Controller;
 
-use TAuth, Exception;
+use TAuth, Exception, Response;
 
 class notarisController extends Controller
 {
@@ -78,7 +78,7 @@ class notarisController extends Controller
 		}
 		//set datas
 		$this->paginate(null, $data->count(), $this->per_page);
-		$this->page_datas->Notariss	= $data->skip($skip)->take($this->per_page)->get()->toArray();
+		$this->page_datas->notaris	= $data->skip($skip)->take($this->per_page)->get()->toArray();
 	}
 
 	private function retrieveNotarisFilter()

@@ -10,8 +10,8 @@
 @section('content')
 		@component('components.form', [ 
 			'data_id' 		=> $page_datas->id,
-			'store_url' 	=> route('pos.billing.store'), 
-			'update_url' 	=> route('pos.billing.update', ['id' => $page_datas->id]), 
+			'store_url' 	=> route('tagihan.tagihan.store'), 
+			'update_url' 	=> route('tagihan.tagihan.update', ['id' => $page_datas->id]), 
 		])
 
 			<div class="row">
@@ -97,7 +97,7 @@
 			<fieldset class="form-group">
 				<div class="row">
 					<div class="col-6">
-						<a href="{{ isset($page_datas->id) ? route('pos.billing.show', ['id' => $page_datas->id]) : route('pos.billing.index') }}" type="button" class="btn btn-secondary">Cancel</a>
+						<a href="{{ isset($page_datas->id) ? route('tagihan.tagihan.show', ['id' => $page_datas->id]) : route('tagihan.tagihan.index') }}" type="button" class="btn btn-secondary">Cancel</a>
 						<button type="submit" class="btn btn-primary">Save</button>
 					</div>
 				</div>

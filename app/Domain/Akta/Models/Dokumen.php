@@ -80,9 +80,9 @@ class Dokumen extends BaseModel
 	 * @var array
 	 */
 	protected $hidden				= 	[
-											'_id',
-											'created_at', 
-											'updated_at', 
+											// '_id',
+											// 'created_at', 
+											// 'updated_at', 
 											'deleted_at', 
 										];
 
@@ -98,7 +98,10 @@ class Dokumen extends BaseModel
 	
 	public function getIdAttribute($value = NULL)
 	{
-		return $this->attributes['_id'];
+		if(isset($this->attributes['_id']))
+		{
+			return $this->attributes['_id'];
+		}
 	}
 	
 	public function getMentionableAttribute($value = NULL)
@@ -115,12 +118,18 @@ class Dokumen extends BaseModel
 
 	public function getTanggalPembuatanAttribute($value = NULL)
 	{
-		return $this->formatDateTo($this->attributes['created_at']);
+		if(isset($this->attributes['created_at']))
+		{
+			return $this->formatDateTo($this->attributes['created_at']);
+		}
 	}
 
 	public function getTanggalSuntingAttribute($value = NULL)
 	{
-		return $this->formatDateTo($this->attributes['updated_at']);
+		if(isset($this->attributes['updated_at']))
+		{
+			return $this->formatDateTo($this->attributes['updated_at']);
+		}
 	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/

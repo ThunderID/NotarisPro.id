@@ -65,6 +65,38 @@ class aktaController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+	public function trashed(Request $request)
+	{
+		$this->active_office 				= TAuth::activeOffice();
+
+		// 1. set page attributes
+		$this->page_attributes->title		= 'Akta Dokumen';
+
+		// 2. call all aktas data needed
+		//2a. parse query searching
+		$query 								= $request->only('cari', 'filter', 'urutkan', 'page');
+		$query['trash']						= true;
+
+		//2b. retrieve all akta
+		$this->retrieveAkta($query);
+
+		//2c. get all filter 
+		$this->page_datas->filters 			= $this->retrieveAktaFilter();
+		
+		//2d. get all urutan 
+		$this->page_datas->urutkan 			= $this->retrieveAktaUrutkan();
+
+		//3.initialize view
+		$this->view							= view('pages.akta.akta.index');
+
+		return $this->generateView();  
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 	public function show(Request $request, $id)
 	{
 		$this->active_office 					= TAuth::activeOffice();
@@ -381,6 +413,13 @@ class aktaController extends Controller
 		{
 			$skip 	= ((1 * $query['page']) - 1) * $this->per_page;
 		}
+
+		//6. trash
+		if(isset($query['trashed']))
+		{
+			$data 	= $data->onlyTrashed();
+		}
+
 		//set datas
 		$this->paginate(null, $data->count(), $this->per_page);
 		$this->page_datas->aktas 		= $data->skip($skip)->take($this->per_page)->get(['_id', 'judul', 'jenis', 'status', 'versi', 'penulis', 'pemilik', 'created_at', 'updated_at'])->toArray();

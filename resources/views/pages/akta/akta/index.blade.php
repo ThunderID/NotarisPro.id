@@ -39,7 +39,7 @@
 						'title' => 'Filter Akta',
 						'alias' => 'status',
 						'qs'	=> [ 'q','urutkan' ],
-						'lists' => \App\Service\Akta\DaftarAkta::statuses()
+						'lists' => $page_datas->filters
 					])
 				</div>	
 
@@ -133,7 +133,7 @@
 		@if(!isset($page_attributes->hide['create']))
 		<div class="row mt-2 mb-3">
 			<div class="col-12">
-				<a href="{{ route('akta.akta.choose.template') }}" class="btn btn-primary btn-sm">Buat Akta</a>
+				<a href="{{ route('akta.akta.create') }}" class="btn btn-primary btn-sm">Buat Akta</a>
 			</div>
 		</div>
 		@endif
@@ -149,7 +149,7 @@
 						</tr>
 					</thead>
 					<tbody>
-		                @forelse((array)$page_datas->datas as $key => $data)
+		                @forelse((array)$page_datas->aktas as $key => $data)
 						<tr class="clickable-row" data-href="{{ route('akta.akta.show', ['id' => $data['id']]) }}">
 							<td>
 								<i class="fa fa-file"></i>

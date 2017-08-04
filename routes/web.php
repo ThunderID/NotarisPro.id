@@ -31,6 +31,7 @@ Route::group(['namespace' => 'Akta\\'], function(){
 	Route::any('/akta/renvoi/{akta_id}/mark/{key}/{mode}', 		['uses' => 'aktaController@renvoiMark', 	'as' => 'akta.renvoi.mark']);
 	Route::any('/akta/status/{akta_id}/{status}',	 			['uses' => 'aktaController@status', 		'as' => 'akta.akta.status']);
 	Route::any('/akta/copy/{akta_id}',	 						['uses' => 'aktaController@copy', 			'as' => 'akta.akta.copy']);
+	Route::any('/akta/trashed',	 								['uses' => 'aktaController@trashed', 		'as' => 'akta.akta.trash']);
 
 	Route::any('/akta/required/dokumen',	 					['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
 });

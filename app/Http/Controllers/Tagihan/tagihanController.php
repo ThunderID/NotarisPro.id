@@ -47,7 +47,7 @@ class tagihanController extends Controller
 		$this->page_datas->urutkan 			= $this->retrieveTagihanUrutkan();
 
 		//3.initialize view
-		$this->view							= view('pages.tagihan.tagihan.index');
+		$this->view							= view('pages.pos.billing.index');
 
 		return $this->generateView();  
 	}
@@ -96,13 +96,18 @@ class tagihanController extends Controller
 		$this->active_office 				= TAuth::activeOffice();
 
 		//2. init akta as null
-		$this->page_datas->tagihan 			= HeaderTransaksi::id($id)->kantor($this->active_office['kantor']['id'])->with('details')->firstornew();
+		$this->page_datas->tagihan 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->first();
+		if(!$this->page_datas->tagihan)
+		{
+			$this->page_datas->tagihan 		= new $this->query;
+		}
+		$this->page_datas->id 				= $id;
 
 		//2. set page attributes
 		$this->page_attributes->title		= 'Tagihan';
 
 		//3.initialize view
-		$this->view							= view('pages.tagihan.tagihan.create');
+		$this->view							= view('pages.pos.billing.create');
 
 		return $this->generateView();  
 	}
@@ -241,7 +246,7 @@ class tagihanController extends Controller
 	private function retrieveTagihan($query)
 	{
 		//1. pastikan berasal dari kantor yang sama
-		$data 	 	= $this->query->kantor($this->active_office['kantor']['id'])->tipe('bukti_kas_masuk');
+		$data 	 	= $this->query->kantor($this->active_office['kantor']['id'])->where('tipe', 'bukti_kas_masuk');
 
 		//2. cari sesuai query
 		if(isset($query['cari']))
