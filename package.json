@@ -19,6 +19,9 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "at.js": "^1.5.3",
+    "jquery": "^3.2.1",
+    "jquery.caret": "^0.3.1",
     "medium-editor": "^5.23.0",
     "medium-editor-tc-mention": "^2.2.4",
     "select2": "^4.0.3"

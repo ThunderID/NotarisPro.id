@@ -136,10 +136,10 @@ class aktaController extends Controller
 	 */
 	public function create(Request $request)
 	{
-		$this->active_office 				= TAuth::activeOffice();
+		$this->active_office 			= TAuth::activeOffice();
 
 		//1. parse data needed based on category
-		// $this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
+		$this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
 
 		//2. init akta as null
 		$this->page_datas->akta 			= null;
@@ -148,7 +148,7 @@ class aktaController extends Controller
 		$this->page_attributes->title		= 'Akta Dokumen';
 
 		//3.initialize view
-		$this->view							= view('pages.akta.akta.create');
+		$this->view					= view('pages.akta.akta.create');
 
 		return $this->generateView();  
 	}

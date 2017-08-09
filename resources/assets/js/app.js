@@ -50,3 +50,6 @@ require('./plugins/hotkey/hotkey.js');
 
 // footer
 require('./plugins/footerGenerator.js');
+
+// quill (text editor)
+window.Quill = require('./plugins/quill/quill.js');

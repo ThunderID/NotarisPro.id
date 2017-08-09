@@ -46,3 +46,7 @@
 // Themes
 @import "themes/githubVersioning";
 
+// editor quill (text editor)
+@import "plugins/quill/quill.snow.css";
+// mention At.js
+@import "../../../node_modules/at.js/dist/css/jquery.atwho.css";
