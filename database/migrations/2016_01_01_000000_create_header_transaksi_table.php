@@ -15,6 +15,7 @@ class CreateHeaderTransaksiTable extends Migration
 	{
 		Schema::connection('mysql')->create('header_transaksi', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('kantor_id')->nullable();
 			$table->string('nomor')->nullable();
 			$table->text('klien')->nullable();
 

@@ -13,6 +13,7 @@
 			<div class="col-sm-4" style="padding-top:16px;"> 
 				<h6><a href="{{route('web.tutorial.index')}}"> TUTORIAL </a></h6>
 			</div>
+			
 		</div>
 	</div>
 	<div class="col-sm-4">

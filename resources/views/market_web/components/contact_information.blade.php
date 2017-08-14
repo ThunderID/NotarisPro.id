@@ -8,6 +8,7 @@
 	</div>
 	<div class="col-sm-3 text-left">
 		<h6><strong>HELP DESK</strong></h6>
+		<p style="margin-bottom:5px;margin-top:5px;">Notaris di Indonesia</p>
 		<p style="margin-bottom:5px;margin-top:5px;">Training</p>
 		<p style="margin-bottom:5px;margin-top:5px;">Consult</p>
 		<p style="margin-bottom:5px;margin-top:5px;">Trouble Shoot</p>

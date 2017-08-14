@@ -3,6 +3,7 @@
 namespace App\Domain\Order\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Infrastructure\Traits\IDRTrait;
 
 use Validator, Exception;
 
@@ -13,6 +14,8 @@ use Validator, Exception;
  */
 class DetailTransaksi extends Model
 {
+	use IDRTrait;
+
     protected $connection 			= 'mysql';
 
 	/**
@@ -63,6 +66,9 @@ class DetailTransaksi extends Model
 											'deleted_at', 
 										];
 
+	protected $appends 				= 	[
+											'subtotal',
+										];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
@@ -70,7 +76,58 @@ class DetailTransaksi extends Model
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
 
+	/**
+	 * formatting pengajuan kredit menjadi numeric dengan mata uang rupiah
+	 *
+	 * @param string $value ["Rp 200.000.000"]
+	 */	
+	protected function setHargaSatuanAttribute($value)
+	{
+		$this->attributes['harga_satuan']	= $this->formatMoneyFrom($value);
+	}
+
+
+	/**
+	 * formatting pengajuan kredit menjadi numeric dengan mata uang rupiah
+	 *
+	 * @param string $value ["Rp 200.000.000"]
+	 */	
+	protected function setDiskonSatuanAttribute($value)
+	{
+		$this->attributes['diskon_satuan']	= $this->formatMoneyFrom($value);
+	}
+
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
+
+	/**
+	 * formatting pengajuan kredit menjadi mata uang rupiah dari numeric
+	 *
+	 * @param numeric $value [200000000]
+	 * @return string $value ["Rp 200.000.000"]
+	 */	
+	protected function getHargaSatuanAttribute($value)
+	{
+		return $this->formatMoneyTo($value);
+	}
+
+	/**
+	 */	
+	protected function getSubtotalAttribute($value)
+	{
+		return $this->formatMoneyTo(($this->formatMoneyFrom($this->harga_satuan) - $this->formatMoneyFrom($this->diskon_satuan)) * $this->kuantitas);
+	}
+
+	/**
+	 * formatting pengajuan kredit menjadi mata uang rupiah dari numeric
+	 *
+	 * @param numeric $value [200000000]
+	 * @return string $value ["Rp 200.000.000"]
+	 */	
+	protected function getDiskonSatuanAttribute($value)
+	{
+		return $this->formatMoneyTo($value);
+	}
+
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 

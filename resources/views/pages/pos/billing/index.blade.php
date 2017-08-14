@@ -3,11 +3,11 @@
 @push('styles') 
 @endpush  
 
-@section('pos')
+@section('tagihan')
 	active
 @stop
 
-@section('pos-bkk')
+@section('tagihan')
 	active
 @stop
 
@@ -139,27 +139,21 @@
 					</thead>
 					<tbody>
 		                @forelse($page_datas->tagihans as $key => $data)
-						<tr class="clickable-row" data-href="{{ route('akta.akta.show', ['id' => $data['id']]) }}">
+						<tr class="clickable-row" data-href="{{ route('tagihan.tagihan.edit', ['id' => $data['id']]) }}">
 							<td>
 								<i class="fa fa-file"></i>
 								&nbsp;
-								{{ $data['judul'] }}
+								{{ $data['nomor'] }}
 							</td>
 							<td>
-								@if(isset($data['pemilik']['klien']))
-									<ol style="padding-left: 5px;margin-bottom: 0px;">
-										@foreach($data['pemilik']['klien'] as $key => $value)
-											<li> {{ $value['nama'] }} </li>
-										@endforeach
-									</ol>
-								@endif
+								{{ $data['klien']['nama'] }}
 							</td>
+							<td>
+								{{ $data['tanggal_dikeluarkan'] }}
+							</td>					
 							<td>
 								{{ $data['status'] }}
 							</td>
-							<td>
-								{{ $data['tanggal_pembuatan'] }}
-							</td>					
 						</tr>
 		                @empty
 		                <tr>

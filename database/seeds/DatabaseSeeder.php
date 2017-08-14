@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run()
 	{
-		// $this->call(InitNotarisTableSeeder::class);
+		$this->call(InitNotarisTableSeeder::class);
 		$this->call(InitNewArchTableSeeder::class);
 		$this->call(InitTagihanTableSeeder::class);
 		// $this->call(InitTipeDokumenTableSeeder::class);

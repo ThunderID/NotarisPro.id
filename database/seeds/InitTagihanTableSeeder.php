@@ -9,9 +9,12 @@ use App\Domain\Order\Models\HeaderTransaksi;
 use App\Domain\Order\Models\DetailTransaksi;
 use App\Domain\Order\Models\Klien;
 use App\Domain\Admin\Models\Pengguna;
+use App\Infrastructure\Traits\IDRTrait;
 
 class InitTagihanTableSeeder extends Seeder
 {
+	use IDRTrait;
+
 	public function run()
 	{
 		DB::connection('mysql')->table('header_transaksi')->truncate();
@@ -32,14 +35,13 @@ class InitTagihanTableSeeder extends Seeder
 
 			$parse_month 	= rand(-12, -2);
 			$data 			= [
-				'klien_id'				=> $klien['id'],
-				'klien_nama'			=> (isset($klien['ktp']['nama']) ? $klien['ktp']['nama'] : $klien['akta_pendirian']['nama']),
+				'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['ktp']['nama']) ? $klien['ktp']['nama'] : $klien['akta_pendirian']['nama'])],
 				'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
-				'nomor_transaksi'		=> rand(234289849248924,999999999999999),
-				'tipe'					=> 'billing_out',
-				'tanggal_dikeluarkan'	=> Carbon::parse($parse_month.' months')->format('Y-m-d H:i:s'),
-				'tanggal_jatuh_tempo'	=> Carbon::parse($parse_month.' months')->addMonths(1)->format('Y-m-d H:i:s'),
-				'sudah_dibayar'			=> false,
+				'nomor'					=> rand(234289849248924,999999999999999),
+				'tipe'					=> 'bukti_kas_keluar',
+				'tanggal_dikeluarkan'	=> Carbon::parse($parse_month.' months')->format('d/m/Y'),
+				'tanggal_jatuh_tempo'	=> Carbon::parse($parse_month.' months')->addMonths(1)->format('d/m/Y'),
+				'status'				=> 'pending',
 			];
 
 			$tagihan 	= new HeaderTransaksi;
@@ -52,8 +54,8 @@ class InitTagihanTableSeeder extends Seeder
 				'item'						=> 'Jasa Pembuatan Akta',
 				'deskripsi'					=> $deskripsi[rand(0,3)],
 				'kuantitas'					=> 1,
-				'harga_satuan'				=> $harga_satuan[rand(0,3)],
-				'diskon_satuan'				=> $harga_satuan[rand(0,3)] *0.25,
+				'harga_satuan'				=> $this->formatMoneyTo($harga_satuan[rand(0,3)]),
+				'diskon_satuan'				=> $this->formatMoneyTo($harga_satuan[rand(0,3)] *0.25),
 			];
 
 			$tdetail 	= new DetailTransaksi;
@@ -64,10 +66,11 @@ class InitTagihanTableSeeder extends Seeder
 		//billing keluar
 		$data 			= [
 			'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
-			'nomor_transaksi'		=> rand(234289849248924,999999999999999),
-			'tipe'					=> 'billing_in',
-			'tanggal_dikeluarkan'	=> Carbon::parse('first day of next month')->format('Y-m-d H:i:s'),
-			'tanggal_jatuh_tempo'	=> Carbon::parse('first day of next month')->addMonths(1)->format('Y-m-d H:i:s'),
+			'nomor'					=> rand(234289849248924,999999999999999),
+			'status'				=> 'pending',
+			'tipe'					=> 'bukti_kas_masuk',
+			'tanggal_dikeluarkan'	=> Carbon::parse('first day of next month')->format('d/m/Y'),
+			'tanggal_jatuh_tempo'	=> Carbon::parse('first day of next month')->addMonths(1)->format('d/m/Y'),
 		];
 
 		$tagihan 	= new HeaderTransaksi;
@@ -78,7 +81,7 @@ class InitTagihanTableSeeder extends Seeder
 
 		$user 		= Pengguna::id($user['id'])->first();
 
-		$biaya 		= Carbon::parse('first day of next month')->diffInDays($user->created_at) *(250000/30);
+		$biaya 		= $this->formatMoneyTo(Carbon::parse('first day of next month')->diffInDays($user->created_at) *(250000/30));
 
 		//details
 		$data_detail 			= [
@@ -87,7 +90,7 @@ class InitTagihanTableSeeder extends Seeder
 			'deskripsi'					=> 'Tagihan Bulanan',
 			'kuantitas'					=> 1,
 			'harga_satuan'				=> $biaya,
-			'diskon_satuan'				=> 0,
+			'diskon_satuan'				=> 'Rp 0',
 		];
 
 		$tdetail 	= new DetailTransaksi;
@@ -97,15 +100,16 @@ class InitTagihanTableSeeder extends Seeder
 		//bukti kas masuk
 		foreach(range(0, 5) as $key2)
 		{
-			$ht 		= HeaderTransaksi::where('kantor_id', TAuth::activeOffice()['kantor']['id'])->where('tipe', 'billing_out')->skip(rand(0,19))->first();
+			$ht 		= HeaderTransaksi::where('kantor_id', TAuth::activeOffice()['kantor']['id'])->where('tipe', 'bukti_kas_keluar')->skip(rand(0,19))->first();
 			$td 		= DetailTransaksi::where('header_transaksi_id', $ht['id'])->get();
 
 			$bkm 		= new HeaderTransaksi;
-			$bkm->kantor_id			= $ht['kantor_id'];
-			$bkm->nomor_transaksi	= rand(234289849248924,999999999999999);
-			$bkm->referensi_id 		= $ht['id'];
-			$bkm->tipe 				= 'bukti_kas_masuk';
-			$bkm->tanggal_dikeluarkan = Carbon::now()->format('Y-m-d H:i:s');
+			$bkm->kantor_id				= $ht['kantor_id'];
+			$bkm->nomor					= rand(234289849248924,999999999999999);
+			// $bkm->referensi_id 			= $ht['id'];
+			$bkm->status 				= 'pending';
+			$bkm->tipe 					= 'bukti_kas_masuk';
+			$bkm->tanggal_dikeluarkan 	= Carbon::now()->format('d/m/Y');
 			$bkm->save();
 
 			foreach ($td as $key => $value) 
@@ -116,7 +120,7 @@ class InitTagihanTableSeeder extends Seeder
 				$bkm_dt->deskripsi 				= $value->deskripsi;
 				$bkm_dt->kuantitas 				= 1;
 				$bkm_dt->harga_satuan 			= $value->harga_satuan;
-				$bkm_dt->diskon_satuan 			= 0;
+				$bkm_dt->diskon_satuan 			= 'Rp 0';
 				
 				$bkm_dt->save();
 			}
@@ -129,9 +133,10 @@ class InitTagihanTableSeeder extends Seeder
 		{
 			$bkk 						= new HeaderTransaksi;
 			$bkk->kantor_id				= TAuth::activeOffice()['kantor']['id'];
-			$bkk->nomor_transaksi		= rand(234289849248924,999999999999999);
+			$bkk->nomor					= rand(234289849248924,999999999999999);
 			$bkk->tipe 					= 'bukti_kas_keluar';
-			$bkk->tanggal_dikeluarkan 	= Carbon::now()->format('Y-m-d H:i:s');
+			$bkk->status 				= 'pending';
+			$bkk->tanggal_dikeluarkan 	= Carbon::now()->format('d/m/Y');
 			$bkk->save();
 
 			foreach ($td as $key => $value) 
@@ -141,8 +146,8 @@ class InitTagihanTableSeeder extends Seeder
 				$bkk_dt->item 					= $details[$key2];
 				$bkk_dt->deskripsi 				= $details[$key2];
 				$bkk_dt->kuantitas 				= 1;
-				$bkk_dt->harga_satuan 			= $prices[$key2];
-				$bkk_dt->diskon_satuan 			= 0;
+				$bkk_dt->harga_satuan 			= $this->formatMoneyTo($prices[$key2]);
+				$bkk_dt->diskon_satuan 			= 'Rp 0';
 				$bkk_dt->save();
 			}
 		}

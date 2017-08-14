@@ -83,6 +83,7 @@
                 </div>
 
                 <div class="links">
+                    <a href="{{route('akta.akta.index')}}">Akta</a>
                     <a href="{{route('uac.login.destroy')}}">Logout</a>
                 </div>
             </div>

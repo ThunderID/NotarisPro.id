@@ -23,17 +23,17 @@ Route::group(['namespace' => 'Akta\\'], function(){
 		'destroy' 	=> 'akta.akta.destroy' //post 
 	]]);
 
-	Route::any('/akta/mention/{akta_id}', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
-	Route::any('/akta/versi/{akta_id}', 						['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
-	Route::any('/akta/versi/{akta_id}/compare/{version_id}', 	['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
-	Route::any('/akta/print/{akta_id}',	 						['uses' => 'aktaController@print', 			'as' => 'akta.akta.print']);
+	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
+	Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
+	Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
+	Route::any('/akta/print/{akta_id}',	 					['uses' => 'aktaController@print', 			'as' => 'akta.akta.print']);
 
-	Route::any('/akta/renvoi/{akta_id}/mark/{key}/{mode}', 		['uses' => 'aktaController@renvoiMark', 	'as' => 'akta.renvoi.mark']);
-	Route::any('/akta/status/{akta_id}/{status}',	 			['uses' => 'aktaController@status', 		'as' => 'akta.akta.status']);
-	Route::any('/akta/copy/{akta_id}',	 						['uses' => 'aktaController@copy', 			'as' => 'akta.akta.copy']);
-	Route::any('/akta/trashed',	 								['uses' => 'aktaController@trashed', 		'as' => 'akta.akta.trash']);
+	Route::any('/akta/renvoi/{akta_id}/mark/{key}/{mode}', 	['uses' => 'aktaController@renvoiMark', 	'as' => 'akta.renvoi.mark']);
+	Route::any('/akta/status/{akta_id}/{status}',	 		['uses' => 'aktaController@status', 		'as' => 'akta.akta.status']);
+	Route::any('/akta/copy/{akta_id}',	 					['uses' => 'aktaController@copy', 			'as' => 'akta.akta.copy']);
+	Route::any('/akta/trashed',	 							['uses' => 'aktaController@trashed', 		'as' => 'akta.akta.trash']);
 
-	Route::any('/akta/required/dokumen',	 					['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
+	Route::any('/akta/required/dokumen',	 				['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
 });
 
 // 2. TAGIHAN
@@ -80,9 +80,9 @@ Route::group(['namespace' => 'Notaris\\'], function(){
 // AREA PENGATURAN //
 Route::group(['namespace' => 'Pengaturan\\'], function(){
 	//5. Subscription
-	Route::any('/pengaturan/tagihan',						['uses' => 'tagihanController@index', 		'as' => 'pengaturan.tagihan.index']);
-	Route::any('/pengaturan/tagihan/print/{id}',			['uses' => 'tagihanController@print', 		'as' => 'pengaturan.tagihan.print']);
-	Route::any('/pengaturan/tagihan/recalculate/{mode}',	['uses' => 'tagihanController@recalculate',	'as' => 'pengaturan.tagihan.recalculate']);
+	Route::any('/pengaturan/tagihan',					['uses' => 'tagihanController@index', 		'as' => 'pengaturan.tagihan.index']);
+	Route::any('/pengaturan/tagihan/print/{id}',		['uses' => 'tagihanController@print', 		'as' => 'pengaturan.tagihan.print']);
+	Route::any('/pengaturan/tagihan/recalculate/{mode}',['uses' => 'tagihanController@recalculate',	'as' => 'pengaturan.tagihan.recalculate']);
 
 	//6. User
 	Route::resource('/pengaturan/user', 'userController', ['names' => [

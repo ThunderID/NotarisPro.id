@@ -42,7 +42,7 @@
 							<div class="row">
 								<div class="col-12">
 									<label class="control-label" for="email">Email</label>  
-									<input name="akun_email" value="{{ old('email') ? old('email') : $page_datas->datas['email'] }}" class="form-control" type="text" required>
+									<input name="akun_email" value="{{ old('email') ? old('email') : $page_datas->akun['email'] }}" class="form-control" type="text" required>
 								</div>
 							</div>
 						</fieldset>

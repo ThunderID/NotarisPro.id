@@ -6,6 +6,7 @@ namespace App\Service\Admin;
 //   Models  //
 ///////////////
 use App\Domain\Admin\Models\Pengguna;
+use App\Domain\Admin\Models\Kantor;
 
 use Hash, Exception, Session, TAuth;
 
@@ -111,6 +112,8 @@ class SessionBasedAuthenticator
 
 		foreach ($office as $key => $value) 
 		{
+			$value['kantor']  	= Kantor::find($value['kantor']['id'])->toArray();
+
 			return $value;
 		}
 	}
