@@ -29,9 +29,9 @@
 			<li class="nav-item @yield('tagihan')">
 				<a class="nav-link" href="{{ route('tagihan.tagihan.index') }}">Tagihan</a>
 			</li>
-			<li class="nav-item @yield('klien')">
+			<!-- <li class="nav-item @yield('klien')">
 				<a class="nav-link" href="{{route('klien.klien.index')}}">Klien</a>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 

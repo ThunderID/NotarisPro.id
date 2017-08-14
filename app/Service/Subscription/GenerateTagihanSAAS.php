@@ -111,6 +111,7 @@ class GenerateTagihanSAAS
 				$tagihan 		= new HeaderTransaksi;
 			}
 
+			$input['kantor_id']	= $k_value->id;
 			$input['klien']		= json_encode(['id' => $k_value->id, 'nama' => $k_value->nama, 'alamat' => $k_value->address]);
 			$input['status']	= 'pending';
 			$input['tipe']		= 'bukti_kas_keluar';

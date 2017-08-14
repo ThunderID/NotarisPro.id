@@ -1,19 +1,19 @@
 <?php
 	// Sidebar Menu List
 	$list['Profil Kantor'] 	= 	[
-								'url' 	=> route('kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
+								'url' 	=> route('pengaturan.kantor.edit', ['id' => $acl_active_office['kantor']['id']]),
 								'icon' 	=> 'fa-building',
 							];
 	$list['Pengaturan Akun'] 		= 	[
-								'url' 	=> route('akun.edit', $acl_logged_user['id']),
+								'url' 	=> route('pengaturan.akun.edit', $acl_logged_user['id']),
 								'icon' 	=> 'fa-user'
 							];
 	$list['User'] 		= 	[
-								'url' 	=> route('user.index'),
+								'url' 	=> route('pengaturan.user.index'),
 								'icon' 	=> 'fa-users'
 							];
 	$list['Tagihan'] 	= 	[
-								'url' 	=> route('billing.index'),
+								'url' 	=> route('pengaturan.tagihan.index'),
 								'icon' 	=> 'fa-money'
 							];
 

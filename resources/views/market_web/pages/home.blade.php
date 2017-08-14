@@ -16,7 +16,7 @@
 				<div class="col-sm-12 text-center" style="padding-top:150px;padding-bottom:150px;">
 					<h1>Kesulitan Melacak<br>Dokumen Klien ?</h1>
 					<h2> 
-						<a href="#" class="btn btn-default" style="border:1px solid;">
+						<a href="{{route('uac.tsignup.create')}}" class="btn btn-default" style="border:1px solid;">
 							TRY FOR FREE
 						</a>
 					</h2>

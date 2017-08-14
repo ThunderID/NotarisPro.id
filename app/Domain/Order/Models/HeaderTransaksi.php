@@ -3,6 +3,8 @@
 namespace App\Domain\Order\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Infrastructure\Traits\IDRTrait;
+use App\Infrastructure\Traits\TanggalSQLTrait;
 
 use Validator, Exception;
 
@@ -13,6 +15,9 @@ use Validator, Exception;
  */
 class HeaderTransaksi extends Model
 {
+	use TanggalSQLTrait;
+	use IDRTrait;
+	
     protected $connection 			= 'mysql';
 
 	/**
@@ -30,6 +35,7 @@ class HeaderTransaksi extends Model
 
 	protected $fillable				=	[
 											'klien'					,
+											'kantor_id'				,
 											'nomor'					,
 											'status'				,
 											'tipe'					,
@@ -49,7 +55,7 @@ class HeaderTransaksi extends Model
 	 *
 	 * @var array
 	 */
-	protected $dates				= ['created_at', 'updated_at', 'deleted_at', 'tanggal_dikeluarkan'];
+	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
 	
 	/**
 	 * data hidden
@@ -73,19 +79,65 @@ class HeaderTransaksi extends Model
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
+	/**
+	 *
+	 */	
+	protected function setKlienAttribute($value)
+	{
+		$this->attributes['klien']					= json_encode($value);
+	}
+
+	/**
+	 *
+	 */	
+	protected function setTanggalDikeluarkanAttribute($value)
+	{
+		$this->attributes['tanggal_dikeluarkan']	= $this->formatDateFrom($value);
+	}
+
+	/**
+	 *
+	 */	
+	protected function setTanggalJatuhTempoAttribute($value)
+	{
+		$this->attributes['tanggal_jatuh_tempo']	= $this->formatDateFrom($value);
+	}
 
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
 	public function getTotalAttribute()
 	{
+
 		$total 			= 0;
-		foreach ((array)$this->details as $key => $value) 
+		foreach ($this->details as $key => $value) 
 		{
-			$total 		= $total + ($value->kuantitas * ($value->harga_satuan - $value->diskon_satuan));
+			$total 		= $total + ($value->kuantitas * ($this->formatMoneyFrom($value->harga_satuan) - $this->formatMoneyFrom($value->diskon_satuan)));
 		}
 
 		return $this->formatMoneyTo($total);
 	}
 
+	/**
+	 */	
+	protected function getKlienAttribute($value)
+	{
+		return json_decode($value, true);
+	}
+
+	/**
+	 *
+	 */	
+	protected function getTanggalDikeluarkanAttribute($value)
+	{
+		return $this->formatDateTo($value);
+	}
+
+	/**
+	 *
+	 */	
+	protected function getTanggalJatuhTempoAttribute($value)
+	{
+		return $this->formatDateTo($value);
+	}
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
 	/**
@@ -96,6 +148,26 @@ class HeaderTransaksi extends Model
 	public static function boot() 
 	{
 		parent::boot();
+	}
+
+	public static function generateNomorTransaksiKeluar($kantor, $tanggal)
+	{
+		$prefix 	= 'INVIN'.$kantor['id'].$tanggal->format('m').$tanggal->format('y');
+		$previous 	= self::where('nomor', 'like', $prefix.'%')->orderby('created_at', 'desc')->first();
+		
+		if($previous)
+		{
+			$suffix = explode('.', $orang['nip']);
+			$suffix = ((int)$suffix[1] * 1) + 1;
+		}
+		else
+		{
+			$suffix = 1;
+		}
+
+		$suffix 	= str_pad($suffix, 4, '0', STR_PAD_LEFT);
+
+		return $prefix.$suffix;
 	}
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
@@ -114,13 +186,14 @@ class HeaderTransaksi extends Model
 	{
 		if(is_array($value))
 		{
-			foreach ($value as $mention) 
-			{
-				$query 	= $query->where('klien', 'like', '%id%'.$mention.'%');
-			}
-			return $query;
+			return $query->whereIn('kantor_id', $value);
+			// foreach ($value as $mention) 
+			// {
+			// 	$query 	= $query->where('klien', 'like', '%id%'.$mention.'%');
+			// }
+			// return $query;
 		}
 
-		return $query->where('klien', 'like', '%id%'.$value.'%');
+		return $query->where('kantor_id', $value);
 	}
 }

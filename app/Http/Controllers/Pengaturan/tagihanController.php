@@ -45,9 +45,10 @@ class tagihanController extends Controller
 		
 		//2d. get all urutan 
 		$this->page_datas->urutkan 			= $this->retrieveTagihanUrutkan();
+		$this->page_datas->active_office 	= $this->active_office;
 
 		//3.initialize view
-		$this->view							= view('pages.pengaturan.tagihan.index');
+		$this->view							= view('notaris.pages.pengaturan.tagihan.index');
 
 		return $this->generateView();  
 	}
@@ -69,7 +70,8 @@ class tagihanController extends Controller
 		$this->page_datas->tagihan 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->first();
 
 		//3.initialize view
-		$this->view							= view('pages.pengaturan.tagihan.print');
+		$this->view							= view('notaris.pages.pengaturan.tagihan.print');
+		$this->page_datas->active_office 	= $this->active_office;
 
 		return $this->generateView();  
 	}
@@ -112,7 +114,7 @@ class tagihanController extends Controller
 					$day_range 		= min($day_range, $that_day);
 
 					$total_counter 	= $total_counter + 1;
-					if($total_counter < = 2)
+					if($total_counter <= 2)
 					{
 						$total_tagihan 	= $total_tagihan + ((250000/$that_day) * $day_range);
 					}
@@ -132,10 +134,15 @@ class tagihanController extends Controller
 		return $total_tagihan;
 	}
 
-	private function adding($month = Carbon::parse('last day of this month')->endofTheDay())
+	private function adding($month = null)
 	{
+		if(is_null($month))
+		{
+			$month 			= Carbon::parse('last day of this month')->endofTheDay();
+		}
+
 		$users 				= Pengguna::where('visas.kantor.id', $this->active_office['kantor']['id'])->get();
-		$total_tagihan 	= $this->countCurrent($users, $month);
+		$total_tagihan 		= $this->countCurrent($users, $month);
 
 		if(count($users) >= 2)
 		{
@@ -156,8 +163,13 @@ class tagihanController extends Controller
 		return $total_tagihan;
 	}
 
-	private function remove($month = Carbon::parse('last day of this month')->endofTheDay(), $id)
+	private function remove($month = null, $id)
 	{
+		if(is_null($month))
+		{
+			$month 			= Carbon::parse('last day of this month')->endofTheDay();
+		}
+
 		$users 				= Pengguna::where('visas.kantor.id', $this->active_office['kantor']['id'])->notID($id)->get();
 		$total_tagihan 		= $this->countCurrent($users, $month);
 
@@ -191,12 +203,12 @@ class tagihanController extends Controller
 	private function retrieveTagihan($query)
 	{
 		//1. pastikan berasal dari kantor yang sama
-		$data 	 	= $this->query->kantor($this->active_office['kantor']['id'])->tipe('bukti_kas_keluar');
+		$data 	 	= $this->query->kantor($this->active_office['kantor']['id'])->where('tipe', 'bukti_kas_keluar');
 
 		//2. cari sesuai query
 		if(isset($query['cari']))
 		{
-			$data 	= $data->where(function($q)use($query){$q->where('klien_nama', 'like', '%'.$query['cari'].'%')->orwhere('nomor_transaksi', 'like', '%'.$query['cari'].'%');});
+			$data 	= $data->where(function($q)use($query){$q->where('klien_nama', 'like', '%'.$query['cari'].'%')->orwhere('nomor', 'like', '%'.$query['cari'].'%');});
 		}
 
 		//3. filter 
