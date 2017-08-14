@@ -10,4 +10,5 @@ mix.sass('resources/assets/sass/app.scss', 'public/css/app.css')
 	// .autoload({ 
 	// 	'jquery': ['window.$', 'window.jQuery'],
 	// })
+	.browserSync('NotarisPro.dev');
 	;
