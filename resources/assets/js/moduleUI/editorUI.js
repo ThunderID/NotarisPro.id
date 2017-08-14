@@ -54,6 +54,8 @@ window.editorUI = {
 	quill: function () {
 		var currentCursor, newIndex, suffix, textSearch;
 		var selector = document.getElementById('editor');
+		var Delta = Quill.import('delta');
+		var Embed = Quill.import('blots/embed');
 		var toolbarOptions = [
 			['bold', 'italic', 'underline'],
 			[{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -72,25 +74,45 @@ window.editorUI = {
 				toolbar: '#toolbarPane'
 			}
 		};
-
+		var changeText = new Delta();
 		var editor = new window.Quill('#editor', options);
 		var toolbar = editor.getModule('toolbar');
-		toolbar.addHandler('openData', function() {});
-
 		var buttonOpenData = document.querySelector('.ql-openData');
+
+		class dataMention extends Embed {
+			static create (value) {
+				let node = super.create(value);
+
+				node.setAttribute('style', 'color: #0275d8');
+				node.setAttribute('data-mention', value.value);
+				node.innerHTML = value.text;
+
+				return node;
+			}
+		}
+
+		dataMention.blotName = 'data-link';
+		dataMention.className = 'data-link';
+		dataMention.tagName = 'span';
+
+		Quill.register({
+			'formats/data-link': dataMention
+		});
+
 		buttonOpenData.addEventListener('click', function() {
 			var flag = buttonOpenData.getAttribute('data-flag');
 			if (flag == 'close') {
 				$('#DataList').css('display', 'block');
 				buttonOpenData.setAttribute('data-flag', 'open');
 			} else {
-				$('#DataList').css('display', 'hide');
+				$('#DataList').css('display', 'none');
 				buttonOpenData.setAttribute('data-flag', 'close');
 			}
 		});
 
 		// Data Mention
-		editor.on('text-change', function() {
+		editor.on('text-change', function(delta) {
+			changeText = changeText.compose(delta);
 			let range = editor.getSelection();
 			if (range) {
 				if (range.length == 0) {
@@ -106,48 +128,78 @@ window.editorUI = {
 			textSearch = query;
 		});
 
-		if (listMention) {
-			const config = {
-				at: "@",
-				data: listMention,
-				functionOverrides: {
-					insert: function (text) {
-						let cursor = currentCursor;
-
-						if ((typeof(suffix) != 'undefined') && (typeof(textSearch) != 'undefined')) {
-							var newIndex = parseInt(cursor + text.length);
-
-							editor.insertText(cursor, text, Quill.sources.USER);
-							editor.deleteText((cursor - (suffix.length + textSearch.length)), (suffix.length + textSearch.length));
-							editor.deleteText(newIndex, 1);
-							editor.setSelection(newIndex, 0);
-						}					
-					}
-				}
-			};
-			$(editor.root).atwho(config);
-		}
-
 		$('.data-mention').on('click', function(e) {
 			e.preventDefault();
+
 			var textValue = $(this).attr('data-value');
+			var textObj = {text: textValue, value: textValue};
 
 			// set selection
 			var range = editor.getSelection();
+			var text = editor.getText(range.index, range.length);
+			var newIndex = parseInt(range.index + textValue.length);
+
 			if (range) {
 				if (range.length == 0) {
-					console.log('User cursor is at index', range.index);
-					editor.insertText(range.index, textValue, '', true);
+					editor.insertEmbed(range.index, 'data-link', textObj);
 				} else {
-					var text = editor.getText(range.index, range.length);
 					editor.deleteText(range.index, range.length);
-					editor.insertText(range.index, textValue, '', true);
-					console.log('User has highlighted: ', text);
+					editor.insertEmbed(range.index, 'data-link', textObj);
 				}
 			} else {
-				editor.insertText(editor.getLength() - 1, textValue, '', true);
-				console.log('User cursor is not in editor');
+				editor.insertEmbed(editor.getLength() - 1, 'data-link', textObj);
 			}
+
+			editor.setSelection(newIndex, 0)
+		});
+
+
+		// save doucment using interval autosave
+		setInterval( function() {
+			if (changeText.length() > 0) {
+				console.log('saving changes..');
+				$.ajax({
+					method: 'POST',
+					url: '/test',
+					data: { content: editor.root.innerHTML },
+				})
+				changeText = new Delta();
+			}
+		}, 5*1000);
+
+		window.onbeforunload = function() {
+			if (changeText.length() > 0) {
+				return 'There are unsaved changes. Are you sure you want to leave?';
+			}
+		}
+
+		// save document using button submit
+		$('.save-document').on('click', function(){
+			let method = "post";
+			let form = document.createElement("form");
+			let hiddenField = document.createElement("input");
+
+			form.setAttribute("method", method);
+			form.setAttribute("action", "/test");
+
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", "contents");
+
+			if (changeText.length() > 0) {
+				let getDocument = JSON.stringify(editor.getContents());
+				let getPartialDocument = JSON.stringify(changeText);
+
+				// console.log({
+				// 	innerHTMLJSONparse: JSON.stringify(editor.root.innerHTML),
+				// });
+				// hiddenField.setAttribute("value", getEntryDocument);
+			}
+
+
+			
+			form.appendChild(hiddenField);
+			document.body.appendChild(form);
+			// form.submit();
 		});
 	},
 	init: function () {
