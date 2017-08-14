@@ -133,7 +133,7 @@
 		@if(!isset($page_attributes->hide['create']))
 		<div class="row mt-2 mb-3">
 			<div class="col-12">
-				<a href="{{ route('akta.akta.create') }}" class="btn btn-primary btn-sm">Buat Akta</a>
+				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.create') }}', 'newwindow', 'width=1024,height=768'); return false;" class="btn btn-primary btn-sm">Buat Akta</a>
 			</div>
 		</div>
 		@endif
