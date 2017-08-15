@@ -38,7 +38,7 @@
 					@include('components.filter',[
 						'title' => 'Filter Akta',
 						'alias' => 'status',
-						'qs'	=> [ 'q','urutkan' ],
+						'qs'	=> [ 'cari','urutkan' ],
 						'lists' => $page_datas->filters
 					])
 				</div>	
@@ -47,7 +47,7 @@
 					@include('components.filter',[
 						'title'	=> 'Urutkan',
 						'alias' => 'urutkan',
-						'qs'	=> [ 'q','status' ],
+						'qs'	=> [ 'cari','status' ],
 						'lists' => [
 							'tanggal sunting terbaru' 	=> null,
 							'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
@@ -95,7 +95,7 @@
 			<div class="col-6 hidden-sm-down text-right">
 				@include('components.sort',[
 					'alias' => 'urutkan',
-					'qs'	=> [ 'q','status' ],
+					'qs'	=> [ 'cari','status' ],
 					'lists' => [
 						'judul a - z' 	=> 'judul-asc',
 						'judul z - a' 	=> 'judul-desc',
@@ -119,7 +119,7 @@
 			<div class="col-12 mb-2">
 				@include('components.filterIndicator',[
 					'lists' => 	[
-						'q' 		=> 'Cari Data',
+						'cari' 		=> 'Cari Data',
 						'status' 	=> 'Status Data'
 					]
 				])
@@ -133,7 +133,7 @@
 		@if(!isset($page_attributes->hide['create']))
 		<div class="row mt-2 mb-3">
 			<div class="col-12">
-				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.create') }}', 'newwindow', 'width=1024,height=768'); return false;" class="btn btn-primary btn-sm">Buat Akta</a>
+				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.choooseTemplate') }}', 'newwindow', 'width=1024,height=768'); return false;" class="btn btn-primary btn-sm">Buat Akta</a>
 			</div>
 		</div>
 		@endif
