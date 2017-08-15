@@ -12,10 +12,10 @@
 @stop
 
 @section('content')
-<div class="row">
-@php
-	// dd($page_datas);
-@endphp
+<div id="akta_show" class="row" style="display:none;background-color: white;z-index: 10; position:absolute; top:54 ;">
+	@include('pages.akta.akta.show')
+</div>
+<div id="akta_index" class="row">
 	<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 pt-0 hide-mobile sidebar subset-menu target-menu" style="overflow-y: hidden;">
 		<div class="row" style="padding-top:16px;overflow-y: scroll;height: calc(100% - 39px);">
 			<div class="col-md-12">
@@ -150,7 +150,7 @@
 					</thead>
 					<tbody>
 		                @forelse((array)$page_datas->aktas as $key => $data)
-						<tr class="clickable-row" data-href="{{ route('akta.akta.show', ['id' => $data['id']]) }}">
+						<tr onclick="showAkta(this);" data_judul_akta="{{ $data['judul'] }}" data_id_akta="{{ $data['id'] }}" style="cursor: pointer;">
 							<td>
 								<i class="fa fa-file"></i>
 								&nbsp;
@@ -186,8 +186,17 @@
 		</div>
 	</div>
 </div>
+
 @stop
 
-@push('scripts')  
+@push('scripts')
+	function showAkta(e){
+		// init
+		$('#akta_show').fadeIn('fast');
+		$('#akta_show').find('#judul_akta').text($(e).attr('data_judul_akta'));
+	}
+	function hideAkta(e){
+		$('#akta_show').fadeOut('fast');
+	}
 
 @endpush 
