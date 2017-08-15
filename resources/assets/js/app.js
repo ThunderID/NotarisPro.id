@@ -56,3 +56,6 @@ window.Quill = require('./plugins/quill/quill.js');
 
 // require('./plugins/atjs/jquery.caret.js');
 // window.atwho = require('./plugins/atjs/jquery.atwho.js');
+
+// laoder ui
+require('./plugins/loader');
