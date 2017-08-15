@@ -43,6 +43,10 @@
 		]
 	*/
 ?>		
+
+{{-- V1 --}}
+<?php
+/*
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			{{-- COMPONENT MENUBAR --}}
 			<div class="row bg-faded">
@@ -87,6 +91,54 @@
 
 				{{-- Menu Buttons --}}
 				<div class="col-8 col-md-3 col-lg-4 pr-2">
+					<ul class="nav menu-content justify-content-end">
+						@foreach($menus as $key => $menu)
+						
+							{{-- Fuze --}}
+							<?php
+								$route = "";
+								if(isset($menu['route'])){
+									$route = $menu['route'];
+								}							
+							?>
+
+							<li class="nav-item {{ isset($menu['hide_on']) ? $menu['hide_on'] : '' }}">
+								<a class="nav-link text-center {{ isset($menu['class']) ? $menu['class'] : '' }}"
+									href="{{ isset($menu['trigger_modal']) ? 'javascript:void(0);' : $route }}" 
+									{{ isset($menu['trigger_modal']) ? 'data-toggle=modal data-target=' . $menu['trigger_modal'] : '' }}
+								>
+									<i class="fa {{ isset($menu['icon']) ? $menu['icon'] : '' }}"></i>&nbsp;
+									<span class="hidden-md-down"> {{ isset($menu['title']) ? $menu['title'] : '' }}</span>
+									<span class="hidden-md-up"> {{ isset($menu['title']) ? $menu['title'] : '' }}</span>
+								</a>
+							</li>
+						@endforeach
+					</ul>
+				</div>
+
+			</div>
+			{{-- END COMPONENT MENUBAR --}}
+		</div>
+*/
+?>
+
+{{-- V2 --}}
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			{{-- COMPONENT MENUBAR --}}
+			<div class="row bg-faded">
+
+				{{-- Title --}}
+				<div class="col-9 col-sm-10 col-md-10 col-lg-11 col-xl-11">
+					<div style="text-overflow:ellipsis; width:100%;">
+						<span id="judul_akta" class="navbar-text mb-0 text-muted">				
+							{!! isset($title) ? $title : '' !!}
+						</span>
+					</div>
+				</div>
+
+
+				{{-- Menu Buttons --}}
+				<div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1 pr-0">
 					<ul class="nav menu-content justify-content-end">
 						@foreach($menus as $key => $menu)
 						
