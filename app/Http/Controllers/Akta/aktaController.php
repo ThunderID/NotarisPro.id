@@ -138,7 +138,19 @@ class aktaController extends Controller
 	 */
 	public function create(Request $request)
 	{
-		$this->active_office 			= TAuth::activeOffice();
+		// blank or copy
+		$input 								= $request->only('id_akta','judul_akta');
+		// some logic here
+		if(is_null($input['id_akta'])){
+			// blank here
+		}else{
+			// copy
+
+			// open akta and  return to akta
+		}
+
+
+		$this->active_office 				= TAuth::activeOffice();
 
 		//1. parse data needed based on category
 		$this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
@@ -151,6 +163,33 @@ class aktaController extends Controller
 
 		//3.initialize view
 		$this->view					= view('pages.akta.akta.create');
+
+		return $this->generateView();  
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function chooseTemplate(Request $request)
+	{
+
+		$this->active_office 				= TAuth::activeOffice();
+
+		//1. init akta as null
+		$this->page_datas->akta 			= null;
+
+		//2. set page attributes
+		$this->page_attributes->title		= 'Buat Akta Baru';
+
+		//3. initialize view
+		$this->view							= view('pages.akta.akta.aktanew');
+
+		//4. get data akta
+		$query 								= $request->only('cari', 'page');
+		$query['trash']						= false;
+		$this->retrieveAkta($query);		
 
 		return $this->generateView();  
 	}
@@ -431,11 +470,13 @@ class aktaController extends Controller
 		}
 
 		//3. filter 
-		foreach ((array)$query['filter'] as $key => $value) 
-		{
-			if(in_array($key, ['jenis', 'status']))
+		if(isset($query['filter'])){
+			foreach ((array)$query['filter'] as $key => $value) 
 			{
-				$data 	= $data->where($key, $value);				
+				if(in_array($key, ['jenis', 'status']))
+				{
+					$data 	= $data->where($key, $value);				
+				}
 			}
 		}
 
@@ -445,7 +486,7 @@ class aktaController extends Controller
 			$explode 		= explode('-', $query['urutkan']);
 			if(in_array($explode[0], ['updated_at', 'created_at', 'status', 'jenis']) && in_array($explode[1], ['asc', 'desc']))
 			{
-				$data 		= $data->orderby($key, $value);
+				$data 		= $data->orderby($explode[0], $explode[1]);
 			}
 		}
 

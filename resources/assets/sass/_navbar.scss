@@ -56,3 +56,9 @@ color: #0275d8;
 text-decoration: none;
 background-color: white;
 } 
+
+@media screen and (min-width: 800px){
+	.navbar .nav-item .nav-link{
+	    padding-right: 0px;
+	}
+}

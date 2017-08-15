@@ -32,6 +32,8 @@ Route::group(['namespace' => 'Akta\\'], function(){
 	Route::any('/akta/status/{akta_id}/{status}',	 		['uses' => 'aktaController@status', 		'as' => 'akta.akta.status']);
 	Route::any('/akta/copy/{akta_id}',	 					['uses' => 'aktaController@copy', 			'as' => 'akta.akta.copy']);
 	Route::any('/akta/trashed',	 							['uses' => 'aktaController@trashed', 		'as' => 'akta.akta.trash']);
+	Route::any('/akta/chooseTemplate',	 					['uses' => 'aktaController@chooseTemplate', 		'as' => 'akta.akta.choooseTemplate']);
+
 
 	Route::any('/akta/required/dokumen',	 				['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
 

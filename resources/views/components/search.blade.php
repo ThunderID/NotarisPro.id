@@ -53,7 +53,7 @@
 <div class="search">
 	<form class="form" action="{{ $action_url }}" method="Get">
 		<div class="input-group">
-			<input type="text" class="form-control search" placeholder="{{ isset($placehlder) ? $placeholder : 'Cari' }}" aria-describedby="basic-addon1" name="q">
+			<input type="text" class="form-control search" placeholder="{{ isset($placehlder) ? $placeholder : 'Cari' }}" aria-describedby="basic-addon1" name="cari">
 			@foreach($data_qs as $key => $value )
 				@if(in_array($key, $qs))
 					<input type="hidden" name="{{$key}}" value="{{$value}}">

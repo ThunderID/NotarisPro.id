@@ -548,6 +548,7 @@
 .ql-snow .ql-toolbar button svg {
   float: left;
   height: 100%;
+  margin-top: 2px;
 }
 .ql-snow.ql-toolbar button:active:hover,
 .ql-snow .ql-toolbar button:active:hover {
