@@ -462,8 +462,7 @@ class aktaController extends Controller
 		}
 
 		//set datas
-		// $this->paginate(null, $data->count(), $this->per_page);
-		$this->paginate(null, $data->count(), 2);
+		$this->paginate(null, $data->count(), $this->per_page);
 		$this->page_datas->aktas 		= $data->skip($skip)->take($this->per_page)->get(['_id', 'judul', 'jenis', 'status', 'versi', 'penulis', 'pemilik', 'created_at', 'updated_at'])->toArray();
 
 		return $this->page_datas;
