@@ -29,6 +29,9 @@
 			<li class="nav-item @yield('tagihan')">
 				<a class="nav-link" href="{{ route('tagihan.tagihan.index') }}">Tagihan</a>
 			</li>
+			<li class="nav-item @yield('jadwal')">
+				<a class="nav-link" href="{{ route('jadwal.bpn.index') }}">Jadwal BPN</a>
+			</li>
 			<!-- <li class="nav-item @yield('klien')">
 				<a class="nav-link" href="{{route('klien.klien.index')}}">Klien</a>
 			</li> -->

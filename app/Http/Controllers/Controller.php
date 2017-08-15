@@ -122,7 +122,7 @@ class Controller extends BaseController
 	//only for displaying construction site. cool?
 	private function underConstruction()
 	{
-		if(str_is('jadwal.*', Route::currentRouteName()) || str_is('klien.*', Route::currentRouteName()))
+		if(str_is('klien.*', Route::currentRouteName()))
 		{
 			$this->view 				= view('pages.developer.under_construction');
 		}

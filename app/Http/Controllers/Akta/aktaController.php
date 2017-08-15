@@ -15,6 +15,8 @@ use App\Service\Akta\LockAkta;
 
 use App\Service\Helpers\JSend;
 
+use PulkitJalan\Google\Client;
+
 use Illuminate\Http\Request;
 
 use TAuth;
@@ -361,6 +363,46 @@ class aktaController extends Controller
 			$this->page_attributes->msg['error']       = $e->getMessage();
 			return $this->generateRedirect(route('akta.akta.show', $akta_id));
 		}
+	}
+
+	public function dropboxStore(Request $request, $id)
+	{
+		$active_office 	= TAuth::activeOffice();
+
+		$akta 			= $this->query->id($id)->kantor($active_office['kantor']['id'])->first()->toArray();
+		$this->FromTextToPDF($akta, $active_office);
+		
+		return $this->generateRedirect(route('akta.akta.show', $id));
+	}
+
+	//!UNFINISHED! Using an Example
+	private function fromTextToPDF($akta, $office)
+	{
+		//1. file naming
+		$namafile 	= 	$akta['judul'].'[Versi '.$akta['versi'].'].pdf';
+
+		//2. rendering pdf
+		$pdf 		= \PDF::loadView('market_web.thirdparty.aktapdf', $akta);
+		$data 		= $pdf->output();
+
+		//3. initiate path
+		$dbox_api 	= 	['path' => "/Akta/".\Carbon\Carbon::now()->format('Y/m/d')."/$namafile", 'mode' => 'add', 'autorename' => true, 'mute' => false];
+
+		//4. execute curl
+		$headers 	= 	['Authorization: Bearer '.$office['kantor']['thirdparty']['dbox']['token'], "Content-Type: application/octet-stream", 'Dropbox-API-Arg: '.json_encode($dbox_api)
+						];
+
+		$ch = curl_init('https://content.dropboxapi.com/2/files/upload');
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+
+		curl_close($ch);
+		$returned 	= json_decode($response, true);
+
+		return $returned;
 	}
 
 	public function dokumenIndex(Request $request)
