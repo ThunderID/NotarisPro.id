@@ -18,3 +18,18 @@ h5{
     font-weight: 300;
     color:gray;
 }   
+h6{
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: gray;
+}
+h7{
+    font-size: 0.7rem;
+    font-weight: 300;
+    color:gray;
+}
+
+a.disabled {
+  color: gray !important;
+  pointer-events: none;
+}
