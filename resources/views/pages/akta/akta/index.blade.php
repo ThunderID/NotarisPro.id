@@ -133,8 +133,8 @@
 		@if(!isset($page_attributes->hide['create']))
 		<div class="row mt-2 mb-3">
 			<div class="col-12">
-				<!-- <a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.choooseTemplate') }}', 'newwindow', 'width=1024,height=768'); return false;" class="btn btn-primary btn-sm">Buat Akta</a> -->
-				<a href="javascript:void(0);" onclick="showAkta(this);" data_judul_akta="testing" data_id_akta="111" class="btn btn-primary btn-sm">Buat Akta</a>
+				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.choooseTemplate') }}', 'newwindow', 'width=1024,height=768'); return false;" class="btn btn-primary btn-sm">Buat Akta</a>
+				<!-- <a href="javascript:void(0);" onclick="showAkta(this);" data_judul_akta="testing" data_id_akta="111" class="btn btn-primary btn-sm">Buat Akta</a> -->
 			</div>
 		</div>
 		@endif
@@ -155,7 +155,7 @@
 							<td>
 								<i class="fa fa-file"></i>
 								&nbsp;
-								{{ $data['judul'] }}
+								<span id="judul">{{ $data['judul'] }}</span>
 							</td>
 							<td>
 								@if(isset($data['pemilik']['klien']))

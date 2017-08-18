@@ -23,6 +23,9 @@ Route::group(['namespace' => 'Akta\\'], function(){
 		'destroy' 	=> 'akta.akta.destroy' //post 
 	]]);
 
+	Route::get('/ajax/akta/get/{akta_id}', 					['uses' => 'aktaController@getAkta', 	'as' => 'ajax.akta.get']);
+
+
 	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 	Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
 	Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);

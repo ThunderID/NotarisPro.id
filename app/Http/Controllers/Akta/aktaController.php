@@ -100,7 +100,7 @@ class aktaController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Request $request, $id)
-	{
+	{	
 		$this->active_office 					= TAuth::activeOffice();
 
 		//1. call all aktas data needed
@@ -139,29 +139,31 @@ class aktaController extends Controller
 	public function create(Request $request)
 	{
 		// blank or copy
-		$input 								= $request->only('id_akta','judul_akta');
-		// some logic here
-		if(is_null($input['id_akta'])){
-			// blank here
-		}else{
-			// copy
-
-			// open akta and  return to akta
-		}
+		$input 						= $request->only('id_akta','judul_akta');
+		
 
 
-		$this->active_office 				= TAuth::activeOffice();
+		$this->active_office 			= TAuth::activeOffice();
 
 		//1. parse data needed based on category
 		$this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
 
 		//2. init akta as null
-		$this->page_datas->akta 			= null;
-
-		//2. set page attributes
+		// some logic here
+		if (is_null($input['id_akta'])){
+			// blank here
+			$this->page_datas->judul_akta = $input['judul_akta'];
+		}else{
+			// copy
+			// open akta and  return to akta
+			$this->page_datas->judul_akta = $input['judul_akta'];
+			$this->page_datas->akta 		= $this->query->id($input['id_akta'])->kantor($this->active_office['kantor']['id'])->first()->toArray();
+		}
+		
+		//3. set page attributes
 		$this->page_attributes->title		= 'Akta Dokumen';
 
-		//3.initialize view
+		//4.initialize view
 		$this->view					= view('pages.akta.akta.create');
 
 		return $this->generateView();  
@@ -175,7 +177,7 @@ class aktaController extends Controller
 	public function chooseTemplate(Request $request)
 	{
 
-		$this->active_office 				= TAuth::activeOffice();
+		$this->active_office 			= TAuth::activeOffice();
 
 		//1. init akta as null
 		$this->page_datas->akta 			= null;
@@ -184,11 +186,11 @@ class aktaController extends Controller
 		$this->page_attributes->title		= 'Buat Akta Baru';
 
 		//3. initialize view
-		$this->view							= view('pages.akta.akta.aktanew');
+		$this->view					= view('pages.akta.akta.aktanew');
 
 		//4. get data akta
-		$query 								= $request->only('cari', 'page');
-		$query['trash']						= false;
+		$query 						= $request->only('cari', 'page');
+		$query['trash']				= false;
 		$this->retrieveAkta($query);		
 
 		return $this->generateView();  
@@ -603,5 +605,9 @@ class aktaController extends Controller
 		}
 
 		return $required;
+	}
+
+	public function getAkta($akta_id){
+		echo($akta_id);
 	}
 }

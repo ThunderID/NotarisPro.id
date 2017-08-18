@@ -109,7 +109,7 @@
 											{{ $data['tanggal_pembuatan'] }}
 										</td>
 										<td style="float: right;">
-											<a href="javascript:void(0);" data-toggle="modal" data-target="#setTitleAkta" class="btn btn-sm btn-primary" akta_id="{{ $value['id'] }}">Pilih</a>
+											<a href="javascript:void(0);" data-toggle="modal" data-target="#setTitleAkta" class="btn btn-sm btn-primary" akta_id="{{ $data['id'] }}" akta_judul="{{ $data['judul'] }}">Pilih</a>
 										</td>						
 									</tr>
 					                @empty
@@ -172,7 +172,8 @@
 	// events
 	$('#setTitleAkta').on('shown.bs.modal', function (e) {
 		$(this).find('#id_akta').val($(e.relatedTarget).attr('akta_id'));
-	})
+		$(this).find('[name="judul_akta"]').val($(e.relatedTarget).attr('akta_judul'));
+	});
 
 	$(document).on('click', "ul.pagination a", function(e) {
 		showLoader();
@@ -180,5 +181,5 @@
 
 	$(document).on('click', ".badge-notif a", function(e) {
 		showLoader();
-	});	
+	});
 @endpush
