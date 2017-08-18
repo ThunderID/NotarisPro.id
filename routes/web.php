@@ -23,9 +23,6 @@ Route::group(['namespace' => 'Akta\\'], function(){
 		'destroy' 	=> 'akta.akta.destroy' //post 
 	]]);
 
-	Route::get('/ajax/akta/get/{akta_id}', 					['uses' => 'aktaController@getAkta', 	'as' => 'ajax.akta.get']);
-
-
 	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 	Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
 	Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
@@ -37,11 +34,12 @@ Route::group(['namespace' => 'Akta\\'], function(){
 	Route::any('/akta/trashed',	 							['uses' => 'aktaController@trashed', 		'as' => 'akta.akta.trash']);
 	Route::any('/akta/chooseTemplate',	 					['uses' => 'aktaController@chooseTemplate', 		'as' => 'akta.akta.choooseTemplate']);
 
-
 	Route::any('/akta/required/dokumen',	 				['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
 
-
 	Route::any('/akta/dropbox/{id}/store',	 				['uses' => 'aktaController@dropboxStore', 	'as' => 'akta.dropbox.store']);
+
+	Route::get('/akta/ajax/{id}', 							['uses' => 'aktaController@ajaxShow', 		'as' => 'akta.ajax.show']);
+
 });
 
 // 2. TAGIHAN
