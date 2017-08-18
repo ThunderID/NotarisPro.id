@@ -36,6 +36,9 @@ Route::group(['namespace' => 'Akta\\'], function(){
 
 
 	Route::any('/akta/required/dokumen',	 				['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
+
+
+	Route::any('/akta/dropbox/{id}/store',	 				['uses' => 'aktaController@dropboxStore', 	'as' => 'akta.dropbox.store']);
 });
 
 // 2. TAGIHAN
@@ -54,6 +57,21 @@ Route::group(['namespace' => 'Tagihan\\'], function(){
 	Route::any('/tagihan/print/{tagihan_id}',	 		['uses' => 'tagihanController@print',	'as' => 'tagihan.tagihan.print']);
 	Route::any('/tagihan/status/{tagihan_id}/{status}',	['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
 });
+
+// 2A. JADWAL
+Route::group(['namespace' => 'Jadwal\\'], function(){
+	//tagihan
+	Route::resource('/jadwal/bpn', 'bpnController', ['names' => [
+		'index' 	=> 'jadwal.bpn.index', //get
+		'create'	=> 'jadwal.bpn.create', //get
+		'store' 	=> 'jadwal.bpn.store', //post
+		'show' 		=> 'jadwal.bpn.show', //get
+		'edit' 		=> 'jadwal.bpn.edit', //get
+		'update' 	=> 'jadwal.bpn.update', //patch
+		'destroy' 	=> 'jadwal.bpn.destroy' //post 
+	]]);
+});
+
 
 // 3. KLIEN
 Route::group(['namespace' => 'Klien\\'], function(){
@@ -104,6 +122,10 @@ Route::group(['namespace' => 'Pengaturan\\'], function(){
 	//8. Akun
 	Route::get('/pengaturan/akun',			['uses' => 'akunController@edit', 		'as' => 'pengaturan.akun.edit']);
 	Route::patch('/pengaturan/akun',		['uses' => 'akunController@update', 	'as' => 'pengaturan.akun.update']);
+
+	//8b. Developer
+	Route::get('/pengaturan/developer',		['uses' => 'developerController@edit', 	'as' => 'pengaturan.developer.edit']);
+	Route::patch('/pengaturan/developer',	['uses' => 'developerController@update','as' => 'pengaturan.developer.update']);
 });
 
 // AREA UAC //

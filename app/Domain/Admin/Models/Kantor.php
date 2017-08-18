@@ -40,6 +40,7 @@ class Kantor extends BaseModel
 											'_id'					,
 											'nama'					,
 											'notaris'				,
+											'thirdparty'			,
 										];
 	/**
 	 * Basic rule of database
@@ -55,6 +56,11 @@ class Kantor extends BaseModel
 											'notaris.alamat'					=> 'required|max:255',
 											'notaris.telepon'					=> 'required|max:255',
 											'notaris.logo_url'					=> 'max:255',
+											'thirdparty.gcal.key'				=> 'max:255',
+											'thirdparty.gcal.secret'			=> 'max:255',
+											'thirdparty.dbox.token'				=> 'max:255',
+											'thirdparty.smtp.email'				=> 'max:255',
+											'thirdparty.smtp.password'			=> 'max:255'
 										];
 
 	/**

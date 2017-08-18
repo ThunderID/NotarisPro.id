@@ -166,12 +166,7 @@
 @push('scripts')
 	// showing loader
 	function showLoader(){
-		window.scrollTo(0,0);
-		var over =  '<div id="loader" style=" position: absolute;left: 0;top: 0;bottom: 0;right: 0;background: #000;opacity: 0.8;filter: alpha(opacity=80); z-index:1052;">' +
-		            '<h3 style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -25px;transform:translateX(-20%);"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Loading</h3>' +
-		            '</div>';
-        $(over).appendTo('body');
-        $('body').css('overflow', 'hidden');
+		window.loader.show('body');
 	}
 
 	// events

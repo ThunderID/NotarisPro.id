@@ -24,6 +24,14 @@
 	}
 }
 
+.subset-submenu{
+	height: calc(100vh - 40px);
+
+	@media screen and (max-width: 575px) {
+	}
+}
+
+
 .subset-sidebar{
 	@media screen and (min-width: 767px) {
 		margin-left: 15px;

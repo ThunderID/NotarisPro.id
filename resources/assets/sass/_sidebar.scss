@@ -25,6 +25,12 @@
 }
 
 .sidebar-right{
+
+	position: absolute;
+	right: 0px;
+	padding: 0px;
+
+
 	@media screen and (min-width: 767px) {
 		margin-left: 0px; 
 	}
@@ -44,5 +50,32 @@
 	    background-color: #0275d8;
 	    border-color: transperant;
     }
+
+	.sidebar p{
+	    font-size: 0.8rem;
+	}
+
+	.sidebar h4{
+	    font-size: 1rem;
+	}	
+
+	.sidebar-right {
+	    padding: 0vw;
+	    overflow-x: hidden;
+	    width: 350px;
+	}
+	.sidebar ul {
+		border-bottom: 1px solid rgb(2, 117, 216);
+	}
+
+	.sidebar ul li{
+	    width: 33vw;
+	    text-align: center;
+	    font-size: 0.8rem;
+	}
+
+	.fa-stack{
+		width: 20px;
+	}
 }
 
