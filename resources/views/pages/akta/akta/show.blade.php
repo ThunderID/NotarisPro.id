@@ -3,7 +3,6 @@
 
 		@include('components.submenu', [
 			'title' 		=> "Judul Akta",
-			'back_route'	=> route('akta.akta.index'),
 			'menus' 		=> [
 					[
 						"title" 			=> "",		
@@ -33,9 +32,9 @@
 
 		<div class="hidden-sm-down sidebar sidebar-right subset-2menu" style="width: 297px;">
 
-			<div class="col-12 pt-2 pb-2">
-				<h5>
-					<b>Akta Pendirian Teguh Jaya Selalu Noto Boto Limo Merongos Sedoyo</b>
+			<div id="sidebar-header" class="col-12 pt-2 pb-2">
+				<h5 id="title">
+					<b>Judul Akta</b>
 				</h5>
 
 				<div class="row">
@@ -57,7 +56,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="#" class="text-primary disabled">
+							<a href="#" class="text-primary disabled-before-load disabled">
 								<span class="fa-stack">
 									<i class="fa fa-print" aria-hidden="true"></i>
 								</span>
@@ -82,124 +81,126 @@
 				</h6>
 			</div>
 
-			<div class="col-12 pt-3 pb-2">
-				<h5 class="mb-0">
-					<b>Informasi</b>
-				</h5>
+			<div id="sidebar-content" class="hide-before-load">
+				<div class="col-12 pt-3 pb-2" >
+					<h5 class="mb-0">
+						<b>Informasi</b>
+					</h5>
 
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">Status Akta</h7>
-						<h6>Renvoi</h6>
-					</div>
-				</div>				
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">Status Akta</h7>
+							<h6>Renvoi</h6>
+						</div>
+					</div>				
 
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">Pihak</h7>
-						<h6>1. borneo</h6>
-						<h6>2. parinho</h6>
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">Pihak</h7>
+							<h6>1. borneo</h6>
+							<h6>2. parinho</h6>
+						</div>
+					</div>	
+
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">Dibuat Pada</h7>
+							<h6>17 Agustus 2016</h6>
+						</div>
 					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">Oleh</h7>
+							<h6>John Dai</h6>
+						</div>
+					</div>								
+
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">Sunting Terakhir</h7>
+							<h6>17 Agustus 2016</h6>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">Versi Akta</h7>
+							<h6>1</h6>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 pt-3 pb-2">
+					<h5>
+						<b>Kelengkapan Dokumen Akta</b>
+					</h5>
+
+					<div class="row">
+						<div class="col-12">
+							<h6 class="mb-0">
+								<span class="fa-stack">
+									<i class="fa fa-check-square-o" aria-hidden="true"></i>
+								</span>
+								KTP Pihak 1
+							</h6>
+						</div>
+						<div class="col-12">
+							<h6 class="mb-0">
+								<span class="fa-stack">
+									<i class="fa fa-check-square-o" aria-hidden="true"></i>
+								</span>
+								KTP Pihak 2
+							</h6>
+						</div>
+						<div class="col-12">
+							<h6 class="mb-0">
+								<span class="fa-stack">
+									<i class="fa fa-square-o" aria-hidden="true"></i>
+								</span>
+								KK Pihak 1
+							</h6>
+						</div>
+						<div class="col-12">
+							<h6 class="mb-0">
+								<span class="fa-stack">
+									<i class="fa fa-check-square-o" aria-hidden="true"></i>
+								</span>
+								KK Pihak 2
+							</h6>
+						</div>					
+					</div>
+
+				</div>
+
+				<div class="col-12 pt-3 pb-2">
+					<h5 class="mb-0">
+						<b>Histori Status</b>
+					</h5>
+
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">12 Agustus 2017</h7>
+							<h6 class="mb-1">Renvoi</h6>
+							<h6>Mr. Bo</h6>
+						</div>
+					</div>	
+
+					<div class="row">
+						<div class="col-12">
+							<h7 class="text-muted">10 Agustus 2017</h7>
+							<h6 class="mb-1">Draft</h6>
+							<h6>Mr. Dal</h6>
+						</div>
+					</div>				
+
 				</div>	
 
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">Dibuat Pada</h7>
-						<h6>17 Agustus 2016</h6>
-					</div>
+				<div class="col-12 pt-3 pb-2">
+
+					<div class="row clearfix"></div>
+
 				</div>
-
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">Oleh</h7>
-						<h6>John Dai</h6>
-					</div>
-				</div>								
-
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">Sunting Terakhir</h7>
-						<h6>17 Agustus 2016</h6>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">Versi Akta</h7>
-						<h6>1</h6>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-12 pt-3 pb-2">
-				<h5>
-					<b>Kelengkapan Dokumen Akta</b>
-				</h5>
-
-				<div class="row">
-					<div class="col-12">
-						<h6 class="mb-0">
-							<span class="fa-stack">
-								<i class="fa fa-check-square-o" aria-hidden="true"></i>
-							</span>
-							KTP Pihak 1
-						</h6>
-					</div>
-					<div class="col-12">
-						<h6 class="mb-0">
-							<span class="fa-stack">
-								<i class="fa fa-check-square-o" aria-hidden="true"></i>
-							</span>
-							KTP Pihak 2
-						</h6>
-					</div>
-					<div class="col-12">
-						<h6 class="mb-0">
-							<span class="fa-stack">
-								<i class="fa fa-square-o" aria-hidden="true"></i>
-							</span>
-							KK Pihak 1
-						</h6>
-					</div>
-					<div class="col-12">
-						<h6 class="mb-0">
-							<span class="fa-stack">
-								<i class="fa fa-check-square-o" aria-hidden="true"></i>
-							</span>
-							KK Pihak 2
-						</h6>
-					</div>					
-				</div>
-
-			</div>
-
-			<div class="col-12 pt-3 pb-2">
-				<h5 class="mb-0">
-					<b>Histori Status</b>
-				</h5>
-
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">12 Agustus 2017</h7>
-						<h6 class="mb-1">Renvoi</h6>
-						<h6>Mr. Bo</h6>
-					</div>
-				</div>	
-
-				<div class="row">
-					<div class="col-12">
-						<h7 class="text-muted">10 Agustus 2017</h7>
-						<h6 class="mb-1">Draft</h6>
-						<h6>Mr. Dal</h6>
-					</div>
-				</div>				
-
-			</div>	
-
-			<div class="col-12 pt-3 pb-2">
-
-				<div class="row clearfix"></div>
-
 			</div>	
 		</div>
 
@@ -218,11 +219,17 @@
 
 	function showAkta(e){
 		/* re-init */
-		// empty val
+		// set val
+		// sidebar-header
+		var sh = $(document.getElementById('sidebar-header'));
+		sh.find('#title').text($(e).find('#judul').text());
+
 
 		// reset state
 		$('#page-loader').show();
 		$('#sidebar-loader').show();
+		$('.disabled-before-load').addClass("disabled");
+		$('.hide-before-load').hide();
 
 		// ui display
 		$('#akta_show').fadeIn('fast');
@@ -232,4 +239,24 @@
 	function hideAkta(e){
 		$('#akta_show').fadeOut('fast');
 	}
+
+
+
+var req = $.ajax({
+  url: 'http://localhost:3000/ajax/akta/get/123',
+  dataType: 'json'
+});
+
+var success = function( resp ) {
+  console.log( resp );
+};
+
+var err = function( req, status, err ) {
+  console.log( err );
+};
+
+req.then( success, err );
+
+
+
 @endpush

@@ -100,7 +100,7 @@ class aktaController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Request $request, $id)
-	{
+	{	
 		$this->active_office 					= TAuth::activeOffice();
 
 		//1. call all aktas data needed
@@ -603,5 +603,9 @@ class aktaController extends Controller
 		}
 
 		return $required;
+	}
+
+	public function getAkta($akta_id){
+		echo($akta_id);
 	}
 }
