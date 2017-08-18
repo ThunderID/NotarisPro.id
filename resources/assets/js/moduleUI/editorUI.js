@@ -54,30 +54,86 @@ window.editorUI = {
 	quill: function () {
 		var currentCursor, newIndex, suffix, textSearch;
 		var selector = document.getElementById('editor');
+		var Parchment = Quill.import('parchment');
 		var Delta = Quill.import('delta');
 		var Embed = Quill.import('blots/embed');
-		var toolbarOptions = [
-			['bold', 'italic', 'underline'],
-			[{ 'list': 'ordered'}, { 'list': 'bullet' }],
-			[{ 'script': 'sub'}, { 'script': 'super' }],
-			[{ 'indent': '-1'}, { 'indent': '+1' }],
-			[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-			[{ 'align': [] }],
-			['clean'],
-			['openData']
-		];
+		var Break = Quill.import('blots/break');
+		var Block = Quill.import('blots/block');
+
+		function lineBreakMatcher() {
+			var newDelta = new Delta();
+			newDelta.insert({'break': ''});
+			return newDelta;
+		}
+
+		class SmartBreak extends Break {
+			length () {
+				return 1;
+			}
+			value () {
+				return '\n';
+			}
+		  
+			insertInto(parent, ref) {
+				Embed.prototype.insertInto.call(this, parent, ref);
+			}
+		}
+
+		SmartBreak.blotName = 'break';
+		SmartBreak.tagName = 'BR';
+
+		Quill.register(SmartBreak);
+
 		var options = {
 			placeholder: 'Tulis disini',
 			theme: 'snow',
 			modules: {
 				// toolbar: toolbarOptions
-				toolbar: '#toolbarPane'
+				toolbar: '#toolbarPane',
+				clipboard: {
+					matchers: [
+						['BR', lineBreakMatcher] 
+					]
+				},
+				keyboard: {
+					bindings: {
+						linebreak: {
+							key: 13,
+							shiftKey: true,
+							handler: function (range) {
+								let currentLeaf = this.quill.getLeaf(range.index)[0];
+								let nextLeaf = this.quill.getLeaf(range.index + 1)[0];
+
+								this.quill.insertEmbed(range.index, 'break', true, 'user');
+								// Insert a second break if:
+								// At the end of the editor, OR next leaf has a different parent (<p>)
+								if (nextLeaf === null || (currentLeaf.parent !== nextLeaf.parent)) {
+									this.quill.insertEmbed(range.index, 'break', true, 'user');
+								}
+
+								// Now that we've inserted a line break, move the cursor forward
+								this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+							}
+						}
+					}
+				}
 			}
 		};
+
 		var changeText = new Delta();
 		var editor = new window.Quill('#editor', options);
 		var toolbar = editor.getModule('toolbar');
-		var buttonOpenData = document.querySelector('.ql-openData');
+		var buttonOpenArsip = document.querySelector('.ql-open-arsip');
+		var buttonNewDocument = document.querySelector('.ql-new');
+		var buttonSaveDocument = document.querySelector('.ql-save');
+
+		var length = editor.getLength();
+		var text = editor.getText(length - 2, 2);
+
+		// Remove extraneous new lines
+		if (text === '\n\n') {
+			editor.deleteText(editor.getLength() - 2, 2);
+		}
 
 		class dataMention extends Embed {
 			static create (value) {
@@ -99,14 +155,48 @@ window.editorUI = {
 			'formats/data-link': dataMention
 		});
 
-		buttonOpenData.addEventListener('click', function() {
-			var flag = buttonOpenData.getAttribute('data-flag');
+		// function on click button new document
+		buttonNewDocument.addEventListener('click', function() {
+			console.log('new document');
+		});
+
+		// function on click button save
+		function post () {
+			let method = "post";
+			let form = document.createElement("form");
+			let hiddenField = document.createElement("input");
+
+			form.setAttribute("method", method);
+			form.setAttribute("action", "/test");
+
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", "contents");
+
+			hiddenField.setAttribute("value", JSON.stringify(editor.root.innerHTML));
+			
+			form.appendChild(hiddenField);
+			document.body.appendChild(form);
+			form.submit();
+
+			// $(form).serialize();
+
+		}
+
+		buttonSaveDocument.addEventListener('click', function() {
+			post();
+		});
+
+		// function on click button open arsip
+		buttonOpenArsip.addEventListener('click', function() {
+			var flag = buttonOpenArsip.getAttribute('data-flag');
 			if (flag == 'close') {
 				$('#DataList').css('display', 'block');
-				buttonOpenData.setAttribute('data-flag', 'open');
+				buttonOpenArsip.setAttribute('data-flag', 'open');
+				buttonOpenArsip.classList.add('ql-active');
 			} else {
 				$('#DataList').css('display', 'none');
-				buttonOpenData.setAttribute('data-flag', 'close');
+				buttonOpenArsip.setAttribute('data-flag', 'close');
+				buttonOpenArsip.classList.remove('ql-active');
 			}
 		});
 
