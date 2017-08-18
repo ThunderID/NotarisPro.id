@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Jadwal;
 
 use Illuminate\Http\Request;
 use App\Domain\Order\Models\Jadwal as Query;
+use App\Domain\Akta\Models\Dokumen;
 
 use App\Http\Controllers\Controller;
 
 use App\Infrastructure\Traits\GuidTrait;
 
-use TAuth, Exception;
+use TAuth, Exception, Carbon\Carbon;
 
 class bpnController extends Controller
 {
@@ -25,12 +26,11 @@ class bpnController extends Controller
 
 	public function index(Request $request)
 	{
-		$this->test();
 		//0. set active office
 		$this->active_office                = TAuth::activeOffice();
 
 		// 1. set page attributes
-		$this->page_attributes->title       = 'bpn';
+		$this->page_attributes->title       = 'Jadwal Monitoring BPN';
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
@@ -46,7 +46,7 @@ class bpnController extends Controller
 		$this->page_datas->urutkan          = $this->retrieveBpnUrutkan();
 
 		//3.initialize view
-		$this->view                         = view('pages.jadwal.bpn.index');
+		$this->view                         = view('notaris.pages.jadwal.bpn.index');
 
 		return $this->generateView();
 	}
@@ -61,7 +61,7 @@ class bpnController extends Controller
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
-		$this->page_attributes->title       = 'bpn';
+		$this->page_attributes->title       = 'Jadwal Monitoring BPN';
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
@@ -77,10 +77,10 @@ class bpnController extends Controller
 		$this->page_datas->urutkan 			= $this->retrieveBpnUrutkan();
 
 		//2e. get show document
-		$this->page_datas->bpn 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+		$this->page_datas->jadwal 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 
 		//3.initialize view
-		$this->view							= view('pages.jadwal.bpn.show');
+		$this->view                         = view('notaris.pages.jadwal.bpn.show');
 		
 		return $this->generateView();  
 	}
@@ -130,48 +130,37 @@ dd($events);
 		return $this->generateView();  
 	}
 
-	public function store(Request $request, $id)
+	public function store(Request $request, $id = null)
 	{
 		try {
 			//set this function
-			$this->active_office 				= TAuth::activeOffice();
+			$this->active_office	= TAuth::activeOffice();
 
 			//2. get store document
-			$bpn				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
+			$bpn				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 			
-			if($request->has('ktp'))
+			if(!$bpn)
 			{
-				$bpn->tipe 	= 'perorangan';
-				$bpn->ktp 	= $request->get('ktp');
+				$bpn 			= new $this->query;
 			}
 
-			if($request->has('akta_pendirian'))
-			{
-				$bpn->tipe			= 'perusahaan';
-				$bpn->akta_pendirian	= $request->get('akta_pendirian');
-			}
+			$akta 				= Dokumen::where('nomor_akta', $request->get('nomor_akta'))->kantor($this->active_office['kantor']['id'])->first();
 
-			if($request->has('dokumen'))
-			{
-				$adding_doc 			= $request->get('dokumen');
-				foreach ($adding_doc as $key => $value) 
-				{
-					$adding_doc[$key]['id']		= self::createID('doku'); 
-				}
-				$dokumen 				= $bpn->dokumen;
-				$dokumen 				= array_merge($dokumen, $adding_doc);
-				$bpn->dokumen 		= $dokumen;
-			}
+			$bpn->title 		= $akta['judul'];
+			$bpn->start 		= $request->get('tanggal_mulai');
+			$bpn->end 			= $request->get('tanggal_selesai');
+			$bpn->referensi 	= ['id' => $akta['id'], 'nomor_akta' => $request->get('nomor_akta')];
 
+			$bpn->pembuat 		= ['kantor' => $this->active_office['kantor']];
 			$bpn->save();
 
-			$this->page_attributes->msg['success']		= ['bpn Berhasil Disimpan'];
+			$this->page_attributes->msg['success']		= ['BPN Berhasil Disimpan'];
 	
-			return $this->generateRedirect(route('bpn.bpn.show', $bpn->id));
+			return $this->generateRedirect(route('jadwal.bpn.show', $bpn->id));
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']		= $e->getMessage();
 	
-			return $this->generateRedirect(route('bpn.bpn.create', ['id' => $id]));
+			return $this->generateRedirect(route('jadwal.bpn.index', ['id' => $id]));
 		}
 	}
 
@@ -192,89 +181,16 @@ dd($events);
 			$this->active_office	= TAuth::activeOffice();
 
 			//2. get store document
-			$bpn					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
-
+			$bpn					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
 			$bpn->delete();
 
-			$this->page_attributes->msg['success']		= ['bpn Berhasil Dihapus'];
+			$this->page_attributes->msg['success']		= ['Jadwal Berhasil Dihapus'];
 	
-			return $this->generateRedirect(route('bpn.bpn.index'));
+			return $this->generateRedirect(route('jadwal.bpn.index'));
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']		= $e->getMessage();
 	
-			return $this->generateRedirect(route('bpn.bpn.show', ['id' => $id]));
-		}	
-	}
-
-	public function addDokumen(Request $request, $id)
-	{
-		try {
-			//set this function
-			$this->active_office	= TAuth::activeOffice();
-
-			//2. get store document
-			$bpn					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
-			$dokumen 				= $bpn->dokumen;
-
-			if(isset($request->get('dokumen')['id']))
-			{
-				foreach ($dokumen as $key => $value) 
-				{
-					if($value['id'] == $request->get('dokumen')['id'])
-					{
-						$dokumen[$key]	= $request->get('dokumen');
-					}
-				}
-			}
-			else
-			{
-				$add_doku 			= $request->get('dokumen');
-				$add_doku['id']		= self::createID('doku');
-				$dokumen[]			= $add_doku;
-			}
-
-			$bpn->dokumen 		= $dokumen;
-
-			$bpn->save();
-
-			$this->page_attributes->msg['success']		= ['Dokumen Berhasil Disimpan'];
-	
-			return $this->generateRedirect(route('bpn.bpn.index'));
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']		= $e->getMessage();
-	
-			return $this->generateRedirect(route('bpn.bpn.show', ['id' => $id]));
-		}	
-	}
-
-	public function removeDokumen(Request $request, $id, $dokumen_id)
-	{
-		try {
-			//set this function
-			$this->active_office	= TAuth::activeOffice();
-
-			//2. get store document
-			$bpn					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
-			$dokumen 				= $bpn->dokumen;
-
-			foreach ($dokumen as $key => $value) 
-			{
-				if($value['id'] == $dokumen_id)
-				{
-					unset($dokumen[$key]);
-				}
-			}
-
-			$bpn->dokumen 		= $dokumen;
-			$bpn->save();
-
-			$this->page_attributes->msg['success']		= ['Dokumen Berhasil Disimpan'];
-	
-			return $this->generateRedirect(route('bpn.bpn.index'));
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']		= $e->getMessage();
-	
-			return $this->generateRedirect(route('bpn.bpn.show', ['id' => $id]));
+			return $this->generateRedirect(route('jadwal.bpn.show', ['id' => $id]));
 		}	
 	}
 
@@ -286,29 +202,20 @@ dd($events);
 		//2. cari sesuai query
 		if(isset($query['cari']))
 		{
-			$data			= $data->where(function($q)use($query){$q->where('akta_pendirian.nama', 'like', '%'.$query['cari'].'%')->orwhere('ktp.nama', 'like', '%'.$query['cari'].'%');});
+			$data			= $data->where(function($q)use($query){$q->where('title', 'like', '%'.$query['cari'].'%');});
 		}
 
-		//3. filter 
-		foreach ((array)$query['filter'] as $key => $value) 
-		{
-			if(in_array($key, ['jenis']))
-			{
-				$data   	= $data->where('tipe', $value);               
-			}
-		}
-
-		//4. urutkan
+		//3. urutkan
 		if(isset($query['urutkan']))
 		{
 			$explode        = explode('-', $query['urutkan']);
 			if(in_array($explode[0], ['nama']) && in_array($explode[1], ['asc', 'desc']))
 			{
-				$data       = $data->orderby('akta_pendirian.nama', $value)->orderby('ktp.nama', $value);
+				$data       = $data->orderby('title', $value)->orderby('ktp.nama', $value);
 			}
 		}
 
-		//5. page
+		//4. page
 		$skip				= 0;
 		if(isset($query['page']))
 		{
@@ -316,23 +223,18 @@ dd($events);
 		}
 		//set datas
 		$this->paginate(null, $data->count(), $this->per_page);
-		$this->page_datas->bpns	= $data->skip($skip)->take($this->per_page)->get(['_id', 'tipe', 'ktp', 'akta_pendirian'])->toArray();
+		$this->page_datas->bpns	= $data->skip($skip)->take($this->per_page)->get(['_id', 'title', 'start', 'end'])->toArray();
 	}
 
 	private function retrieveBpnFilter()
 	{
-		//1. jenis
-		$filter['jenis']	= ['perusahaan', 'perorangan'];
-
-		return $filter;
+		return $filter = [];
 	}
 	
 	private function retrieveBpnUrutkan()
 	{
 		//1a.cari urutan
 		$sort   =   [
-						'nama-desc'   => 'Nama A - Z',
-						'nama-asc'    => 'Nama Z - A',
 					];
 
 		return $sort;

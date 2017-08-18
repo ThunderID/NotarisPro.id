@@ -38,14 +38,15 @@ class Jadwal extends BaseModel
 	 */
 
 	protected $fillable				=	[
-											'_id'					,
-											'judul'					,
-											'waktu'					,
-											'pembuat'				,
-											'peserta'				,
-											'tempat'				,
-											'agenda'				,
-											'referensi_id'			,
+											'_id'			,
+											'title'			,
+											'start'			,
+											'end'			,
+											'pembuat'		,
+											'peserta'		,
+											'tempat'		,
+											'agenda'		,
+											'referensi'		,
 										];
 	/**
 	 * Basic rule of database
@@ -53,8 +54,9 @@ class Jadwal extends BaseModel
 	 * @var array
 	 */
 	protected $rules				=	[
-											'judul'					=> 'max:255',
-											'waktu'					=> 'date_format:"Y-m-d H:i:s"',
+											'title'					=> 'max:255',
+											'start'					=> 'date_format:"Y-m-d H:i:s"',
+											'end'					=> 'date_format:"Y-m-d H:i:s"',
 											'pembuat.kantor.id'		=> 'required',
 											'pembuat.kantor.nama'	=> 'required',
 											'peserta.*.id'			=> 'required',
@@ -79,7 +81,7 @@ class Jadwal extends BaseModel
 											'deleted_at', 
 										];
 
-	protected $appends 				= ['id'];
+	protected $appends 				= ['id', 'url'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
@@ -87,23 +89,36 @@ class Jadwal extends BaseModel
 	
 	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
 	
-	public function setWaktuAttribute($value)
+	public function setStartAttribute($value)
 	{
-		$this->attributes['waktu'] = $this->formatDateTimeFrom($value);
+		$this->attributes['start'] 	= $this->formatDateTimeFrom($value);
 	}
-
+	
+	public function setEndAttribute($value)
+	{
+		$this->attributes['end'] 	= $this->formatDateTimeFrom($value);
+	}
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
 	
 	public function getIdAttribute($value = NULL)
 	{
 		return $this->attributes['_id'];
 	}
-	
-	public function getWaktuAttribute($value = NULL)
+		
+	public function getUrlAttribute($value = NULL)
 	{
-		return $this->formatDateTimeTo($this->attributes['waktu']);
+		return route('jadwal.bpn.show', ['id' => $this->id]);
 	}
-
+	
+	// public function getStartAttribute($value = NULL)
+	// {
+	// 	return $this->formatDateTimeTo($this->attributes['start']);
+	// }
+	
+	// public function getEndAttribute($value = NULL)
+	// {
+	// 	return $this->formatDateTimeTo($this->attributes['end']);
+	// }
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
 	/**
