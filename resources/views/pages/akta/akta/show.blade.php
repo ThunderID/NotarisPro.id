@@ -218,6 +218,9 @@
 @push('scripts')
 
 	function showAkta(e){
+		// get akta
+		getAkta
+
 		/* re-init */
 		// set val
 		// sidebar-header
@@ -240,23 +243,20 @@
 		$('#akta_show').fadeOut('fast');
 	}
 
+	// ajax get akta
+	function getAkta(id_akta){
+		var url = ;
 
-
-var req = $.ajax({
-  url: 'http://localhost:3000/ajax/akta/get/123',
-  dataType: 'json'
-});
-
-var success = function( resp ) {
-  console.log( resp );
-};
-
-var err = function( req, status, err ) {
-  console.log( err );
-};
-
-req.then( success, err );
-
-
-
+		var ajax_akta = window.ajax;
+		ajax_akta.defineOnSuccess(function(resp){
+			console.log(resp);
+		});
+		ajax_akta.defineOnError(function(resp){
+			console.log(resp);
+		});
+		ajax_akta.defineOnComplete(function(){
+			console.log();
+		});
+		ajax_akta.get(url);
+	}
 @endpush
