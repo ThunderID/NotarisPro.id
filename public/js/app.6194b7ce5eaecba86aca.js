@@ -22606,6 +22606,9 @@ __webpack_require__("./resources/assets/js/plugins/loader.js");
 // ajax
 __webpack_require__("./resources/assets/js/plugins/ajax.js");
 
+// stringManipulator
+__webpack_require__("./resources/assets/js/plugins/stringManipulator.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -53726,6 +53729,62 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   // Return the Select2 instance for anyone who is importing it.
   return select2;
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/stringManipulator.js":
+/***/ (function(module, exports) {
+
+/*
+	stringManipulator
+	Author: Budi
+	Version: 0.1
+	19-07-2017
+
+	Contents
+	-------------
+
+	1. ucWords
+	call method: window.stringManipulator.ucWords('YOUR STRING')
+	return : ucWords (php ucWords function like)
+
+	2. ucFirst
+	call method: window.stringManipulator.ucFirst('YOUR STRING')
+	return : ucFirst (php ucFirst function like)
+
+*/
+
+// Ucwords
+// var stringManipulator = function(){
+window.stringManipulator = new function () {
+
+	this.ucWords = function (str) {
+		return (str + '').replace(/^(.)|\s+(.)/g, function ($1) {
+			return $1.toUpperCase();
+		});
+	};
+
+	// Ucwords
+	this.ucFirst = function (str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	};
+
+	this.toSpace = function (str) {
+		return str.replace(/_/g, ' ');
+	};
+
+	// init
+	this.init = function () {
+		return true;
+	};
+
+	this.toDefaultReadable = function (str) {
+		return window.stringManipulator.ucWords(window.stringManipulator.toSpace(str));
+	};
+}();
+
+// interface
+// window.thunder.stringManipulator = new stringManipulator();
 
 /***/ }),
 
