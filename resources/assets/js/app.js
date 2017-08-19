@@ -62,3 +62,6 @@ require('./plugins/loader');
 
 // ajax
 require('./plugins/ajax');
+
+// stringManipulator
+require('./plugins/stringManipulator');
