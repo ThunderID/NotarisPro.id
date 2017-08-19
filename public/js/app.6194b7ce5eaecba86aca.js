@@ -22603,6 +22603,12 @@ window.Quill = __webpack_require__("./resources/assets/js/plugins/quill/quill.js
 // laoder ui
 __webpack_require__("./resources/assets/js/plugins/loader.js");
 
+// ajax
+__webpack_require__("./resources/assets/js/plugins/ajax.js");
+
+// stringManipulator
+__webpack_require__("./resources/assets/js/plugins/stringManipulator.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -23332,6 +23338,139 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		list.find('span').addClass('active');
 	}
 };
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/ajax.js":
+/***/ (function(module, exports) {
+
+/*
+	=====================================================================
+	Ajax
+	=====================================================================
+	Version		: 0.1
+	Author 		: Budi
+	Requirement : jQuery
+
+	Documentation:
+	
+	I. define ajax event action
+	
+	1. defineOnSuccess
+		definition: A function to be called if the request succeeds.
+		data: ajax response
+		usage: 
+			ajax.defineOnSuccess(function(response){
+				// your code here
+				console.log(response);
+			});
+
+	2. defineOnError
+		definition: A function to be called if the request fails.
+		data: ajax response
+		usage: 
+			ajax.defineOnError(function(response){
+				// your code here
+				console.log(response);
+			});
+
+	3. defineOnComplete
+		definition: A function to be called when the request finishes
+					(after success and error are executed)
+		data: ajax response
+		usage: 
+			ajax.defineOnComplete(function(response){
+				// your code here
+				console.log(response);
+			});
+
+	II. Ajax call
+	1. Get
+		definition: ajax call using GET method
+		parameter: url
+		usage:
+			ajax.get(YOUR URL);
+
+	2. Post
+		definition: ajax call using POST method
+		parameter: url, data
+		usage:
+			ajax.get(YOUR URL, YOUR DATA);
+	
+
+*/
+
+/*
+  	prototype using promise
+	------------------------------------------------------
+
+	var ajax = function(){
+
+	  this.get = function(url){
+	      return $.ajax({
+	          url: url,
+	          type: 'GET',
+	          dataType: 'json'
+	      });
+	  }
+	}
+
+	var success = function( resp ) {
+	  console.log( resp );
+	};
+
+	var err = function( req, status, err ) {
+	  console.log( err );
+	};
+
+
+	var qs = new ajax();
+	qs.get('http://localhost:3000/ajax/akta/get/123').then( success, err ).done(function(){alert('done');});  
+*/
+
+// var ajax = function(){
+window.ajax = new function () {
+
+	// internal declare
+	var on_success;
+	var on_error;
+	var on_complete;
+
+	// interface ajax actions
+	this.defineOnSuccess = function (syntax) {
+		on_success = syntax;
+	};
+	this.defineOnError = function (syntax) {
+		on_error = syntax;
+	};
+	this.defineOnComplete = function (syntax) {
+		on_complete = syntax;
+	};
+
+	// interface ajax function
+	this.get = function (url) {
+		send(url, null, 'GET');
+	};
+	this.post = function (url, data) {
+		send(url, null, 'GET');
+	};
+
+	// ajax engine
+	function send(url, data, type) {
+		$.ajax({
+			url: url,
+			type: type,
+			data: data,
+			dataType: 'json',
+			success: on_success,
+			error: on_error,
+			complete: on_complete
+		});
+	}
+}();
+
+// This the interface
+// window.thunder.ajax = new ajax();
 
 /***/ }),
 
@@ -53590,6 +53729,62 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   // Return the Select2 instance for anyone who is importing it.
   return select2;
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/stringManipulator.js":
+/***/ (function(module, exports) {
+
+/*
+	stringManipulator
+	Author: Budi
+	Version: 0.1
+	19-07-2017
+
+	Contents
+	-------------
+
+	1. ucWords
+	call method: window.stringManipulator.ucWords('YOUR STRING')
+	return : ucWords (php ucWords function like)
+
+	2. ucFirst
+	call method: window.stringManipulator.ucFirst('YOUR STRING')
+	return : ucFirst (php ucFirst function like)
+
+*/
+
+// Ucwords
+// var stringManipulator = function(){
+window.stringManipulator = new function () {
+
+	this.ucWords = function (str) {
+		return (str + '').replace(/^(.)|\s+(.)/g, function ($1) {
+			return $1.toUpperCase();
+		});
+	};
+
+	// Ucwords
+	this.ucFirst = function (str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	};
+
+	this.toSpace = function (str) {
+		return str.replace(/_/g, ' ');
+	};
+
+	// init
+	this.init = function () {
+		return true;
+	};
+
+	this.toDefaultReadable = function (str) {
+		return window.stringManipulator.ucWords(window.stringManipulator.toSpace(str));
+	};
+}();
+
+// interface
+// window.thunder.stringManipulator = new stringManipulator();
 
 /***/ }),
 

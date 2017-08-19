@@ -19,12 +19,12 @@
 
 		<div id="page" class="scrollable_panel" style="width: calc(100vw - 297px); float: right;">
 			
-			<div id="page-loader" style="width: calc(100vw - 297px); background: #000;opacity: 0.8; height:100%; position: absolute;">
+			<div id="page-loader" class="loader" style="width: calc(100vw - 297px); background: #000;opacity: 0.8; height:100%; position: absolute;">
 				<h4 style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -25px;transform:translateX(-20%);"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat</h4>'
 			</div>
 			<div class="d-flex justify-content-center mx-auto">
 				<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
-					<div class="form-group editor">	
+					<div id="text-editor" class="form-group editor">	
 					</div>
 				</div>
 			</div>			
@@ -75,7 +75,7 @@
 				</div>
 			</div>
 
-			<div id="sidebar-loader" class="col-12 pt-3 pb-2">
+			<div id="sidebar-loader" class="col-12 pt-3 pb-2 loader">
 				<h6 class="mb-0">
 					<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;<b>Memuat</b>
 				</h6>
@@ -90,43 +90,44 @@
 					<div class="row">
 						<div class="col-12">
 							<h7 class="text-muted">Status Akta</h7>
-							<h6>Renvoi</h6>
+							<h6 id="status_akta">_</h6>
 						</div>
 					</div>				
 
 					<div class="row">
 						<div class="col-12">
 							<h7 class="text-muted">Pihak</h7>
-							<h6>1. borneo</h6>
-							<h6>2. parinho</h6>
+							<div id="pihak">
+									<h6 id="template" hidden></h6>
+							</div>
 						</div>
 					</div>	
 
 					<div class="row">
 						<div class="col-12">
 							<h7 class="text-muted">Dibuat Pada</h7>
-							<h6>17 Agustus 2016</h6>
+							<h6 id="tanggal_pembuatan">17 Agustus 2016</h6>
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-12">
 							<h7 class="text-muted">Oleh</h7>
-							<h6>John Dai</h6>
+							<h6 id="penulis">John Dai</h6>
 						</div>
 					</div>								
 
 					<div class="row">
 						<div class="col-12">
 							<h7 class="text-muted">Sunting Terakhir</h7>
-							<h6>17 Agustus 2016</h6>
+							<h6 id="tanggal_sunting">17 Agustus 2016</h6>
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-12">
 							<h7 class="text-muted">Versi Akta</h7>
-							<h6>1</h6>
+							<h6 id="versi">1</h6>
 						</div>
 					</div>
 				</div>
@@ -217,46 +218,79 @@
 
 @push('scripts')
 
+	/* Start UI page */
 	function showAkta(e){
-		/* re-init */
+		// global vars
+		var element_source = $(e);
+
 		// set val
+		setAktaShow(element_source.attr('data_id_akta'));
+
+		/* re-init */
 		// sidebar-header
 		var sh = $(document.getElementById('sidebar-header'));
-		sh.find('#title').text($(e).find('#judul').text());
-
+		sh.find('#title').text(element_source.find('#judul').text());
 
 		// reset state
-		$('#page-loader').show();
-		$('#sidebar-loader').show();
+		$('.loader').show();
 		$('.disabled-before-load').addClass("disabled");
 		$('.hide-before-load').hide();
+		$('#text-editor').empty();
 
 		// ui display
 		$('#akta_show').fadeIn('fast');
-		$('#akta_show').find('#judul_akta').text($(e).attr('data_judul_akta'));
+		$('#akta_show').find('#judul_akta').text(element_source.find('#judul').text());
 	}
 
 	function hideAkta(e){
 		$('#akta_show').fadeOut('fast');
 	}
 
+	/* End UI page */
 
 
-var req = $.ajax({
-  url: 'http://localhost:3000/ajax/akta/get/123',
-  dataType: 'json'
-});
+	/* Start Set Akta Show */
+	function setAktaShow(id_akta){
+		var url = '{{route('akta.ajax.show', ['id' => null])}}/' + id_akta;
+		var ajax_akta = window.ajax;
 
-var success = function( resp ) {
-  console.log( resp );
-};
+		ajax_akta.defineOnSuccess(function(resp){
+			console.log(resp);
 
-var err = function( req, status, err ) {
-  console.log( err );
-};
+			// sidebar-content
+			var sc = $(document.getElementById('sidebar-content'));
+			sc.find('#status_akta').text(window.stringManipulator.toDefaultReadable(resp.status));
+			var tmplt = sc.find('#pihak').find('#template');
+			$('.pihak').remove();
+			resp.pemilik.klien.forEach(function(element) {
+				rslt = $(tmplt).clone().appendTo(sc.find('#pihak'));
+				rslt.text(element.nama);
+				rslt.removeAttr('hidden');
+				rslt.addClass('pihak');
+			});
+			sc.find('#tanggal_pembuatan').text(resp.tanggal_pembuatan);
+			sc.find('#penulis').text(resp.penulis.nama);
+			sc.find('#tanggal_sunting').text(resp.tanggal_sunting);
+			sc.find('#versi').text(resp.versi);
 
-req.then( success, err );
+			// editor
+			resp.paragraf.forEach(function(element) {
+				$('#text-editor').append(element.konten);
+			});
 
+		});
+		ajax_akta.defineOnError(function(resp){
+			console.log(resp);
+		});
+		ajax_akta.defineOnComplete(function(){
+			$('.disabled-before-load').removeClass("disabled");
+			$('.loader').fadeOut('fast', function(){
+				$('.hide-before-load').fadeIn();
+			});
+		});
 
+		ajax_akta.get(url);
+	}
+	/* End Get Akta Data */
 
 @endpush
