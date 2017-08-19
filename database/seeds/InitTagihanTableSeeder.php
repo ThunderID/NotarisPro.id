@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 use App\Domain\Order\Models\HeaderTransaksi;
 use App\Domain\Order\Models\DetailTransaksi;
-use App\Domain\Order\Models\Klien;
+use App\Domain\Order\Models\Arsip;
 use App\Domain\Admin\Models\Pengguna;
 use App\Infrastructure\Traits\IDRTrait;
 
@@ -31,11 +31,11 @@ class InitTagihanTableSeeder extends Seeder
 		//init transaksi
 		foreach (range(0, 19) as $key) 
 		{
-			$klien 			= Klien::kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
+			$klien 			= Arsip::whereIn('jenis', ['akta_pendirian', 'ktp'])->kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
 
 			$parse_month 	= rand(-12, -2);
 			$data 			= [
-				'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['ktp']['nama']) ? $klien['ktp']['nama'] : $klien['akta_pendirian']['nama'])],
+				'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['isi']['nama']) ? $klien['isi']['nama'] : $klien['isi']['nama'])],
 				'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
 				'nomor'					=> rand(234289849248924,999999999999999),
 				'tipe'					=> 'bukti_kas_keluar',

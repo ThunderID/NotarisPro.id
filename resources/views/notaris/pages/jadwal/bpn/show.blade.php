@@ -22,7 +22,12 @@
 			<h5 style="padding-bottom:5px;margin-bottom:5px;">Ubah Jadwal</h5>
 			<p style="line-height:1;"><small><small>Perubahan jadwal ini akan di sinkronkan dengan google calendar Anda</small></small></p>
 
-			<form action="{{route('jadwal.bpn.update', ['id' => $page_datas->jadwal['id']])}}" method="POST">
+				@component('components.form', [ 
+					'data_id'		=> $page_datas->jadwal['id'],
+					'store_url' 	=> route('jadwal.bpn.store'), 
+					'update_url' 	=> route('jadwal.bpn.update', ['id', $page_datas->jadwal['id']]), 
+					'class'			=> 'mb-0'
+				])
 				<fieldset class="form-group">
 					<div class="row">
 						<div class="col-12">
@@ -53,8 +58,8 @@
 				<fieldset class="form-group">
 					<div class="row">
 						<div class="col-12">
-							<label class="control-label" for="catatan">Catatan</label>  
-							<textarea name="catatan" class="form-control"></textarea>
+							<label class="control-label" for="tempat">Tempat</label>  
+							<textarea name="tempat" class="form-control">{{$page_datas->jadwal['tempat']}}</textarea>
 						</div>
 					</div>
 				</fieldset>
@@ -71,6 +76,7 @@
 
 		</div>	
 	</div>	
+	@endcomponent
 	
 	@include('components.deleteModal',[
 		'title' => 'Menghapus jadwal monitoring BPN',

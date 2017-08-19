@@ -146,10 +146,13 @@ class UpdateAkta
 				$this->simpanTipeDokumen($this->variable['tipe_dokumen'], $this->active_office);
 
 				//5. simpan new detected klien/objek/saksi
-				$this->updateDataDokumen($this->variable['dokumen']);
+				$potential_owner 			= $this->updateDataDokumen($this->variable['dokumen']);
+				// $this->updateDataDokumen($this->variable['dokumen']);
 			}
 	
 			$this->akta->save();
+
+			$sync 							= $this->syncRelatedDoc($this->akta, $potential_owner);
 
 			return $this->akta;
 		}

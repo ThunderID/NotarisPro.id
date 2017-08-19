@@ -103,6 +103,7 @@ class BuatAktaBaru
 			//5. simpan akta
 			$akta->save();
 
+			$sync 						= $this->syncRelatedDoc($akta, $potential_owner);
 
 			return $akta;
 		}

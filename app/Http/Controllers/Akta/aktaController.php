@@ -418,7 +418,7 @@ class aktaController extends Controller
 
 	/**
 	 * Display a listing of the resource.
-	 *
+	 * 
 	 * @return \Illuminate\Http\Response
 	 */
 	public function ajaxShow(Request $request, $id)
@@ -623,9 +623,5 @@ class aktaController extends Controller
 		}
 
 		return $required;
-	}
-
-	public function getAkta($akta_id){
-		echo($akta_id);
 	}
 }

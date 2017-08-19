@@ -18,7 +18,7 @@
 			<h4 class="title">{{$page_attributes->title}}</h4>		
 			<div id='calendar' style="padding-right:15px"></div>
 		</div>	
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 sidebar hide-mobile sidebar subset-menu target-menu">
+		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 hide-mobile sidebar subset-menu target-menu">
 			<h5 style="padding-bottom:5px;margin-bottom:5px;">Jadwal Baru</h5>
 			<p style="line-height:1;"><small><small>Penambahan jadwal baru ini akan di sinkronkan dengan google calendar Anda</small></small></p>
 
@@ -53,8 +53,8 @@
 				<fieldset class="form-group">
 					<div class="row">
 						<div class="col-12">
-							<label class="control-label" for="catatan">Catatan</label>  
-							<textarea name="catatan" class="form-control"></textarea>
+							<label class="control-label" for="tempat">Tempat</label>  
+							<textarea name="tempat" class="form-control"></textarea>
 						</div>
 					</div>
 				</fieldset>

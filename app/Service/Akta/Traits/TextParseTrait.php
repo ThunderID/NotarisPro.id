@@ -3,8 +3,7 @@
 namespace App\Service\Akta\Traits;
 
 use App\Domain\Akta\Models\TipeDokumen;
-use App\Domain\Order\Models\Klien;
-use App\Domain\Order\Models\Objek;
+use App\Domain\Order\Models\Arsip;
 
 /**
  * Trait untuk otomatis enhance klien
@@ -67,16 +66,16 @@ trait TextParseTrait
 
 					if(in_array($exploded[0], ['pihak', 'objek', 'saksi']))
 					{
-						$new_paragraph['dokumen'][$exploded[0]][$exploded[1]][$exploded[2]][$exploded[3]] = strip_tags($span[1][$key]);
+						$new_paragraph['dokumen'][$exploded[0].'[dot]'.$exploded[1]][$exploded[2].'[dot]'.$exploded[3]][$exploded[4]] = strip_tags($span[1][$key]);
 
 						//butuh extends
 						if(!isset($new_paragraph['tipe_dokumen'][$exploded[0].'.'.$exploded[2]]))
 						{
-							$new_paragraph['tipe_dokumen'][$exploded[0].'.'.$exploded[2]]  = ['kategori' => $exploded[0], 'jenis_dokumen' => $exploded[2], 'isi' => [$exploded[3]]];
+							$new_paragraph['tipe_dokumen'][$exploded[0].'.'.$exploded[2]]  = ['kategori' => $exploded[0], 'jenis_dokumen' => $exploded[2], 'kepemilikan' => $exploded[3], 'isi' => [$exploded[4]]];
 						}
-						else
+						elseif(!in_array($exploded[4], $new_paragraph['tipe_dokumen'][$exploded[0].'.'.$exploded[2]]['isi']))
 						{
-							$new_paragraph['tipe_dokumen'][$exploded[0].'.'.$exploded[2]]['isi'][]	= $exploded[3];
+							$new_paragraph['tipe_dokumen'][$exploded[0].'.'.$exploded[2]]['isi'][]	= $exploded[4];
 						}
 					}
 				}
@@ -97,6 +96,7 @@ trait TextParseTrait
 				$new_tipe_doc 					= new TipeDokumen;
 				$new_tipe_doc->kategori 		= $value['kategori'];
 				$new_tipe_doc->jenis_dokumen 	= $value['jenis_dokumen'];
+				$new_tipe_doc->kepemilikan 		= $value['kepemilikan'];
 				$new_tipe_doc->isi 				= $value['isi'];
 				$new_tipe_doc->kantor 			= $active_office['kantor'];
 				$new_tipe_doc->save();
@@ -106,109 +106,115 @@ trait TextParseTrait
 
 	private function updateDataDokumen($array_of_docs)
 	{
-		$saved_data 	= [];
+		//need sort
+		$saved_data 		= [];
+		$root 				= [];
+
 		foreach ($array_of_docs as $key => $value) 
 		{
-			//$key 		= 'saksi'
-			//$value 	= ['1' => ['ktp']]
-			if(in_array($key, ['saksi', 'pihak']))
+			foreach ($value as $key2 => $value2) 
 			{
-				foreach ($value as $key2 => $value2) 
+				list($jenis, $kepemilikan)	= explode('[dot]', $key2);
+	
+				//simpan dokumen
+				$arsip 						= Arsip::where('jenis', $jenis);
+	
+				foreach ($value2 as $key3 => $value3) 
 				{
-					//$key2 		= '1'
-					//$value 	= ['ktp' => ['nama']]
-					if(isset($value2['ktp']))
-					{
-						$klien	= Klien::where('ktp.nik', $value2['ktp']['nik'])->first();
-						if(!$klien)
-						{
-							$klien 	= new Klien;
-						}
-						$klien->tipe 			= 'perorangan';
-						$klien->ktp 			= $value2['ktp'];
-						$klien->kantor 			= $this->active_office['kantor'];
-						unset($value2['ktp']);
-						$klien->dokumen 		= $value2;
-						$klien->save();
-
-						$saved_data['pihak'][]	= $klien;
-					}
-					elseif(isset($value2['akta_pendirian']))
-					{
-						$klien	= Klien::where('akta_pendirian.nomor_akta', $value2['akta_pendirian']['nomor_akta'])->first();
-						if(!$klien)
-						{
-							$klien 	= new Klien;
-						}
-						$klien->tipe 			= 'perusahaan';
-						$klien->akta_pendirian 	= $value2['akta_pendirian'];
-						$klien->kantor 			= $this->active_office['kantor'];
-						unset($value2['akta_pendirian']);
-						$klien->dokumen 		= $value2;
-						$klien->save();
-					
-						$saved_data['pihak'][]	= $klien;
-					}
+					$arsip 					= $arsip->where('isi.'.$key3, $value3);
 				}
-			}
-			elseif(in_array($key, ['objek']))
-			{
-				foreach ($value as $key2 => $value2) 
+		
+				$arsip 					 	= $arsip->first();
+
+				if(!$arsip)
 				{
-					//$key2 	= '1'
-					//$value 	= ['bpkb' => ['nama']]
-					if(isset($value3['bpkb']))
+					$arsip 					= new Arsip;
+				}
+
+				$arsip->jenis 				= $jenis;
+				$arsip->isi 				= $value2;
+				$arsip->kantor 				= $this->active_office['kantor'];
+				$arsip->save();
+		
+				if(str_is('pribadi', $kepemilikan))
+				{
+					$saved_data['root'][$key]		= $arsip;
+				}
+				else
+				{
+					$saved_data['relasi'][$key][] 	= ['relasi' => $kepemilikan, 'arsip' => $arsip];
+				}
+	
+				$flag 					= 1;
+				if(str_is('ktp', $jenis) || str_is('akta_pendirian', $jenis))
+				{
+					if(isset($saved_data['pihak']))
 					{
-						$objek	= Objek::where('bpkb.nomor_bpkb', $value3['bpkb']['nomor_bpkb'])->first();
-						if(!$objek)
+						foreach ((array)$saved_data['pihak'] as $k => $v) 
 						{
-							$objek 	= new Objek;
+							if($v['id']!=$arsip['id'] && $flag)
+							{
+								$saved_data['pihak'][]	= $arsip->toArray();
+							}
+							else
+							{
+								$flag 	= 0;
+							}
 						}
-						$klien->tipe 			= 'kendaraan';
-						$objek->bpkb 			= $value3['bpkb'];
-						$objek->kantor 			= $this->active_office['kantor'];
-						unset($value3['bpkb']);
-						$objek->dokumen 		= $value3;
-						$objek->save();
-					
-						$saved_data['objek'][]	= $objek;
 					}
-					elseif(isset($value3['shm']))
+					else
 					{
-						$objek	= Objek::where('shm.nomor_akta', $value3['shm']['nomor_akta'])->first();
-						if(!$objek)
-						{
-							$objek 	= new Objek;
-						}
-						$klien->tipe 			= 'tanah_bangunan';
-						$objek->shm 			= $value3['shm'];
-						$objek->kantor 			= $this->active_office['kantor'];
-						unset($value3['shm']);
-						$objek->dokumen 		= $value3;
-						$objek->save();
-					
-						$saved_data['objek'][]	= $objek;
-					}
-					elseif(isset($value3['shgb']))
-					{
-						$objek	= Objek::where('shgb.nomor_akta', $value3['shgb']['nomor_akta'])->first();
-						if(!$objek)
-						{
-							$objek 	= new Objek;
-						}
-						$klien->tipe 			= 'bangunan';
-						$objek->shgb 			= $value3['shgb'];
-						$objek->kantor 			= $this->active_office['kantor'];
-						unset($value3['shgb']);
-						$objek->dokumen 		= $value3;
-						$objek->save();
-					
-						$saved_data['objek'][]	= $objek;
+						$saved_data['pihak'][0]			= $arsip->toArray();
 					}
 				}
 			}
 		}
 
 		return $saved_data;
+	}
+
+	private function syncRelatedDoc($akta, $arsip)
+	{
+		//for every root
+		foreach ($arsip['root'] as $key => $value) 
+		{
+			$relasi 	= $value->relasi;
+			$count 		= count($relasi);
+			$count2 	= 0;
+
+			foreach ((array)$relasi['akta'] as $k => $v) 
+			{
+				if(str_is($akta['id'], $v['id']))
+				{
+					$count 		= $k;
+				}
+			}
+
+			if(isset($arsip['relasi'][$key]))
+			{
+				foreach ($arsip['relasi'][$key] as $key2 => $value2) 
+				{
+					$relasi['akta'][$count]	= ['id' => $akta['id'], 'judul' => $akta['judul'], 'jenis' => $akta['jenis']];
+
+					if(isset($relasi['dokumen'][$count]))
+					{
+						foreach ((array)$relasi['dokumen'][$count] as $k2 => $v2) 
+						{
+							if(str_is($v2['id'], $value2['arsip']['id']))
+							{
+								$count2			= $k2;
+							}
+						}
+					}
+
+					$relasi['dokumen'][$count][$count2]	= ['id' => $value2['arsip']['id'], 'jenis' => $value2['arsip']['jenis'], 'relasi' => $value2['relasi']];
+				}
+			}
+
+			$value->relasi 	= $relasi;
+			$value->save();
+		}
+
+		return $arsip;
 	}
 }

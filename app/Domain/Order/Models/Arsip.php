@@ -1,29 +1,35 @@
 <?php
 
-namespace App\Domain\Akta\Models;
+namespace App\Domain\Order\Models;
 
 use App\Infrastructure\Traits\GuidTrait;
+use App\Infrastructure\Traits\TanggalTrait;
 
 use App\Infrastructure\Models\BaseModel;
-use Hash, Validator, Exception;
+
+use Validator, Exception;
 
 /**
- * Model TipeDokumen
+ * Model Arsip
  *
- * Digunakan untuk menyimpan data nasabah.
+ * Digunakan untuk menyimpan data alamat
+ * Ketentuan : 
+ * 	- tidak bisa direct changes, tapi harus melalui fungsi tersedia (aggregate)
+ * 	- auto generate id (guid)
  *
  * @author     C Mooy <chelsy@thunderlab.id>
  */
-class TipeDokumen extends BaseModel
+class Arsip extends BaseModel
 {
 	use GuidTrait;
-	
+	use TanggalTrait;
+
 	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
 	 */
-	protected $table				= 'akta_tipe_dokumen';
+	protected $table				= 'notaris_arsip';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -33,42 +39,69 @@ class TipeDokumen extends BaseModel
 
 	protected $fillable				=	[
 											'_id'					,
-											'kategori'				,
-											'jenis_dokumen'			,
-											'kepemilikan'			,
+											'jenis'					,
 											'isi'					,
+											'relasi'				,
 											'kantor'				,
 										];
-
 	/**
 	 * Basic rule of database
 	 *
 	 * @var array
 	 */
 	protected $rules				=	[
+											'jenis'						=> 'required|max:255',
+											'isi'						=> 'array',
+											'relasi.akta.*.id'			=> 'required|max:255',
+											'relasi.dokumen.*.*.id'		=> 'required|max:255',
+											'relasi.dokumen.*.*.jenis'	=> 'required|max:255',
+											'relasi.dokumen.*.*.relasi'	=> 'required|max:255',
+											'kantor.id'					=> 'required',
+											'kantor.nama'				=> 'required',
 										];
+
 	/**
 	 * Date will be returned as carbon
 	 *
 	 * @var array
 	 */
 	protected $dates				= ['created_at', 'updated_at', 'deleted_at'];
+	
+	/**
+	 * data hidden
+	 *
+	 * @var array
+	 */
+	protected $hidden				= 	[
+											'_id',
+											'created_at', 
+											'updated_at', 
+											'deleted_at', 
+										];
 
 	protected $appends 				= ['id'];
-
-	protected $hidden				= ['created_at', 'updated_at', 'deleted_at', '_id'];
 
 	/* ---------------------------------------------------------------------------- RELATIONSHIP ----------------------------------------------------------------------------*/
 
 	/* ---------------------------------------------------------------------------- QUERY BUILDER ----------------------------------------------------------------------------*/
 	
+	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
+	// public function setTanggalLahirAttribute($value)
+	// {
+	// 	$this->attributes['tanggal_lahir'] = $this->formatDateFrom($value);
+	// }
+
 	/* ---------------------------------------------------------------------------- ACCESSOR ----------------------------------------------------------------------------*/
+	
 	public function getIdAttribute($value = NULL)
 	{
-		return $this->attributes['_id'];
-	}
+		if(isset($this->attributes['_id']))
+		{
+			return $this->attributes['_id'];
+		}
 
-	/* ---------------------------------------------------------------------------- MUTATOR ----------------------------------------------------------------------------*/
+		return null;
+	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
@@ -84,13 +117,18 @@ class TipeDokumen extends BaseModel
 
 	/* ---------------------------------------------------------------------------- SCOPES ----------------------------------------------------------------------------*/
 
-	public function scopeKantor($model, $variable)
+	public function scopeIsi($query, $value)
 	{
-		if(is_array($variable))
+		return $query->where('isi', 'like', '%'.$value.'%');
+	}
+
+	public function scopeKantor($query, $value)
+	{
+		if(is_array($value))
 		{
-			return $model->whereIn('kantor.id', $variable);
+			return $query->whereIn('kantor.id', $value);
 		}
-	
-		return $model->where('kantor.id', $variable);
+
+		return $query->where('kantor.id', $value);
 	}
 }

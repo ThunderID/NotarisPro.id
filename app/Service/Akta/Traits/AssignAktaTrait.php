@@ -37,13 +37,13 @@ trait AssignAktaTrait
 		{
 			$akta['pemilik']['klien'][$key]['id'] 		= $value['id'];
 
-			if(isset($value['ktp']))
+			if(str_is($value['jenis'], 'ktp'))
 			{
-				$akta['pemilik']['klien'][$key]['nama'] 	= $value['ktp']['nama'];
+				$akta['pemilik']['klien'][$key]['nama'] 	= $value['isi']['nama'];
 			}
-			elseif(isset($value['akta_pendirian']))
+			elseif(str_is($value['jenis'], 'akta_pendirian'))
 			{
-				$akta['pemilik']['klien'][$key]['nama'] 	= $value['akta_pendirian']['nama'];
+				$akta['pemilik']['klien'][$key]['nama'] 	= $value['isi']['nama'];
 			}
 		}
 

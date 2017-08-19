@@ -85,35 +85,6 @@ class bpnController extends Controller
 		return $this->generateView();  
 	}
 
-	private function test()
-	{
-		// $client = new \Google_Client();
-
-// $credentialsJson should contain the path to the json file downloaded from the API site
-		// $credentialJson 	= '{"web":{"client_id":"323258491938-q5jrf77d15d8j9cfpuksl3b4hcnajrru.apps.googleusercontent.com","project_id":"mitra-notaris","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://accounts.google.com/o/oauth2/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"96cE1nz0lRVWTHExmqrILh4R"}}';
-
-		$client = new \Google_Client;
-
-		$client->setApplicationName("Mitra Notaris");
-		$client->setDeveloperKey("AIzaSyCuY5OpGqq9639C45rlSsm460gPae9BtWk");
-
-
-		$calendarId 	= 'a19g6utd9dkq9b5prseoj7779o@group.calendar.google.com';
-// $credentials = $client->loadServiceAccountJson(
-//    $credentialJson,
-//    'https://www.googleapis.com/auth/calendar'
-// );
-
-// $client->setAssertionCredentials($credentials);
-
-$service = new \Google_Service_Calendar($client);
-dd($service);
-// $calendarId should contain the calendar id found on the settings page of the calendar
-$events = $service->events->listEvents($calendarId);
-
-dd($events);
-	}
-
 	public function create(Request $request, $id = null)
 	{
 		//set this function
@@ -149,17 +120,19 @@ dd($events);
 			$bpn->title 		= $akta['judul'];
 			$bpn->start 		= $request->get('tanggal_mulai');
 			$bpn->end 			= $request->get('tanggal_selesai');
+			$bpn->tempat 		= $request->get('tempat');
 			$bpn->referensi 	= ['id' => $akta['id'], 'nomor_akta' => $request->get('nomor_akta')];
 
 			$bpn->pembuat 		= ['kantor' => $this->active_office['kantor']];
 			$bpn->save();
+
+			$this->test($bpn, $akta);
 
 			$this->page_attributes->msg['success']		= ['BPN Berhasil Disimpan'];
 	
 			return $this->generateRedirect(route('jadwal.bpn.show', $bpn->id));
 		} catch (Exception $e) {
 			$this->page_attributes->msg['error']		= $e->getMessage();
-	
 			return $this->generateRedirect(route('jadwal.bpn.index', ['id' => $id]));
 		}
 	}
