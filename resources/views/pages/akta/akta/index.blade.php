@@ -151,7 +151,7 @@
 					</thead>
 					<tbody>
 		                @forelse((array)$page_datas->aktas as $key => $data)
-						<tr onclick="showAkta(this);" data_judul_akta="{{ $data['judul'] }}" data_id_akta="{{ $data['id'] }}" style="cursor: pointer;">
+						<tr onclick="showAkta(this);" data_id_akta="{{ $data['id'] }}" style="cursor: pointer;">
 							<td>
 								<i class="fa fa-file"></i>
 								&nbsp;
