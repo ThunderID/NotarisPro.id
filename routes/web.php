@@ -23,9 +23,6 @@ Route::group(['namespace' => 'Akta\\'], function(){
 		'destroy' 	=> 'akta.akta.destroy' //post 
 	]]);
 
-	Route::get('/ajax/akta/get/{akta_id}', 					['uses' => 'aktaController@getAkta', 	'as' => 'ajax.akta.get']);
-
-
 	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 	Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
 	Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
@@ -37,11 +34,12 @@ Route::group(['namespace' => 'Akta\\'], function(){
 	Route::any('/akta/trashed',	 							['uses' => 'aktaController@trashed', 		'as' => 'akta.akta.trash']);
 	Route::any('/akta/chooseTemplate',	 					['uses' => 'aktaController@chooseTemplate', 		'as' => 'akta.akta.choooseTemplate']);
 
-
 	Route::any('/akta/required/dokumen',	 				['uses' => 'aktaController@dokumenIndex', 	'as' => 'akta.dokumen.index']);
 
-
 	Route::any('/akta/dropbox/{id}/store',	 				['uses' => 'aktaController@dropboxStore', 	'as' => 'akta.dropbox.store']);
+
+	Route::get('/akta/ajax/{id}', 							['uses' => 'aktaController@ajaxShow', 		'as' => 'akta.ajax.show']);
+
 });
 
 // 2. TAGIHAN
@@ -77,20 +75,17 @@ Route::group(['namespace' => 'Jadwal\\'], function(){
 
 
 // 3. KLIEN
-Route::group(['namespace' => 'Klien\\'], function(){
-	//klien
-	Route::resource('/klien/klien', 'klienController', ['names' => [
-		'index' 	=> 'klien.klien.index', //get
-		'create'	=> 'klien.klien.create', //get
-		'store' 	=> 'klien.klien.store', //post
-		'show' 		=> 'klien.klien.show', //get
-		'edit' 		=> 'klien.klien.edit', //get
-		'update' 	=> 'klien.klien.update', //patch
-		'destroy' 	=> 'klien.klien.destroy' //post 
+Route::group(['namespace' => 'Arsip\\'], function(){
+	//arsip
+	Route::resource('/arsip/arsip', 'arsipController', ['names' => [
+		'index' 	=> 'arsip.arsip.index', //get
+		'create'	=> 'arsip.arsip.create', //get
+		'store' 	=> 'arsip.arsip.store', //post
+		'show' 		=> 'arsip.arsip.show', //get
+		'edit' 		=> 'arsip.arsip.edit', //get
+		'update' 	=> 'arsip.arsip.update', //patch
+		'destroy' 	=> 'arsip.arsip.destroy' //post 
 	]]);
-
-	Route::any('/klien/document/{id}/add',		 		['uses' => 'klienController@addDokumen', 		'as' => 'klien.dokumen.add']);
-	Route::any('/klien/document/{id}/remove/{doc_id}',	['uses' => 'klienController@removeDokumen', 	'as' => 'klien.dokumen.remove']);
 });
 
 // 4. NOTARIS

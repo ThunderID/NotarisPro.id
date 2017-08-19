@@ -19,7 +19,7 @@ use PulkitJalan\Google\Client;
 
 use Illuminate\Http\Request;
 
-use TAuth;
+use TAuth, Response;
 
 class aktaController extends Controller
 {
@@ -414,6 +414,24 @@ class aktaController extends Controller
 		$this->FromTextToPDF($akta, $active_office);
 		
 		return $this->generateRedirect(route('akta.akta.show', $id));
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ajaxShow(Request $request, $id)
+	{	
+		$this->active_office	= TAuth::activeOffice();
+
+		//1. get show document
+		$akta 					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
+
+		//1f. generate checker
+		$akta['incomplete']		= $this->checkInclompeteData($akta['dokumen']);
+
+		return Response::json($akta);
 	}
 
 	//!UNFINISHED! Using an Example
