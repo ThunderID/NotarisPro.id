@@ -59,3 +59,6 @@ window.Quill = require('./plugins/quill/quill.js');
 
 // laoder ui
 require('./plugins/loader');
+
+// ajax
+require('./plugins/ajax');
