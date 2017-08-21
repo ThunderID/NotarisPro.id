@@ -53,6 +53,7 @@ class Dokumen extends BaseModel
 											'prev'					,
 											'next'					,
 											'required_documents'	,
+											'riwayat_status'		,
 										];
 	/**
 	 * Basic rule of database

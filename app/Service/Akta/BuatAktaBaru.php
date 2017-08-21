@@ -83,6 +83,12 @@ class BuatAktaBaru
 			$variable['jenis']			= $this->jenis;
 			$variable['prev']			= null;
 			$variable['next']			= null;
+			$variable['riwayat_status'][0]	= [
+				'status' 	=> $variable['status'], 
+				'editor' 	=> ['id' => $this->logged_user['id'], 'nama' => $this->logged_user['nama']], 
+				'tanggal' 	=> Carbon::now()->format('Y-m-d H:i:s'),
+				'versi'		=> $variable['versi'],
+			];
 
 			// STORE
 			//1. simpan new detected doc type

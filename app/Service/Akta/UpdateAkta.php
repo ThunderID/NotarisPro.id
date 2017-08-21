@@ -134,6 +134,15 @@ class UpdateAkta
 				// 1c. update prev from current version
 				$this->akta->prev 			= $current_version->id;
 				$this->akta->versi 			= (int)$this->akta->versi + 1;
+
+				$riwayat_status 			= $this->akta->riwayat_status;
+				$riwayat_status[]			= [
+					'status' 	=> $this->akta->status, 
+					'editor' 	=> ['id' => $this->logged_user['id'], 'nama' => $this->logged_user['nama']], 
+					'tanggal' 	=> Carbon::now()->format('Y-m-d H:i:s'),
+					'versi'		=> $this->akta->versi,
+				];
+				$this->akta->riwayat_status = $riwayat_status;
 			}
 
 			if((array)$this->variable)
@@ -180,6 +189,7 @@ class UpdateAkta
 
 		//demi menghemat resource
 		$this->active_office 	= TAuth::activeOffice();
+		$this->logged_user 		= TAuth::loggedUser();
 
 		return true;
 	

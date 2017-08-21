@@ -49,7 +49,18 @@ class UpdateStatusAkta
 
 		$this->akta->status 		= 'minuta';
 		$this->akta->paragraf 		= $paragraf;
+		
+		$riwayat_status 			= $this->akta->riwayat_status;
+		$riwayat_status[]			= [
+			'status' 	=> $this->akta->status, 
+			'editor' 	=> ['id' => $this->logged_user['id'], 'nama' => $this->logged_user['nama']], 
+			'tanggal' 	=> Carbon::now()->format('Y-m-d H:i:s'),
+			'versi'		=> $this->akta->versi,
+		];
+		$this->akta->riwayat_status = $riwayat_status;
+
 		$this->akta->save();
+
 
 		return $this->akta;
 	}
@@ -93,8 +104,18 @@ class UpdateStatusAkta
 			}
 		}
 
-		$this->akta->status 			= 'salinan';
-		$this->akta->paragraf 			= $paragraf;
+		$this->akta->status 		= 'salinan';
+		$this->akta->paragraf 		= $paragraf;
+		
+		$riwayat_status 			= $this->akta->riwayat_status;
+		$riwayat_status[]			= [
+			'status' 	=> $this->akta->status, 
+			'editor' 	=> ['id' => $this->logged_user['id'], 'nama' => $this->logged_user['nama']], 
+			'tanggal' 	=> Carbon::now()->format('Y-m-d H:i:s'),
+			'versi'		=> $this->akta->versi,
+		];
+		$this->akta->riwayat_status = $riwayat_status;
+
 		$this->akta->save();
 
 		return $this->akta;
