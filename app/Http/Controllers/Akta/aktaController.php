@@ -563,11 +563,23 @@ class aktaController extends Controller
 	private function retrieveAktaFilter()
 	{
 		//1a. cari jenis
-		$filter['jenis']	= $this->query->distinct('jenis')->get();
+		$jenis 					= $this->query->distinct('jenis')->get();
+
+		$filter['jenis']		= [];
+		foreach ($jenis as $key => $value) 
+		{
+			$filter['jenis']	= array_merge($filter['jenis'], $value['attributes']);
+		}
 
 		//2a. status
-		$filter['status']	= $this->query->distinct('status')->get();
-	
+		$status 				= $this->query->distinct('status')->get();
+
+		$filter['status']		= [];
+		foreach ($status as $key => $value) 
+		{
+			$filter['status']	= array_merge($filter['status'], $value['attributes']);
+		}
+
 		return $filter;
 	}
 	private function retrieveAktaUrutkan()
