@@ -23,7 +23,7 @@
 				<h4 style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -25px;transform:translateX(-20%);"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat</h4>'
 			</div>
 			<div class="d-flex justify-content-center mx-auto">
-				<div class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
+				<div id="page-content" class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 					<div id="text-editor" class="form-group editor">	
 					</div>
 				</div>
@@ -223,6 +223,9 @@
 		// global vars
 		var element_source = $(e);
 
+		// sets url
+		history.pushState(null, null, 'akta/' + element_source.attr('data_id_akta'));
+
 		// set val
 		setAktaShow(element_source.attr('data_id_akta'));
 
@@ -235,7 +238,6 @@
 		$('.loader').show();
 		$('.disabled-before-load').addClass("disabled");
 		$('.hide-before-load').hide();
-		$('#text-editor').empty();
 
 		// ui display
 		$('#akta_show').fadeIn('fast');
@@ -243,7 +245,10 @@
 	}
 
 	function hideAkta(e){
-		$('#akta_show').fadeOut('fast');
+		$('#akta_show').fadeOut('fast', function(){
+			$('#text-editor').empty();
+			history.pushState(null, null, '/akta/akta');
+		});		
 	}
 
 	/* End UI page */
@@ -277,6 +282,7 @@
 			resp.paragraf.forEach(function(element) {
 				$('#text-editor').append(element.konten);
 			});
+			$('#page').scrollTop(0);
 
 		});
 		ajax_akta.defineOnError(function(resp){
