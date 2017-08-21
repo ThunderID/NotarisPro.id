@@ -81,7 +81,7 @@
 				</h6>
 			</div>
 
-			<div id="sidebar-content" class="hide-before-load">
+			<div id="sidebar-content" class="hide-before-load" style="display: none;">
 				<div class="col-12 pt-3 pb-2" >
 					<h5 class="mb-0">
 						<b>Informasi</b>
@@ -132,44 +132,44 @@
 					</div>
 				</div>
 
-				<div class="col-12 pt-3 pb-2">
+				<div id="kelengkapan" class="col-12 pt-3 pb-0">
 					<h5>
 						<b>Kelengkapan Dokumen Akta</b>
 					</h5>
 
-					<div class="row">
-						<div class="col-12">
+					<div hidden>
+						<div id="template-judul" class="col-12">
+							<h6 id="title" class="mb-1" style='font-weight: 100;'>
+								Pihak 
+							</h6>
+						</div>					
+						<div id="template-dokumen-ok" class="col-12">
 							<h6 class="mb-0">
 								<span class="fa-stack">
 									<i class="fa fa-check-square-o" aria-hidden="true"></i>
 								</span>
-								KTP Pihak 1
-							</h6>
-						</div>
-						<div class="col-12">
-							<h6 class="mb-0">
-								<span class="fa-stack">
-									<i class="fa fa-check-square-o" aria-hidden="true"></i>
+								<span id="dokumen">
+									_
 								</span>
-								KTP Pihak 2
 							</h6>
 						</div>
-						<div class="col-12">
+						<div id="template-dokumen-not-ok" class="col-12">
 							<h6 class="mb-0">
 								<span class="fa-stack">
 									<i class="fa fa-square-o" aria-hidden="true"></i>
 								</span>
-								KK Pihak 1
-							</h6>
-						</div>
-						<div class="col-12">
-							<h6 class="mb-0">
-								<span class="fa-stack">
-									<i class="fa fa-check-square-o" aria-hidden="true"></i>
+								<span id="dokumen">
+									_
 								</span>
-								KK Pihak 2
 							</h6>
-						</div>					
+						</div>	
+						<div id="template-spacer" class="col-12 mb-1 mt-1">
+							<div class="row clearfix">
+							</div>
+						</div>
+					</div>				
+
+					<div id="content" class="row">
 					</div>
 
 				</div>
@@ -291,6 +291,35 @@
 			sc.find('#penulis').text(resp.penulis.nama);
 			sc.find('#tanggal_sunting').text(resp.tanggal_sunting);
 			sc.find('#versi').text(resp.versi);
+
+			// kelengkapan dokumen
+			var k = $(document.getElementById('kelengkapan'));
+			k.find('#content').empty();
+
+			$.map(resp.incomplete.pihak, function(value, index) {
+				tmp = k.find('#template-judul');
+				target = tmp.clone().appendTo(k.find('#content'));
+				target.find('#title').text(tmp.find('#title').text() + ' ' + index);
+				target.removeAttr('id');
+
+				$.map(value, function(val, key) {
+					if(val == false){
+						tmp = k.find('#template-dokumen-not-ok');
+						target = tmp.clone().appendTo(k.find('#content'));
+						target.find('#dokumen').text(key);
+						target.removeAttr('id');
+					}else{
+						tmp = k.find('#template-dokumen-ok');
+						target = tmp.clone().appendTo(k.find('#content'));
+						target.find('#dokumen').text(key);
+						target.removeAttr('id');
+					}
+				});
+
+				tmp = k.find('#template-spacer');
+				target = tmp.clone().appendTo(k.find('#content'));
+				target.removeAttr('id');				
+			});
 
 			// editor
 			resp.paragraf.forEach(function(element) {
