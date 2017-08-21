@@ -300,7 +300,7 @@ class aktaController extends Controller
 		return $mentions;
 	}
 
-	public function mentionStore(Request $request, $id)
+	public function mentionStore(Request $request)
 	{
 		$this->active_office	= TAuth::activeOffice();
 

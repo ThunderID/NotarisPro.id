@@ -25,7 +25,7 @@ Route::group(['namespace' => 'Akta\\'], function(){
 
 	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 
-	Route::any('/akta/mention/{akta_id}/store', 			['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);
+	Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);
 	
 	Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
 	Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
