@@ -102,6 +102,7 @@ class aktaController extends Controller
 	 */
 	public function show(Request $request, $id)
 	{	
+		/*
 		return $this->index($request, $id);
 		$this->active_office 					= TAuth::activeOffice();
 
@@ -131,6 +132,9 @@ class aktaController extends Controller
 		$this->view								= view('pages.akta.akta.show');
 
 		return $this->generateView();  
+		*/
+
+		return $this->index($request, $id);
 	}
 
 	/**
