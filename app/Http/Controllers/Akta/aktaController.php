@@ -575,7 +575,10 @@ class aktaController extends Controller
 		$filter['jenis']		= [];
 		foreach ($jenis as $key => $value) 
 		{
-			$filter['jenis']	= array_merge($filter['jenis'], $value['attributes']);
+			foreach ($value['attributes'] as $k => $v) 
+			{
+				$filter['jenis'][$v]	= $v;
+			}
 		}
 
 		//2a. status
@@ -584,7 +587,10 @@ class aktaController extends Controller
 		$filter['status']		= [];
 		foreach ($status as $key => $value) 
 		{
-			$filter['status']	= array_merge($filter['status'], $value['attributes']);
+			foreach ($value['attributes'] as $k => $v) 
+			{
+				$filter['status'][$v]	= $v;
+			}
 		}
 
 		return $filter;
