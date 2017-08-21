@@ -42,6 +42,7 @@ class aktaController extends Controller
 
 		// 1. set page attributes
 		$this->page_attributes->title		= 'Akta Dokumen';
+		$this->page_datas->id 				= $id;
 
 		// 2. call all aktas data needed
 		//2a. parse query searching
@@ -52,7 +53,6 @@ class aktaController extends Controller
 
 		//2c. get all filter 
 		$this->page_datas->filters 			= $this->retrieveAktaFilter();
-		$this->page_datas->id 				= $id;
 		
 		//2d. get all urutan 
 		$this->page_datas->urutkan 			= $this->retrieveAktaUrutkan();
@@ -101,7 +101,8 @@ class aktaController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Request $request, $id)
-	{	/*
+	{	
+		return $this->index($request, $id);
 		$this->active_office 					= TAuth::activeOffice();
 
 		//1. call all aktas data needed
@@ -130,9 +131,6 @@ class aktaController extends Controller
 		$this->view								= view('pages.akta.akta.show');
 
 		return $this->generateView();  
-		*/
-
-		return $this->index($request, $id);
 	}
 
 	/**
@@ -564,6 +562,7 @@ class aktaController extends Controller
 		return $this->page_datas;
 	}
 
+	///check
 	private function retrieveAktaFilter()
 	{
 		//1a. cari jenis
@@ -586,6 +585,7 @@ class aktaController extends Controller
 
 		return $filter;
 	}
+
 	private function retrieveAktaUrutkan()
 	{
 		//1a.cari urutan
