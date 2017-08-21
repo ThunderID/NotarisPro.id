@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-<div id="akta_show" class="row" style="display:none;background-color: white;z-index: 10; position:absolute; top:54; overflow-y: hidden;">
+<div id="akta_show" class="row" style="{{ $page_datas->id == null ? 'display:none;' : '' }};background-color: white;z-index: 10; position:absolute; top:54; overflow-y: hidden;">
 	@include('pages.akta.akta.show')
 </div>
 <div id="akta_index" class="row">
