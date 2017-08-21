@@ -24,6 +24,9 @@ Route::group(['namespace' => 'Akta\\'], function(){
 	]]);
 
 	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
+
+	Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);
+	
 	Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
 	Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
 	Route::any('/akta/print/{akta_id}',	 					['uses' => 'aktaController@print', 			'as' => 'akta.akta.print']);
@@ -39,7 +42,6 @@ Route::group(['namespace' => 'Akta\\'], function(){
 	Route::any('/akta/dropbox/{id}/store',	 				['uses' => 'aktaController@dropboxStore', 	'as' => 'akta.dropbox.store']);
 
 	Route::get('/akta/ajax/{id}', 							['uses' => 'aktaController@ajaxShow', 		'as' => 'akta.ajax.show']);
-
 });
 
 // 2. TAGIHAN

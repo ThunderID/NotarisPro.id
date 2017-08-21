@@ -143,14 +143,14 @@ class aktaController extends Controller
 	public function create(Request $request)
 	{
 		// blank or copy
-		$input 						= $request->only('id_akta','judul_akta');
+		$input 								= $request->only('id_akta','judul_akta');
 		
 
 
-		$this->active_office 			= TAuth::activeOffice();
+		$this->active_office 				= TAuth::activeOffice();
 
 		//1. parse data needed based on category
-		$this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
+		$this->page_datas->dokumen_lists	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
 
 		//2. init akta as null
 		// some logic here
@@ -304,6 +304,36 @@ class aktaController extends Controller
 		return $mentions;
 	}
 
+	public function mentionStore(Request $request)
+	{
+		$this->active_office	= TAuth::activeOffice();
+
+		$exploded 				= explode('.', str_replace('@', '', $request->get('mention')));
+
+		$tipe 					= TipeDokumen::where('kategori', $exploded[0])->where('jenis_dokumen', $exploded[2])->where('kepemilikan', $exploded[3])->first();
+
+		if(!$tipe)
+		{
+			$tipe 					= new TipeDokumen;
+			$tipe->kategori 		= $exploded[0];
+			$tipe->jenis_dokumen 	= $exploded[2];
+			$tipe->kepemilikan 		= $exploded[3];
+		}
+
+		$isi 					= $tipe->isi;
+		if(empty($isi) || is_null($isi))
+		{
+			$isi 				= [];
+		}
+		$isi 					= array_unique(array_merge($isi, [$exploded[4]]));
+		$tipe->isi 				= $isi;
+		$tipe->kantor 			= $this->active_office['kantor'];
+		$tipe->save();
+
+		return JSend::success(['tersimpan']);
+
+	}
+	
 	public function versionIndex(Request $request, $id)
 	{
 		$this->active_office	= TAuth::activeOffice();
