@@ -506,7 +506,7 @@ class aktaController extends Controller
 
 		$lists 					= TipeDokumen::kantor($this->active_office['kantor']['id'])->orderby('kategori', 'desc')->get()->toArray();
 
-		return JSend::succesS($lists);
+		return JSend::success($lists);
 	}
 
 	/**
@@ -615,67 +615,27 @@ class aktaController extends Controller
 
 	private function checkInclompeteData($document)
 	{
+		//nge bug
 		$required 			= [];
 		//1. incomplete document
-		if(isset($document['pihak']))
-		{
-			foreach ((array)$document['pihak'] as $d_key => $docs) 
-			{
-				//
-				foreach ($docs as $f_key => $field) 
-				{
-					$required['pihak'][$d_key][$f_key] 	=	true;
-					
-					foreach ($field as $v_key => $value) 
-					{
-						if(empty($value))
-						{
-							$required['pihak'][$d_key][$f_key] 	=	false;
-						}
-					}
-				}
-			}
-		}
 
-		if(isset($document['objek']))
+		foreach ($document as $key => $value) 
 		{
-			foreach ((array)$document['objek'] as $d_key => $docs) 
+			list($tipe, $nomor)			= explode('[dot]', $key);
+			foreach ($value as $key2 => $value2) 
 			{
-				//
-				foreach ($docs as $f_key => $field) 
-				{
-					$required['objek'][$d_key][$f_key] 	=	true;
-		
-					foreach ($field as $v_key => $value) 
-					{
-						if(empty($value))
-						{
-							$required['objek'][$d_key][$f_key] 	=	false;
-						}
-					}
-				}
-			}
-		}
+				$jenis_doc 				= str_replace('[dot]', ' ', $key2);
 
-		if(isset($document['saksi']))
-		{
-			foreach ((array)$document['saksi'] as $d_key => $docs) 
-			{
-				//
-				foreach ($docs as $f_key => $field) 
-				{
-					$required['saksi'][$d_key][$f_key] 	=	true;
-		
-					foreach ($field as $v_key => $value) 
-					{
-						if(empty($value))
-						{
-							$required['saksi'][$d_key][$f_key] 	=	false;
-						}
-					}
-				}
-			}
+				$required[$tipe][$nomor][$jenis_doc]			= true;
 
+				foreach ($value2 as $key3 => $value3) 
+				{
+					if(empty($value3))
+					{
+						$required[$tipe][$nomor][$jenis_doc]	= false;
+					}
+				} 
+			}
 		}
 
 		return $required;
