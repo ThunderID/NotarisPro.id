@@ -12,7 +12,8 @@
 @stop
 
 @section('content')
-<div id="akta_show" class="row" style="display:none;background-color: white;z-index: 10; position:absolute; top:54; overflow-y: hidden;">
+
+<div id="akta_show" class="row" style="{{ $page_datas->id == null ? 'display:none;' : '' }};background-color: white;z-index: 10; position:absolute; top:54; overflow-y: hidden;">
 	@include('pages.akta.akta.show')
 </div>
 <div id="akta_index" class="row">
@@ -34,14 +35,16 @@
 					])
 				</div>
 
+				@foreach($page_datas->filters as $key => $filter)
 				<div class="panel">
 					@include('components.filter',[
-						'title' => 'Filter Akta',
+						'title' => 'Filter ' . ucWords($key),
 						'alias' => 'status',
 						'qs'	=> [ 'cari','urutkan' ],
-						'lists' => $page_datas->filters
+						'lists' => $filter
 					])
-				</div>	
+				</div>
+				@endforeach	
 
 				<div class="panel hidden-md-up">
 					@include('components.filter',[
@@ -74,7 +77,7 @@
 								Keranjang Sampah
 								<span class="indicator float-right">
 									<i class="fa fa-trash"></i>
-								</span>d
+								</span>
 							</li>
 						</a>	
 					</ul>

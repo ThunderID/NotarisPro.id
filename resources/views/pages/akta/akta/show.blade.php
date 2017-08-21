@@ -222,17 +222,35 @@
 	function showAkta(e){
 		// global vars
 		var element_source = $(e);
+		var id = element_source.attr('data_id_akta');
+		var judul = element_source.find('#judul').text(); 
+
+		modulShowAkta(id, judul);
+	}
+
+	function hideAkta(e){
+		$('#akta_show').fadeOut('fast', function(){
+			$('#text-editor').empty();
+			window.history.pushState(null, null, '/akta/akta');
+		});		
+	}
+
+	function modulShowAkta(id, judul){
+		// fuse
+		if(judul == null){
+			judul = 'Loading ...';
+		}
 
 		// sets url
-		history.pushState(null, null, 'akta/' + element_source.attr('data_id_akta'));
+		window.history.pushState(null, null, '/akta/akta/' + id);
 
 		// set val
-		setAktaShow(element_source.attr('data_id_akta'));
+		setAktaShow(id);
 
 		/* re-init */
 		// sidebar-header
 		var sh = $(document.getElementById('sidebar-header'));
-		sh.find('#title').text(element_source.find('#judul').text());
+		sh.find('#title').text(judul);
 
 		// reset state
 		$('.loader').show();
@@ -241,14 +259,7 @@
 
 		// ui display
 		$('#akta_show').fadeIn('fast');
-		$('#akta_show').find('#judul_akta').text(element_source.find('#judul').text());
-	}
-
-	function hideAkta(e){
-		$('#akta_show').fadeOut('fast', function(){
-			$('#text-editor').empty();
-			history.pushState(null, null, '/akta/akta');
-		});		
+		$('#akta_show').find('#judul_akta').text(judul);
 	}
 
 	/* End UI page */
@@ -261,8 +272,11 @@
 
 		ajax_akta.defineOnSuccess(function(resp){
 			console.log(resp);
+			// re-set judul
+			$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
+			$('#akta_show').find('#judul_akta').text(resp.judul);
 
-			// sidebar-content
+			// sidebar-content			
 			var sc = $(document.getElementById('sidebar-content'));
 			sc.find('#status_akta').text(window.stringManipulator.toDefaultReadable(resp.status));
 			var tmplt = sc.find('#pihak').find('#template');
@@ -284,19 +298,41 @@
 			});
 			$('#page').scrollTop(0);
 
-		});
-		ajax_akta.defineOnError(function(resp){
-			console.log(resp);
-		});
-		ajax_akta.defineOnComplete(function(){
+			// ui on complete
 			$('.disabled-before-load').removeClass("disabled");
 			$('.loader').fadeOut('fast', function(){
 				$('.hide-before-load').fadeIn();
 			});
+
+		});
+		ajax_akta.defineOnError(function(resp){
+			console.log("Can't get akta data. Retrying");
+			setAktaShow(id_akta);
 		});
 
 		ajax_akta.get(url);
 	}
 	/* End Get Akta Data */
+
+	/* Start URL Page Manager */
+	$(window).on('popstate', function() {
+		managePage();
+	});
+
+	@if($page_datas->id != null)
+		managePage();
+	@endif
+
+	function managePage(){
+		var id = window.location.pathname.replace('/akta/akta', '');
+		if(id != ""){
+			id = id.replace('/', '');
+			modulShowAkta(id, null);
+		}else{
+			hideAkta(null);
+		}
+	}
+
+	/* End URL Page Manager */
 
 @endpush

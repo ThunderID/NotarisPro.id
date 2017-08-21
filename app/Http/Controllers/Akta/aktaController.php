@@ -36,7 +36,7 @@ class aktaController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(Request $request)
+	public function index(Request $request, $id = null)
 	{
 		$this->active_office 				= TAuth::activeOffice();
 
@@ -52,6 +52,7 @@ class aktaController extends Controller
 
 		//2c. get all filter 
 		$this->page_datas->filters 			= $this->retrieveAktaFilter();
+		$this->page_datas->id 				= $id;
 		
 		//2d. get all urutan 
 		$this->page_datas->urutkan 			= $this->retrieveAktaUrutkan();
@@ -100,7 +101,7 @@ class aktaController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Request $request, $id)
-	{	
+	{	/*
 		$this->active_office 					= TAuth::activeOffice();
 
 		//1. call all aktas data needed
@@ -129,6 +130,9 @@ class aktaController extends Controller
 		$this->view								= view('pages.akta.akta.show');
 
 		return $this->generateView();  
+		*/
+
+		return $this->index($request, $id);
 	}
 
 	/**
