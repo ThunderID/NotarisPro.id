@@ -39,7 +39,7 @@
 				<div class="panel">
 					@include('components.filter',[
 						'title' => 'Filter ' . ucWords($key),
-						'alias' => 'status',
+						'alias' => $key,
 						'qs'	=> [ 'cari','urutkan' ],
 						'lists' => $filter
 					])
