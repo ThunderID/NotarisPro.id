@@ -317,6 +317,10 @@ class aktaController extends Controller
 		}
 
 		$isi 					= $tipe->isi;
+		if(empty($isi) || is_null($isi))
+		{
+			$isi 				= [];
+		}
 		$isi 					= array_unique(array_merge($isi, [$exploded[4]]));
 		$tipe->isi 				= $isi;
 		$tipe->save();
