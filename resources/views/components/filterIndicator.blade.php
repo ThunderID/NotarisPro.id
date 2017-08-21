@@ -51,10 +51,10 @@
 	@foreach ($qs as $key => $value)
 		@if($strict_mode == true)
 			@if(array_key_exists($key, $lists))
-				<span class="badge badge-notif" style="color:inherit;">{{$lists[$key]}} : {{$value}} <a href="{{ generateUrl($key) }}">x</a></span>
+				<span class="badge badge-notif" style="color:inherit;">{{$lists[$key]}} : {{ ucWords(str_replace('_', ' ', $value)) }} <a href="{{ generateUrl($key) }}">x</a></span>
 			@endif
 		@else
-			<span class="badge badge-notif" style="color:inherit;">{{$key}} : {{$value}} <a href="{{ generateUrl($key) }}">x</a></span>
+			<span class="badge badge-notif" style="color:inherit;">{{$key}} : {{ ucWords(str_replace('_', ' ', $value)) }} <a href="{{ generateUrl($key) }}">x</a></span>
 		@endif
 	@endforeach
 </div>

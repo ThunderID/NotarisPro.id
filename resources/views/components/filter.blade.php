@@ -20,7 +20,7 @@
 			{{ count(Request::all()) && $list != null> 0 ? '&' : '' }}
 			{{ $list != null ? $alias . '=' . $list : '' }}">
 			<li class="{{ Request::get($alias) == $list ? 'active' : '' }}">
-				{{ ucWords($key) }}
+				{{ ucWords(str_replace('_', ' ',$key)) }}
 				<span class="indicator float-right">
 					@if(Request::get($alias) == $list)
 						<i class="fa fa-circle"></i>
