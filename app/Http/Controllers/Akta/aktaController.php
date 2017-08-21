@@ -300,6 +300,31 @@ class aktaController extends Controller
 		return $mentions;
 	}
 
+	public function mentionStore(Request $request, $id)
+	{
+		$this->active_office	= TAuth::activeOffice();
+
+		$exploded 				= explode('.', str_replace('@', '', $request->get('mention')));
+
+		$tipe 					= TipeDokumen::where('kategori', $exploded[0])->where('jenis_dokumen', $exploded[2])->where('kepemilikan', $exploded[3])->first();
+
+		if(!$tipe)
+		{
+			$tipe 					= new TipeDokumen;
+			$tipe->kategori 		= $exploded[0];
+			$tipe->jenis_dokumen 	= $exploded[2];
+			$tipe->kepemilikan 		= $exploded[3];
+		}
+
+		$isi 					= $tipe->isi;
+		$isi 					= array_unique(array_merge($isi, [$exploded[4]]));
+		$tipe->isi 				= $isi;
+		$tipe->save();
+
+		return JSend::success(['tersimpan']);
+
+	}
+	
 	public function versionIndex(Request $request, $id)
 	{
 		$this->active_office	= TAuth::activeOffice();
