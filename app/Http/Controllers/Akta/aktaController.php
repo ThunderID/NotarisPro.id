@@ -139,14 +139,14 @@ class aktaController extends Controller
 	public function create(Request $request)
 	{
 		// blank or copy
-		$input 						= $request->only('id_akta','judul_akta');
+		$input 								= $request->only('id_akta','judul_akta');
 		
 
 
-		$this->active_office 			= TAuth::activeOffice();
+		$this->active_office 				= TAuth::activeOffice();
 
 		//1. parse data needed based on category
-		$this->page_datas->dokumen_lists 	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
+		$this->page_datas->dokumen_lists	= TipeDokumen::kantor($this->active_office['kantor']['id'])->get();
 
 		//2. init akta as null
 		// some logic here
@@ -323,6 +323,7 @@ class aktaController extends Controller
 		}
 		$isi 					= array_unique(array_merge($isi, [$exploded[4]]));
 		$tipe->isi 				= $isi;
+		$tipe->kantor 			= $this->active_office['kantor'];
 		$tipe->save();
 
 		return JSend::success(['tersimpan']);
