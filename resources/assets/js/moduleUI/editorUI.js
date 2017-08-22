@@ -51,6 +51,48 @@ window.editorUI = {
 		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
 		el.subscribe('editableInput', throttledAutoSave);
 	},
+	postSave: function(editor) {
+		let judulAkta 		= $('.form-judul-akta').val();
+		let paragrafAkta 	= editor.root.innerHTML;
+		let urlStore 		= editor.container.dataset.url;
+		let ajaxAkta 		= window.ajax;
+		
+		ajax_akta.defineOnSuccess( function(respon){
+			console.log(respon);
+		});
+
+		// $.ajax({
+		// 	method: 'POST',
+		// 	url: urlStore,
+		// 	data: { judul: judulAkta, paragraf: paragrafAkta },
+		// 	beforeSend: function () {
+		// 		$('.loading-save').css('display', 'inline');
+		// 	},
+		// 	success: function (data) {
+		// 		$('.loading-save').html('Saved');
+		// 		$('.loading-save').css('display', 'none');
+		// 		$('.loading-save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Menyimpan');
+		// 	}
+		// });
+
+		// let method = "POST";
+		// let form = document.createElement("form");
+		// let hiddenField = document.createElement("input");
+
+		// form.setAttribute("method", method);
+		// form.setAttribute("action", "/test");
+
+		// hiddenField.setAttribute("type", "hidden");
+		// hiddenField.setAttribute("name", "contents");
+
+		// hiddenField.setAttribute("value", JSON.stringify(editor.root.innerHTML));
+		
+		// form.appendChild(hiddenField);
+		// document.body.appendChild(form);
+		// form.submit();
+
+		// $(form).serialize();
+	},
 	quill: function () {
 		var currentCursor, newIndex, suffix, textSearch;
 		var selector = document.getElementById('editor');
@@ -161,73 +203,55 @@ window.editorUI = {
 		});
 
 		// function on click button save
-		function post () {
-			let method = "post";
-			let form = document.createElement("form");
-			let hiddenField = document.createElement("input");
+		$('.form-editor-akta-save').on('click', function(e) {
+			e.preventDefault();
 
-			form.setAttribute("method", method);
-			form.setAttribute("action", "/test");
-
-			hiddenField.setAttribute("type", "hidden");
-			hiddenField.setAttribute("name", "contents");
-
-			hiddenField.setAttribute("value", JSON.stringify(editor.root.innerHTML));
-			
-			form.appendChild(hiddenField);
-			document.body.appendChild(form);
-			form.submit();
-
-			// $(form).serialize();
-
-		}
-
-		buttonSaveDocument.addEventListener('click', function() {
-			post();
+			window.editorUI.postSave(editor);
 		});
 
+		// 
+		// module quill autosave
+		// 
+		// setInterval( function() {
+		// 	if (changeText.length() > 0) {
+		// 		window.editorUI.postSave(editor);
+				
+		// 		changeText = new Delta();
+		// 	}
+		// }, 5*1000);
+
+
+		// 
 		// function on click button open arsip
+		// 
 		buttonOpenArsip.addEventListener('click', function() {
 			var flag = buttonOpenArsip.getAttribute('data-flag');
 			if (flag == 'close') {
-				$('#DataList').css('display', 'block');
+				$('#DataList').addClass('open');
 				buttonOpenArsip.setAttribute('data-flag', 'open');
 				buttonOpenArsip.classList.add('ql-active');
 			} else {
-				$('#DataList').css('display', 'none');
+				$('#DataList').removeClass('open');
 				buttonOpenArsip.setAttribute('data-flag', 'close');
 				buttonOpenArsip.classList.remove('ql-active');
 			}
 		});
 
-		// Data Mention
-		editor.on('text-change', function(delta) {
-			changeText = changeText.compose(delta);
-			let range = editor.getSelection();
-			if (range) {
-				if (range.length == 0) {
-					currentCursor = range.index;
-				} else {
-					currentCursor = range.index;
-				}
-			}
-		});
-
-		$('#editor').on('matched.atwho', function(event, flag, query) {
-			suffix = flag;
-			textSearch = query;
-		});
-
+		// 
+		// get data mention from panel sidebar
+		// 
 		$('.data-mention').on('click', function(e) {
 			e.preventDefault();
 
-			var textValue = $(this).attr('data-value');
-			var textObj = {text: textValue, value: textValue};
+			let textValue = $(this).attr('data-value');
+			let textItem = $(this).attr('data-item');
+			let newTextValue = '@' + textValue + textItem + '@';
+			let textObj = {text: newTextValue, value: newTextValue};
 
 			// set selection
 			var range = editor.getSelection();
 			var text = editor.getText(range.index, range.length);
-			var newIndex = parseInt(range.index + textValue.length);
+			var newIndex = parseInt(range.index + newTextValue.length);
 
 			if (range) {
 				if (range.length == 0) {
@@ -244,53 +268,11 @@ window.editorUI = {
 		});
 
 
-		// save doucment using interval autosave
-		setInterval( function() {
-			if (changeText.length() > 0) {
-				console.log('saving changes..');
-				$.ajax({
-					method: 'POST',
-					url: '/test',
-					data: { content: editor.root.innerHTML },
-				})
-				changeText = new Delta();
-			}
-		}, 5*1000);
-
 		window.onbeforunload = function() {
 			if (changeText.length() > 0) {
 				return 'There are unsaved changes. Are you sure you want to leave?';
 			}
 		}
-
-		// save document using button submit
-		$('.save-document').on('click', function(){
-			let method = "post";
-			let form = document.createElement("form");
-			let hiddenField = document.createElement("input");
-
-			form.setAttribute("method", method);
-			form.setAttribute("action", "/test");
-
-			hiddenField.setAttribute("type", "hidden");
-			hiddenField.setAttribute("name", "contents");
-
-			if (changeText.length() > 0) {
-				let getDocument = JSON.stringify(editor.getContents());
-				let getPartialDocument = JSON.stringify(changeText);
-
-				// console.log({
-				// 	innerHTMLJSONparse: JSON.stringify(editor.root.innerHTML),
-				// });
-				// hiddenField.setAttribute("value", getEntryDocument);
-			}
-
-
-			
-			form.appendChild(hiddenField);
-			document.body.appendChild(form);
-			// form.submit();
-		});
 	},
 	init: function () {
 		// var editor = new window.Editor("textarea.editor", {
