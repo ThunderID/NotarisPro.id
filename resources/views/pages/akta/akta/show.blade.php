@@ -253,6 +253,7 @@
 		// sets actions
 		setEditAsCopy(id);
 		setEdit(id);
+		$('#deleteModal').find('form').attr('action', $('#deleteModal').find('form').attr('action') + '/' + id );
 
 		// sets url
 		window.history.pushState(null, null, '/akta/akta/' + id);
@@ -285,7 +286,6 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			console.log(resp);
 			// re-set judul
 			$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
 			$('#akta_show').find('#judul_akta').text(resp.judul);
