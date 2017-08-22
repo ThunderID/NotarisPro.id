@@ -2,7 +2,7 @@
 	<div class="row">
 
 		@include('components.submenu', [
-			'title' 		=> "Judul Akta",
+			'title' 		=> "...",
 			'menus' 		=> [
 					[
 						"title" 			=> "",		
@@ -41,7 +41,7 @@
 
 			<div id="sidebar-header" class="col-12 pt-2 pb-2">
 				<h5 id="title">
-					<b>Judul Akta</b>
+					<b>...</b>
 				</h5>
 
 				<div class="row">
@@ -187,27 +187,23 @@
 
 				</div>
 
-				<div class="col-12 pt-3 pb-2">
+				<div id="riwayat_status" class="col-12 pt-3 pb-2">
 					<h5 class="mb-0">
 						<b>Histori Status</b>
 					</h5>
 
-					<div class="row">
-						<div class="col-12">
-							<h7 class="text-muted">12 Agustus 2017</h7>
-							<h6 class="mb-1">Renvoi</h6>
-							<h6>Mr. Bo</h6>
+					<div hidden>
+						<div class="row">
+							<div class="col-12" id="template-riwayat-status">
+								<h7 id="template-tanggal" class="text-muted">_/_/__</h7>
+								<h6 id="template-status" class="mb-1">_</h6>
+								<h6 id="template-editor">_</h6>
+							</div>
 						</div>
-					</div>	
+					</div>
 
-					<div class="row">
-						<div class="col-12">
-							<h7 class="text-muted">10 Agustus 2017</h7>
-							<h6 class="mb-1">Draft</h6>
-							<h6>Mr. Dal</h6>
-						</div>
-					</div>				
-
+					<div id="content" class="row">
+					</div>					
 				</div>	
 
 				<div class="col-12 pt-3 pb-2">
@@ -337,6 +333,17 @@
 				tmp = k.find('#template-spacer');
 				target = tmp.clone().appendTo(k.find('#content'));
 				target.removeAttr('id');				
+			});
+
+			// history status
+			resp.riwayat_status.forEach(function(element) {
+				var rs = $(document.getElementById('riwayat_status'));
+				tmp = rs.find('#template-riwayat-status');
+				target = tmp.clone().appendTo(rs.find('#content'));
+				target.find('#template-tanggal').text(element.tanggal);
+				target.find('#template-status').text(window.stringManipulator.toDefaultReadable(element.status));
+				target.find('#template-editor').text(element.editor.nama);
+				target.removeAttr('id');
 			});
 
 			// editor
