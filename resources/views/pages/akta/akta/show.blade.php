@@ -24,7 +24,7 @@
 					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat
 				</h4>
 				<h4 class="show-on-error" style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -5px;transform:translateX(-20%); display: none;">
-					<a href="#retry">
+					<a href="javascript:void(0);" onClick="retrySetAktaShow();">
 						<i class="fa fa-refresh" aria-hidden="true"></i> Coba Lagi
 					</a>
 				</h4>
@@ -359,6 +359,21 @@
 		});
 
 		ajax_akta.get(url);
+	}
+	function retrySetAktaShow(){
+		// sets ui
+		$('.loader').show();
+		$('.disabled-before-load').addClass("disabled");
+		$('.hide-before-load').hide();
+		$('.show-before-load').show();
+		$('.show-on-error').hide();
+
+		// get id_akta
+		var id = window.location.pathname.replace('/akta/akta', '');
+		id_akta = id.replace('/', '');
+
+		// retry get akta
+		setAktaShow(id_akta);
 	}
 	/* End Get Akta Data */
 
