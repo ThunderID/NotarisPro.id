@@ -19,7 +19,7 @@ use PulkitJalan\Google\Client;
 
 use Illuminate\Http\Request;
 
-use TAuth, Response;
+use TAuth, Response, App;
 
 class aktaController extends Controller
 {
@@ -453,15 +453,23 @@ class aktaController extends Controller
 	 */
 	public function ajaxShow(Request $request, $id)
 	{	
-		$this->active_office	= TAuth::activeOffice();
-
-		//1. get show document
-		$akta 					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
-
-		//1f. generate checker
-		$akta['incomplete']		= $this->checkInclompeteData($akta['dokumen']);
-
-		return Response::json($akta);
+		$this->active_office = TAuth::activeOffice();
+        //1. get show document
+        $akta                   = $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+        if($akta)
+        {
+            $akta               = $akta->toArray();
+            //1f. generate checker
+            $akta['incomplete']     = $this->checkInclompeteData($akta['dokumen']);
+	        
+            // returning akta data
+	        return Response::json($akta);
+        }
+        else
+        {
+            //return 404
+			return App::abort(404);
+        }
 	}
 
 	//!UNFINISHED! Using an Example
