@@ -145,7 +145,7 @@
 					</div>
 				</div>
 
-				<div id="kelengkapan" class="col-12 pt-3 pb-0">
+				<div id="kelengkapan" class="col-12 pt-3 pb-1">
 					<h5>
 						<b>Kelengkapan Dokumen Akta</b>
 					</h5>
@@ -197,7 +197,7 @@
 							<div class="col-12" id="template-riwayat-status">
 								<h7 id="template-tanggal" class="text-muted">_/_/__</h7>
 								<h6 id="template-status" class="mb-1">_</h6>
-								<h6 id="template-editor">_</h6>
+								<h6 id="template-editor" style="font-weight: 100;">_</h6>
 							</div>
 						</div>
 					</div>
