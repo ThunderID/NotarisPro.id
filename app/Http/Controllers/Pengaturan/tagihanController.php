@@ -8,6 +8,8 @@ use App\Domain\Order\Models\DetailTransaksi;
 use App\Domain\Admin\Models\Pengguna;
 use App\Service\Subscription\GenerateTagihanSAAS;
 
+use App\Service\ThirdParty\Veritrans\CheckNotifVeritrans;
+
 use Illuminate\Http\Request;
 use App\Service\Helpers\JSend;
 
@@ -37,6 +39,11 @@ class tagihanController extends Controller
 	 */
 	public function index(Request $request)
 	{
+		// $data = new GenerateTagihanSAAS;
+		// $data->bulanan(Carbon::now()->addDays(65));
+
+		$data = new CheckNotifVeritrans;
+		$data->checker();
 		$this->active_office 				= TAuth::activeOffice();
 		$office_id 							= $this->active_office['kantor']['id'];
 
@@ -65,13 +72,13 @@ class tagihanController extends Controller
 		return $this->generateView();  
 	}
 
-	public function payCreate(Request $request)
+	public function payCreate(Request $request, $nomor)
 	{
 		$this->active_office 	= TAuth::activeOffice();
 		$this->logged_user 		= TAuth::loggedUser();
 
 		//1. Ambil data order detail
-		$data_trs	= Query::kantor($this->active_office['kantor']['id'])->where('status', 'pending')->where('tipe', 'bukti_kas_keluar')->with(['details'])->get();
+		$data_trs	= Query::kantor($this->active_office['kantor']['id'])->where('status', 'pending')->where('tipe', 'bukti_kas_keluar')->where('nomor', $nomor)->with(['details'])->first();
 
 		// Set our server key
 		Veritrans_Config::$serverKey = env('VERITRANS_SERVER_KEY', 'VT_KEY');
@@ -86,31 +93,21 @@ class tagihanController extends Controller
 		Veritrans_Config::$is3ds 		= true;
 
 	    $item_details 	= 	[];
-	    $i 				= 	0;
 	    $total 			= 	0;
 
-	    foreach ($data_trs as $key => $value) 
+	    foreach ($data_trs['details'] as $key => $value) 
 	    {
-	    	$nama 					= '';
-	    	$subtotal 				= 0;
 
-	    	foreach ($value['details'] as $key2 => $value2) 
-	    	{
-				$nama 				= $nama.' '.$value2['item'];
-				$subtotal 			= $subtotal + $this->formatMoneyFrom($value2['subtotal']);
-	    	}
-
-	    	$item_details[$i]['id']				= $value['nomor'];
-	    	$item_details[$i]['name']			= $nama;
-	    	$item_details[$i]['price']			= $subtotal;
-	    	$item_details[$i]['quantity']		= 1;
-	    	$i 									= $i + 1;
-	    	$total 								= $total + $subtotal;
+	    	$item_details[$key]['id']		= $nomor.$key;
+	    	$item_details[$key]['name']		= $value['item'];
+	    	$item_details[$key]['price']	= $this->formatMoneyFrom($value['subtotal']);
+	    	$item_details[$key]['quantity']	= 1;
+	    	$total 							= $total + $item_details[$key]['price'];
 	    }
 
 		// Fill transaction data
 		$transaction_details	= 	[
-										'order_id' 		=> $this->generatePaymentID($this->active_office['kantor']['id'], Carbon::now()),
+										'order_id' 		=> $nomor,
 										'gross_amount'	=> $total // no decimal allowed for creditcard
 									];
 
@@ -126,7 +123,6 @@ class tagihanController extends Controller
 		$customer_details		= 	[
 										'first_name'		=> $this->active_office['kantor']['notaris']['nama'],
 										'email'				=> $this->active_office['kantor']['notaris']['email'],
-										// 'email'				=> $this->logged_user['email'],
 										'billing_address'	=> $billing_address,
 									];
 
@@ -142,10 +138,6 @@ class tagihanController extends Controller
 		dd(header('Location: ' . $vtweb_url));
 	}
 
-	private function generatePaymentID($kantor_id, $tanggal)
-	{
-		return 'PAYMN'.$kantor_id.$tanggal->format('m').$tanggal->format('y');
-	}
 	/**
 	 * Display a listing of the resource.
 	 *

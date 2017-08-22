@@ -45,10 +45,7 @@
 					<p>{{$page_datas->total_billing}}</p>
 				</div>
 				<div class="col-3 text-right">
-					<a class="btn btn-sm btn-primary" href="{{route('pengaturan.tagihan.bayar')}}">
-						<i class="fa fa-money" aria-hidden="true"></i>&nbsp;
-						Bayar Semua
-					</a>
+					
 				</div>
 			</div>
 			<hr>
@@ -64,7 +61,7 @@
 										<a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
 											#{{$value['nomor']}} / 
 											@if(str_is($value['status'], 'pending'))
-												<span class="badge badge-success">{{$value['status']}}</span>
+												<span class="badge badge-danger">{{$value['status']}}</span>
 											@else
 												<span class="badge badge-success">{{$value['status']}}</span>
 											@endif
@@ -76,6 +73,8 @@
 									<div class="card-block">
 										<div class="row">
 											<div class="col-12 text-right">
+												<a href="{{route('pengaturan.tagihan.bayar', ['nomor' => $value['nomor']])}}" class="btn btn-primary" target="__blank"> <i class="fa fa-money"></i> Bayar </a>
+
 												<a href="{{route('pengaturan.tagihan.print', ['id' => $value['id']])}}" class="btn btn-secondary" target="__blank"> <i class="fa fa-print"></i> Print </a>
 											</div>
 										</div>

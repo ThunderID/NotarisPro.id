@@ -104,7 +104,7 @@ Route::group(['namespace' => 'Pengaturan\\'], function(){
 	Route::any('/pengaturan/tagihan/print/{id}',		['uses' => 'tagihanController@print', 		'as' => 'pengaturan.tagihan.print']);
 	Route::any('/pengaturan/tagihan/recalculate/{mode}',['uses' => 'tagihanController@recalculate',	'as' => 'pengaturan.tagihan.recalculate']);
 	
-	Route::any('/pengaturan/tagihan/bayar',				['uses' => 'tagihanController@payCreate',	'as' => 'pengaturan.tagihan.bayar']);
+	Route::any('/pengaturan/tagihan/bayar/{nomor}',		['uses' => 'tagihanController@payCreate',	'as' => 'pengaturan.tagihan.bayar']);
 
 	//6. User
 	Route::resource('/pengaturan/user', 'userController', ['names' => [

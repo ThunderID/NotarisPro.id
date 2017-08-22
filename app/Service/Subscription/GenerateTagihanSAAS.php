@@ -38,18 +38,24 @@ class GenerateTagihanSAAS
 	{
 		if(is_null($month))
 		{
-			$month 		= Carbon::now()->startOfDay();
+			$month 			= Carbon::now()->startOfDay();
 
-			$bulan_lalu = Carbon::createFromFormat('Y-m-d H:i:s', $month->format('Y-m-d H:i:s'));
+			$bulan_lalu 	= Carbon::createFromFormat('Y-m-d H:i:s', $month->format('Y-m-d H:i:s'));
 			$bulan_lalu->subMonths(1);
+
+			$bulan_depan 	= Carbon::createFromFormat('Y-m-d H:i:s', $month->format('Y-m-d H:i:s'));
+			$bulan_depan->addMonths(1);
 		}
 		else
 		{
-			$bulan_lalu = Carbon::createFromFormat('Y-m-d H:i:s', $month->format('Y-m-d H:i:s'));
+			$bulan_lalu 	= Carbon::createFromFormat('Y-m-d H:i:s', $month->format('Y-m-d H:i:s'));
 			$bulan_lalu->subMonths(1);
+
+			$bulan_depan 	= Carbon::createFromFormat('Y-m-d H:i:s', $month->format('Y-m-d H:i:s'));
+			$bulan_depan->addMonths(1);
 		}
 
-		$kantor 		= Kantor::wherenull('deleted_at')->orwhere('deleted_at', '>', $month->format('Y-m-d H:i:s'))->get();
+		$kantor 		= Kantor::wherenull('deleted_at')->orwhere('deleted_at', '>', $month->format('Y-m-d H:i:s'))->withTrashed()->get();
 
 		//1. untuk setiap kantor
 		foreach ($kantor as $k_key => $k_value) 
@@ -119,7 +125,7 @@ class GenerateTagihanSAAS
 				//2a2. untuk setiap user
 				foreach ((array)$joined_users as $j_uk => $j_uv) 
 				{
-					$date_diff 		= Carbon::createFromFormat('Y-m-d H:i:s', $j_uv['visas'][0]['started_at'])->diffInDays($bulan_lalu);
+					$date_diff 		= Carbon::createFromFormat('Y-m-d H:i:s', $j_uv['visas'][0]['started_at'])->diffInDays($month);
 
 					//kalau user terlama sudah bekerja selama sebulan
 					if((!$flag && $date_diff >= 30) || $flag)
@@ -133,12 +139,12 @@ class GenerateTagihanSAAS
 							$hari_hari_terlewati_syalalala 	= $month->diffInDays(Carbon::parse($j_uv['visas'][0]['started_at']));
 
 							$max 			= 500000;
-							if($hari_hari_terlewati_syalalala > 30)
+							if($hari_hari_terlewati_syalalala > 31)
 							{
-								$max 		= ceil($hari_hari_terlewati_syalalala/30) * 500000;
+								$max 		= floor($hari_hari_terlewati_syalalala/30) * 500000;
 							}
 
-							$total_tagihan 	= $total_tagihan + ceil($hari_hari_terlewati_syalalala/30) * 250000;
+							$total_tagihan 	= $total_tagihan + floor($hari_hari_terlewati_syalalala/30) * 250000;
 							$total_tagihan 	= max($max, $total_tagihan);
 
 							$total_counter 	= $total_counter + 1;
@@ -191,7 +197,7 @@ class GenerateTagihanSAAS
 				$input['status']	= 'pending';
 				$input['tipe']		= 'bukti_kas_keluar';
 				$input['tanggal_dikeluarkan']	= $month->format('d/m/Y');
-				$input['tanggal_jatuh_tempo']	= $month->addMonths(1)->format('d/m/Y');
+				$input['tanggal_jatuh_tempo']	= $bulan_depan->format('d/m/Y');
 
 				$tagihan->fill($input);
 				$tagihan->save();
