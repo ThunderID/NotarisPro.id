@@ -23461,6 +23461,7 @@ window.ajax = new function () {
 			url: url,
 			type: type,
 			data: data,
+			timeout: 5000,
 			dataType: 'json',
 			success: on_success,
 			error: on_error,

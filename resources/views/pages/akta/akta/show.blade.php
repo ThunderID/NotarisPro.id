@@ -2,7 +2,7 @@
 	<div class="row">
 
 		@include('components.submenu', [
-			'title' 		=> "Judul Akta",
+			'title' 		=> "...",
 			'menus' 		=> [
 					[
 						"title" 			=> "",		
@@ -20,7 +20,14 @@
 		<div id="page" class="scrollable_panel" style="width: calc(100vw - 297px); float: right;">
 			
 			<div id="page-loader" class="loader" style="width: calc(100vw - 297px); background: #000;opacity: 0.8; height:100%; position: absolute;">
-				<h4 style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -25px;transform:translateX(-20%);"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat</h4>'
+				<h4 class="show-before-load" style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -5px;transform:translateX(-20%);">
+					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat
+				</h4>
+				<h4 class="show-on-error" style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -5px;transform:translateX(-20%); display: none;">
+					<a href="javascript:void(0);" onClick="retrySetAktaShow();">
+						<i class="fa fa-refresh" aria-hidden="true"></i> Coba Lagi
+					</a>
+				</h4>
 			</div>
 			<div class="d-flex justify-content-center mx-auto">
 				<div id="page-content" class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
@@ -34,13 +41,13 @@
 
 			<div id="sidebar-header" class="col-12 pt-2 pb-2">
 				<h5 id="title">
-					<b>Judul Akta</b>
+					<b>...</b>
 				</h5>
 
 				<div class="row">
 					<div class="col-12">
 						<h6>
-							<a href="#" class="text-primary">
+							<a id="link-edit" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary">
 								<span class="fa-stack">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 								</span>
@@ -48,7 +55,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="#" class="text-primary">
+							<a id="link-edit-as-copy" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary">
 								<span class="fa-stack">
 									<i class="fa fa-copy"></i>
 								</span>
@@ -56,7 +63,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="#" class="text-primary disabled-before-load disabled">
+							<a href="javascript:void(0);" data-url="#" class="text-primary disabled-before-load disabled">
 								<span class="fa-stack">
 									<i class="fa fa-print" aria-hidden="true"></i>
 								</span>
@@ -64,7 +71,7 @@
 							</a>							
 						</h6>
 						<h6>
-							<a href="#" data-toggle="modal" data-target="#deleteModal" class="text-danger">
+							<a href="javascript:void(0);" link="link-delete" data-url="#" data-toggle="modal" data-target="#deleteModal" class="text-danger">
 								<span class="fa-stack">
 									<i class="fa fa-trash" aria-hidden="true"></i>
 								</span>
@@ -76,9 +83,15 @@
 			</div>
 
 			<div id="sidebar-loader" class="col-12 pt-3 pb-2 loader">
-				<h6 class="mb-0">
+				<h6 class="mb-0 show-before-load">
 					<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;<b>Memuat</b>
 				</h6>
+				<h6 class="mb-0 show-on-error" style="display: none;">
+					Tidak dapat mengambil data!<br><br><small>Pastikan Anda dapat terhubung dengan internet dan cobalah beberapa saat lagi. Bila masalah ini terus berlanjut, silahkan hubungi Costumer Service kami untuk mendapatkan bantuan.</small>
+				</h6>
+				<h6 class="pt-2 show-on-error" style="display: none;">
+					<small>Kode Error: <span id="loader-error-code">500</span></small>
+				</h6>				
 			</div>
 
 			<div id="sidebar-content" class="hide-before-load" style="display: none;">
@@ -132,7 +145,7 @@
 					</div>
 				</div>
 
-				<div id="kelengkapan" class="col-12 pt-3 pb-0">
+				<div id="kelengkapan" class="col-12 pt-3 pb-1">
 					<h5>
 						<b>Kelengkapan Dokumen Akta</b>
 					</h5>
@@ -174,27 +187,23 @@
 
 				</div>
 
-				<div class="col-12 pt-3 pb-2">
+				<div id="riwayat_status" class="col-12 pt-3 pb-2">
 					<h5 class="mb-0">
 						<b>Histori Status</b>
 					</h5>
 
-					<div class="row">
-						<div class="col-12">
-							<h7 class="text-muted">12 Agustus 2017</h7>
-							<h6 class="mb-1">Renvoi</h6>
-							<h6>Mr. Bo</h6>
+					<div hidden>
+						<div class="row">
+							<div class="col-12" id="template-riwayat-status">
+								<h7 id="template-tanggal" class="text-muted">_/_/__</h7>
+								<h6 id="template-status" class="mb-1">_</h6>
+								<h6 id="template-editor" style="font-weight: 100;">_</h6>
+							</div>
 						</div>
-					</div>	
+					</div>
 
-					<div class="row">
-						<div class="col-12">
-							<h7 class="text-muted">10 Agustus 2017</h7>
-							<h6 class="mb-1">Draft</h6>
-							<h6>Mr. Dal</h6>
-						</div>
-					</div>				
-
+					<div id="content" class="row">
+					</div>					
 				</div>	
 
 				<div class="col-12 pt-3 pb-2">
@@ -238,8 +247,12 @@
 	function modulShowAkta(id, judul){
 		// fuse
 		if(judul == null){
-			judul = 'Loading ...';
+			judul = '...';
 		}
+
+		// sets actions
+		setEditAsCopy(id);
+		setEdit(id);
 
 		// sets url
 		window.history.pushState(null, null, '/akta/akta/' + id);
@@ -256,12 +269,13 @@
 		$('.loader').show();
 		$('.disabled-before-load').addClass("disabled");
 		$('.hide-before-load').hide();
+		$('.show-before-load').show();
+		$('.show-on-error').hide();
 
 		// ui display
 		$('#akta_show').fadeIn('fast');
 		$('#akta_show').find('#judul_akta').text(judul);
 	}
-
 	/* End UI page */
 
 
@@ -321,6 +335,17 @@
 				target.removeAttr('id');				
 			});
 
+			// history status
+			resp.riwayat_status.forEach(function(element) {
+				var rs = $(document.getElementById('riwayat_status'));
+				tmp = rs.find('#template-riwayat-status');
+				target = tmp.clone().appendTo(rs.find('#content'));
+				target.find('#template-tanggal').text(element.tanggal);
+				target.find('#template-status').text(window.stringManipulator.toDefaultReadable(element.status));
+				target.find('#template-editor').text(element.editor.nama);
+				target.removeAttr('id');
+			});
+
 			// editor
 			resp.paragraf.forEach(function(element) {
 				$('#text-editor').append(element.konten);
@@ -335,11 +360,27 @@
 
 		});
 		ajax_akta.defineOnError(function(resp){
-			console.log("Can't get akta data. Retrying");
-			setAktaShow(id_akta);
+			$('.show-before-load').hide();
+			$('.show-on-error').show();
+			$(document.getElementById('loader-error-code')).text(resp.status);
 		});
 
 		ajax_akta.get(url);
+	}
+	function retrySetAktaShow(){
+		// sets ui
+		$('.loader').show();
+		$('.disabled-before-load').addClass("disabled");
+		$('.hide-before-load').hide();
+		$('.show-before-load').show();
+		$('.show-on-error').hide();
+
+		// get id_akta
+		var id = window.location.pathname.replace('/akta/akta', '');
+		id_akta = id.replace('/', '');
+
+		// retry get akta
+		setAktaShow(id_akta);
 	}
 	/* End Get Akta Data */
 
@@ -361,7 +402,20 @@
 			hideAkta(null);
 		}
 	}
-
 	/* End URL Page Manager */
 
+
+	/* Set Action Links */
+	function setEditAsCopy(id_akta){
+		var url = "{{ route('akta.akta.copy', ['id' => null]) }}/" + id_akta;
+		$('#link-edit-as-copy').attr('data-url', url);
+	}
+	function setEdit(id_akta){
+		var url = "{{ route('akta.akta.show', ['id' => null]) }}/" + id_akta + "/edit";
+		$('#link-edit').attr('data-url', url);
+	}
+	function triggerOpenWindow(e){
+		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
+	}
+	/* EndAction Links */
 @endpush
