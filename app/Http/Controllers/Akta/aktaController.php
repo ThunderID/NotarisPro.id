@@ -306,14 +306,14 @@ class aktaController extends Controller
 
 		$exploded 				= explode('.', str_replace('@', '', $request->get('mention')));
 
-		$tipe 					= TipeDokumen::where('kategori', $exploded[0])->where('jenis_dokumen', $exploded[2])->where('kepemilikan', $exploded[3])->kantor($this->active_office['kantor']['id'])->first();
+		$tipe 					= TipeDokumen::where('kategori', $exploded[0])->where('jenis_dokumen', $exploded[1])->where('kepemilikan', $exploded[2])->kantor($this->active_office['kantor']['id'])->first();
 
 		if(!$tipe)
 		{
 			$tipe 					= new TipeDokumen;
 			$tipe->kategori 		= $exploded[0];
-			$tipe->jenis_dokumen 	= $exploded[2];
-			$tipe->kepemilikan 		= $exploded[3];
+			$tipe->jenis_dokumen 	= $exploded[1];
+			$tipe->kepemilikan 		= $exploded[2];
 		}
 
 		$isi 					= $tipe->isi;
@@ -321,7 +321,7 @@ class aktaController extends Controller
 		{
 			$isi 				= [];
 		}
-		$isi 					= array_unique(array_merge($isi, [$exploded[4]]));
+		$isi 					= array_unique(array_merge($isi, [$exploded[3]]));
 		$tipe->isi 				= $isi;
 		$tipe->kantor 			= $this->active_office['kantor'];
 		$tipe->save();
