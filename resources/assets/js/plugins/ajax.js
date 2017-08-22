@@ -120,6 +120,8 @@ window.ajax = new function(){
 			success: on_success,
 			error: on_error,
 			complete: on_complete
+	        contentType: false,
+			processData: false,
 		});
   	}
 }
