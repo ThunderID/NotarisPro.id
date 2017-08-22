@@ -30,17 +30,24 @@
 				<div class="panel">
 					@include('components.search',[
 						'title' => 'Cari Akta',
-						'qs'	=> [ 'status','urutkan' ],
+						'qs'	=> [ 'status','jenis','urutkan' ],
 						'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
 					])
 				</div>
 
 				@foreach($page_datas->filters as $key => $filter)
+				<?php
+					if($key == 'jenis'){
+						$qs_helper = 'status';
+					}else{
+						$qs_helper = 'jenis';
+					}
+				?>
 				<div class="panel">
 					@include('components.filter',[
 						'title' => 'Filter ' . ucWords($key),
 						'alias' => $key,
-						'qs'	=> [ 'cari','urutkan' ],
+						'qs'	=> [ 'cari','urutkan', $qs_helper ],
 						'lists' => $filter
 					])
 				</div>
@@ -50,7 +57,7 @@
 					@include('components.filter',[
 						'title'	=> 'Urutkan',
 						'alias' => 'urutkan',
-						'qs'	=> [ 'cari','status' ],
+						'qs'	=> [ 'cari','status','jenis' ],
 						'lists' => [
 							'tanggal sunting terbaru' 	=> null,
 							'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
@@ -98,7 +105,7 @@
 			<div class="col-6 hidden-sm-down text-right">
 				@include('components.sort',[
 					'alias' => 'urutkan',
-					'qs'	=> [ 'cari','status' ],
+					'qs'	=> [ 'cari','status','jenis' ],
 					'lists' => [
 						'judul a - z' 	=> 'judul-asc',
 						'judul z - a' 	=> 'judul-desc',
@@ -122,8 +129,9 @@
 			<div class="col-12 mb-2">
 				@include('components.filterIndicator',[
 					'lists' => 	[
-						'cari' 		=> 'Cari Data',
-						'status' 	=> 'Status Data'
+						'cari' 		=> 'Cari Akta',
+						'status' 	=> 'Status Akta',
+						'jenis' 	=> 'Jenis Akta'
 					]
 				])
 			</div>
