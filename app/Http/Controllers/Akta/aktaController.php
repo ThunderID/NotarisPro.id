@@ -291,19 +291,13 @@ class aktaController extends Controller
 		}
 	}
 
-	public function mentionIndex(Request $request, $id)
+	public function mentionIndex(Request $request)
 	{
 		$this->active_office	= TAuth::activeOffice();
 	
-		$akta		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
-		$mentions 	= [];
+		$tipe					= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
 
-		foreach ($akta['mentionable'] as $key => $value) 
-		{
-			$mentions[] 	= str_replace('[dot]', '.', str_replace('[at]', '@', $key));
-		}
-
-		return $mentions;
+		return $tipe;
 	}
 
 	public function mentionStore(Request $request)
@@ -312,7 +306,7 @@ class aktaController extends Controller
 
 		$exploded 				= explode('.', str_replace('@', '', $request->get('mention')));
 
-		$tipe 					= TipeDokumen::where('kategori', $exploded[0])->where('jenis_dokumen', $exploded[2])->where('kepemilikan', $exploded[3])->first();
+		$tipe 					= TipeDokumen::where('kategori', $exploded[0])->where('jenis_dokumen', $exploded[2])->where('kepemilikan', $exploded[3])->kantor($this->active_office['kantor']['id'])->first();
 
 		if(!$tipe)
 		{
