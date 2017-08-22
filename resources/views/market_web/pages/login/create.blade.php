@@ -23,7 +23,7 @@
 
 						<div class="form-group">
 							<!-- <label for="exampleInputEmail1">Email address</label> -->
-							<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email" />
+							<input type="email" class="form-control set-focus" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email" />
 							<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
 						</div>
 
@@ -57,3 +57,11 @@
 		</div>
 	</section>
 @endsection
+
+@push('scripts')
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.set-focus').focus();
+		});
+	</script>
+@endpush

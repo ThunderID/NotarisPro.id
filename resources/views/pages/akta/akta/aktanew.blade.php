@@ -182,4 +182,8 @@
 	$(document).on('click', ".badge-notif a", function(e) {
 		showLoader();
 	});
+
+	$('#setTitleAkta').on('shown.bs.modal', function(e) {
+		$('.set-focus').focus();
+	});
 @endpush
