@@ -19,11 +19,11 @@
 <div class="clearfix">&nbsp;</div>
 <div class="clearfix">&nbsp;</div>
 <div class="row">
-	<div class="col-8">
+	<div class="col-6">
 		<h5>{{$kantor['notaris']['nama']}}</h5>
 		<h7>{{$kantor['notaris']['alamat']}}<br/>Telepon : {{$kantor['notaris']['telepon']}}</h7>
 	</div>
-	<div class="col-4">
+	<div class="col-6">
 		<div class="row">
 		  	<div class="col-5 text-left">
 		  		Tagihan
@@ -88,16 +88,16 @@
 		<div class="col-3" style="border:1px solid;">
 			{{$value['deskripsi']}}
 		</div>
-		<div class="col-2" style="border:1px solid;">
+		<div class="col-2 text-right" style="border:1px solid;">
 			{{$value['harga_satuan']}}
 		</div>
-		<div class="col-2" style="border:1px solid;">
+		<div class="col-2 text-right" style="border:1px solid;">
 			{{$value['diskon_satuan']}}
 		</div>
-		<div class="col-1" style="border:1px solid;">
+		<div class="col-1 text-right" style="border:1px solid;">
 			{{$value['kuantitas']}}
 		</div>
-		<div class="col-2" style="border:1px solid;">
+		<div class="col-2 text-right" style="border:1px solid;">
 			{{$value['subtotal']}}
 		</div>
 	@endforeach

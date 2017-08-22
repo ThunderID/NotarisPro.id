@@ -43,7 +43,7 @@
 						</thead>
 						<tbody>
 							@forelse($page_datas->users as $key => $data)
-							<tr>
+							<tr class="clickable-row" data-href="{{route('pengaturan.user.edit', ['id' => $data['id']])}}">
 								<td>
 									{{ $data['nama'] }}
 								</td>
@@ -59,7 +59,7 @@
 								</td>
 								<td>
 									
-								</td>					
+								</td>
 							</tr>
 							@empty
 							<tr>

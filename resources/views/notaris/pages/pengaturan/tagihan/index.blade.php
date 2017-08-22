@@ -26,7 +26,7 @@
 					<p>Plan</p>
 				</div>
 				<div class="col-6">
-					<p>0 User(s)</p>
+					<p>{{$page_datas->total_users}} User(s)</p>
 				</div>
 				<div class="col-3 text-right">
 					<a class="btn btn-sm btn-primary" href="{{route('pengaturan.user.create')}}">
@@ -42,12 +42,12 @@
 					<p>Tagihan Harus Dibayarkan</p>
 				</div>
 				<div class="col-6">
-					<p>Rp 0</p>
+					<p>{{$page_datas->total_billing}}</p>
 				</div>
 				<div class="col-3 text-right">
-					<a class="btn btn-sm btn-primary" href="{{route('pengaturan.user.create')}}">
+					<a class="btn btn-sm btn-primary" href="{{route('pengaturan.tagihan.bayar')}}">
 						<i class="fa fa-money" aria-hidden="true"></i>&nbsp;
-						Bayar
+						Bayar Semua
 					</a>
 				</div>
 			</div>

@@ -50,6 +50,16 @@
 								</div>
 							</div>
 						</fieldset>	
+
+						<fieldset class="form-group">
+							<div class="row">
+								<div class="col-12">
+									<label class="control-label" for="notaris[email]">Email Notaris</label>  
+									<input name="notaris[email]" value="{{ old('notaris[email]') ? old('notaris[email]') : $page_datas->kantor['notaris']['email'] }}" class="form-control" type="text" required>
+								</div>
+							</div>
+						</fieldset>	
+						
 						<fieldset class="form-group">
 							<div class="row">
 								<div class="col-12">

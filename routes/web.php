@@ -23,7 +23,7 @@ Route::group(['namespace' => 'Akta\\'], function(){
 		'destroy' 	=> 'akta.akta.destroy' //post 
 	]]);
 
-	Route::any('/akta/mention/{akta_id}', 					['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
+	Route::any('/akta/mention/all', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 
 	Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);
 	
@@ -103,6 +103,8 @@ Route::group(['namespace' => 'Pengaturan\\'], function(){
 	Route::any('/pengaturan/tagihan',					['uses' => 'tagihanController@index', 		'as' => 'pengaturan.tagihan.index']);
 	Route::any('/pengaturan/tagihan/print/{id}',		['uses' => 'tagihanController@print', 		'as' => 'pengaturan.tagihan.print']);
 	Route::any('/pengaturan/tagihan/recalculate/{mode}',['uses' => 'tagihanController@recalculate',	'as' => 'pengaturan.tagihan.recalculate']);
+	
+	Route::any('/pengaturan/tagihan/bayar',				['uses' => 'tagihanController@payCreate',	'as' => 'pengaturan.tagihan.bayar']);
 
 	//6. User
 	Route::resource('/pengaturan/user', 'userController', ['names' => [
