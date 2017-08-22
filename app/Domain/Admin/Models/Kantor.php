@@ -53,6 +53,7 @@ class Kantor extends BaseModel
 											'notaris.daerah_kerja'				=> 'max:255',
 											'notaris.nomor_sk'					=> 'max:255',
 											'notaris.tanggal_pengangkatan '		=> 'date_format:"Y-m-d"',
+											'notaris.email'						=> 'required|max:255',
 											'notaris.alamat'					=> 'required|max:255',
 											'notaris.telepon'					=> 'required|max:255',
 											'notaris.logo_url'					=> 'max:255',

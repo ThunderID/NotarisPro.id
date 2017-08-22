@@ -120,7 +120,6 @@ class UpdateAkta
 				$current_version->mentionable 			= $this->akta->mentionable;
 				$current_version->prev 					= $this->akta->prev;
 				$current_version->next 					= $this->akta->id;
-				$current_version->required_documents 	= $this->akta->required_documents;
 				$current_version->save();
 
 				// 1b. update next from prev version

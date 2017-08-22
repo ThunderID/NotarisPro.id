@@ -29,39 +29,39 @@ class InitTagihanTableSeeder extends Seeder
 		$harga_satuan 	= [1000000,1500000,2000000,3000000];
 
 		//init transaksi
-		foreach (range(0, 19) as $key) 
-		{
-			$klien 			= Arsip::whereIn('jenis', ['akta_pendirian', 'ktp'])->kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
+		// foreach (range(0, 19) as $key) 
+		// {
+		// 	$klien 			= Arsip::whereIn('jenis', ['akta_pendirian', 'ktp'])->kantor(TAuth::activeOffice()['kantor']['id'])->skip(rand(0,19))->first()->toArray();
 
-			$parse_month 	= rand(-12, -2);
-			$data 			= [
-				'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['isi']['nama']) ? $klien['isi']['nama'] : $klien['isi']['nama'])],
-				'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
-				'nomor'					=> rand(234289849248924,999999999999999),
-				'tipe'					=> 'bukti_kas_keluar',
-				'tanggal_dikeluarkan'	=> Carbon::parse($parse_month.' months')->format('d/m/Y'),
-				'tanggal_jatuh_tempo'	=> Carbon::parse($parse_month.' months')->addMonths(1)->format('d/m/Y'),
-				'status'				=> 'pending',
-			];
+		// 	$parse_month 	= rand(-12, -2);
+		// 	$data 			= [
+		// 		'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['isi']['nama']) ? $klien['isi']['nama'] : $klien['isi']['nama'])],
+		// 		'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
+		// 		'nomor'					=> rand(234289849248924,999999999999999),
+		// 		'tipe'					=> 'bukti_kas_keluar',
+		// 		'tanggal_dikeluarkan'	=> Carbon::parse($parse_month.' months')->format('d/m/Y'),
+		// 		'tanggal_jatuh_tempo'	=> Carbon::parse($parse_month.' months')->addMonths(1)->format('d/m/Y'),
+		// 		'status'				=> 'pending',
+		// 	];
 
-			$tagihan 	= new HeaderTransaksi;
-			$tagihan->fill($data);
-			$tagihan->save();
+		// 	$tagihan 	= new HeaderTransaksi;
+		// 	$tagihan->fill($data);
+		// 	$tagihan->save();
 
-			//details
-			$data_detail 			= [
-				'header_transaksi_id'		=> $tagihan->id,
-				'item'						=> 'Jasa Pembuatan Akta',
-				'deskripsi'					=> $deskripsi[rand(0,3)],
-				'kuantitas'					=> 1,
-				'harga_satuan'				=> $this->formatMoneyTo($harga_satuan[rand(0,3)]),
-				'diskon_satuan'				=> $this->formatMoneyTo($harga_satuan[rand(0,3)] *0.25),
-			];
+		// 	//details
+		// 	$data_detail 			= [
+		// 		'header_transaksi_id'		=> $tagihan->id,
+		// 		'item'						=> 'Jasa Pembuatan Akta',
+		// 		'deskripsi'					=> $deskripsi[rand(0,3)],
+		// 		'kuantitas'					=> 1,
+		// 		'harga_satuan'				=> $this->formatMoneyTo($harga_satuan[rand(0,3)]),
+		// 		'diskon_satuan'				=> $this->formatMoneyTo($harga_satuan[rand(0,3)] *0.25),
+		// 	];
 
-			$tdetail 	= new DetailTransaksi;
-			$tdetail->fill($data_detail);
-			$tdetail->save();
-		}
+		// 	$tdetail 	= new DetailTransaksi;
+		// 	$tdetail->fill($data_detail);
+		// 	$tdetail->save();
+		// }
 
 		//billing keluar
 		$data 			= [
@@ -126,30 +126,30 @@ class InitTagihanTableSeeder extends Seeder
 			}
 		}
 
-		//bukti kas keluar
-		$details 			= ['Bayar Air', 'Bayar Listrik', 'Gaji Pegawai', 'Bayar Internet'];
-		$prices 			= [300000, 500000, 30000000, 500000];
-		foreach(range(0, 3) as $key2)
-		{
-			$bkk 						= new HeaderTransaksi;
-			$bkk->kantor_id				= TAuth::activeOffice()['kantor']['id'];
-			$bkk->nomor					= rand(234289849248924,999999999999999);
-			$bkk->tipe 					= 'bukti_kas_keluar';
-			$bkk->status 				= 'pending';
-			$bkk->tanggal_dikeluarkan 	= Carbon::now()->format('d/m/Y');
-			$bkk->save();
+		// //bukti kas keluar
+		// $details 			= ['Bayar Air', 'Bayar Listrik', 'Gaji Pegawai', 'Bayar Internet'];
+		// $prices 			= [300000, 500000, 30000000, 500000];
+		// foreach(range(0, 3) as $key2)
+		// {
+		// 	$bkk 						= new HeaderTransaksi;
+		// 	$bkk->kantor_id				= TAuth::activeOffice()['kantor']['id'];
+		// 	$bkk->nomor					= rand(234289849248924,999999999999999);
+		// 	$bkk->tipe 					= 'bukti_kas_keluar';
+		// 	$bkk->status 				= 'pending';
+		// 	$bkk->tanggal_dikeluarkan 	= Carbon::now()->format('d/m/Y');
+		// 	$bkk->save();
 
-			foreach ($td as $key => $value) 
-			{
-				$bkk_dt 			= new DetailTransaksi;
-				$bkk_dt->header_transaksi_id 	= $bkk->id;
-				$bkk_dt->item 					= $details[$key2];
-				$bkk_dt->deskripsi 				= $details[$key2];
-				$bkk_dt->kuantitas 				= 1;
-				$bkk_dt->harga_satuan 			= $this->formatMoneyTo($prices[$key2]);
-				$bkk_dt->diskon_satuan 			= 'Rp 0';
-				$bkk_dt->save();
-			}
-		}
+		// 	foreach ($td as $key => $value) 
+		// 	{
+		// 		$bkk_dt 			= new DetailTransaksi;
+		// 		$bkk_dt->header_transaksi_id 	= $bkk->id;
+		// 		$bkk_dt->item 					= $details[$key2];
+		// 		$bkk_dt->deskripsi 				= $details[$key2];
+		// 		$bkk_dt->kuantitas 				= 1;
+		// 		$bkk_dt->harga_satuan 			= $this->formatMoneyTo($prices[$key2]);
+		// 		$bkk_dt->diskon_satuan 			= 'Rp 0';
+		// 		$bkk_dt->save();
+		// 	}
+		// }
 	}
 }

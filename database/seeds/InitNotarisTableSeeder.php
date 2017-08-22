@@ -71,6 +71,7 @@ class InitNotarisTableSeeder extends Seeder
 				'alamat'				=> 'Jl Raya Mangga Dua Grand Boutique Centre Bl A/9',
 				'telepon'				=> '0216018828',
 				'logo_url'				=> 'https://s3.amazonaws.com/Athlete-Endeavors-Staging/athletes/signature_images/000/000/026/standard/A_Winslow_Signature_Black.png?1395846955',
+				'email'					=> 'chelsy.developer@gmail.com'
 				// 'fax'					=> '0216018828',
 			]
 		];
@@ -86,6 +87,7 @@ class InitNotarisTableSeeder extends Seeder
 				'alamat'				=> 'Jl. Telomoyo No. 5 Malang',
 				'telepon'				=> '0341-555588',
 				'logo_url'				=> 'https://s3.amazonaws.com/Athlete-Endeavors-Staging/athletes/signature_images/000/000/026/standard/A_Winslow_Signature_Black.png?1395846955',
+				'email'					=> 'chelsy.developer@gmail.com'
 				// 'fax'					=> '0216018828',
 			]
 		];

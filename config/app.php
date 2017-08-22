@@ -181,7 +181,6 @@ return [
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Collective\Html\HtmlServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        PulkitJalan\Google\GoogleServiceProvider::class,
 
     ],
 
@@ -235,7 +234,6 @@ return [
         // 'Html' => Collective\Html\HtmlFacade::class,
 
         'TAuth' => App\Service\Facades\TAuth::class,
-        'Google' => PulkitJalan\Google\Facades\Google::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
