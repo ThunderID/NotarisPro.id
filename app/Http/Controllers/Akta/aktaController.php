@@ -46,7 +46,7 @@ class aktaController extends Controller
 
 		// 2. call all aktas data needed
 		//2a. parse query searching
-		$query 								= $request->only('cari', 'filter', 'urutkan', 'page');
+		$query 								= $request->only('cari', 'status', 'jenis', 'urutkan', 'page');
 
 		//2b. retrieve all akta
 		$this->retrieveAkta($query);
@@ -77,7 +77,7 @@ class aktaController extends Controller
 
 		// 2. call all aktas data needed
 		//2a. parse query searching
-		$query 								= $request->only('cari', 'filter', 'urutkan', 'page');
+		$query 								= $request->only('cari', 'status', 'jenis', 'filter', 'urutkan', 'page');
 		$query['trash']						= true;
 
 		//2b. retrieve all akta
@@ -527,16 +527,13 @@ class aktaController extends Controller
 			$data 	= $data->where(function($q)use($query){$q->where('judul', 'like', '%'.$query['cari'].'%')->orwhere('pemilik.klien.nama', 'like', '%'.$query['cari'].'%');});
 		}
 
-		//3. filter 
-		if(isset($query['filter'])){
-			foreach ((array)$query['filter'] as $key => $value) 
-			{
-				if(in_array($key, ['jenis', 'status']))
-				{
-					$data 	= $data->where($key, $value);				
-				}
-			}
+		//3. filter jenis
+		if(isset($query['jenis'])){
+			$data 	= $data->where('jenis', $query['jenis']);				
 		}
+		if(isset($query['status'])){
+			$data 	= $data->where('status', $query['status']);				
+		}		
 
 		//4. urutkan
 		if(isset($query['urutkan']))
