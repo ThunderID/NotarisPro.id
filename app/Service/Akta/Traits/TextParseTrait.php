@@ -89,12 +89,12 @@ trait TextParseTrait
 	{
 		foreach ($array_of_doc_type as $key => $value) 
 		{
-			$tipe_doc		= TipeDokumen::where('kategori', $value['kategori'])->where('jenis_dokumen', $value['jenis_dokumen'])->kantor($active_office['kantor']['id'])->first();
+			$tipe_doc		= TipeDokumen::/*where('kategori', $value['kategori'])->*/where('jenis_dokumen', $value['jenis_dokumen'])->kantor($active_office['kantor']['id'])->first();
 
 			if(!$tipe_doc)
 			{
 				$new_tipe_doc 					= new TipeDokumen;
-				$new_tipe_doc->kategori 		= $value['kategori'];
+				// $new_tipe_doc->kategori 		= $value['kategori'];
 				$new_tipe_doc->jenis_dokumen 	= $value['jenis_dokumen'];
 				$new_tipe_doc->kepemilikan 		= $value['kepemilikan'];
 				$new_tipe_doc->isi 				= $value['isi'];
