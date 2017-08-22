@@ -40,7 +40,7 @@
 				<div class="row">
 					<div class="col-12">
 						<h6>
-							<a href="#" class="text-primary">
+							<a id="link-edit" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary">
 								<span class="fa-stack">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 								</span>
@@ -48,7 +48,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="#" class="text-primary">
+							<a id="link-edit-as-copy" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary">
 								<span class="fa-stack">
 									<i class="fa fa-copy"></i>
 								</span>
@@ -56,7 +56,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="#" class="text-primary disabled-before-load disabled">
+							<a href="javascript:void(0);" data-url="#" class="text-primary disabled-before-load disabled">
 								<span class="fa-stack">
 									<i class="fa fa-print" aria-hidden="true"></i>
 								</span>
@@ -64,7 +64,7 @@
 							</a>							
 						</h6>
 						<h6>
-							<a href="#" data-toggle="modal" data-target="#deleteModal" class="text-danger">
+							<a href="javascript:void(0);" link="link-delete" data-url="#" data-toggle="modal" data-target="#deleteModal" class="text-danger">
 								<span class="fa-stack">
 									<i class="fa fa-trash" aria-hidden="true"></i>
 								</span>
@@ -241,6 +241,10 @@
 			judul = 'Loading ...';
 		}
 
+		// sets actions
+		setEditAsCopy(id);
+		setEdit(id);
+
 		// sets url
 		window.history.pushState(null, null, '/akta/akta/' + id);
 
@@ -261,7 +265,6 @@
 		$('#akta_show').fadeIn('fast');
 		$('#akta_show').find('#judul_akta').text(judul);
 	}
-
 	/* End UI page */
 
 
@@ -361,7 +364,20 @@
 			hideAkta(null);
 		}
 	}
-
 	/* End URL Page Manager */
 
+
+	/* Set Action Links */
+	function setEditAsCopy(id_akta){
+		var url = "{{ route('akta.akta.copy', ['id' => null]) }}/" + id_akta;
+		$('#link-edit-as-copy').attr('data-url', url);
+	}
+	function setEdit(id_akta){
+		var url = "{{ route('akta.akta.show', ['id' => null]) }}/" + id_akta + "/edit";
+		$('#link-edit').attr('data-url', url);
+	}
+	function triggerOpenWindow(e){
+		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
+	}
+	/* EndAction Links */
 @endpush
