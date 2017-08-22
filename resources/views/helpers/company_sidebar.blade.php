@@ -22,7 +22,7 @@
 							];
 	// Set Activate Menu
 	// Readme : set $active parameter (sile including this section) set to $list's array index
-	// $list[$active]['active'] = 'active';								
+	$list[$active]['active'] = 'active';								
 ?>
 
 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 sidebar hide-mobile sidebar subset-menu target-menu">

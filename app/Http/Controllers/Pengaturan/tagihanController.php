@@ -4,15 +4,24 @@ namespace App\Http\Controllers\Pengaturan;
 
 use App\Http\Controllers\Controller;
 use App\Domain\Order\Models\HeaderTransaksi as Query;
-
-use App\Service\Helpers\JSend;
+use App\Domain\Order\Models\DetailTransaksi;
+use App\Domain\Admin\Models\Pengguna;
+use App\Service\Subscription\GenerateTagihanSAAS;
 
 use Illuminate\Http\Request;
+use App\Service\Helpers\JSend;
 
-use TAuth, Exception;
+use TAuth, Exception, DB, Carbon\Carbon;
+
+use App\Service\ThirdParty\Veritrans\Veritrans_Config;
+use App\Service\ThirdParty\Veritrans\Veritrans_VtWeb;
+
+use App\Infrastructure\Traits\IDRTrait;
 
 class tagihanController extends Controller
 {
+	use IDRTrait;
+
 	public function __construct(Query $query)
 	{
 		parent::__construct();
@@ -29,6 +38,7 @@ class tagihanController extends Controller
 	public function index(Request $request)
 	{
 		$this->active_office 				= TAuth::activeOffice();
+		$office_id 							= $this->active_office['kantor']['id'];
 
 		// 1. set page attributes
 		$this->page_attributes->title		= 'Tagihan';
@@ -46,6 +56,8 @@ class tagihanController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan 			= $this->retrieveTagihanUrutkan();
 		$this->page_datas->active_office 	= $this->active_office;
+		$this->page_datas->total_users 		= Pengguna::where('visas.kantor.id', $this->active_office['kantor']['id'])->count();
+		$this->page_datas->total_billing 	= $this->query->formatMoneyTo(DetailTransaksi::select(DB::raw('sum((harga_satuan - diskon_satuan) * kuantitas) as hutang'))->wherehas('header', function($q)use($office_id){$q->kantor($office_id)->where('tipe', 'bukti_kas_keluar')->where('status', 'pending');})->first()['hutang']);
 
 		//3.initialize view
 		$this->view							= view('notaris.pages.pengaturan.tagihan.index');
@@ -53,6 +65,87 @@ class tagihanController extends Controller
 		return $this->generateView();  
 	}
 
+	public function payCreate(Request $request)
+	{
+		$this->active_office 	= TAuth::activeOffice();
+		$this->logged_user 		= TAuth::loggedUser();
+
+		//1. Ambil data order detail
+		$data_trs	= Query::kantor($this->active_office['kantor']['id'])->where('status', 'pending')->where('tipe', 'bukti_kas_keluar')->with(['details'])->get();
+
+		// Set our server key
+		Veritrans_Config::$serverKey = env('VERITRANS_SERVER_KEY', 'VT_KEY');
+
+		// Uncomment for production environment
+		Veritrans_Config::$isProduction = env('VERITRANS_PRODUCTION', false);
+
+		// Comment to disable sanitization
+		Veritrans_Config::$isSanitized 	= true;
+
+		// Comment to disable 3D-Secure
+		Veritrans_Config::$is3ds 		= true;
+
+	    $item_details 	= 	[];
+	    $i 				= 	0;
+	    $total 			= 	0;
+
+	    foreach ($data_trs as $key => $value) 
+	    {
+	    	$nama 					= '';
+	    	$subtotal 				= 0;
+
+	    	foreach ($value['details'] as $key2 => $value2) 
+	    	{
+				$nama 				= $nama.' '.$value2['item'];
+				$subtotal 			= $subtotal + $this->formatMoneyFrom($value2['subtotal']);
+	    	}
+
+	    	$item_details[$i]['id']				= $value['nomor'];
+	    	$item_details[$i]['name']			= $nama;
+	    	$item_details[$i]['price']			= $subtotal;
+	    	$item_details[$i]['quantity']		= 1;
+	    	$i 									= $i + 1;
+	    	$total 								= $total + $subtotal;
+	    }
+
+		// Fill transaction data
+		$transaction_details	= 	[
+										'order_id' 		=> $this->generatePaymentID($this->active_office['kantor']['id'], Carbon::now()),
+										'gross_amount'	=> $total // no decimal allowed for creditcard
+									];
+
+		// Optional
+		$billing_address		= 	[
+										'first_name'	=> $this->active_office['kantor']['notaris']['nama'],
+										'address'		=> $this->active_office['kantor']['notaris']['alamat'],
+										'phone'			=> $this->active_office['kantor']['notaris']['telepon'],
+									];
+
+
+		// Optional
+		$customer_details		= 	[
+										'first_name'		=> $this->active_office['kantor']['notaris']['nama'],
+										'email'				=> $this->active_office['kantor']['notaris']['email'],
+										// 'email'				=> $this->logged_user['email'],
+										'billing_address'	=> $billing_address,
+									];
+
+		// Fill transaction details
+		$transaction			=	[
+										'transaction_details'	=> $transaction_details,
+										'customer_details'		=> $customer_details,
+										'item_details'			=> $item_details,
+									];
+		$vtweb_url				= Veritrans_VtWeb::getRedirectionUrl($transaction);
+
+		// Redirect
+		dd(header('Location: ' . $vtweb_url));
+	}
+
+	private function generatePaymentID($kantor_id, $tanggal)
+	{
+		return 'PAYMN'.$kantor_id.$tanggal->format('m').$tanggal->format('y');
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -138,7 +231,7 @@ class tagihanController extends Controller
 	{
 		if(is_null($month))
 		{
-			$month 			= Carbon::parse('last day of this month')->endofTheDay();
+			$month 			= Carbon::parse('last day of this month')->endofDay();
 		}
 
 		$users 				= Pengguna::where('visas.kantor.id', $this->active_office['kantor']['id'])->get();
@@ -167,7 +260,7 @@ class tagihanController extends Controller
 	{
 		if(is_null($month))
 		{
-			$month 			= Carbon::parse('last day of this month')->endofTheDay();
+			$month 			= Carbon::parse('last day of this month')->endofDay();
 		}
 
 		$users 				= Pengguna::where('visas.kantor.id', $this->active_office['kantor']['id'])->notID($id)->get();

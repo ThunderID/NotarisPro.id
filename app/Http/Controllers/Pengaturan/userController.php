@@ -9,7 +9,7 @@ use App\Service\Helpers\JSend;
 
 use Illuminate\Http\Request;
 
-use TAuth, Exception;
+use TAuth, Exception, Carbon\Carbon, Validator;
 
 class userController extends Controller
 {
@@ -51,6 +51,86 @@ class userController extends Controller
 		$this->view							= view('notaris.pages.pengaturan.user.index');
 
 		return $this->generateView();  
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create(Request $request, $id = null)
+	{
+		$this->active_office 				= TAuth::activeOffice();
+
+		//2. init akta as null
+		$this->page_datas->user 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+
+		if(!$this->page_datas->user || is_null($id))
+		{
+			$this->page_datas->user			= null;
+		}
+
+		$this->page_datas->id 				= $id;
+		$this->page_datas->active_office	= $this->active_office;
+
+		//2. set page attributes
+		$this->page_attributes->title		= 'User';
+
+		//3.initialize view
+		$this->view							= view('notaris.pages.pengaturan.user.create');
+
+		return $this->generateView();  
+	}
+
+	public function edit(Request $request, $id = null)
+	{
+		return $this->create($request, $id);
+	}
+
+	public function store(Request $request, $id = null)
+	{
+		try {
+			//set this function
+			$this->active_office= TAuth::activeOffice();
+			$this->logged_user	= TAuth::loggedUser();
+
+			//2. get store document
+			$user				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+			
+			if(!$user || is_null($id))
+			{
+				$user 			= new $this->query;
+				$password 		= rand(10000000,99999999);
+				$user->password = $password;
+			}
+
+			$user->nama 		= $request->get('user_nama');
+			$user->email 		= $request->get('user_email');
+			$visas[0]			= [
+									'type'			=> $this->logged_user['visas'][0]['type'],
+									'started_at'	=> Carbon::now()->format('Y-m-d H:i:s'),
+									'expired_at'	=> $this->logged_user['visas'][0]['expired_at'],
+									'role'			=> $request->get('user_role'),
+									'kantor'		=> 	[
+															'id'	=> $this->active_office['kantor']['id'],
+															'nama'	=> $this->active_office['kantor']['nama'],
+														]
+								  ];
+			$user->visas 		= $visas;
+			$user->save();
+
+			$this->page_attributes->msg['success']	= ['User Berhasil Disimpan. '.(isset($password) ? 'Password '.$user->nama.' '.$password : '')];
+	
+			return $this->generateRedirect(route('pengaturan.user.index'));
+		} catch (Exception $e) {
+			$this->page_attributes->msg['error']	= $e->getMessage();
+			return $this->generateRedirect(route('pengaturan.user.edit', ['id' => $id]));
+		}
+	}
+
+	public function update(Request $request, $id = null)
+	{
+		return $this->create($request, $id);
 	}
 
 	private function retrieveUser($query)
