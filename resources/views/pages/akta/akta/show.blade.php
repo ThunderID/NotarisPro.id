@@ -55,7 +55,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a id="link-edit-as-copy" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary">
+							<a id="link-edit-as-copy" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary disabled">
 								<span class="fa-stack">
 									<i class="fa fa-copy"></i>
 								</span>
@@ -232,7 +232,18 @@
 		// global vars
 		var element_source = $(e);
 		var id = element_source.attr('data_id_akta');
-		var judul = element_source.find('#judul').text(); 
+		var judul = element_source.find('#judul').text();
+
+		// sets action 
+		setEdit(element_source.attr('data_id_akta'));
+		$('#deleteModal').find('form').attr('action', window.location.href + '/' + element_source.attr('data_id_akta'));
+		// policy edit as copy
+		if(canEditAsCopy(element_source.find('#status').text())){
+			setEditAsCopy(element_source.attr('data_id_akta'));
+			$('#link-edit-as-copy').removeClass('disabled');
+		}else{
+			$('#link-edit-as-copy').addClass('disabled');
+		}
 
 		modulShowAkta(id, judul);
 	}
@@ -249,10 +260,6 @@
 		if(judul == null){
 			judul = '...';
 		}
-
-		// sets actions
-		setEditAsCopy(id);
-		setEdit(id);
 
 		// sets url
 		window.history.pushState(null, null, '/akta/akta/' + id);
@@ -285,10 +292,20 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			console.log(resp);
-			// re-set judul
-			$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
-			$('#akta_show').find('#judul_akta').text(resp.judul);
+			// reloaded or from index
+			if($(document.getElementById('sidebar-header')).find('#title').text() == '...'){
+				// re-set actions
+				setEdit(id_akta);
+				if(canEditAsCopy(resp.status)){
+					setEditAsCopy(id_akta);
+					$('#link-edit-as-copy').removeClass('disabled');
+				}
+				$('#deleteModal').find('form').attr('action', window.location.href );
+
+				// re-set judul
+				$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
+				$('#akta_show').find('#judul_akta').text(resp.judul);
+			}
 
 			// sidebar-content			
 			var sc = $(document.getElementById('sidebar-content'));
@@ -418,4 +435,16 @@
 		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
 	}
 	/* EndAction Links */
+
+
+	/* Start Policies */
+	// policy edit as copy
+	function canEditAsCopy(val){
+		if(val == 'salinan'){
+			return true;
+		}
+		return false;
+	}
+
+	/* End Policies */
 @endpush
