@@ -22609,6 +22609,9 @@ __webpack_require__("./resources/assets/js/plugins/ajax.js");
 // stringManipulator
 __webpack_require__("./resources/assets/js/plugins/stringManipulator.js");
 
+// print any element
+__webpack_require__("./resources/assets/js/plugins/printElement.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -35624,6 +35627,73 @@ if (!("classList" in document.createElement("_"))) {
     return MediumEditor;
 }());
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module), __webpack_require__("./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/printElement.js":
+/***/ (function(module, exports) {
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*
+	=====================================================================
+	printElement
+	=====================================================================
+	Version     : 0.1
+	Author      : Budi
+	Requirement : jQuery
+*/
+
+// var printElement = function(){
+window.printElement = new function () {
+
+	this.init = function () {
+		return true;
+	};
+
+	this.print = function () {
+		window.print();
+	};
+
+	this.setElementPrint = function (elem, append, delimiter) {
+
+		initializeDocument();
+
+		var domClone = elem.cloneNode(true);
+		var $printSection = document.getElementById("printSection");
+		if (!$printSection) {
+			$printSection = document.createElement("div");
+			$printSection.id = "printSection";
+			document.body.appendChild($printSection);
+		}
+
+		if (append !== true) {
+			$printSection.innerHTML = "";
+		} else if (append === true) {
+			if (typeof delimiter === "string") {
+				$printSection.innerHTML += delimiter;
+			} else if ((typeof delimiter === "undefined" ? "undefined" : _typeof(delimiter)) === "object") {
+				$printSection.appendChlid(delimiter);
+			}
+		}
+
+		$printSection.appendChild(domClone);
+	};
+
+	function initializeDocument() {
+		function addStyleString(str) {
+			var node = document.createElement('style');
+			node.innerHTML = str;
+			document.body.appendChild(node);
+		}
+
+		addStyleString('@media screen {#printSection {display: none;}}');
+		addStyleString('@media print {body * {visibility:hidden;}#printSection, #printSection * {visibility:visible;}#printSection {position:absolute;left:0;top:0;}}');
+	}
+}();
+
+// This the interface
+// window.thunder.printElement = new printElement();
 
 /***/ }),
 
