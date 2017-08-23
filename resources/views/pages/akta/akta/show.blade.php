@@ -162,7 +162,6 @@
 									<i class="fa fa-check-square-o" aria-hidden="true"></i>
 								</span>
 								<span id="dokumen">
-									_
 								</span>
 							</h6>
 						</div>
@@ -172,7 +171,6 @@
 									<i class="fa fa-square-o" aria-hidden="true"></i>
 								</span>
 								<span id="dokumen">
-									_
 								</span>
 							</h6>
 						</div>	
@@ -195,9 +193,9 @@
 					<div hidden>
 						<div class="row">
 							<div class="col-12" id="template-riwayat-status">
-								<h7 id="template-tanggal" class="text-muted">_/_/__</h7>
-								<h6 id="template-status" class="mb-1">_</h6>
-								<h6 id="template-editor" style="font-weight: 100;">_</h6>
+								<h7 id="template-tanggal" class="text-muted"></h7>
+								<h6 id="template-status" class="mb-1"></h6>
+								<h6 id="template-editor" style="font-weight: 100;"></h6>
 							</div>
 						</div>
 					</div>
@@ -236,21 +234,21 @@
 
 		// sets action 
 		setEdit(element_source.attr('data_id_akta'));
-		$('#deleteModal').find('form').attr('action', window.location.href + '/' + element_source.attr('data_id_akta'));
+		$(document.getElementById('deleteModal')).find('form').attr('action', window.location.href + '/' + element_source.attr('data_id_akta'));
 		// policy edit as copy
 		if(canEditAsCopy(element_source.find('#status').text())){
 			setEditAsCopy(element_source.attr('data_id_akta'));
-			$('#link-edit-as-copy').removeClass('disabled');
+			$(document.getElementById('link-edit-as-copy')).removeClass('disabled');
 		}else{
-			$('#link-edit-as-copy').addClass('disabled');
+			$(document.getElementById('link-edit-as-copy')).addClass('disabled');
 		}
 
 		modulShowAkta(id, judul);
 	}
 
 	function hideAkta(e){
-		$('#akta_show').fadeOut('fast', function(){
-			$('#text-editor').empty();
+		$(document.getElementById('akta_show')).fadeOut('fast', function(){
+			$(document.getElementById('text-editor')).empty();
 			window.history.pushState(null, null, '/akta/akta');
 		});		
 	}
@@ -269,7 +267,7 @@
 
 		/* re-init */
 		// sidebar-header
-		var sh = $(document.getElementById('sidebar-header'));
+		sh = $(document.getElementById('sidebar-header'));
 		sh.find('#title').text(judul);
 
 		// reset state
@@ -280,8 +278,8 @@
 		$('.show-on-error').hide();
 
 		// ui display
-		$('#akta_show').fadeIn('fast');
-		$('#akta_show').find('#judul_akta').text(judul);
+		$(document.getElementById('akta_show')).fadeIn('fast');
+		$(document.getElementById('akta_show')).find('#judul_akta').text(judul);
 	}
 	/* End UI page */
 
@@ -292,89 +290,123 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			// reloaded or from index
-			if($(document.getElementById('sidebar-header')).find('#title').text() == '...'){
-				// re-set actions
-				setEdit(id_akta);
-				if(canEditAsCopy(resp.status)){
-					setEditAsCopy(id_akta);
-					$('#link-edit-as-copy').removeClass('disabled');
-				}
-				$('#deleteModal').find('form').attr('action', window.location.href );
+			try {
 
-				// re-set judul
-				$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
-				$('#akta_show').find('#judul_akta').text(resp.judul);
-			}
-
-			// sidebar-content			
-			var sc = $(document.getElementById('sidebar-content'));
-			sc.find('#status_akta').text(window.stringManipulator.toDefaultReadable(resp.status));
-			var tmplt = sc.find('#pihak').find('#template');
-			$('.pihak').remove();
-			resp.pemilik.klien.forEach(function(element) {
-				rslt = $(tmplt).clone().appendTo(sc.find('#pihak'));
-				rslt.text(element.nama);
-				rslt.removeAttr('hidden');
-				rslt.addClass('pihak');
-			});
-			sc.find('#tanggal_pembuatan').text(resp.tanggal_pembuatan);
-			sc.find('#penulis').text(resp.penulis.nama);
-			sc.find('#tanggal_sunting').text(resp.tanggal_sunting);
-			sc.find('#versi').text(resp.versi);
-
-			// kelengkapan dokumen
-			var k = $(document.getElementById('kelengkapan'));
-			k.find('#content').empty();
-
-			$.map(resp.incomplete.pihak, function(value, index) {
-				tmp = k.find('#template-judul');
-				target = tmp.clone().appendTo(k.find('#content'));
-				target.find('#title').text(tmp.find('#title').text() + ' ' + index);
-				target.removeAttr('id');
-
-				$.map(value, function(val, key) {
-					if(val == false){
-						tmp = k.find('#template-dokumen-not-ok');
-						target = tmp.clone().appendTo(k.find('#content'));
-						target.find('#dokumen').text(key);
-						target.removeAttr('id');
-					}else{
-						tmp = k.find('#template-dokumen-ok');
-						target = tmp.clone().appendTo(k.find('#content'));
-						target.find('#dokumen').text(key);
-						target.removeAttr('id');
+				// reloaded or from index
+				if($(document.getElementById('sidebar-header')).find('#title').text() == '...'){
+					// re-set actions
+					setEdit(id_akta);
+					if(canEditAsCopy(resp.status)){
+						setEditAsCopy(id_akta);
+						$(document.getElementById('link-edit-as-copy')).removeClass('disabled');
 					}
+					$(document.getElementById('deleteModal')).find('form').attr('action', window.location.href );
+
+					// re-set judul
+					$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
+					$(document.getElementById('akta_show')).find('#judul_akta').text(resp.judul);
+				}
+
+				// sidebar-content			
+				var sc = $(document.getElementById('sidebar-content'));
+				sc.find('#status_akta').text(window.stringManipulator.toDefaultReadable(resp.status));
+				var tmplt = sc.find('#pihak').find('#template');
+				$('.pihak').remove();
+				if(resp.pemilik.klien){
+					resp.pemilik.klien.forEach(function(element) {
+						rslt = $(tmplt).clone().appendTo(sc.find('#pihak'));
+						rslt.text(element.nama);
+						rslt.removeAttr('hidden');
+						rslt.addClass('pihak');
+					});
+				}else{
+					rslt = $(tmplt).clone().appendTo(sc.find('#pihak'));
+					rslt.text('Belum ada data');
+					rslt.removeAttr('hidden');
+					rslt.addClass('pihak');
+				}
+
+				sc.find('#tanggal_pembuatan').text(resp.tanggal_pembuatan);
+				sc.find('#penulis').text(resp.penulis.nama);
+				sc.find('#tanggal_sunting').text(resp.tanggal_sunting);
+				sc.find('#versi').text(resp.versi);
+
+				// kelengkapan dokumen
+				var k = $(document.getElementById('kelengkapan'));
+				k.find('#content').empty();
+
+				if(resp.incomplete.pihak){
+					$.map(resp.incomplete.pihak, function(value, index) {
+						tmp = k.find('#template-judul');
+						target = tmp.clone().appendTo(k.find('#content'));
+						target.find('#title').text(tmp.find('#title').text() + ' ' + index);
+						target.removeAttr('id');
+
+						$.map(value, function(val, key) {
+							if(val == false){
+								tmp = k.find('#template-dokumen-not-ok');
+								target = tmp.clone().appendTo(k.find('#content'));
+								target.find('#dokumen').text(key);
+								target.removeAttr('id');
+							}else{
+								tmp = k.find('#template-dokumen-ok');
+								target = tmp.clone().appendTo(k.find('#content'));
+								target.find('#dokumen').text(key);
+								target.removeAttr('id');
+							}
+						});
+
+						tmp = k.find('#template-spacer');
+						target = tmp.clone().appendTo(k.find('#content'));
+						target.removeAttr('id');				
+					});
+				}else{
+					tmp = k.find('#template-judul');
+					target = tmp.clone().appendTo(k.find('#content'));
+					target.find('#title').text('Belum ada data');
+					target.removeAttr('id');
+				}
+
+
+				// history status
+				var rs = $(document.getElementById('riwayat_status'));
+				rs.find('#content').empty();
+
+				if(resp.riwayat_status){
+					resp.riwayat_status.forEach(function(element) {
+						tmp = rs.find('#template-riwayat-status');
+						target = tmp.clone().appendTo(rs.find('#content'));
+						target.find('#template-tanggal').text(element.tanggal);
+						target.find('#template-status').text(window.stringManipulator.toDefaultReadable(element.status));
+						target.find('#template-editor').text(element.editor.nama);
+						target.removeAttr('id');
+					});
+				}else{
+					tmp = rs.find('#template-riwayat-status');
+					target = tmp.clone().appendTo(rs.find('#content'));
+					target.find('#template-status').text('Belum ada data');
+					target.removeAttr('id');
+				}
+
+
+				// editor
+				resp.paragraf.forEach(function(element) {
+					$(document.getElementById('text-editor')).append(element.konten);
+				});
+				$(document.getElementById('page')).scrollTop(0);
+
+				// ui on complete
+				$('.disabled-before-load').removeClass("disabled");
+				$('.loader').fadeOut('fast', function(){
+					$('.hide-before-load').fadeIn();
 				});
 
-				tmp = k.find('#template-spacer');
-				target = tmp.clone().appendTo(k.find('#content'));
-				target.removeAttr('id');				
-			});
-
-			// history status
-			resp.riwayat_status.forEach(function(element) {
-				var rs = $(document.getElementById('riwayat_status'));
-				tmp = rs.find('#template-riwayat-status');
-				target = tmp.clone().appendTo(rs.find('#content'));
-				target.find('#template-tanggal').text(element.tanggal);
-				target.find('#template-status').text(window.stringManipulator.toDefaultReadable(element.status));
-				target.find('#template-editor').text(element.editor.nama);
-				target.removeAttr('id');
-			});
-
-			// editor
-			resp.paragraf.forEach(function(element) {
-				$('#text-editor').append(element.konten);
-			});
-			$('#page').scrollTop(0);
-
-			// ui on complete
-			$('.disabled-before-load').removeClass("disabled");
-			$('.loader').fadeOut('fast', function(){
-				$('.hide-before-load').fadeIn();
-			});
-
+			}
+			catch(err){
+				$('.show-before-load').hide();
+				$('.show-on-error').show();
+				$(document.getElementById('loader-error-code')).text('422');
+			}
 		});
 		ajax_akta.defineOnError(function(resp){
 			$('.show-before-load').hide();
@@ -425,11 +457,11 @@
 	/* Set Action Links */
 	function setEditAsCopy(id_akta){
 		var url = "{{ route('akta.akta.copy', ['id' => null]) }}/" + id_akta;
-		$('#link-edit-as-copy').attr('data-url', url);
+		$(document.getElementById('link-edit-as-copy')).attr('data-url', url);
 	}
 	function setEdit(id_akta){
 		var url = "{{ route('akta.akta.show', ['id' => null]) }}/" + id_akta + "/edit";
-		$('#link-edit').attr('data-url', url);
+		$(document.getElementById('link-edit')).attr('data-url', url);
 	}
 	function triggerOpenWindow(e){
 		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
