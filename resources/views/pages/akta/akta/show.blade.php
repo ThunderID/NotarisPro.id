@@ -63,7 +63,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="javascript:void(0);" data-url="#" class="text-primary disabled-before-load disabled">
+							<a href="javascript:void(0);" onclick="triggerPrint();" class="text-primary disabled-before-load disabled">
 								<span class="fa-stack">
 									<i class="fa fa-print" aria-hidden="true"></i>
 								</span>
@@ -433,6 +433,10 @@
 	}
 	function triggerOpenWindow(e){
 		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
+	}
+	function triggerPrint(){
+		window.printElement.setElementPrint(document.getElementById('page-content'));
+		window.printElement.print();
 	}
 	/* EndAction Links */
 
