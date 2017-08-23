@@ -177,9 +177,7 @@
 									</ol>
 								@endif
 							</td>
-							<td>
-								{{ str_replace('_', ' ', $data['status']) }}
-							</td>
+							<td id="status">{{ str_replace('_', ' ', $data['status']) }}</td>
 							<td>
 								{{ $data['tanggal_pembuatan'] }}
 							</td>					

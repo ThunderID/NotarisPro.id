@@ -71,9 +71,10 @@ class aktaController extends Controller
 	public function trashed(Request $request)
 	{
 		$this->active_office 				= TAuth::activeOffice();
+		$this->page_datas->id 				= null;
 
 		// 1. set page attributes
-		$this->page_attributes->title		= 'Akta Dokumen';
+		$this->page_attributes->title		= 'Akta Terhapus';
 
 		// 2. call all aktas data needed
 		//2a. parse query searching
@@ -428,11 +429,11 @@ class aktaController extends Controller
 			$akta 				= $akta->save();
 
 			$this->page_attributes->msg['success']		= ['Akta Berhasil di duplikasi'];
-			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+			return $this->generateRedirect(route('akta.akta.edit', $akta['id']));
 		} 
 		catch (Exception $e) {
 			$this->page_attributes->msg['error']       = $e->getMessage();
-			return $this->generateRedirect(route('akta.akta.show', $akta_id));
+			return $this->generateRedirect(route('akta.akta.edit', $akta_id));
 		}
 	}
 

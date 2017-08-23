@@ -37,6 +37,7 @@
 							   don't want trigger modal, and use this 
 							   menu to redirect instead.
 			icon 			=> fa icon class you want
+			id 				=> element id
 			route 			=> url routing Not the route it self. 
 							   This will not working if you set 
 							   trigger_modal parameter
@@ -128,7 +129,7 @@
 			<div class="row bg-faded">
 
 				{{-- Title --}}
-				<div class="col-9 col-sm-10 col-md-10 col-lg-11 col-xl-11">
+				<div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-10">
 					<div style="text-overflow:ellipsis; width:100%;">
 						<span id="judul_akta" class="navbar-text mb-0 text-muted">				
 							{!! isset($title) ? $title : '' !!}
@@ -138,7 +139,7 @@
 
 
 				{{-- Menu Buttons --}}
-				<div class="col-3 col-sm-2 col-md-2 col-lg-1 col-xl-1 pr-0">
+				<div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-2 pr-0">
 					<ul class="nav menu-content justify-content-end">
 						@foreach($menus as $key => $menu)
 						
@@ -151,13 +152,15 @@
 							?>
 
 							<li class="nav-item {{ isset($menu['hide_on']) ? $menu['hide_on'] : '' }}">
-								<a class="nav-link text-center {{ isset($menu['class']) ? $menu['class'] : '' }}"
+								<a id="{{ isset($menu['id']) ? $menu['id'] : ''}}" class="nav-link text-center {{ isset($menu['class']) ? $menu['class'] : '' }}"
 									href="{{ isset($menu['trigger_modal']) ? 'javascript:void(0);' : $route }}" 
 									{{ isset($menu['trigger_modal']) ? 'data-toggle=modal data-target=' . $menu['trigger_modal'] : '' }}
 								>
-									<i class="fa {{ isset($menu['icon']) ? $menu['icon'] : '' }}"></i>&nbsp;
+									<i class="fa {{ isset($menu['icon']) ? $menu['icon'] : '' }}"></i>
+									@if(isset($menu['title']) && $menu['title'] !== '')
 									<span class="hidden-md-down"> {{ isset($menu['title']) ? $menu['title'] : '' }}</span>
 									<span class="hidden-md-up"> {{ isset($menu['title']) ? $menu['title'] : '' }}</span>
+									@endif
 								</a>
 							</li>
 						@endforeach
