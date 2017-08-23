@@ -6,9 +6,16 @@
 			'menus' 		=> [
 					[
 						"title" 			=> "",		
+						"route" 			=> "javascript:sidebarManagement();",
+						"class" 			=> "akta_close mr-2 show-smaller-paper disabled",
+						"icon"				=> "fa-info",
+						"id" 				=> "trigger-info-sidebar"
+					],			
+					[
+						"title" 			=> "",		
 						"route" 			=> "javascript:hideAkta();",
-						"class" 			=> "akta_close",
-						"special" 			=> "close"
+						"icon" 				=> "fa-times",
+						"class" 			=> "akta_close"
 					],
 			]
 		])
@@ -37,14 +44,14 @@
 			</div>			
 		</div>
 
-		<div class="sidebar sidebar-right subset-2menu" style="width: 297px;">
+		<div id="sidebar-info" class="sidebar sidebar-right subset-2menu" style="width: 297px;">
 
 			<div id="sidebar-header" class="col-12 pt-2 pb-2">
 				<h5>
 					<b id="title">...</b>
-					<span class="float-right pr-1">
+					<span class="float-right pr-1 show-smaller-paper">
 						<small>
-							<a href="#" style="font-weight: 100;">
+							<a href="javascript:void(0);" onclick="javascript:sidebarManagement();" style="font-weight: 100;">
 								<span aria-hidden="true" style="font-size: 20px;">&times;</span>
 							</a>
 						</small>
@@ -234,6 +241,13 @@
 
 	/* Start UI page */
 	function showAkta(e){
+		// init template
+		//sidebar
+		if($( window ).width() > '793'){
+			showSidebar();
+			$(document.getElementById('trigger-info-sidebar')).addClass('disabled');
+		}
+
 		// global vars
 		var element_source = $(e);
 		var id = element_source.attr('data_id_akta');
@@ -490,4 +504,25 @@
 	}
 
 	/* End Policies */
+
+
+	/* Start Sidebar Function */
+	function hideSidebar(){
+		$(document.getElementById('sidebar-info')).attr('hidden','true');
+	}
+	function showSidebar(){
+		$(document.getElementById('sidebar-info')).removeAttr('hidden');
+	}
+	function sidebarManagement(){
+		if($(document.getElementById('sidebar-info')).attr('hidden')){
+			$(document.getElementById('trigger-info-sidebar')).addClass('disabled');
+			showSidebar();
+		}else{
+			$(document.getElementById('trigger-info-sidebar')).removeClass('disabled');
+			hideSidebar();
+		}
+	}
+
+	/* End Sidebar Function */
+
 @endpush
