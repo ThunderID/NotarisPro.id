@@ -15,6 +15,7 @@ class InitNewArchTableSeeder extends Seeder
 		DB::table('akta_dokumen')->truncate();
 		DB::table('notaris_klien')->truncate();
 		DB::table('notaris_arsip')->truncate();
+		DB::table('jadwal_pertemuan')->truncate();
 
 		$credentials[0]	= ['email' => 'admin@notaris.id', 'password' => 'admin'];
 		$credentials[1]	= ['email' => 'drafter@notaris.id', 'password' => 'admin'];
@@ -23,7 +24,7 @@ class InitNewArchTableSeeder extends Seeder
 
 		$hari 			= ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
 		$ju_akta 		= ['Akta Jual Beli', 'Akta Pemberian Hak Tanggungan', 'Akta Fidusia', 'Akta Perjanjian Sewa'];
-		$je_akta 		= ['AJB'];
+		$je_akta 		= ['AJB', 'APHT', 'Fidusia', 'PERJANJIANSEWA'];
 
 		$pekerjaan 		= ['Direktur ', 'Karyawan ', 'Manager ', 'Supervisor '];
 		$kab 			= ['Banyuwangi', 'Gresik', 'Kediri', 'Lamongan', 'Magetan', 'Malang', 'Mojokerto', 'Pamekasan', 'Pasuruan', 'Ponorogo', 'Situbondo', 'Sumenep', 'Tuban', 'Bangkalan', 'Bondowoso', 'Jember', 'Ngawi', 'Pacitan', 'Sampang', 'Tulungagung', 'Blitar', 'Bojonegoro', 'Jombang', 'Lumajang', 'Madiun', 'Nganjuk', 'Probolinggo', 'Sidoarjo', 'Trenggalek'];
@@ -33,7 +34,7 @@ class InitNewArchTableSeeder extends Seeder
 		$notaris_aktif	=  App\Domain\Admin\Models\Kantor::find($active_office['kantor']['id']);
 
 		//init draft
-		foreach (range(0, 9) as $key) 
+		foreach (range(0, 19) as $key) 
 		{
 			$klien_1 			= [
 				'nama' 				=> $faker->name($gender='male'),
@@ -62,7 +63,8 @@ class InitNewArchTableSeeder extends Seeder
 			$isi 				= '<h4 class="text-center"><b style="color: rgb(41, 43, 44); font-size: 1rem;">PEJABAT PEMBUAT AKTA TANAH</b></h4><h4 class="text-center"><span class="medium-editor-mention-at" data-mention="@notaris.nama@">'.$notaris_aktif['notaris']['nama'].'</span>&nbsp;</h4><h4 class="text-center">DAERAH KERJA <span class="medium-editor-mention-at" data-mention="@notaris.daerah_kerja@">'.$notaris_aktif['notaris']['daerah_kerja'].'</span>&nbsp;</h4><h4 class="text-center">SK. Kepala Badan Pertanahan Nasional Nomor : <span class="medium-editor-mention-at" data-mention="@notaris.nomor_sk@">'.$notaris_aktif['notaris']['nomor_sk'].'</span>&nbsp;</h4><h4 class="text-center">Tanggal <span class="medium-editor-mention-at" data-mention="@notaris.tanggal_pengangkatan@">'.$notaris_aktif['notaris']['tanggal_pengangkatan'].'</span>&nbsp;</h4><h4 class="text-center"><span class="medium-editor-mention-at" data-mention="@notaris.alamat@">'.$notaris_aktif['notaris']['alamat'].'</span>&nbsp;<span class="medium-editor-mention-at" data-mention="@notaris.telepon@">'.$notaris_aktif['notaris']['telepon'].'</span>&nbsp;</h4><p class="text-center">------------------------------------------------------------------</p><h5 class="text-center"><b>AKTA JUAL BELI</b></h5><h5 class="text-center">Nomor <span class="medium-editor-mention-at" data-mention="@akta.nomor@"></span>&nbsp;</h5><h5 class="text-center"><i>Lembar Pertama / Kedua</i></h5><p style="text-align: left;">Pada hari ini <span class="medium-editor-mention-at" data-mention="@akta.tanggal@"></span>&nbsp;hadir dihadapan saya <span class="medium-editor-mention-at" data-mention="@notaris.nama@">'.$notaris_aktif['notaris']['nama'].'</span>&nbsp;yang berdasarkan surat keputusan menteri Agraria / Kepala Badan Pertanahan Nasional tanggal <span class="medium-editor-mention-at" data-mention="@notaris.tanggal_pengangkatan@">'.$notaris_aktif['notaris']['tanggal_pengangkatan'].'</span>&nbsp;nomor <span class="medium-editor-mention-at" data-mention="@notaris.nomor_sk@">'.$notaris_aktif['notaris']['nomor_sk'].'</span>&nbsp;diangkat / ditunjuk sebagai Pejabat Pembuat Akta Tanah&nbsp;, yang selanjutnya disebut PPAT, yang dimaksud dalam pasal 7 Peraturan Pemerintah Nomor 24 Tahun 1997 tentang pendaftaran tanah, dengan daerah kerja <span class="medium-editor-mention-at" data-mention="@notaris.daerah_kerja@">'.$notaris_aktif['notaris']['daerah_kerja'].'</span>&nbsp;dengan dihadiri oleh saksi - saksi yang saya kenal dan akan disebut pada bagian akhir akta ini :</p><ol><li><span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.nama@">'.$klien_1['nama'].'</span>&nbsp;lahir di <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.tempat_lahir@">'.$klien_1['tempat_lahir'].'</span>&nbsp;pada tanggal <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.tanggal_lahir@">'.$klien_1['tanggal_lahir'].'</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.pekerjaan@">'.$klien_1['pekerjaan'].'</span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.alamat@"></span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.nik@">'.$klien_1['nik'].'</span>&nbsp;<br> <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.deskripsi@"></span>&nbsp;<br>Selaku penjual, yang selanjutnya disebut sebagai<br>PIHAK PERTAMA</li><li><span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.nama@">'.$klien_2['nama'].'</span>&nbsp;lahir di <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.tempat_lahir@">'.$klien_2['tempat_lahir'].',</span>&nbsp;pada tanggal <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.tanggal_lahir@">'.$klien_2['tanggal_lahir'].'</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.pekerjaan@"></span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.alamat@"></span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.nik@">'.$klien_2['nik'].'<br></span> <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.deskripsi@"></span><br>Selaku pembeli, yang selanjutnya disebut sebagai<br>PIHAK KEDUA, dalam hal ini bertindak sebagai istri dari saudara <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.suami.nama@">'.$klien_1['nama'].'</span>pemilik nomor kartu tanda penduduk <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.suami.nik@">'.$klien_1['nik'].'</span><br></li></ol>';
 
 			//test buat akta baru
-			$akta 			= new App\Service\Akta\BuatAktaBaru($ju_akta[0], $je_akta[0], $isi);
+			$jrand 			= rand(0,3);
+			$akta 			= new App\Service\Akta\BuatAktaBaru($ju_akta[$jrand], $je_akta[$jrand], $isi);
 			$akta 			= $akta->save();
 
 			//test update akta dalam proses

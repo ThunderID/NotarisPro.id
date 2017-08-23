@@ -110,18 +110,18 @@ class bpnController extends Controller
 			//2. get store document
 			$bpn				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 			
-			if(!$bpn)
+			if(is_null($id))
 			{
 				$bpn 			= new $this->query;
 			}
 
-			$akta 				= Dokumen::where('nomor_akta', $request->get('nomor_akta'))->kantor($this->active_office['kantor']['id'])->first();
+			$akta 				= Dokumen::where('nomor', $request->get('nomor_akta'))->kantor($this->active_office['kantor']['id'])->first();
 
 			$bpn->title 		= $akta['judul'];
 			$bpn->start 		= $request->get('tanggal_mulai');
 			$bpn->end 			= $request->get('tanggal_selesai');
 			$bpn->tempat 		= $request->get('tempat');
-			$bpn->referensi 	= ['id' => $akta['id'], 'nomor_akta' => $request->get('nomor_akta')];
+			$bpn->referensi 	= ['id' => $akta['id'], 'nomor_akta' => $request->get('nomor_akta'), 'judul_akta' => $akta['judul']];
 
 			$bpn->pembuat 		= ['kantor' => $this->active_office['kantor']];
 			$bpn->save();

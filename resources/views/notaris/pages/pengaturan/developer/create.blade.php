@@ -38,7 +38,7 @@
 							</div>
 						</div>					
 						
-						<fieldset class="form-group">
+						<!-- <fieldset class="form-group">
 							<div class="row">
 								<div class="col-12">
 									<label class="control-label" for="GCAL"><strong>Google Calendar</strong></label>  
@@ -52,7 +52,7 @@
 									<input name="developer_gcal_secret" class="form-control" type="password" required>
 								</div>
 							</div>
-						</fieldset>	
+						</fieldset>	 -->
 						
 						<div class="clearfix">&nbsp;</div>
 						<fieldset class="form-group">
@@ -68,7 +68,7 @@
 						</fieldset>	
 						
 						<div class="clearfix">&nbsp;</div>
-						<fieldset class="form-group">
+						<!-- <fieldset class="form-group">
 							<div class="row">
 								<div class="col-12">
 									<label class="control-label" for="SMTP"><strong>SMTP Mail<strong></label>  
@@ -82,7 +82,7 @@
 									<input name="developer_smtp_password" class="form-control" type="password" required>
 								</div>
 							</div>
-						</fieldset>	
+						</fieldset>	 -->
 						
 						<fieldset class="form-group">
 							</br>

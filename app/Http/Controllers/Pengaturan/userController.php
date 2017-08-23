@@ -11,8 +11,12 @@ use Illuminate\Http\Request;
 
 use TAuth, Exception, Carbon\Carbon, Validator;
 
+use App\Infrastructure\Traits\GuidTrait;
+
 class userController extends Controller
 {
+	use GuidTrait;
+
 	public function __construct(Query $query)
 	{
 		parent::__construct();
@@ -107,6 +111,7 @@ class userController extends Controller
 			$user->nama 		= $request->get('user_nama');
 			$user->email 		= $request->get('user_email');
 			$visas[0]			= [
+									'id'			=> $this->createID('NEW'),
 									'type'			=> $this->logged_user['visas'][0]['type'],
 									'started_at'	=> Carbon::now()->format('Y-m-d H:i:s'),
 									'expired_at'	=> $this->logged_user['visas'][0]['expired_at'],

@@ -36,6 +36,8 @@ class UserAttendance extends Model
 	protected $fillable				=	[
 											'pengguna_id'			,
 											'kantor_id'				,
+											'aktivitas'				,
+											'deskripsi'				,
 											'jam_masuk'				,
 											'jam_keluar'			,
 										];

@@ -17,6 +17,8 @@ class CreateUserAttendanceTable extends Migration
             $table->increments('id');
             $table->string('pengguna_id');
             $table->string('kantor_id');
+            $table->text('aktivitas');
+            $table->text('deskripsi');
             $table->datetime('jam_masuk');
             $table->datetime('jam_keluar');
             $table->timestamps();

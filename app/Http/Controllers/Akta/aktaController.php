@@ -461,7 +461,6 @@ class aktaController extends Controller
             $akta               = $akta->toArray();
             //1f. generate checker
             $akta['incomplete']     = $this->checkInclompeteData($akta['dokumen']);
-	        
             // returning akta data
 	        return Response::json($akta);
         }
