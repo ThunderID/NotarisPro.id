@@ -428,11 +428,11 @@ class aktaController extends Controller
 			$akta 				= $akta->save();
 
 			$this->page_attributes->msg['success']		= ['Akta Berhasil di duplikasi'];
-			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+			return $this->generateRedirect(route('akta.akta.edit', $akta['id']));
 		} 
 		catch (Exception $e) {
 			$this->page_attributes->msg['error']       = $e->getMessage();
-			return $this->generateRedirect(route('akta.akta.show', $akta_id));
+			return $this->generateRedirect(route('akta.akta.edit', $akta_id));
 		}
 	}
 
