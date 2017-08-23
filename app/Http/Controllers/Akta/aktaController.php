@@ -71,9 +71,10 @@ class aktaController extends Controller
 	public function trashed(Request $request)
 	{
 		$this->active_office 				= TAuth::activeOffice();
+		$this->page_datas->id 				= null;
 
 		// 1. set page attributes
-		$this->page_attributes->title		= 'Akta Dokumen';
+		$this->page_attributes->title		= 'Akta Terhapus';
 
 		// 2. call all aktas data needed
 		//2a. parse query searching
