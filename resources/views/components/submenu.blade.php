@@ -40,6 +40,7 @@
 			route 			=> url routing Not the route it self. 
 							   This will not working if you set 
 							   trigger_modal parameter
+			special 		=> 'close' : genereate default close menu
 		]
 	*/
 ?>		
@@ -150,6 +151,17 @@
 								}							
 							?>
 
+							@if(isset($menu['special']))
+								@if($menu['special'] == 'close')
+								<li class="nav-item {{ isset($menu['hide_on']) ? $menu['hide_on'] : '' }}">
+									<a class="nav-link text-center {{ isset($menu['class']) ? $menu['class'] : '' }}"
+										href="{{ $route }}"
+									>
+										<span aria-hidden="true" style="font-size: 20px;">&times;</span>
+									</a>
+								</li>								
+								@endif
+							@else
 							<li class="nav-item {{ isset($menu['hide_on']) ? $menu['hide_on'] : '' }}">
 								<a class="nav-link text-center {{ isset($menu['class']) ? $menu['class'] : '' }}"
 									href="{{ isset($menu['trigger_modal']) ? 'javascript:void(0);' : $route }}" 
@@ -160,6 +172,7 @@
 									<span class="hidden-md-up"> {{ isset($menu['title']) ? $menu['title'] : '' }}</span>
 								</a>
 							</li>
+							@endif
 						@endforeach
 					</ul>
 				</div>
