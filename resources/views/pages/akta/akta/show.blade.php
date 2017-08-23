@@ -7,9 +7,9 @@
 					[
 						"title" 			=> "",		
 						"route" 			=> "javascript:hideAkta();",
-						"icon" 				=> "fa-times",
-						"class" 			=> "akta_close"
-					]				
+						"class" 			=> "akta_close",
+						"special" 			=> "close"
+					],
 			]
 		])
 	</div>
@@ -17,19 +17,19 @@
 	<div class="row subset-2menu full-on-mobile" style="background-color: rgba(0, 0, 0, 0.075);">
 
 
-		<div id="page" class="scrollable_panel" style="width: calc(100vw - 297px); float: right;">
+		<div id="page" class="scrollable_panel">
 			
-			<div id="page-loader" class="loader" style="width: calc(100vw - 297px); background: #000;opacity: 0.8; height:100%; position: absolute;">
-				<h4 class="show-before-load" style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -5px;transform:translateX(-20%);">
+			<div id="page-loader" class="loader">
+				<h4 class="show-before-load">
 					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat
 				</h4>
-				<h4 class="show-on-error" style=" width: 272px;height: 57px;position: absolute;top: 50%;left: 50%;margin: -28px 0 0 -5px;transform:translateX(-20%); display: none;">
+				<h4 class="show-on-error" style="display: none;">
 					<a href="javascript:void(0);" onClick="retrySetAktaShow();">
 						<i class="fa fa-refresh" aria-hidden="true"></i> Coba Lagi
 					</a>
 				</h4>
 			</div>
-			<div class="d-flex justify-content-center mx-auto">
+			<div class="d-flex justify-content-center mx-auto page-frame">
 				<div id="page-content" class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 					<div id="text-editor" class="form-group editor">	
 					</div>
@@ -37,11 +37,18 @@
 			</div>			
 		</div>
 
-		<div class="hidden-sm-down sidebar sidebar-right subset-2menu" style="width: 297px;">
+		<div class="sidebar sidebar-right subset-2menu" style="width: 297px;">
 
 			<div id="sidebar-header" class="col-12 pt-2 pb-2">
-				<h5 id="title">
-					<b>...</b>
+				<h5>
+					<b id="title">...</b>
+					<span class="float-right pr-1">
+						<small>
+							<a href="#" style="font-weight: 100;">
+								<span aria-hidden="true" style="font-size: 20px;">&times;</span>
+							</a>
+						</small>
+					</span>
 				</h5>
 
 				<div class="row">
