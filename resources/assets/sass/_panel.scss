@@ -46,3 +46,44 @@
 		width: 100vw !important;
 	}
 }
+
+
+// specified akta show
+
+#akta_show{
+	.scrollable_panel{
+		
+	}
+
+	#page-loader{
+		@media screen and (min-width: 21cm) {
+			width: calc(100vw - 297px); 
+		}
+
+		width: 100vw;  
+		background: #000;
+		opacity: 0.8; 
+		height:100%; 
+		position: absolute;
+
+		h4{
+			width: 272px;
+			height: 57px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: -28px 0 0 -5px;
+			transform:translateX(-20%);
+		}
+	}
+	.page-frame{
+		width: 100vw; 
+		min-width: 21cm;
+
+		@media screen and (min-width: 1095px) {
+			width: calc(100vw - 297px); 
+		}
+	}
+
+}
+
