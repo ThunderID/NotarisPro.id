@@ -31,7 +31,7 @@ class DuplikasiAkta
 	public function __construct($id)
 	{
 		$this->id		= $id;
-		$this->akta		= Dokumen::where('id', $id)->wherenull('next')->status('minuta')->firstorfail();
+		$this->akta		= Dokumen::id($id)->wherenull('next')->status('salinan')->firstorfail();
 	}
 
 	public function save()
@@ -55,20 +55,17 @@ class DuplikasiAkta
 		$dokumen 		= [];
 		foreach ($this->akta->dokumen as $key_td => $tipe_doku) 
 		{
-			//key : pihak
-			//value [1 => ['ktp' => ['nama' => 'ABC'], 'kk' => ['nomor' => '1283']]]]
+			//key : pihak[dot]1
+			//value ['ktp[dot]pribadi' => ['nama' => 'ABC'], 'kk' => ['nomor' => '1283']]]
 			foreach ($tipe_doku as $key_nu => $nomor_urut) 
 			{
-				//key : ktp
+				//key : ktp[dot]pribadi
 				//value ['nama' => 'ABC']
 				foreach ($nomor_urut as $key_jd => $jenis_doku) 
 				{
 					//key : nama
 					//value ABC
-					foreach ($jenis_doku as $key_fd => $field_doku) 
-					{
-						$dokumen[$key_td][$key_nu][$key_jd][$key_fd]	= null;
-					}
+					$dokumen[$key_td][$key_nu][$key_jd]	= null;
 				}
 			}
 		}
@@ -76,11 +73,17 @@ class DuplikasiAkta
 		//3. CHANGE PARAGRAF
 		// remove all lock and stuffs
 		$paragraf 		= [];
+
 		foreach ($this->akta->paragraf as $key => $value) 
 		{
-			$search 					= '/[^<span class="medium-editor-mention-at].*[^data-mention="@].*[^@">](.*)[^<\/span>]/';
-			$replace 					= '';
-			$paragraf[$key]['konten'] 	= preg_replace($search, $replace, $this->akta->paragraf[$key]['konten']);
+			$pattern_span	= '/<span class="medium-editor-mention-at.*?data-mention="@.*?@">(.*?)<\/span>/i';
+			preg_match_all($pattern_span, $value['konten'], $spans);
+
+			$paragraf[$key]['konten']		= $value['konten'];
+			foreach ((array)$spans[1] as $k_span => $v_span) 
+			{
+				$paragraf[$key]['konten']	= str_replace($v_span, '', $paragraf[$key]['konten']);
+			}
 		}
 
 		//4. ASSIGN WRITER
@@ -92,8 +95,8 @@ class DuplikasiAkta
 		// 6. parse inisialisasi dokumen akta
 		$akta->status	= 'dalam_proses';
 		$akta->versi	= '1';
-		$akta->judul	= $this->judul;
-		$akta->jenis	= $this->jenis;
+		$akta->judul	= $this->akta->judul;
+		$akta->jenis	= $this->akta->jenis;
 		$akta->prev		= $this->akta->id;
 		$akta->next		= null;
 
