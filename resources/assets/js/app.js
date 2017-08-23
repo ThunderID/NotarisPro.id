@@ -65,3 +65,6 @@ require('./plugins/ajax');
 
 // stringManipulator
 require('./plugins/stringManipulator');
+
+// print any element
+require('./plugins/printElement');
