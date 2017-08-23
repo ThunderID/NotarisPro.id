@@ -116,12 +116,12 @@ window.ajax = new function(){
 			type: type,
 			data: data,
 			timeout: 5000,
+	        contentType: false,
+			processData: false,
 			dataType: 'json',
 			success: on_success,
 			error: on_error,
 			complete: on_complete
-	        contentType: false,
-			processData: false,
 		});
   	}
 }
