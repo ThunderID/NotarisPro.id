@@ -106,6 +106,7 @@ class UpdateStatusAkta
 
 		$this->akta->status 		= 'salinan';
 		$this->akta->paragraf 		= $paragraf;
+		$this->akta->nomor 			= (string)$nomor;
 		
 		$riwayat_status 			= $this->akta->riwayat_status;
 		$riwayat_status[]			= [

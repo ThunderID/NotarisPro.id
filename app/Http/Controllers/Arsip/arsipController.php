@@ -25,6 +25,8 @@ class arsipController extends Controller
 
 	public function index(Request $request)
 	{
+		$this->middleware('scope:read_archive');
+
 		//0. set active office
 		$this->active_office			= TAuth::activeOffice();
 
@@ -57,6 +59,8 @@ class arsipController extends Controller
 	 */
 	public function show(Request $request, $id)
 	{
+		$this->middleware('scope:read_archive');
+		
 		$this->active_office 			= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -82,170 +86,6 @@ class arsipController extends Controller
 		$this->view						= view('notaris.pages.arsip.arsip.show');
 		
 		return $this->generateView();  
-	}
-
-	public function create(Request $request, $id = null)
-	{
-		//set this function
-		$this->active_office 			= TAuth::activeOffice();
-
-		//1. set page attributes
-		$this->page_attributes->title 	= 'Arsip';
-
-		//2. get show document
-		$this->page_datas->arsip		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
-
-		$this->view						= view('pages.arsip.arsip.create');
-		
-		return $this->generateView();  
-	}
-
-	public function store(Request $request, $id)
-	{
-		try {
-			//set this function
-			$this->active_office 				= TAuth::activeOffice();
-
-			//2. get store document
-			$Arsip				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
-			
-			if($request->has('ktp'))
-			{
-				$Arsip->tipe 	= 'perorangan';
-				$Arsip->ktp 	= $request->get('ktp');
-			}
-
-			if($request->has('akta_pendirian'))
-			{
-				$Arsip->tipe			= 'perusahaan';
-				$Arsip->akta_pendirian	= $request->get('akta_pendirian');
-			}
-
-			if($request->has('dokumen'))
-			{
-				$adding_doc 			= $request->get('dokumen');
-				foreach ($adding_doc as $key => $value) 
-				{
-					$adding_doc[$key]['id']		= self::createID('doku'); 
-				}
-				$dokumen 				= $Arsip->dokumen;
-				$dokumen 				= array_merge($dokumen, $adding_doc);
-				$Arsip->dokumen 		= $dokumen;
-			}
-
-			$Arsip->save();
-
-			$this->page_attributes->msg['success']		= ['Arsip Berhasil Disimpan'];
-	
-			return $this->generateRedirect(route('arsip.arsip.show', $Arsip->id));
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']		= $e->getMessage();
-	
-			return $this->generateRedirect(route('arsip.arsip.create', ['id' => $id]));
-		}
-	}
-
-	public function edit(Request $request, $id)
-	{
-		return $this->create($request, $id);
-	}
-
-	public function update(Request $request, $id)
-	{
-		return $this->store($request, $id);
-	}
-
-	public function destroy(Request $request, $id)
-	{
-		try {
-			//set this function
-			$this->active_office	= TAuth::activeOffice();
-
-			//2. get store document
-			$Arsip					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstornew();
-
-			$Arsip->delete();
-
-			$this->page_attributes->msg['success']		= ['Arsip Berhasil Dihapus'];
-	
-			return $this->generateRedirect(route('arsip.arsip.index'));
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']		= $e->getMessage();
-	
-			return $this->generateRedirect(route('arsip.arsip.show', ['id' => $id]));
-		}	
-	}
-
-	public function addDokumen(Request $request, $id)
-	{
-		try {
-			//set this function
-			$this->active_office	= TAuth::activeOffice();
-
-			//2. get store document
-			$Arsip					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
-			$dokumen 				= $Arsip->dokumen;
-
-			if(isset($request->get('dokumen')['id']))
-			{
-				foreach ($dokumen as $key => $value) 
-				{
-					if($value['id'] == $request->get('dokumen')['id'])
-					{
-						$dokumen[$key]	= $request->get('dokumen');
-					}
-				}
-			}
-			else
-			{
-				$add_doku 			= $request->get('dokumen');
-				$add_doku['id']		= self::createID('doku');
-				$dokumen[]			= $add_doku;
-			}
-
-			$Arsip->dokumen 		= $dokumen;
-
-			$Arsip->save();
-
-			$this->page_attributes->msg['success']		= ['Dokumen Berhasil Disimpan'];
-	
-			return $this->generateRedirect(route('arsip.arsip.index'));
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']		= $e->getMessage();
-	
-			return $this->generateRedirect(route('arsip.arsip.show', ['id' => $id]));
-		}	
-	}
-
-	public function removeDokumen(Request $request, $id, $dokumen_id)
-	{
-		try {
-			//set this function
-			$this->active_office	= TAuth::activeOffice();
-
-			//2. get store document
-			$Arsip					= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->firstorfail();
-			$dokumen 				= $Arsip->dokumen;
-
-			foreach ($dokumen as $key => $value) 
-			{
-				if($value['id'] == $dokumen_id)
-				{
-					unset($dokumen[$key]);
-				}
-			}
-
-			$Arsip->dokumen 		= $dokumen;
-			$Arsip->save();
-
-			$this->page_attributes->msg['success']		= ['Dokumen Berhasil Disimpan'];
-	
-			return $this->generateRedirect(route('arsip.arsip.index'));
-		} catch (Exception $e) {
-			$this->page_attributes->msg['error']		= $e->getMessage();
-	
-			return $this->generateRedirect(route('arsip.arsip.show', ['id' => $id]));
-		}	
 	}
 
 	private function retrieveArsip($query = [])

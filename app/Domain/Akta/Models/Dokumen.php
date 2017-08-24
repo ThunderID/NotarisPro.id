@@ -46,6 +46,7 @@ class Dokumen extends BaseModel
 											'versi'					,
 											'penulis'				,
 											'pemilik'				,
+											'nomor'					,
 
 											'mentionable'			,
 											'dokumen'				,

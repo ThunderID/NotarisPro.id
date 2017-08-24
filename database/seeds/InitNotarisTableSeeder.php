@@ -11,6 +11,7 @@ class InitNotarisTableSeeder extends Seeder
 	{
 		DB::table('immigration_pengguna')->truncate();
 		DB::table('kantor_notaris')->truncate();
+		DB::connection('mysql')->table('user_attendance')->truncate();
 
 		$pengguna 	= [
 						'email'		=> 'admin@notaris.id',

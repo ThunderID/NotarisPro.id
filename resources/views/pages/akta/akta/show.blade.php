@@ -122,7 +122,7 @@
 									<i class="fa fa-trash" aria-hidden="true"></i>
 								</span>
 								Hapus
-							</a>				
+							</a>
 						</h6>
 					</div>
 				</div>

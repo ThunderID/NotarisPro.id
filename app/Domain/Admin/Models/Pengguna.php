@@ -53,6 +53,7 @@ class Pengguna extends BaseModel
 											'visas.*.expired_at'	=> 'max:255',
 											'visas.*.started_at'	=> 'max:255',
 											'visas.*.role'			=> 'max:255',
+											'visas.*.scopes'		=> 'required',
 											'visas.*.kantor.id'		=> 'max:255',
 											'visas.*.kantor.nama'	=> 'max:255',
 										];
@@ -112,10 +113,12 @@ class Pengguna extends BaseModel
 			'kantor.id'		=> 'required|max:255',
 			'kantor.nama'	=> 'required|max:255',
 			'role'			=> 'required|max:255',
+			'scopes'		=> 'required',
 			'type'			=> 'required|in:starter,trial',
 			'expired_at'	=> 'required|date_format:"Y-m-d H:i:s"',
 			'started_at'	=> 'required|date_format:"Y-m-d H:i:s"',
 		];
+
 		$validator			= Validator::make($visa, $rules);
 		if(!$validator->passes())
 		{

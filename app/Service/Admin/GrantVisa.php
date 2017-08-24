@@ -45,6 +45,19 @@ class GrantVisa
 			}
 		}
 
+		if(str_is($this->role, 'drafter'))
+		{
+			$this->scopes 	= env('DRAFTER_SCOPE', '');
+		}
+		elseif(str_is($this->role, 'manajer'))
+		{
+			$this->scopes 	= env('MANAGER_SCOPE', '');
+		}
+		elseif(str_is($this->role, 'notaris'))
+		{
+			$this->scopes 	= env('NOTARIS_SCOPE', '');
+		}
+
 		$this->kantor_id	= $kantor_id;
 		$this->kantor_nama	= $kantor_nama;
 	}
@@ -60,6 +73,7 @@ class GrantVisa
 		{
 			$visa 			= [
 				'role'			=> $this->role,
+				'scopes'		=> $this->scopes,
 				'type'			=> $this->type,
 				'started_at'	=> $this->started_at,
 				'expired_at'	=> $this->expired_at,

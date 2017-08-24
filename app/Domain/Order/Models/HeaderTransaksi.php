@@ -196,4 +196,18 @@ class HeaderTransaksi extends Model
 
 		return $query->where('kantor_id', $value);
 	}
+
+	public function getTotal()
+	{
+		$total 			= 0;
+		if(count($this->details))
+		{
+			foreach ($this->details as $key => $value) 
+			{
+				$total 	= $total + $this->formatMoneyFrom($value['subtotal']);
+			}
+		}
+
+		return $this->formatMoneyTo($total);
+	}
 }

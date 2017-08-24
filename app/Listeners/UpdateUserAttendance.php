@@ -37,6 +37,8 @@ class UpdateUserAttendance
 		{
 			$klien					= new UserAttendance;
 			$klien->pengguna_id		= $user->user['id'];
+			$klien->aktivitas 		= $user->user['nama'].' login ke dalam sistem ';
+			$klien->deskripsi 		= 'Melalui '.getenv('REMOTE_ADDR');
 			$klien->kantor_id		= $user->user['visas'][0]['kantor']['id'];
 			$klien->jam_masuk		= $now->format('Y-m-d H:i:s');
 			$klien->jam_keluar		= $now->format('Y-m-d H:i:s');
