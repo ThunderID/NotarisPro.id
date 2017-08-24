@@ -3,21 +3,25 @@
 @section('content')
 
 	<!-- TOPBAR -->
-	<section id="market-web-pricing-topbar">
+	<section id="market-web-tutorial-topbar">
 		<div class="container">
 			@include('market_web.components.topbar')
 		</div>
 	</section>
 	
 	<!-- TUTORIAL -->
-	<section id="market-web-pricing-video">
+	<section id="market-web-tutorial-video">
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 text-center" style="padding-top:50px;padding-bottom:50px;">
 					<h1>TUTORIAL</h1>
 				</div>
 			</div>
+		</div>
+	</section>
 
+	<section id="market-web-tutorial-legal">
+		<div class="container">
 			<div class="row" style="padding-bottom:50px;">
 				<div class="col-sm-12">
 					<h4>LEGAL CREATOR DOCUMENTS</h4>
@@ -55,7 +59,11 @@
 					<h7><small>1 Bulan Lalu</small></h7>
 				</div>
 			</div>
+		</div>
+	</section>
 
+	<section id="market-web-tutorial-billing">
+		<div class="container">
 			<div class="row" style="padding-bottom:50px;">
 				<div class="col-sm-12">
 					<h4>BILLING GENERATOR</h4>
@@ -85,7 +93,11 @@
 				<div class="col-sm-3">
 				</div>
 			</div>
+		</div>
+	</section>
 
+	<section id="market-web-tutorial-archive">
+		<div class="container">
 			<div class="row" style="padding-bottom:50px;">
 				<div class="col-sm-12">
 					<h4>CLIENT ARCHIVE</h4>
@@ -115,10 +127,14 @@
 				<div class="col-sm-3">
 				</div>
 			</div>
+		</div>
+	</section>
 
+	<section id="market-web-tutorial-authorization">
+		<div class="container">
 			<div class="row" style="padding-bottom:50px;">
 				<div class="col-sm-12">
-					<h4>LISTING NOTARIS</h4>
+					<h4>Authorization</h4>
 				</div>
 				<div class="col-sm-3">
 					<embed width="100%" height="100%" src="https://www.youtube.com/embed/PJPD7oNafkw?list=PLkaSezl7YQKz55jaCI8gVxDyHivwW2BTx" frameborder="0" allowfullscreen>
@@ -130,7 +146,7 @@
 				<div class="col-sm-3">
 				</div>
 				<div class="col-sm-3">
-					<h5><strong>Menampilkan Data Notaris Daerah Kerja Tertentu</strong></h5>
+					<h5><strong>Mengatur Akses Sistem</strong></h5>
 					<h7>Mitra Notaris</h7><br/>
 					<h7><small>1 Bulan Lalu</small></h7>
 				</div>
@@ -141,7 +157,11 @@
 				<div class="col-sm-3">
 				</div>
 			</div>
+		</div>
+	</section>
 
+	<section id="market-web-tutorial-subscribe">
+		<div class="container">
 			<div class="row" style="padding-bottom:50px;">
 				<div class="col-sm-12">
 					<h4>MEMBAYAR SUBCRIPTION MITRA NOTARIS</h4>
@@ -172,7 +192,7 @@
 	</section>
 
 	<!-- FOOTER -->
-	<section id="market-web-pricing-footer" style="background-color:rgb(239, 239, 239)">
+	<section id="market-web-tutorial-footer" style="background-color:rgb(239, 239, 239)">
 		<div class="container">
 			<!-- CONTACT INFORMATION -->
 			@include('market_web.components.contact_information')

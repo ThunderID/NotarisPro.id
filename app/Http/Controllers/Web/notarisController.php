@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Notaris;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Domain\Admin\Models\Kantor as Query;
@@ -37,7 +37,10 @@ class notarisController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan          = $this->retrieveNotarisUrutkan();
 
-		return Response::json(['data' => $this->page_datas->notaris, 'filters' => $this->page_datas->filters, 'urutkan' => $this->page_datas->urutkan, 'paging' => $this->page_attributes->paging]);
+		//3.initialize view
+		$this->view							= view('market_web.pages.notaris');
+
+		return $this->generateView();  
 	}
 
 	private function retrieveNotaris($query = [])

@@ -79,7 +79,7 @@
 				</div>
 				<div class="col-sm-12 text-center" style="padding-top:25px;">
 					<h2> 
-						<a href="#" class="btn btn-default" style="border:1px solid;">
+						<a href="{{route('uac.tsignup.create')}}" class="btn btn-default" style="border:1px solid;">
 							TRY FOR FREE
 						</a>
 					</h2>
