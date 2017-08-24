@@ -38,6 +38,8 @@ class aktaController extends Controller
 	 */
 	public function index(Request $request, $id = null)
 	{
+		$this->middleware('scope:read_akta');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -70,6 +72,8 @@ class aktaController extends Controller
 	 */
 	public function trashed(Request $request)
 	{
+		$this->middleware('scope:read_akta');
+
 		$this->active_office 				= TAuth::activeOffice();
 		$this->page_datas->id 				= null;
 
@@ -103,6 +107,7 @@ class aktaController extends Controller
 	 */
 	public function show(Request $request, $id)
 	{	
+		$this->middleware('scope:read_akta');
 		/*
 		return $this->index($request, $id);
 		$this->active_office 					= TAuth::activeOffice();
@@ -145,11 +150,10 @@ class aktaController extends Controller
 	 */
 	public function create(Request $request)
 	{
+		$this->middleware('scope:draft_akta');
 		// blank or copy
 		$input 								= $request->only('id_akta','judul_akta');
 		
-
-
 		$this->active_office 				= TAuth::activeOffice();
 
 		//1. parse data needed based on category
@@ -159,19 +163,19 @@ class aktaController extends Controller
 		// some logic here
 		if (is_null($input['id_akta'])){
 			// blank here
-			$this->page_datas->judul_akta = $input['judul_akta'];
+			$this->page_datas->judul_akta 	= $input['judul_akta'];
 		}else{
 			// copy
 			// open akta and  return to akta
-			$this->page_datas->judul_akta = $input['judul_akta'];
-			$this->page_datas->akta 		= $this->query->id($input['id_akta'])->kantor($this->active_office['kantor']['id'])->first()->toArray();
+			$this->page_datas->judul_akta 	= $input['judul_akta'];
+			$this->page_datas->akta			= $this->query->id($input['id_akta'])->kantor($this->active_office['kantor']['id'])->first()->toArray();
 		}
 		
 		//3. set page attributes
 		$this->page_attributes->title		= 'Akta Dokumen';
 
 		//4.initialize view
-		$this->view					= view('pages.akta.akta.create');
+		$this->view							= view('pages.akta.akta.create');
 
 		return $this->generateView();  
 	}
@@ -183,6 +187,7 @@ class aktaController extends Controller
 	 */
 	public function chooseTemplate(Request $request)
 	{
+		$this->middleware('scope:draft_akta');
 
 		$this->active_office 			= TAuth::activeOffice();
 
@@ -210,6 +215,8 @@ class aktaController extends Controller
 	 */
 	public function edit(Request $request, $id)
 	{
+		$this->middleware('scope:draft_akta');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		//1. parse data needed based on category
@@ -234,6 +241,8 @@ class aktaController extends Controller
 	public function store(Request $request)
 	{
 		try {
+			$this->middleware('scope:draft_akta');
+			
 			$akta 		= new BuatAktaBaru($request->get('judul'), $request->get('jenis'), $request->get('paragraf'));
 			$akta 		= $akta->save();
 
@@ -250,6 +259,8 @@ class aktaController extends Controller
 	public function update(Request $request, $id)
 	{
 		try {
+			$this->middleware('scope:draft_akta');
+			
 			$akta 		= new UpdateAkta($id);
 
 			if($request->has('judul'))
@@ -281,6 +292,8 @@ class aktaController extends Controller
 	public function destroy(Request $request, $id)
 	{
 		try {
+			$this->middleware('scope:void_akta');
+			
 			$akta 		= new HapusAkta($id);
 			$akta 		= $akta->save();
 
@@ -294,6 +307,8 @@ class aktaController extends Controller
 
 	public function mentionIndex(Request $request)
 	{
+		$this->middleware('scope:draft_akta');
+
 		$this->active_office	= TAuth::activeOffice();
 	
 		$tipe					= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
@@ -303,6 +318,7 @@ class aktaController extends Controller
 
 	public function mentionStore(Request $request)
 	{
+		$this->middleware('scope:draft_akta');
 		$this->active_office	= TAuth::activeOffice();
 
 		$exploded 				= explode('.', str_replace('@', '', $request->get('mention')));
@@ -333,6 +349,7 @@ class aktaController extends Controller
 	
 	public function versionIndex(Request $request, $id)
 	{
+		$this->middleware('scope:read_akta');
 		$this->active_office	= TAuth::activeOffice();
 		$key 					= 0;
 		$versi 					= [];
@@ -347,6 +364,7 @@ class aktaController extends Controller
 
 	public function versionShow(Request $request, $akta_id, $version_id)
 	{
+		$this->middleware('scope:read_akta');
 		$this->active_office	= TAuth::activeOffice();
 
 		$akta['original']		= $this->query->id($akta_id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
@@ -357,6 +375,7 @@ class aktaController extends Controller
 
 	public function print(Request $request, $akta_id)
 	{
+		$this->middleware('scope:read_akta');
 		$this->active_office	= TAuth::activeOffice();
 
 		$akta					= $this->query->id($akta_id)->kantor($this->active_office['kantor']['id'])->first()->toArray();
@@ -366,6 +385,7 @@ class aktaController extends Controller
 
 	public function renvoiMark(Request $request, $akta_id, $key, $mode)
 	{
+		$this->middleware('scope:mark_renvoi');
 		$this->active_office	= TAuth::activeOffice();
 
 		$akta 					= new LockAkta($akta_id);
@@ -395,6 +415,7 @@ class aktaController extends Controller
 
 	public function status(Request $request, $akta_id, $status)
 	{
+		$this->middleware('scope:draft_akta');
 		$this->active_office	= TAuth::activeOffice();
 
 		$akta 					= new UpdateStatusAkta($akta_id);
@@ -406,6 +427,7 @@ class aktaController extends Controller
 				$akta 	= $akta->toMinuta($key);
 					break;
 				case 'salinan':
+				$this->middleware('scope:mark_renvoi');
 				$akta 	= $akta->toSalinan($key);
 					break;
 				default :
@@ -421,6 +443,7 @@ class aktaController extends Controller
 
 	public function copy(Request $request, $akta_id)
 	{
+		$this->middleware('scope:draft_akta');
 		$this->active_office	= TAuth::activeOffice();
 
 		$akta 					= new DuplikasiAkta($akta_id);
@@ -439,6 +462,7 @@ class aktaController extends Controller
 
 	public function dropboxStore(Request $request, $id)
 	{
+		$this->middleware('scope:mark_renvoi');
 		$active_office 	= TAuth::activeOffice();
 
 		$akta 			= $this->query->id($id)->kantor($active_office['kantor']['id'])->first()->toArray();
@@ -454,6 +478,7 @@ class aktaController extends Controller
 	 */
 	public function ajaxShow(Request $request, $id)
 	{	
+		$this->middleware('scope:read_akta');
 		$this->active_office = TAuth::activeOffice();
         //1. get show document
         $akta                   = $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
@@ -504,6 +529,7 @@ class aktaController extends Controller
 
 	public function dokumenIndex(Request $request)
 	{
+		$this->middleware('scope:read_akta');
 		$this->active_office	= TAuth::activeOffice();
 
 		$lists 					= TipeDokumen::kantor($this->active_office['kantor']['id'])->orderby('kategori', 'desc')->get()->toArray();

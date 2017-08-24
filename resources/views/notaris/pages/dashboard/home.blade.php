@@ -73,8 +73,11 @@
 
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
-				<div class="col-sm-8">
+				<div class="col-sm-3">
 					<h3>MITRA NOTARIS</h3>
+				</div>
+				<div class="col-sm-5">
+					<a href="{{route('akta.akta.index')}}">AKTA</a>
 				</div>
 				<div class="col-sm-4 text-right">
 					<a href="{{route('uac.login.destroy')}}">LOGOUT</a>

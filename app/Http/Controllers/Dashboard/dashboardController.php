@@ -45,7 +45,7 @@ class dashboardController extends Controller
 		$stat_akta_bulan_ini	= collect($aktas)->sortByDesc('percentage');
 		// $stat_main_col 			= (ceil((12/(count($aktas) + (count($aktas)/2))) * 2))%12;
 		// $stat_add_col 			= floor((12 - $stat_main_col)/(count($stat_akta_bulan_ini)-1));
-		$stat_main_col 			= ceil(12/count($aktas));
+		$stat_main_col 			= ceil(12/max(1, count($aktas)));
 		$stat_add_col 			= $stat_main_col;
 
 		$awal_bulan_ini 		= Carbon::parse('first day of this month')->startOfDay();
@@ -71,7 +71,7 @@ class dashboardController extends Controller
 			$akta_movement[$k_ja]['bulan_lalu']['compare_perc']	= (($akta_movement[$k_ja]['bulan_lalu']['total'] - $akta_movement[$k_ja]['bulan_lalu_lalu']['total']) / max(1, $akta_movement[$k_ja]['bulan_lalu_lalu']['total'])) * 100;
 		}
 
-		$stat_akta['dalam_proses']		= Dokumen::kantor($this->active_office['kantor']['id'])->where('jenis', $v_ja[0])->status('dalam_proses')->count();
+		$stat_akta['dalam_proses']		= Dokumen::kantor($this->active_office['kantor']['id'])->status('dalam_proses')->count();
 		$stat_akta['total_karyawan']	= Pengguna::kantor($this->active_office['kantor']['id'])->count();
 		$stat_akta['jam_kerja_mingguan']= $stat_akta['total_karyawan'] * 40;
 
@@ -110,7 +110,10 @@ class dashboardController extends Controller
 				$doklist 	= ['tanggal' => $dokumen[0]['created_at']->format('Y-m-d H:i:s'), 'judul' => count($dokumen).' dokumen telah ditambahkan', 'deskripsi' => ''];
 			}
 		}
-		$notifikasi->push($doklist);
+		if((array)$doklist)
+		{
+			$notifikasi->push($doklist);
+		}
 
 		//c. last login
 		$loglist 			= [];
@@ -126,7 +129,7 @@ class dashboardController extends Controller
 		{
 			$notifikasi->push($value);
 		}
-		
+
 		//d. user baru
 		if(!$last_logged)
 		{

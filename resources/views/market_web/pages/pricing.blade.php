@@ -21,7 +21,7 @@
 				<div class="col-sm-3 offset-sm-2 text-center" style="border:1px solid;padding:30px;">
 					<h1 style="padding:40px;">FREE<br/>TRIAL</h1>
 					<h3> 
-						<a href="#" class="btn btn-default" style="border:1px solid;">
+						<a href="{{route('uac.tsignup.create')}}" class="btn btn-default" style="border:1px solid;">
 							SUBSCRIBE
 						</a>
 					</h3>
@@ -36,7 +36,7 @@
 					<h5 style="padding:15px;">STARTER</h5>
 					<h1 style="padding:30px;"><sup><small><small><small>IDR</small></small></small></sup>500K</h1>
 					<h3 style="padding-top:5px;"> 
-						<a href="#" class="btn btn-default" style="border:1px solid;">
+						<a href="{{route('uac.signup.create')}}" class="btn btn-default" style="border:1px solid;">
 							SUBSCRIBE
 						</a>
 					</h3>

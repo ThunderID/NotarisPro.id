@@ -26,6 +26,8 @@ class bpnController extends Controller
 
 	public function index(Request $request)
 	{
+		$this->middleware('scope:read_schedule');
+
 		//0. set active office
 		$this->active_office                = TAuth::activeOffice();
 
@@ -58,6 +60,8 @@ class bpnController extends Controller
 	 */
 	public function show(Request $request, $id)
 	{
+		$this->middleware('scope:read_schedule');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -87,6 +91,8 @@ class bpnController extends Controller
 
 	public function create(Request $request, $id = null)
 	{
+		$this->middleware('scope:add_schedule');
+
 		//set this function
 		$this->active_office 			= TAuth::activeOffice();
 
@@ -104,6 +110,8 @@ class bpnController extends Controller
 	public function store(Request $request, $id = null)
 	{
 		try {
+			$this->middleware('scope:add_schedule');
+
 			//set this function
 			$this->active_office	= TAuth::activeOffice();
 
@@ -149,6 +157,8 @@ class bpnController extends Controller
 
 	public function destroy(Request $request, $id)
 	{
+		$this->middleware('scope:delete_schedule');
+		
 		try {
 			//set this function
 			$this->active_office	= TAuth::activeOffice();

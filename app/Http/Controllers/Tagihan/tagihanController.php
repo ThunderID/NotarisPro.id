@@ -29,6 +29,8 @@ class tagihanController extends Controller
 	 */
 	public function index(Request $request)
 	{
+		$this->middleware('scope:read_invoice');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -60,6 +62,8 @@ class tagihanController extends Controller
 	 */
 	public function show(Request $request, $id)
 	{
+		$this->middleware('scope:read_invoice');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -97,6 +101,8 @@ class tagihanController extends Controller
 	 */
 	public function create(Request $request, $id = null)
 	{
+		$this->middleware('scope:issue_invoice');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		//2. init akta as null
@@ -137,7 +143,8 @@ class tagihanController extends Controller
 	public function store(Request $request, $id = null, $status = 'pending')
 	{
 		try {
-
+			$this->middleware('scope:issue_invoice');
+			
 			$this->active_office 	= TAuth::activeOffice();
 			
 			//store header transaksi
@@ -193,6 +200,8 @@ class tagihanController extends Controller
 
 	public function destroy(Request $request, $id)
 	{
+		$this->middleware('scope:cancel_invoice');
+
 		$this->active_office 	= TAuth::activeOffice();
 		
 		try {
@@ -217,6 +226,8 @@ class tagihanController extends Controller
 	 */
 	public function print(Request $request, $id)
 	{
+		$this->middleware('scope:read_invoice');
+
 		$this->active_office 				= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -237,6 +248,8 @@ class tagihanController extends Controller
 	public function status(Request $request, $id, $status)
 	{
 		try {
+			$this->middleware('scope:settle_invoice');
+			
 			//1. get active office
 			$this->active_office 	= TAuth::activeOffice();
 

@@ -47,6 +47,14 @@
 								<input type="text" name="kantor[daerah_kerja]" placeholder="Kabupaten Malang" class="f1-kantor-daerah_kerja form-control" id="f1-kantor-daerah_kerja">
 							</div>
 							<div class="form-group">
+								<label class="sr-only" for="f1-kantor-nomor_sk">Nomor SK</label>
+								<input type="text" name="kantor[nomor_sk]" placeholder="Nomor SK" class="f1-kantor-nomor_sk form-control" id="f1-kantor-nomor_sk">
+							</div>
+							<div class="form-group">
+								<label class="sr-only" for="f1-kantor-tanggal_pengangkatan">Tanggal Pengangkatan</label>
+								<input type="text" name="kantor[tanggal_pengangkatan]" placeholder="dd/mm/YYYY" class="f1-kantor-tanggal_pengangkatan form-control" id="f1-kantor-tanggal_pengangkatan">
+							</div>
+							<div class="form-group">
 								<label class="sr-only" for="f1-kantor-telepon">Nomor Telepon</label>
 								<input type="text" name="kantor[telepon]" placeholder="0341 884400" class="f1-kantor-telepon form-control" id="f1-kantor-telepon">
 							</div>
@@ -73,6 +81,7 @@
 								<label class="sr-only" for="f1-repeat-password">Repeat password</label>
 								<input type="password" name="akun[repeat-password]" placeholder="Repeat password..." class="f1-repeat-password form-control" id="f1-repeat-password">
 							</div>
+							<div class="clearfix">&nbsp;</div>
 							<div class="f1-buttons">
 								<button type="button" class="btn btn-previous">Kembali</button>
 								<button type="button" class="btn btn-next">Lanjutkan</button>
@@ -95,14 +104,14 @@
 									<option value="auto_debet">Auto Debet</option>
 								</select>
 							</div>
-							<div class="form-group">
-								<label class="sr-only" for="f1-payment-account">Nomor Rekening</label>
-								<input type="text" name="pembayaran[nomor_rekening]" placeholder="009302930000" class="f1-payment-account form-control" id="f1-payment-account">
-							</div>
+							<div class="clearfix">&nbsp;</div>
 							<div class="f1-buttons">
 								<button type="button" class="btn btn-previous">Kembali</button>
 								<button type="submit" class="btn btn-submit">Submit</button>
 							</div>
+							<div class="clearfix">&nbsp;</div>
+							<div class="clearfix">&nbsp;</div>
+							<div class="clearfix">&nbsp;</div>
 						</fieldset>
 					
 					</form>

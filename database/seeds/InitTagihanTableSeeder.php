@@ -35,7 +35,7 @@ class InitTagihanTableSeeder extends Seeder
 
 			$parse_month 	= rand(-12, -2);
 			$data 			= [
-				'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['isi']['nama']) ? $klien['isi']['nama'] : $klien['isi']['nama'])],
+				'klien'					=> ['id' => $klien['id'], 'nama' => (isset($klien['isi']['nama']) ? $klien['isi']['nama'] : $klien['isi']['nama']), 'alamat' => (isset($klien['isi']['alamat']) ? $klien['isi']['alamat'] : '')],
 				'kantor_id'				=> TAuth::activeOffice()['kantor']['id'],
 				'nomor'					=> rand(234289849248924,999999999999999),
 				'tipe'					=> 'bukti_kas_masuk',
