@@ -96,10 +96,17 @@ trait TextParseTrait
 				$new_tipe_doc 					= new TipeDokumen;
 				// $new_tipe_doc->kategori 		= $value['kategori'];
 				$new_tipe_doc->jenis_dokumen 	= $value['jenis_dokumen'];
-				$new_tipe_doc->kepemilikan 		= $value['kepemilikan'];
+				$new_tipe_doc->kepemilikan 		= [$value['kepemilikan']];
 				$new_tipe_doc->isi 				= $value['isi'];
 				$new_tipe_doc->kantor 			= $active_office['kantor'];
 				$new_tipe_doc->save();
+			}
+			else
+			{
+				$kepemilikan 			= $tipe_doc->kepemilikan;
+				$kepemilikan			= array_unique(array_merge($kepemilikan, [$value['kepemilikan']]));
+				$tipe_doc->kepemilikan 	= $kepemilikan;
+				$tipe_doc->save();				
 			}
 		}
 	}
