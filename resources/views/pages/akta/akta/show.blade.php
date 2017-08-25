@@ -38,7 +38,30 @@
 			</div>
 			<div class="d-flex justify-content-center mx-auto page-frame">
 				<div id="page-content" class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
-					<div id="text-editor" class="form-group editor">	
+					<div id="text-editor" class="form-group editor">
+
+						<div id="template" hidden>
+							<div class="wrapper unlocked">
+								<div class="control">
+									<a href="javascript:void(0);" class="lock" id="lock">
+										<i class="fa fa-unlock" aria-hidden="true"></i>
+									</a>
+									&nbsp;|&nbsp;
+									<a href="javascript:void(0);" id="revise" class="" data-toggle="modal" data-target="">
+										<i class="fa fa-history" aria-hidden="true"></i>1
+									</a>
+								</div>
+								<div id="narasi" class="content">
+								</div>
+							</div>
+						</div>
+
+						<div id="content">
+						</div>
+
+						<div id="reader" style="display: none;">
+						</div>
+
 					</div>
 				</div>
 			</div>			
@@ -61,6 +84,15 @@
 				<div class="row">
 					<div class="col-12">
 						<h6>
+							<a id="link-reader" href="javascript:void(0);" onClick="triggerReaderMode(this);" data-url="#" class="text-primary disabled-before-load disabled">
+								<span class="fa-stack">
+									<i class="fa fa-bullseye" aria-hidden="true"></i>
+								</span>
+								Mode Baca : 
+								<span id="status">Tidak Aktif</span>
+							</a>
+						</h6>					
+						<h6>
 							<a id="link-edit" href="javascript:void(0);" onClick="triggerOpenWindow(this);" data-url="#" class="text-primary">
 								<span class="fa-stack">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -77,7 +109,7 @@
 							</a>
 						</h6>
 						<h6>
-							<a href="javascript:void(0);" onclick="triggerPrint();" class="text-primary disabled-before-load disabled">
+							<a id="link-print" href="javascript:void(0);" onclick="triggerPrint();" class="text-primary disabled">
 								<span class="fa-stack">
 									<i class="fa fa-print" aria-hidden="true"></i>
 								</span>
@@ -94,6 +126,11 @@
 						</h6>
 					</div>
 				</div>
+				<div id="menu-keterangan" class="row" hidden>
+					<div class="col-12">
+						<h7>* Beberapa menu tidak tersedia pada akta dengan status ini.</h7>
+					</div>				
+				</div>				
 			</div>
 
 			<div id="sidebar-loader" class="col-12 pt-3 pb-2 loader">
@@ -125,7 +162,7 @@
 						<div class="col-12">
 							<h7 class="text-muted">Pihak</h7>
 							<div id="pihak">
-									<h6 id="template" hidden></h6>
+								<h6 id="template" hidden></h6>
 							</div>
 						</div>
 					</div>	
@@ -256,12 +293,32 @@
 		// sets action 
 		setEdit(element_source.attr('data_id_akta'));
 		$(document.getElementById('deleteModal')).find('form').attr('action', window.location.href + '/' + element_source.attr('data_id_akta'));
+
+		var status = element_source.find('#status').text();
+
 		// policy edit as copy
-		if(canEditAsCopy(element_source.find('#status').text())){
+		var display_keterangan = false;
+		if(canEditAsCopy(status)){
 			setEditAsCopy(element_source.attr('data_id_akta'));
 			$(document.getElementById('link-edit-as-copy')).removeClass('disabled');
 		}else{
 			$(document.getElementById('link-edit-as-copy')).addClass('disabled');
+			display_keterangan = true;
+		}
+
+		// policy print
+		if(canPrint(status)){
+			$(document.getElementById('link-print')).removeClass('disabled');
+		}else{
+			$(document.getElementById('link-print')).addClass('disabled');
+			display_keterangan = true;
+		}
+
+		// policy Global
+		if(display_keterangan == true){
+			$(document.getElementById('menu-keterangan')).removeAttr('hidden');
+		}else{
+			$(document.getElementById('menu-keterangan')).attr('hidden', true);
 		}
 
 		modulShowAkta(id, judul);
@@ -269,7 +326,9 @@
 
 	function hideAkta(e){
 		$(document.getElementById('akta_show')).fadeOut('fast', function(){
-			$(document.getElementById('text-editor')).empty();
+			var target = $(document.getElementById('text-editor'));
+			target.find('#reader').empty();
+			target.find('#content').empty();
 			window.history.pushState(null, null, '/akta/akta');
 		});		
 	}
@@ -311,16 +370,38 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
+			console.log(resp);
 			try {
 
 				// reloaded or from index
 				if($(document.getElementById('sidebar-header')).find('#title').text() == '...'){
 					// re-set actions
 					setEdit(id_akta);
+
+					let display_keterangan = false;
+
+					//edit as copy
 					if(canEditAsCopy(resp.status)){
 						setEditAsCopy(id_akta);
 						$(document.getElementById('link-edit-as-copy')).removeClass('disabled');
+					}else{
+						display_keterangan = true;
 					}
+
+					// policy print
+					if(canPrint(resp.status)){
+						$(document.getElementById('link-print')).removeClass('disabled');
+					}else{
+						display_keterangan = true;
+					}
+
+					// policy Global
+					if(display_keterangan == true){
+						$(document.getElementById('menu-keterangan')).removeAttr('hidden');
+					}else{
+						$(document.getElementById('menu-keterangan')).attr('hidden', true);
+					}					
+
 					$(document.getElementById('deleteModal')).find('form').attr('action', window.location.href );
 
 					// re-set judul
@@ -328,22 +409,23 @@
 					$(document.getElementById('akta_show')).find('#judul_akta').text(resp.judul);
 				}
 
+
 				// sidebar-content			
 				var sc = $(document.getElementById('sidebar-content'));
 				sc.find('#status_akta').text(window.stringManipulator.toDefaultReadable(resp.status));
 				var tmplt = sc.find('#pihak').find('#template');
-				$('.pihak').remove();
+				$('.pihak').remove(); 
 				if(resp.pemilik.klien){
 					resp.pemilik.klien.forEach(function(element) {
-						rslt = $(tmplt).clone().appendTo(sc.find('#pihak'));
+						rslt = tmplt.clone().appendTo(sc.find('#pihak'));
 						rslt.text(element.nama);
-						rslt.removeAttr('hidden');
+						rslt.removeAttr('hidden id');
 						rslt.addClass('pihak');
 					});
 				}else{
 					rslt = $(tmplt).clone().appendTo(sc.find('#pihak'));
 					rslt.text('Belum ada data');
-					rslt.removeAttr('hidden');
+					rslt.removeAttr('hidden id');
 					rslt.addClass('pihak');
 				}
 
@@ -351,6 +433,7 @@
 				sc.find('#penulis').text(resp.penulis.nama);
 				sc.find('#tanggal_sunting').text(resp.tanggal_sunting);
 				sc.find('#versi').text(resp.versi);
+
 
 				// kelengkapan dokumen
 				var k = $(document.getElementById('kelengkapan'));
@@ -411,10 +494,50 @@
 
 
 				// editor
+				let feature_lockUnlock = defaultLockUnlock(resp.status);
+				let feature_lockDisplayRevision = defaultDisplayRevision(resp.status);
+
 				resp.paragraf.forEach(function(element) {
-					$(document.getElementById('text-editor')).append(element.konten);
+					// reader mode
+					$(document.getElementById('text-editor')).find('#reader').append(element.konten);
+					
+					// display + feature bundle
+					var editor = $(document.getElementById('page')).find('#text-editor');
+					tmp = editor.find('#template');
+					var target = tmp.clone().appendTo(editor.find('#content'));
+					target.removeAttr('hidden');
+					target.removeAttr('id');
+					target.find('#narasi').append(element.konten);
+
+					// set status lock/unlock
+					wrapper = target.find('.wrapper');
+					lock = target.find('#lock');
+
+					if(element.lock){
+						wrapper.removeClass('unlocked');
+						wrapper.addClass('locked');
+						lock.find('.fa').removeClass('fa-unlock');
+						lock.find('.fa').addClass('fa-lock');
+						lock.attr('unlocked', 'false');
+						lock.attr('id', element.lock);
+					}else{
+						wrapper.removeClass('locked');
+						wrapper.addClass('unlocked');
+						lock.find('.fa').addClass('fa-unlock');
+						lock.find('.fa').removeClass('fa-lock');
+						lock.attr('unlocked', 'true');
+						lock.attr('id', null);
+					}
+
+					lock.addClass(feature_lockUnlock);
+
+					// set status displayRevision
+
+					target.find('#revise').addClass(feature_lockDisplayRevision);
+
 				});
 				$(document.getElementById('page')).scrollTop(0);
+
 
 				// ui on complete
 				$('.disabled-before-load').removeClass("disabled");
@@ -454,6 +577,50 @@
 	}
 	/* End Get Akta Data */
 
+
+	/* Start Set Akta Feature */
+	function defaultLockUnlock(val){
+		var feature_status = 'disabled';
+		if(canLockUnlock(val)){
+			feature_status = 'active';
+		}
+		return feature_status;
+	}
+	function defaultDisplayRevision(val){
+		var feature_status = 'disabled';
+		if(canDisplayRevision(val)){
+			feature_status = 'active';
+		}
+		return feature_status;
+	}
+
+	// manage lock unlock
+	$(document).on('click', 'a.lock', function(){
+		// do ajax save
+		console.log($(this));
+		handleState($(this));
+
+		function handleState(e){
+			if(e.attr('unlocked') == 'true'){
+				console.log(1);
+				e.closest('a.lock').attr('unlocked','false');
+				e.closest('.wrapper').removeClass('unlocked');
+				e.closest('.wrapper').addClass('locked');
+				e.find('i').removeClass('fa-unlock');
+				e.find('i').addClass('fa-lock');
+			}else{
+				console.log(2);
+				e.closest('a.lock').attr('unlocked','true');
+				e.closest('.wrapper').removeClass('locked');
+				e.closest('.wrapper').addClass('unlocked');
+				e.find('i').removeClass('fa-lock');
+				e.find('i').addClass('fa-unlock');
+			}
+		}
+	})
+	/* End Get Akta Feature */
+
+
 	/* Start URL Page Manager */
 	$(window).on('popstate', function() {
 		managePage();
@@ -476,13 +643,30 @@
 
 
 	/* Set Action Links */
-	function setEditAsCopy(id_akta){
-		var url = "{{ route('akta.akta.copy', ['id' => null]) }}/" + id_akta;
-		$(document.getElementById('link-edit-as-copy')).attr('data-url', url);
+	function  triggerReaderMode(e){
+		var target = $(document.getElementById('page')).find('#text-editor');
+
+		if($(e).find('#status').text() == 'Tidak Aktif'){
+			$(e).find('#status').text('Aktif');
+			target.find('#content').fadeOut('fast', function(){
+				target.find('#reader').fadeIn('fast');
+				$(document.getElementById('page')).scrollTop(0);
+			});
+		}else{
+			$(e).find('#status').text('Tidak Aktif');
+			target.find('#reader').fadeOut('fast', function(){
+				target.find('#content').fadeIn('fast');
+				$(document.getElementById('page')).scrollTop(0);
+			});
+		}
 	}
 	function setEdit(id_akta){
 		var url = "{{ route('akta.akta.show', ['id' => null]) }}/" + id_akta + "/edit";
 		$(document.getElementById('link-edit')).attr('data-url', url);
+	}
+	function setEditAsCopy(id_akta){
+		var url = "{{ route('akta.akta.copy', ['id' => null]) }}/" + id_akta;
+		$(document.getElementById('link-edit-as-copy')).attr('data-url', url);
 	}
 	function triggerOpenWindow(e){
 		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
@@ -502,6 +686,27 @@
 		}
 		return false;
 	}
+	// policy print
+	function canPrint(val){
+		if(val == 'minuta' || val == 'salinan'){
+			return true;
+		}
+		return false;
+	}
+	// policy lockUnlock
+	function canLockUnlock(val){
+		if(val == 'minuta'){
+			return true;
+		}
+		return false;
+	}
+	// policy Revision
+	function canDisplayRevision(val){
+		if(val == 'minuta' || val == 'salinan'){
+			return true;
+		}
+		return false;
+	}	
 
 	/* End Policies */
 
