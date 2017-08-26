@@ -32,16 +32,16 @@
 						])
 					</div>
 
+					@foreach($page_datas->filters as $key => $filter)
 					<div class="panel">
-						@foreach($page_datas->filters as $key => $value)
-							@include('components.filter',[
-								'title' => $key,
-								'alias' => 'status',
-								'qs'	=> [ 'cari','urutkan' ],
-								'lists' => $value
-							])
-						@endforeach
-					</div>	
+						@include('components.filter',[
+							'title' => 'Filter ' . ucWords($key),
+							'alias' => $key,
+							'qs'	=> [ 'cari','status' ],
+							'lists' => $filter
+						])
+					</div>
+					@endforeach						
 
 					<div class="panel hidden-md-up">
 						@include('components.filter',[
@@ -49,14 +49,8 @@
 							'alias' => 'urutkan',
 							'qs'	=> [ 'cari','status' ],
 							'lists' => [
-								'tanggal sunting terbaru' 	=> null,
-								'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
-								'tanggal pembuatan terbaru' => 'tanggal_pembuatan-desc',
-								'tanggal pembuatan terlama' => 'tanggal_pembuatan-asc',
-								'judul a - z' 	=> 'judul-asc',
-								'judul z - a' 	=> 'judul-desc',
-								'status a - z'	=> 'status-asc',
-								'status z - a'	=> 'status-desc',
+								'nama a - z' 	=> null,
+								'nama z - a' 	=> 'nama-desc'
 							]
 						])
 					</div>
@@ -65,19 +59,65 @@
 			</div>
 		</div>	
 		<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 scrollable_panel subset-menu subset-sidebar target-panel">
-			<h4 class="title">{{$page_attributes->title}}</h4>
+			<div class="row">
+				<div class="col-6">
+					<h4 class="title">{{$page_attributes->title}}</h4>
+				</div>
+				<div class="col-6 hidden-sm-down text-right">
+					@include('components.sort',[
+						'alias' => 'urutkan',
+						'qs'	=> [ 'q','status' ],
+						'lists' => [
+							'nama a - z' 	=> null,
+							'nama z - a' 	=> 'nama-desc',
+						]
+					])
+				</div>	
+				<div class="col-6 hidden-md-up text-right mobile-toggle-search">
+					<a href="javascript:void(0);" class="btn btn-outline-primary btn-default btn-toggle-menu-on">
+						<!-- <i class="fa fa-binoculars" aria-hidden="true"></i> -->
+						<i class="fa fa fa-ellipsis-v" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>
 
 			<div class="row">
-				@foreach($page_datas->arsips as $key => $value)
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-						<a href="{{route('arsip.arsip.show', ['value' => $value['id']])}}">						
-							<h1>
-								<i class="fa fa-file"></i>
-							</h1>
-							<p>[{{strtoupper($value['jenis'])}}] {{$value['isi']['nama']}}</p>
-						</a>
-					</div>
-				@endforeach
+				<div class="col-12">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 20%;"">Jenis Arsip</th>
+								<th style="width: 80%">Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse($page_datas->arsips as $key => $value)
+							<tr class="clickable-row" data-href="{{route('arsip.arsip.show', ['value' => $value['id']])}}">
+								<td>
+									@if(strtoupper($value['jenis']) == 'KTP')
+										<i class="fa fa-id-card" aria-hidden="true"></i>
+									@else
+										<i class="fa fa-file" aria-hidden="true"></i>
+									@endif
+									&nbsp;
+									{{ strtoupper($value['jenis']) }}
+								</td>
+								<td>
+									{{ $value['isi']['nama'] }}
+								</td>				
+							</tr>
+			                @empty
+			                <tr>
+			                    <td colspan="2" class="text-center">
+			                        Tidak Ada Data
+			                    </td>
+			                </tr>
+			                @endforelse
+						</tbody>
+					</table>
+			        @include('components.paginate')
+				</div>
+
 			</div>
 		</div>	
 	</div>	
