@@ -3,19 +3,24 @@
 @section('content')
 
 	<!-- TOPBAR -->
+	{{--
 	<section id="market-web-trial-topbar">
 		<div class="container">
 			@include('market_web.components.topbar_plain')
 		</div>
 	</section>
+	--}}
 	
 	<!-- SLIDE -->
 	<section id="market-web-trial-login">
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-4 offset-sm-4 text-center" style="padding-top:75px;padding-bottom:240px;">
-					<h2>PERMINTAAN DITERIMA</h2>
-					<p> 
+				<div class="col-sm-4 offset-sm-4 text-center" style="padding-top:85px;padding-bottom:10px;">
+					<h1><a href="{{route('web.home.index')}}">{{ str_replace("_", " ", env('APP_NAME')) }}</a></h1> 
+					<hr>
+				</div>				
+				<div class="col-sm-4 offset-sm-4 text-center" style="padding-top:0px;padding-bottom:180px;">
+					<h3 class="pb-4">Permintaan Diterima</h3>
 						Email berisi langkah - langkah untuk reset password Anda telah dikirim ke Email Anda.
 					</p>
 					<p>&nbsp;</p>
@@ -34,10 +39,12 @@
 	</div>
 
 	<!-- FOOTER -->
+	{{--
 	<section id="market-web-trial-footer">
 		<div class="container">
 			<!-- FOOTER -->
 			@include('market_web.components.footer')
 		</div>
 	</section>
+	--}}
 @endsection
