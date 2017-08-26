@@ -114,7 +114,7 @@ class arsipController extends Controller
 			$explode        = explode('-', $query['urutkan']);
 			if(in_array($explode[0], ['nama']) && in_array($explode[1], ['asc', 'desc']))
 			{
-				$data       = $data->orderby('akta_pendirian.nama', $value)->orderby('ktp.nama', $value);
+				$data       = $data->orderby('akta_pendirian.nama', $explode[1])->orderby('ktp.nama', $explode[1]);
 			}
 		}
 
@@ -132,7 +132,16 @@ class arsipController extends Controller
 	private function retrieveArsipFilter()
 	{
 		//1. jenis
-		$filter['jenis']	= $this->query->distinct('jenis')->get();
+		$jenis					= $this->query->distinct('jenis')->get();
+
+		$filter['jenis']		= [];
+		foreach ($jenis as $key => $value) 
+		{
+			foreach ($value['attributes'] as $k => $v) 
+			{
+				$filter['jenis'][$v]	= $v;
+			}
+		}
 
 		return $filter;
 	}
