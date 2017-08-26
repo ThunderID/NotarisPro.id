@@ -323,25 +323,38 @@ class aktaController extends Controller
 
 		$exploded 				= explode('.', str_replace('@', '', $request->get('mention')));
 
-		$tipe 					= TipeDokumen::/*where('kategori', $exploded[0])->*/where('jenis_dokumen', $exploded[0])->where('kepemilikan', $exploded[1])->kantor($this->active_office['kantor']['id'])->first();
-
-		if(!$tipe)
+		//jika hanya diisi 2
+		$tipe 					= TipeDokumen::/*where('kategori', $exploded[0])->*/where('jenis_dokumen', $exploded[0])->kantor($this->active_office['kantor']['id'])->first();
+		
+		if(count($exploded)==2)
 		{
-			$tipe 					= new TipeDokumen;
-			// $tipe->kategori 		= $exploded[0];
-			$tipe->jenis_dokumen 	= $exploded[0];
-			$tipe->kepemilikan 		= $exploded[1];
+			$kepemilikan 		= $tipe->kepemilikan;
+			$kepemilikan		= array_unique(array_merge($kepemilikan, [$exploded[1]]));
+			$tipe->kepemilikan 	= $kepemilikan;
+			$tipe->save();
 		}
-
-		$isi 					= $tipe->isi;
-		if(empty($isi) || is_null($isi))
+		else
 		{
-			$isi 				= [];
+			$tipe 				= TipeDokumen::/*where('kategori', $exploded[0])->*/where('jenis_dokumen', $exploded[0])->whereIn('kepemilikan', [$exploded[1]])->kantor($this->active_office['kantor']['id'])->first();
+
+			if(!$tipe)
+			{
+				$tipe 					= new TipeDokumen;
+				// $tipe->kategori 		= $exploded[0];
+				$tipe->jenis_dokumen 	= $exploded[0];
+				$tipe->kepemilikan 		= $exploded[1];
+			}
+
+			$isi 				= $tipe->isi;
+			if(empty($isi) || is_null($isi))
+			{
+				$isi 			= [];
+			}
+			$isi 				= array_unique(array_merge($isi, [$exploded[2]]));
+			$tipe->isi 			= $isi;
+			$tipe->kantor 		= $this->active_office['kantor'];
+			$tipe->save();
 		}
-		$isi 					= array_unique(array_merge($isi, [$exploded[2]]));
-		$tipe->isi 				= $isi;
-		$tipe->kantor 			= $this->active_office['kantor'];
-		$tipe->save();
 
 		return JSend::success(['tersimpan']);
 
