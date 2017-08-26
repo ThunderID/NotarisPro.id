@@ -30,6 +30,9 @@ class dashboardController extends Controller
 
 	public function home()
 	{
+		// module plis!
+
+
 		$this->active_office 	= TAuth::activeOffice();
 
 		//1. statistik jumlah akta berdasarkan

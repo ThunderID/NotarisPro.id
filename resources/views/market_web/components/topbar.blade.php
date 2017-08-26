@@ -20,11 +20,9 @@
 		<div class="row"> 
 			<div class="col-sm-6 text-right" style="padding-top:14px;"> 
 				<h7> 
-					<small>
-						<a href="{{route('uac.login.create')}}">
-							<u>Sign In</u> 
-						</a>
-					</small>
+					<a href="{{route('uac.login.create')}}">
+						<u>Sign In</u> 
+					</a>
 				</h7>
 			</div>
 			<div class="col-sm-6 text-left" style="padding-top:4px;"> 
