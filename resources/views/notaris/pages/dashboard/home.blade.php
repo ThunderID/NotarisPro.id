@@ -3,6 +3,38 @@
 @section('content')
 
 	<div class="clearfix">&nbsp;</div>
+	<div class="row pb-5">
+		<div class="col-12 hidden-sm-up">
+			<div class="card card-warning mb-3" style="background-color:#fff;">
+				<div class="card-header" style="border-bottom:1px solid #f0ad4e;">
+					<h5 style="margin:5px;">
+						<strong>
+							NOTIFIKASI
+						</strong>
+					</h5>
+				</div>
+				<div class="card-body" style="margin:5px;">
+					@forelse($notifikasi as $key => $value)
+						<div class="row" style="padding:15px;">
+							<div class="col-6">
+								{{$value['judul']}}<br/>
+								<small>{{$value['deskripsi']}}</small>
+							</div>
+							<div class="col-6 text-right">
+								<span class="badge badge-warning">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value['tanggal'])->format('d/m/Y H:i')}}</span>
+							</div>
+						</div>
+					@empty
+						<div class="row" style="padding:15px;">
+							<div class="col-12">
+								Belum ada data
+							</div>
+						</div>						
+					@endforelse
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-sm-4">
 			<div class="card card-inverse card-primary mb-3 text-center">
@@ -150,7 +182,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-5">
+		<div class="col-sm-5 hidden-xs-down">
 			<div class="card card-warning mb-3" style="background-color:#fff;">
 				<div class="card-header" style="border-bottom:1px solid #f0ad4e;">
 					<h5 style="margin:5px;">
@@ -159,26 +191,26 @@
 						</strong>
 					</h5>
 				</div>
-					<div class="card-body" style="margin:5px;">
-						@forelse($notifikasi as $key => $value)
-							<div class="row" style="padding:15px;">
-								<div class="col-6">
-									{{$value['judul']}}<br/>
-									<small>{{$value['deskripsi']}}</small>
-								</div>
-								<div class="col-6 text-right">
-									<span class="badge badge-warning">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value['tanggal'])->format('d/m/Y H:i')}}</span>
-								</div>
+				<div class="card-body" style="margin:5px;">
+					@forelse($notifikasi as $key => $value)
+						<div class="row" style="padding:15px;">
+							<div class="col-6">
+								{{$value['judul']}}<br/>
+								<small>{{$value['deskripsi']}}</small>
 							</div>
-						@empty
-							<div class="row" style="padding:15px;">
-								<div class="col-12">
-									Belum ada data
-								</div>
-							</div>						
-						@endforelse
-					</div>
+							<div class="col-6 text-right">
+								<span class="badge badge-warning">{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value['tanggal'])->format('d/m/Y H:i')}}</span>
+							</div>
+						</div>
+					@empty
+						<div class="row" style="padding:15px;">
+							<div class="col-12">
+								Belum ada data
+							</div>
+						</div>						
+					@endforelse
 				</div>
+			</div>
 		</div>
 	</div>
 	<div class="clearfix">&nbsp;</div>
