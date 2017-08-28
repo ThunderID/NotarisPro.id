@@ -35,7 +35,7 @@
 					@foreach($page_datas->filters as $key => $filter)
 					<div class="panel">
 						@include('components.filter',[
-							'title' => 'Filter ' . ucWords($key),
+							'title' => 'Filter ' . ucWords($key) . ' Arsip',
 							'alias' => $key,
 							'qs'	=> [ 'cari','status' ],
 							'lists' => $filter
@@ -87,7 +87,7 @@
 						<thead>
 							<tr>
 								<th style="width: 20%;"">Jenis Arsip</th>
-								<th style="width: 80%">Status</th>
+								<th style="width: 80%">Nama</th>
 							</tr>
 						</thead>
 						<tbody>
