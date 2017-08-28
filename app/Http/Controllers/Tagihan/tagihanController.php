@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Tagihan;
 
 use App\Http\Controllers\Controller;
+
+use App\Domain\Order\Models\Arsip;
 use App\Domain\Order\Models\HeaderTransaksi as Query;
 use App\Domain\Order\Models\DetailTransaksi;
+
+use App\Domain\Akta\Models\Dokumen;
 
 use App\Service\Helpers\JSend;
 
@@ -108,19 +112,49 @@ class tagihanController extends Controller
 		//2. init akta as null
 		$this->page_datas->tagihan 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->with('details')->first();
 
+		$klien['nama']				= 'Mr. Tukimin';
+		$klien['alamat']			= 'Jl. Adi Sucipto, Malang';
+		$details[0]['item']			= 'Cetak Akta';
+		$details[0]['deskripsi']	= 'Cetak Salinan Akta';
+		$details[0]['harga_satuan']	= 'Rp 5000000';
+		$details[0]['kuantitas']	= 1;
+		$details[0]['subtotal']		= 'Rp 5000000';
+
+		if(!$this->page_datas->tagihan && $request->has('akta_id'))
+		{
+			$akta 			= Dokumen::id($request->get('akta_id'))->kantor($this->active_office['kantor']['id'])->first();
+
+			if($akta && isset($akta['pemilik']['klien'][0]))
+			{
+				$arsip 		= Arsip::id($akta['pemilik']['klien'][0]['id'])->first();
+
+				if($arsip && isset($arsip['isi']['nama']))
+				{
+					$klien['nama']		= $arsip['isi']['nama'];
+				}
+				if($arsip && isset($arsip['isi']['alamat']))
+				{
+					$klien['alamat']	= $arsip['isi']['alamat'];
+				}
+				$details[0]['item']		= $akta['nomor'];
+				$details[0]['deskripsi']= 'Pembuatan '.$akta['judul'];
+			}
+			elseif($akta)
+			{
+				$details[0]['item']		= $akta['nomor'];
+				$details[0]['deskripsi']= 'Pembuatan '.$akta['nomor'];
+			}
+		}
+		
 		if(!$this->page_datas->tagihan)
 		{
 			$this->page_datas->tagihan 							= null;
 			$this->page_datas->tagihan['status'] 				= 'pending';
-			$this->page_datas->tagihan['klien'] 				= ['nama' => 'Bapak Tukimin', 'alamat' => 'Ruko Puri Niaga'];
+			$this->page_datas->tagihan['klien'] 				= $klien;
 			$this->page_datas->tagihan['nomor'] 				= Query::generateNomorTransaksiKeluar($this->active_office['kantor'], Carbon::now());
 			$this->page_datas->tagihan['tanggal_dikeluarkan'] 	= Carbon::now()->format('d/m/Y');
-			$this->page_datas->tagihan['total'] 				= 'Rp 50000';
-			$this->page_datas->tagihan['details'][0]['item'] 			= 'Cetak Akta';
-			$this->page_datas->tagihan['details'][0]['deskripsi'] 		= 'Cetak Salinan Akta dan Dibukukan';
-			$this->page_datas->tagihan['details'][0]['harga_satuan'] 	= 'Rp 50000';
-			$this->page_datas->tagihan['details'][0]['kuantitas'] 		= '1';
-			$this->page_datas->tagihan['details'][0]['subtotal'] 		= 'Rp 50000';
+			$this->page_datas->tagihan['total'] 				= $details[0]['subtotal'];
+			$this->page_datas->tagihan['details']				= $details;
 		}
 
 		$this->page_datas->id 				= $id;

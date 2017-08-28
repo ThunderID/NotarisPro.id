@@ -29,26 +29,44 @@ class bpnController extends Controller
 		$this->middleware('scope:read_schedule');
 
 		//0. set active office
-		$this->active_office                = TAuth::activeOffice();
+		$this->active_office			= TAuth::activeOffice();
 
 		// 1. set page attributes
-		$this->page_attributes->title       = 'Jadwal Monitoring BPN';
+		$this->page_attributes->title	= 'Jadwal Monitoring BPN';
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
-		$query                              = $request->only('cari', 'filter', 'urutkan', 'page');
+		$query							= $request->only('cari', 'filter', 'urutkan', 'page');
 
 		//2b. retrieve all bpn
 		$this->retrieveBpn($query);
 
 		//2c. get all filter 
-		$this->page_datas->filters          = $this->retrieveBpnFilter();
+		$this->page_datas->filters		= $this->retrieveBpnFilter();
 		
 		//2d. get all urutan 
-		$this->page_datas->urutkan          = $this->retrieveBpnUrutkan();
+		$this->page_datas->urutkan		= $this->retrieveBpnUrutkan();
+
+		$jadwal['title']	= 'Kontrol Akta';
+		// $jadwal['start']	= Carbon
+		if($request->has('akta_id'))
+		{
+			$akta	= Dokumen::id($request->get('akta_id'))->kantor($this->active_office['kantor']['id'])->first();
+		}
+
+		// 'title'			,
+		// 'start'			,
+		// 'end'			,
+		// 'pembuat'		,
+		// 'peserta'		,
+		// 'tempat'		,
+		// 'agenda'		,
+		// 'referensi'		,
+
+		$this->page_datas->jadwal	= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 
 		//3.initialize view
-		$this->view                         = view('notaris.pages.jadwal.bpn.index');
+		$this->view 			= view('notaris.pages.jadwal.bpn.index');
 
 		return $this->generateView();
 	}
@@ -84,7 +102,7 @@ class bpnController extends Controller
 		$this->page_datas->jadwal 			= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 
 		//3.initialize view
-		$this->view                         = view('notaris.pages.jadwal.bpn.show');
+		$this->view							= view('notaris.pages.jadwal.bpn.show');
 		
 		return $this->generateView();  
 	}
