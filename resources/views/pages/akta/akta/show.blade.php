@@ -56,10 +56,10 @@
 							</div>
 						</div>
 
-						<div id="content">
+						<div id="content" class="hidden-print">
 						</div>
 
-						<div id="reader" style="display: none;">
+						<div id="reader" class="show-print" style="display: none;">
 						</div>
 
 					</div>

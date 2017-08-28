@@ -100,3 +100,9 @@
 		display: none !important;
 	}
 }
+
+@media print {
+	.show-print{
+		display: block !important;
+	}
+}
