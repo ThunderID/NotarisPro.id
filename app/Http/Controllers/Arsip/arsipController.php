@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Arsip;
 
 use Illuminate\Http\Request;
 use App\Domain\Invoice\Models\Arsip as Query;
+use App\Domain\Akta\Models\TipeDokumen;
 
 use App\Http\Controllers\Controller;
 
@@ -47,6 +48,8 @@ class arsipController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan		= $this->retrieveArsipUrutkan();
 
+		$this->retrieveArsipConfig();
+
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.index');
 
@@ -83,10 +86,24 @@ class arsipController extends Controller
 		//2e. get show document
 		$this->page_datas->arsip 		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 
+		$this->retrieveArsipConfig();
+
+		$this->page_datas->arsip 		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.show');
 		
 		return $this->generateView();  
+	}
+
+	private function retrieveArsipConfig()
+	{
+		$tipe							= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
+ 		$this->page_datas->config 		= null;
+		foreach ($tipe as $key => $value) 
+		{
+			$this->page_datas->config[$value['jenis_dokumen']]	= [(isset($value['isi'][0]) ? $value['isi'][0] : null ), (isset($value['isi'][1]) ? $value['isi'][1] : null )];
+		}
 	}
 
 	/**
