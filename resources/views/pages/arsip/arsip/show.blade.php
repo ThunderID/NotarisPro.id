@@ -62,8 +62,10 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th style="width: 30%;"">Jenis Arsip</th>
-								<th style="width: 70%">Nama</th>
+								<th style="width: 25%;">Dokumen</th>
+								<th style="width: 25%;">Relasi</th>
+								<th style="width: 45%;">Deskripsi</th>
+								<th style="width: 5%;"></th>
 							</tr>
 						</thead>
 						<tbody id="content">
@@ -71,28 +73,65 @@
 						</tbody>
 					</table>
 
-					<div id="template" hidden>
-						<tr onclick="showArsip(this);" style="cursor: pointer;">
-							<td id="jenis">
-								<i class="fa fa-id-card" aria-hidden="true"></i>
-								&nbsp;
-								KTP
+					<table id="template" hidden>
+						<tr id="data" class="pb-0">
+							<td id="jenis" class="text-uppercase">
 							</td>
-							<td id="nama">
-								Aldo Gidal Kebo
-							</td>				
+							<td id="relasi" class="text-capitalize">
+							</td>							
+							<td id="deskripsi">
+								<p id="content1" class="mb-1">Field 1 : Dummy 1</p>
+								<p id="content2" class="mb-1">Field 2 : Dummy 2</p>
+							</td>
+							<td>
+								<a id="link" href="#" target="blank" class="pr-2" style="float: right;">
+									<i class="fa fa-external-link" aria-hidden="true"></i>
+								</a>
+							</td>
 						</tr>						
 		                <tr id="no-data">
-		                    <td colspan="2" class="text-center">
-		                        Tidak Ada Data
+		                    <td colspan="3" class="text-center">
+		                    	Tidak ada data
 		                    </td>
 		                </tr>					
-					</div>
+					</table>
 
 				</div>
 				<div class="tab-pane" id="terkait-akta" role="tabpanel">
 					<p class="pb-3">Penjelasan akta terkait
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 25%;">Jenis</th>
+								<th style="width: 80%;">Judul Akta</th>
+								<th style="width: 5%;"></th>
+							</tr>
+						</thead>
+						<tbody id="content">
+							
+						</tbody>
+					</table>
+
+					<table id="template" hidden>
+						<tr id="data" class="pb-0">
+							<td id="jenis" class="text-uppercase">
+							</td>
+							<td id="judul" class="text-capitalize">
+							</td>
+							<td>
+								<a id="link" href="#" target="blank" class="pr-2" style="float: right;">
+									<i class="fa fa-external-link" aria-hidden="true"></i>
+								</a>
+							</td>
+						</tr>						
+		                <tr id="no-data">
+		                    <td colspan="3" class="text-center">
+		                    	Tidak ada data
+		                    </td>
+		                </tr>					
+					</table>					
 
 				</div>
 
@@ -147,28 +186,54 @@
 									};
 
 			try {
-				let target = $(document.getElementById('arsip_show'));
+				var target = $(document.getElementById('arsip_show'));
 
 				// arsip
-				let arsip = target.find('#arsip');
+				var arsip = target.find('#arsip');
 				try{
 					arsip.find('#title').html(icon_tipe_arsip[resp.jenis] + window.stringManipulator.toSpace(resp.jenis));
 				}catch(err){
 					arsip.find('#title').html(icon_tipe_arsip['lainnya'] + window.stringManipulator.toSpace(resp.jenis));
 				}
-				let tmplt = arsip.find('#template');
+				var tmplt = arsip.find('#template');
 				arsip.find('#content').empty();
 				$.map(resp.isi, function(value, index) {
 					var rslt = tmplt.clone().appendTo(arsip.find('#content'));
 					rslt.find('#field').text(window.stringManipulator.toSpace(index));
-					rslt.find('#value').text(rslt.find('#value').text() + window.stringManipulator.toSpace(value));
+					rslt.find('#value').text(rslt.find('#value').text() + (value == '' ? '_' :  window.stringManipulator.toSpace(value)));
 					rslt.removeAttr('hidden');
 					rslt.addClass('arsip');
 				});
 
 				// arsip terkait
-				let terkait = target.find('#terkait-arsip');
-				
+				var terkait = target.find('#terkait-arsip');
+				terkait.find('#content').empty();
+				if(resp.relasi && resp.relasi.dokumen){
+					$.map(resp.relasi.dokumen, function(value, index) {
+						var rslt = terkait.find('#template').find('#data').clone().appendTo(terkait.find('#content'));
+						rslt.find('#link').attr('href' ,  '{{route('arsip.arsip.index')}}/' + value.id.$oid);
+						rslt.removeAttr('id');
+						rslt.find('#jenis').text(value.jenis);
+						rslt.find('#relasi').text(value.relasi);
+					});
+				}else{
+					terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
+				}
+
+				// akta terkait
+				var terkait = target.find('#terkait-akta');
+				terkait.find('#content').empty();
+				if(resp.relasi && resp.relasi.akta){
+					$.map(resp.relasi.akta, function(value, index) {
+						var rslt = terkait.find('#template').find('#data').clone().appendTo(terkait.find('#content'));
+						rslt.find('#link').attr('href' ,  '{{route('akta.akta.index')}}/' + value.id.$oid);
+						rslt.removeAttr('id');
+						rslt.find('#jenis').text(value.jenis);
+						rslt.find('#judul').text(value.judul);
+					});
+				}else{
+					terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
+				}
 
 
 				// ui on complete

@@ -89,8 +89,8 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th style="width: 20%;"">Jenis Arsip</th>
-								<th style="width: 80%">Nama</th>
+								<th style="width: 30%;"">Jenis Dokumen</th>
+								<th style="width: 70%">Deskripsi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -105,8 +105,9 @@
 									&nbsp;
 									{{ strtoupper($value['jenis']) }}
 								</td>
-								<td>
-									{{ $value['isi']['nama'] }}
+								<td class="pb-1">
+									<p class="mb-1">Field 1 : Dummy 1</p>
+									<p class="mb-1">Field 2 : Dummy 2</p>
 								</td>				
 							</tr>
 			                @empty
