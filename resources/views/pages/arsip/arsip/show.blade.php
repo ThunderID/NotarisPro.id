@@ -25,7 +25,7 @@
 				</a>
 			</h4>
 		</div>	
-		<div id="arsip" class="col-12 col-sm-12 col-md-6 col-lg-4 scrollable_panel pl-3">
+		<div id="arsip" class="col-12 col-sm-12 col-md-5 col-lg-4 scrollable_panel pl-3">
 			<div class="row pt-4 pb-3">
 				<div class="col-12">
 					<h5 id="title" class="text-uppercase"></h5>
@@ -42,29 +42,60 @@
 			<div id="content">
 			</div>
 		</div>
-		<div class="col-12 col-sm-12 col-md-6 col-lg-8" style="height: 100%; border-left: 1px solid #F7F7F7;">
+		<div id="terkait" class="col-12 col-sm-12 col-md-7 col-lg-8 pt-2" style="height: 100%; border-left: 1px solid #F7F7F7;">
 			<!-- Nav tabs -->
-			<ul class="nav nav-tabs" role="tablist">
+			<ul class="nav nav-tabs flat-tabs" role="tablist">
 				<li class="nav-item">
-					<a class="nav-link active" data-toggle="tab" href="#home" role="tab">Home</a>
+					<a class="nav-link active pl-0 pb-0" data-toggle="tab" href="#terkait-arsip" role="tab">Arsip Terkait</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" data-toggle="tab" href="#profile" role="tab">Profile</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-toggle="tab" href="#messages" role="tab">Messages</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a>
+					<a class="nav-link pl-0 pb-0" data-toggle="tab" href="#terkait-akta" role="tab">Akta Terkait</a>
 				</li>
 			</ul>
 
 			<!-- Tab panes -->
-			<div class="tab-content">
-				<div class="tab-pane active" id="home" role="tabpanel">...</div>
-				<div class="tab-pane" id="profile" role="tabpanel">...</div>
-				<div class="tab-pane" id="messages" role="tabpanel">...</div>
-				<div class="tab-pane" id="settings" role="tabpanel">...</div>
+			<div class="tab-content pt-4">
+				<div class="tab-pane active" id="terkait-arsip" role="tabpanel">
+					<p class="pb-3">Penjelasan dokumen arsip terkait
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 30%;"">Jenis Arsip</th>
+								<th style="width: 70%">Nama</th>
+							</tr>
+						</thead>
+						<tbody id="content">
+							
+						</tbody>
+					</table>
+
+					<div id="template" hidden>
+						<tr onclick="showArsip(this);" style="cursor: pointer;">
+							<td id="jenis">
+								<i class="fa fa-id-card" aria-hidden="true"></i>
+								&nbsp;
+								KTP
+							</td>
+							<td id="nama">
+								Aldo Gidal Kebo
+							</td>				
+						</tr>						
+		                <tr id="no-data">
+		                    <td colspan="2" class="text-center">
+		                        Tidak Ada Data
+		                    </td>
+		                </tr>					
+					</div>
+
+				</div>
+				<div class="tab-pane" id="terkait-akta" role="tabpanel">
+					<p class="pb-3">Penjelasan akta terkait
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -119,21 +150,25 @@
 				let target = $(document.getElementById('arsip_show'));
 
 				// arsip
-				let ar = target.find('#arsip')
+				let arsip = target.find('#arsip');
 				try{
-					ar.find('#title').html(icon_tipe_arsip[resp.jenis] + window.stringManipulator.toSpace(resp.jenis));
+					arsip.find('#title').html(icon_tipe_arsip[resp.jenis] + window.stringManipulator.toSpace(resp.jenis));
 				}catch(err){
-					ar.find('#title').html(icon_tipe_arsip['lainnya'] + window.stringManipulator.toSpace(resp.jenis));
+					arsip.find('#title').html(icon_tipe_arsip['lainnya'] + window.stringManipulator.toSpace(resp.jenis));
 				}
-				let tmplt = ar.find('#template');
-				ar.find('#content').empty();
+				let tmplt = arsip.find('#template');
+				arsip.find('#content').empty();
 				$.map(resp.isi, function(value, index) {
-					var rslt = tmplt.clone().appendTo(ar.find('#content'));
+					var rslt = tmplt.clone().appendTo(arsip.find('#content'));
 					rslt.find('#field').text(window.stringManipulator.toSpace(index));
 					rslt.find('#value').text(rslt.find('#value').text() + window.stringManipulator.toSpace(value));
 					rslt.removeAttr('hidden');
 					rslt.addClass('arsip');
 				});
+
+				// arsip terkait
+				let terkait = target.find('#terkait-arsip');
+				
 
 
 				// ui on complete
