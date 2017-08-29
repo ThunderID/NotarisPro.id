@@ -3,6 +3,10 @@
 
 	.nav-link{
 		padding-top: 0.75rem;
+
+		&:hover, &:focus {
+			border-color: white;
+		} 
 	}
 
 	.nav-link.active{
@@ -12,9 +16,10 @@
 		padding-top: 0.5rem;
 		padding-bottom: 0px;
 		color: gray;
-	}
+		border-bottom: 1px solid gray;
 
-	.nav-link:hover,.nav-link:focus{
-		border-color: white;
-	} 
+		&:hover, &:focus {
+			border-bottom: 1px solid gray;
+		}
+	}
 }

@@ -53,6 +53,8 @@ class arsipController extends Controller
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.index');
 
+		// dd($this->page_datas);
+
 		return $this->generateView();
 	}
 

@@ -32,11 +32,14 @@
 				</div>
 			</div>				
 			<div id="template" class="row" hidden>
-				<div class="col-4">
+				<div class="col-4 pr-0">
 					<p class="text-capitalize" id="field"></p>
 				</div>
-				<div class="col-8">
-					<p id="value">: &nbsp;</p>
+				<div class="col-1 pl-0 pr-0 text-center">
+					:
+				</div>
+				<div class="col-7 pl-0">
+					<p id="value">&nbsp;</p>
 				</div>
 			</div>
 			<div id="content">
@@ -46,10 +49,10 @@
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs flat-tabs" role="tablist">
 				<li class="nav-item">
-					<a class="nav-link active pl-0 pb-0" data-toggle="tab" href="#terkait-arsip" role="tab">Arsip Terkait</a>
+					<a class="nav-link active pl-0 pb-1 pr-0 mr-3 tab-init" data-toggle="tab" href="#terkait-arsip" role="tab">Arsip Terkait</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link pl-0 pb-0" data-toggle="tab" href="#terkait-akta" role="tab">Akta Terkait</a>
+					<a class="nav-link pl-0 pb-1 pr-0 mr-3" data-toggle="tab" href="#terkait-akta" role="tab">Akta Terkait</a>
 				</li>
 			</ul>
 
@@ -116,7 +119,7 @@
 
 					<table id="template" hidden>
 						<tr id="data" class="pb-0">
-							<td id="jenis" class="text-uppercase">
+							<td id="jenis" class="text-capitalize">
 							</td>
 							<td id="judul" class="text-capitalize">
 							</td>
@@ -163,6 +166,7 @@
 
 		// reset state
 		$('.loader').show();
+		$('.tab-init').click();
 
 		// sets url
 		window.history.pushState(null, null, '/arsip/arsip/' + id);
@@ -187,7 +191,6 @@
 										'lainnya' :  "<i class='fa fa-file' aria-hidden='true'></i>&nbsp;&nbsp;",
 									};
 
-			try {
 				var target = $(document.getElementById('arsip_show'));
 
 				// arsip
@@ -202,7 +205,7 @@
 				$.map(resp.isi, function(value, index) {
 					var rslt = tmplt.clone().appendTo(arsip.find('#content'));
 					rslt.find('#field').text(window.stringManipulator.toSpace(index));
-					rslt.find('#value').text(rslt.find('#value').text() + (value == '' ? '_' :  window.stringManipulator.toSpace(value)));
+					rslt.find('#value').text((value == '' || value == null ? '_' :  window.stringManipulator.toSpace(value)));
 					rslt.removeAttr('hidden');
 					rslt.addClass('arsip');
 				});
@@ -244,12 +247,7 @@
 
 				});
 
-			}catch(err){
-				console.log(err);
-				// $('.show-before-load').hide();
-				// $('.show-on-error').show();
-				// $(document.getElementById('loader-error-code')).text('422');
-			}									
+									
 
 
 		});
