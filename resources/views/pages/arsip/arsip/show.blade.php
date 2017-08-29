@@ -159,6 +159,8 @@
 	}	
 
 	function modulShowArsip(id, judul){
+		console.log('triggered');
+
 		// reset state
 		$('.loader').show();
 
@@ -259,4 +261,24 @@
 
 		ajax_arsip.get(url);		
 	}
+
+	/* Start URL Page Manager */
+	$(window).on('popstate', function() {
+		managePage();
+	});
+
+	@if($page_datas->id != null)
+		managePage();
+	@endif
+
+	function managePage(){
+		var id = window.location.pathname.replace('/arsip/arsip', '');
+		if(id != ""){
+			id = id.replace('/', '');
+			modulShowArsip(id, null);
+		}else{
+			hideArsip(null);
+		}
+	}
+	/* End URL Page Manager */	
 @endpush

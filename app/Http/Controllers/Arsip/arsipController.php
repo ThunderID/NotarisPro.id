@@ -24,7 +24,7 @@ class arsipController extends Controller
 		$this->per_page 		= 36;
 	}    
 
-	public function index(Request $request)
+	public function index(Request $request, $id = null)
 	{
 		$this->middleware('scope:read_archive');
 
@@ -33,7 +33,7 @@ class arsipController extends Controller
 
 		// 1. set page attributes
 		$this->page_attributes->title	= 'Arsip';
-		$this->page_datas->id			= null;
+		$this->page_datas->id			= $id;
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
@@ -65,6 +65,7 @@ class arsipController extends Controller
 	{
 		$this->middleware('scope:read_archive');
 		
+		/*
 		$this->active_office 			= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -94,6 +95,10 @@ class arsipController extends Controller
 		$this->view						= view('pages.arsip.arsip.show');
 		
 		return $this->generateView();  
+		*/
+
+		return $this->index($request, $id);
+
 	}
 
 	private function retrieveArsipConfig()
