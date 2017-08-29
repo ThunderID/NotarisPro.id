@@ -93,6 +93,21 @@ Route::group(['namespace' => 'Tagihan\\', 'middleware' => ['whitelists_notaris']
 	Route::any('/tagihan/status/{tagihan_id}/{status}',	['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
 });
 
+// AREA JADWAL //
+Route::group(['namespace' => 'Jadwal\\', 'middleware' => ['whitelists_notaris']], function(){
+	// C1. JADWAL
+	Route::resource('/jadwal/bpn', 'bpnController', ['names' => [
+		'index' 	=> 'jadwal.bpn.index', //get
+		'create'	=> 'jadwal.bpn.create', //get
+		'store' 	=> 'jadwal.bpn.store', //post
+		'show' 		=> 'jadwal.bpn.show', //get
+		'edit' 		=> 'jadwal.bpn.edit', //get
+		'update' 	=> 'jadwal.bpn.update', //patch
+		'destroy' 	=> 'jadwal.bpn.destroy' //post 
+	]]);
+});
+
+
 Route::group(['middleware' => 'trial'], function(){
 
 	// 1. AKTA - ACL DONE
@@ -129,19 +144,7 @@ Route::group(['middleware' => 'trial'], function(){
 		Route::get('/akta/ajax/{id}', 							['uses' => 'aktaController@ajaxShow', 		'as' => 'akta.ajax.show']);
 	});
 
-	// 2A. JADWAL
-	Route::group(['namespace' => 'Jadwal\\'], function(){
-		//tagihan
-		Route::resource('/jadwal/bpn', 'bpnController', ['names' => [
-			'index' 	=> 'jadwal.bpn.index', //get
-			'create'	=> 'jadwal.bpn.create', //get
-			'store' 	=> 'jadwal.bpn.store', //post
-			'show' 		=> 'jadwal.bpn.show', //get
-			'edit' 		=> 'jadwal.bpn.edit', //get
-			'update' 	=> 'jadwal.bpn.update', //patch
-			'destroy' 	=> 'jadwal.bpn.destroy' //post 
-		]]);
-	});
+
 
 	// 3. KLIEN
 	Route::group(['namespace' => 'Arsip\\'], function(){
@@ -158,8 +161,6 @@ Route::group(['middleware' => 'trial'], function(){
 		Route::get('/arsip/ajax/{id}', 							['uses' => 'arsipController@ajaxShow', 		'as' => 'arsip.ajax.show']);
 
 	});
-
-
 
 	//AREA DASHBOARD//
 	Route::group(['namespace' => 'Dashboard\\', 'prefix' => 'dashboard'], function(){
