@@ -138,6 +138,17 @@ trait TextParseTrait
 					$arsip 					= new Arsip;
 				}
 
+				//find tipe docs
+				$tipe_doc 					= TipeDokumen::kantor($this->active_office['kantor']['id'])->where('jenis_dokumen', $jenis)->first();
+
+				foreach ((array)$tipe_doc['isi'] as $k_td => $v_td) 
+				{
+					if(!isset($value2[$v_td]))
+					{
+						$value2[$v_td]		= null;
+					}
+				}
+
 				$arsip->jenis 				= $jenis;
 				$arsip->isi 				= $value2;
 				$arsip->kantor 				= $this->active_office['kantor'];
