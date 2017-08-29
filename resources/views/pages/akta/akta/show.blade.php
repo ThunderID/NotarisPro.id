@@ -359,7 +359,7 @@
 
 		// ui display
 		$(document.getElementById('akta_show')).fadeIn('fast');
-		$(document.getElementById('akta_show')).find('#judul_akta').text(judul);
+		$(document.getElementById('akta_show')).find('#title').text(judul);
 	}
 	/* End UI page */
 
@@ -370,7 +370,7 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			console.log(resp);
+			//console.log(resp);
 			try {
 
 				// reloaded or from index

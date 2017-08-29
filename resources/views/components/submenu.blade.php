@@ -131,7 +131,7 @@
 				{{-- Title --}}
 				<div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-10">
 					<div style="text-overflow:ellipsis; width:100%;">
-						<span id="judul_akta" class="navbar-text mb-0 text-muted">				
+						<span id="title" class="navbar-text mb-0 text-muted">				
 							{!! isset($title) ? $title : '' !!}
 						</span>
 					</div>

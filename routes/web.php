@@ -89,6 +89,8 @@ Route::group(['middleware' => 'trial'], function(){
 			'update' 	=> 'arsip.arsip.update', //patch
 			'destroy' 	=> 'arsip.arsip.destroy' //post 
 		]]);
+		Route::get('/arsip/ajax/{id}', 							['uses' => 'arsipController@ajaxShow', 		'as' => 'arsip.ajax.show']);
+
 	});
 
 	// AREA PENGATURAN //

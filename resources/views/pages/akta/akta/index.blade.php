@@ -196,7 +196,5 @@
 		</div>
 	</div>
 </div>
-
 @yield('modal')
-
 @stop
