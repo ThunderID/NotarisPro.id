@@ -2,7 +2,7 @@
 
 namespace App\Service\Admin;
 
-use App\Domain\Admin\Models\Pengguna;
+use App\Domain\Administrative\Models\Pengguna;
 
 use Exception;
 use Carbon\Carbon;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Arsip;
 
 use Illuminate\Http\Request;
-use App\Domain\Order\Models\Arsip as Query;
+use App\Domain\Invoice\Models\Arsip as Query;
 
 use App\Http\Controllers\Controller;
 

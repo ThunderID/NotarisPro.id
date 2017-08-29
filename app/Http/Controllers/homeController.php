@@ -13,14 +13,14 @@ use App\Service\Order\DaftarKlien;
 use App\Domain\Stat\Models\KlienProgress;
 use App\Domain\Stat\Models\UserAttendance;
 
-use App\Domain\Order\Models\Klien;
+use App\Domain\Invoice\Models\Klien;
 
 use App\Domain\Akta\Models\Template;
 use App\Domain\Akta\Models\Dokumen;
 
 use App\Domain\Admin\Models\Pengguna;
 
-use App\Domain\Order\Models\HeaderTransaksi;
+use App\Domain\Invoice\Models\HeaderTransaksi;
 
 use MongoDB\BSON\UTCDateTime;
 

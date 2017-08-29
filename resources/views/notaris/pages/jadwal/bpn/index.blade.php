@@ -27,7 +27,7 @@
 					<div class="row">
 						<div class="col-12">
 							<label class="control-label" for="nomor_akta">Nomor Akta</label>  
-							<input name="nomor_akta" value="{{ old('nomor_akta') ? old('nomor_akta') : null }}" class="form-control" type="text" required>
+							<input name="nomor_akta" value="{{$page_datas->jadwal['referensi']['nomor_akta']}}" class="form-control" type="text" required>
 						</div>
 					</div>
 				</fieldset>
@@ -36,7 +36,7 @@
 					<div class="row">
 						<div class="col-12">
 							<label class="control-label" for="tanggal_mulai">Mulai</label>  
-							<input name="tanggal_mulai" value="{{ old('tanggal_mulai') ? old('tanggal_mulai') : null }}" placeholder="d/m/Y H:i" class="form-control" type="text" required>
+							<input name="tanggal_mulai" value="{{$page_datas->jadwal['start']}}" class="form-control" type="text" required>
 						</div>
 					</div>
 				</fieldset>
@@ -45,7 +45,7 @@
 					<div class="row">
 						<div class="col-12">
 							<label class="control-label" for="tanggal_selesai">Sampai</label>  
-							<input name="tanggal_selesai" value="{{ old('tanggal_selesai') ? old('tanggal_selesai') : null }}" placeholder="d/m/Y H:i" class="form-control" type="text" required>
+							<input name="tanggal_selesai" value="{{$page_datas->jadwal['end']}}" class="form-control" type="text" required>
 						</div>
 					</div>
 				</fieldset>		
@@ -54,7 +54,7 @@
 					<div class="row">
 						<div class="col-12">
 							<label class="control-label" for="tempat">Tempat</label>  
-							<textarea name="tempat" class="form-control"></textarea>
+							<textarea name="tempat" class="form-control">{{$page_datas->jadwal['tempat']}}</textarea>
 						</div>
 					</div>
 				</fieldset>

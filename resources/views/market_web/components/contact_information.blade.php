@@ -9,14 +9,10 @@
 	<div class="col-sm-3 text-left">
 		<h6><strong>HELP DESK</strong></h6>
 		<p style="margin-bottom:5px;margin-top:5px;"><a href="{{route('web.notaris.index')}}">Notaris di Indonesia</a></p>
-		<p style="margin-bottom:5px;margin-top:5px;">Training</p>
-		<p style="margin-bottom:5px;margin-top:5px;">Consult</p>
-		<p style="margin-bottom:5px;margin-top:5px;">Trouble Shoot</p>
 	</div>
 	<div class="col-sm-3 text-left">
 		<h6><strong>LEGAL</strong></h6>
-		<p style="margin-bottom:5px;margin-top:5px;">Privacy</p>
-		<p style="margin-bottom:5px;margin-top:5px;">Security</p>
+		<p style="margin-bottom:5px;margin-top:5px;">Privacy Policy</p>
 		<p style="margin-bottom:5px;margin-top:5px;">Terms of Service</p>
 	</div>
 	<div class="col-sm-3 text-left">

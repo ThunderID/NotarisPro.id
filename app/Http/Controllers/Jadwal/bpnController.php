@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Jadwal;
 
 use Illuminate\Http\Request;
-use App\Domain\Order\Models\Jadwal as Query;
+use App\Domain\Invoice\Models\Jadwal as Query;
 use App\Domain\Akta\Models\Dokumen;
 
 use App\Http\Controllers\Controller;
@@ -47,26 +47,24 @@ class bpnController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan		= $this->retrieveBpnUrutkan();
 
-		$jadwal['title']	= 'Kontrol Akta';
-		// $jadwal['start']	= Carbon
+		$jadwal['referensi']['nomor_akta']	= 'NOMORAKTA0001';
+		$jadwal['start']					= Carbon::now()->format('d/m/Y H:i');
+		$jadwal['end']						= Carbon::now()->addDays(14)->format('d/m/Y H:i');
+		$jadwal['tempat']					= 'BPN '.$this->active_office['kantor']['notaris']['daerah_kerja'];
+
 		if($request->has('akta_id'))
 		{
-			$akta	= Dokumen::id($request->get('akta_id'))->kantor($this->active_office['kantor']['id'])->first();
+			$akta						= Dokumen::id($request->get('akta_id'))->kantor($this->active_office['kantor']['id'])->first();
+			if($akta)
+			{
+				$jadwal['referensi']['nomor_akta']	= $akta['nomor'];
+			}
 		}
 
-		// 'title'			,
-		// 'start'			,
-		// 'end'			,
-		// 'pembuat'		,
-		// 'peserta'		,
-		// 'tempat'		,
-		// 'agenda'		,
-		// 'referensi'		,
-
-		$this->page_datas->jadwal	= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+		$this->page_datas->jadwal		= $jadwal;
 
 		//3.initialize view
-		$this->view 			= view('notaris.pages.jadwal.bpn.index');
+		$this->view 					= view('notaris.pages.jadwal.bpn.index');
 
 		return $this->generateView();
 	}

@@ -6,8 +6,8 @@ use App\Domain\Akta\Models\Dokumen;
 use App\Domain\Admin\Models\Kantor;
 
 use App\Domain\Akta\Models\TipeDokumen;
-use App\Domain\Order\Models\Klien;
-use App\Domain\Order\Models\Objek;
+use App\Domain\Invoice\Models\Klien;
+use App\Domain\Invoice\Models\Objek;
 
 use App\Service\Akta\Traits\TextParseTrait;
 use App\Service\Akta\Traits\AssignAktaTrait;

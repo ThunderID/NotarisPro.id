@@ -3,7 +3,7 @@
 namespace App\Service\Akta\Traits;
 
 use App\Domain\Akta\Models\TipeDokumen;
-use App\Domain\Order\Models\Arsip;
+use App\Domain\Invoice\Models\Arsip;
 
 /**
  * Trait untuk otomatis enhance klien
@@ -201,20 +201,22 @@ trait TextParseTrait
 			{
 				foreach ($arsip['relasi'][$key] as $key2 => $value2) 
 				{
-					$relasi['akta'][$count]	= ['id' => $akta['id'], 'judul' => $akta['judul'], 'jenis' => $akta['jenis']];
+					$relasi['akta'][$count]		= ['id' => $akta['id'], 'judul' => $akta['judul'], 'jenis' => $akta['jenis']];
+					$relasi['dokumen'][$count2]	= ['id' => $value2['arsip']['id'], 'jenis' => $value2['arsip']['jenis'], 'relasi' => $value2['relasi'], 'akta_id' => $akta['id']];
+					$count2++;
 
-					if(isset($relasi['dokumen'][$count]))
-					{
-						foreach ((array)$relasi['dokumen'][$count] as $k2 => $v2) 
-						{
-							if(str_is($v2['id'], $value2['arsip']['id']))
-							{
-								$count2			= $k2;
-							}
-						}
-					}
+					// if(isset($relasi['dokumen'][$count]))
+					// {
+					// 	foreach ((array)$relasi['dokumen'][$count] as $k2 => $v2) 
+					// 	{
+					// 		if(str_is($v2['id'], $value2['arsip']['id']))
+					// 		{
+					// 			$count2		= $k2;
+					// 		}
+					// 	}
+					// }
 
-					$relasi['dokumen'][$count][$count2]	= ['id' => $value2['arsip']['id'], 'jenis' => $value2['arsip']['jenis'], 'relasi' => $value2['relasi']];
+					// $relasi['dokumen'][$count][$count2]		= ['id' => $value2['arsip']['id'], 'jenis' => $value2['arsip']['jenis'], 'relasi' => $value2['relasi']];
 				}
 			}
 
