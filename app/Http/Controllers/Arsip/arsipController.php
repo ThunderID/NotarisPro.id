@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Infrastructure\Traits\GuidTrait;
 
-use TAuth, Exception;
+use TAuth, Response, Exception;
 
 class arsipController extends Controller
 {
@@ -32,6 +32,7 @@ class arsipController extends Controller
 
 		// 1. set page attributes
 		$this->page_attributes->title	= 'Arsip';
+		$this->page_datas->id			= null;
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
@@ -47,7 +48,7 @@ class arsipController extends Controller
 		$this->page_datas->urutkan		= $this->retrieveArsipUrutkan();
 
 		//3.initialize view
-		$this->view						= view('notaris.pages.arsip.arsip.index');
+		$this->view						= view('pages.arsip.arsip.index');
 
 		return $this->generateView();
 	}
@@ -83,10 +84,36 @@ class arsipController extends Controller
 		$this->page_datas->arsip 		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 dd($this->page_datas->arsip);
 		//3.initialize view
-		$this->view						= view('notaris.pages.arsip.arsip.show');
+		$this->view						= view('pages.arsip.arsip.show');
 		
 		return $this->generateView();  
 	}
+
+	/**
+	 * Display a listing of the resource.
+	 * 
+	 * @return \Illuminate\Http\Response
+	 */
+	public function ajaxShow(Request $request, $id)
+	{	
+		$this->middleware('scope:read_archive');
+		$this->active_office = TAuth::activeOffice();
+        //1. get show document
+        $arsip                   = $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+
+        if($arsip)
+        {
+            $arsip               = $arsip->toArray();
+            // returning arsip data
+	        return Response::json($arsip);
+        }
+        else
+        {
+            //return 404
+			return App::abort(404);
+        }
+	}
+
 
 	private function retrieveArsip($query = [])
 	{

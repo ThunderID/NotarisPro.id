@@ -43,6 +43,26 @@
 	}
 }
 
+#page-loader{
+	width: 100vw;  
+	background: #fff;
+	opacity: 1; 
+	height:100%; 
+	position: absolute;
+	z-index:5;
+
+	h4{
+		width: 272px;
+		height: 57px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -28px -15px 0 -5px;
+		transform:translateX(-20%);
+	}
+}
+
+
 
 // specified akta show
 
@@ -98,5 +118,11 @@
 .background-hide-mobile{
 	@media screen and (max-width: 575px) {
 		display: none !important;
+	}
+}
+
+@media print {
+	.show-print{
+		display: block !important;
 	}
 }

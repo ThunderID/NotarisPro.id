@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-	<div id="arsip_show" class="row" style="{{ $page_datas->id == null ? 'display:none;' : '' }};background-color: white;z-index: 10; position:absolute; top:54; overflow-y: hidden;">
+	<div id="arsip_show" class="row" style="{{ $page_datas->id == null ? 'display:none;' : '' }};background-color: white;z-index: 10; position:absolute; top:54px; overflow-y: hidden;">
 		@include('pages.arsip.arsip.show')
 	</div>
 	<div class="row">
@@ -96,7 +96,7 @@
 						<tbody>
 							@forelse($page_datas->arsips as $key => $value)
 							<tr onclick="showArsip(this);" data_id_arsip="{{ $value['id'] }}" style="cursor: pointer;">
-								<td>
+								<td id="judul">
 									@if(strtoupper($value['jenis']) == 'KTP')
 										<i class="fa fa-id-card" aria-hidden="true"></i>
 									@else
