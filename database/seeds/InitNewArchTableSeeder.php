@@ -31,7 +31,7 @@ class InitNewArchTableSeeder extends Seeder
 
 		$login 			= TAuth::login($credentials[0]);
 		$active_office 	= TAuth::activeOffice();
-		$notaris_aktif	=  App\Domain\Admin\Models\Kantor::find($active_office['kantor']['id']);
+		$notaris_aktif	=  App\Domain\Administrative\Models\Kantor::find($active_office['kantor']['id']);
 
 		//init draft
 		foreach (range(0, 19) as $key) 

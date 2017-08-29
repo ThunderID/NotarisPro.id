@@ -10,6 +10,89 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//A. AREA PENGATURAN ADMINISTRATIVE //
+Route::group(['namespace' => 'Administrative\\'], function(){
+	// AREA UAC //
+	Route::group(['namespace' => 'UAC\\'], function(){
+		//A1. REGISTER TRIAL
+		Route::group(['prefix' => 'trial'], function(){
+			Route::get('/signup',		['uses' => 'signupController@trialCreate', 	'as' => 'uac.tsignup.create']);
+			Route::post('/signup',		['uses' => 'signupController@trialStore', 	'as' => 'uac.tsignup.store']);
+			Route::get('/edit',			['uses' => 'signupController@trialEdit', 	'as' => 'uac.tsignup.edit']);
+			Route::post('/update',		['uses' => 'signupController@trialUpdate', 	'as' => 'uac.tsignup.update']);
+		});
+
+		//A2. REGISTER STARTER
+		Route::group(['prefix' => 'subscription'], function(){
+			Route::get('/signup',		['uses' => 'signupController@create', 	'as' => 'uac.signup.create']);
+			Route::post('/signup',		['uses' => 'signupController@store', 	'as' => 'uac.signup.store']);
+		});
+
+		//A3. LOGIN
+		Route::get('/login',		['uses' => 'loginController@create', 	'as' => 'uac.login.create']);
+		Route::post('/login',		['uses' => 'loginController@store', 	'as' => 'uac.login.store']);
+		Route::get('/logout',		['uses' => 'loginController@destroy', 	'as' => 'uac.login.destroy']);
+
+		//A4. RESET PASSWORD
+		Route::get('/reset/password',				['uses' => 'passwordController@create', 'as' => 'uac.reset.create']);
+		Route::any('/reset/password/store',			['uses' => 'passwordController@store',	'as' => 'uac.reset.store']);
+		Route::get('/change/password/{rtoken}',		['uses' => 'passwordController@edit', 	'as' => 'uac.reset.edit']);
+		Route::post('/change/password/{rtoken}',	['uses' => 'passwordController@update', 'as' => 'uac.reset.update']);
+	});
+
+	// AREA SETTING //
+	Route::group(['middleware' => 'whitelists_notaris'], function(){
+		//A5. SETTING OFFICE
+		Route::get('/administrative/kantor',		['uses' => 'kantorController@edit', 	'as' => 'administrative.kantor.edit', 'middleware' => 'scopes:office_setting']);
+		Route::patch('/administrative/kantor',		['uses' => 'kantorController@update', 	'as' => 'administrative.kantor.update', 'middleware' => 'scopes:office_setting']);
+
+		Route::get('/administrative/developer',		['uses' => 'developerController@edit', 	'as' => 'administrative.developer.edit', 'middleware' => 'scopes:developer_setting']);
+		Route::patch('/administrative/developer',	['uses' => 'developerController@update','as' => 'administrative.developer.update', 'middleware' => 'scopes:developer_setting']);
+
+		//A7. SETTING USER
+		Route::resource('/administrative/user', 'userController', ['names' => [
+			'index' 	=> 'administrative.user.index', //get
+			'create'	=> 'administrative.user.create', //get
+			'store' 	=> 'administrative.user.store', //post
+			'show' 		=> 'administrative.user.show', //get
+			'edit' 		=> 'administrative.user.edit', //get
+			'update' 	=> 'administrative.user.update', //patch
+			'destroy' 	=> 'administrative.user.destroy' //post 
+		], 'middleware' => 'scopes:user_setting']);
+
+		//A8. SETTING ACCOUNT
+		Route::get('/administrative/akun',			['uses' => 'akunController@edit', 		'as' => 'administrative.akun.edit', 'middleware' => 'scopes:personal_setting']);
+		Route::patch('/administrative/akun',		['uses' => 'akunController@update', 	'as' => 'administrative.akun.update', 'middleware' => 'scopes:personal_setting']);
+	});
+});
+
+// AREA SUBSCRIPTION //
+Route::group(['namespace' => 'Subscription\\', 'middleware' => ['whitelists_notaris','scope:subscription_setting']], function(){
+	//B1. Subscription
+	Route::any('/subscription/tagihan',						['uses' => 'tagihanController@index', 		'as' => 'subscription.tagihan.index']);
+	Route::any('/subscription/tagihan/print/{id}',			['uses' => 'tagihanController@print', 		'as' => 'subscription.tagihan.print']);
+	Route::any('/subscription/tagihan/recalculate/{mode}',	['uses' => 'tagihanController@recalculate',	'as' => 'subscription.tagihan.recalculate']);
+	Route::any('/subscription/tagihan/bayar/{nomor}',		['uses' => 'tagihanController@payCreate',	'as' => 'subscription.tagihan.bayar']);
+});
+
+// AREA TAGIHAN //
+Route::group(['namespace' => 'Tagihan\\', 'middleware' => ['whitelists_notaris']], function(){
+	// C1. TAGIHAN
+	Route::resource('/tagihan/tagihan', 'tagihanController', ['names' => [
+		'index' 	=> 'tagihan.tagihan.index', //get
+		'create'	=> 'tagihan.tagihan.create', //get
+		'store' 	=> 'tagihan.tagihan.store', //post
+		'show' 		=> 'tagihan.tagihan.show', //get
+		'edit' 		=> 'tagihan.tagihan.edit', //get
+		'update' 	=> 'tagihan.tagihan.update', //patch
+		'destroy' 	=> 'tagihan.tagihan.destroy' //post 
+	]]);
+
+	Route::any('/tagihan/print/{tagihan_id}',	 		['uses' => 'tagihanController@print',	'as' => 'tagihan.tagihan.print']);
+	Route::any('/tagihan/status/{tagihan_id}/{status}',	['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
+});
+
 Route::group(['middleware' => 'trial'], function(){
 
 	// 1. AKTA - ACL DONE
@@ -46,23 +129,6 @@ Route::group(['middleware' => 'trial'], function(){
 		Route::get('/akta/ajax/{id}', 							['uses' => 'aktaController@ajaxShow', 		'as' => 'akta.ajax.show']);
 	});
 
-	// 2. TAGIHAN
-	Route::group(['namespace' => 'Tagihan\\'], function(){
-		//tagihan
-		Route::resource('/tagihan/tagihan', 'tagihanController', ['names' => [
-			'index' 	=> 'tagihan.tagihan.index', //get
-			'create'	=> 'tagihan.tagihan.create', //get
-			'store' 	=> 'tagihan.tagihan.store', //post
-			'show' 		=> 'tagihan.tagihan.show', //get
-			'edit' 		=> 'tagihan.tagihan.edit', //get
-			'update' 	=> 'tagihan.tagihan.update', //patch
-			'destroy' 	=> 'tagihan.tagihan.destroy' //post 
-		]]);
-
-		Route::any('/tagihan/print/{tagihan_id}',	 		['uses' => 'tagihanController@print',	'as' => 'tagihan.tagihan.print']);
-		Route::any('/tagihan/status/{tagihan_id}/{status}',	['uses' => 'tagihanController@status', 	'as' => 'tagihan.tagihan.status']);
-	});
-
 	// 2A. JADWAL
 	Route::group(['namespace' => 'Jadwal\\'], function(){
 		//tagihan
@@ -91,72 +157,12 @@ Route::group(['middleware' => 'trial'], function(){
 		]]);
 	});
 
-	// AREA PENGATURAN //
-	Route::group(['namespace' => 'Pengaturan\\', 'middleware' => 'scope:manage_settings'], function(){
-		//5. Subscription
-		Route::any('/pengaturan/tagihan',					['uses' => 'tagihanController@index', 		'as' => 'pengaturan.tagihan.index']);
-		Route::any('/pengaturan/tagihan/print/{id}',		['uses' => 'tagihanController@print', 		'as' => 'pengaturan.tagihan.print']);
-		Route::any('/pengaturan/tagihan/recalculate/{mode}',['uses' => 'tagihanController@recalculate',	'as' => 'pengaturan.tagihan.recalculate']);
-		
-		Route::any('/pengaturan/tagihan/bayar/{nomor}',		['uses' => 'tagihanController@payCreate',	'as' => 'pengaturan.tagihan.bayar']);
 
-		//6. User
-		Route::resource('/pengaturan/user', 'userController', ['names' => [
-			'index' 	=> 'pengaturan.user.index', //get
-			'create'	=> 'pengaturan.user.create', //get
-			'store' 	=> 'pengaturan.user.store', //post
-			'show' 		=> 'pengaturan.user.show', //get
-			'edit' 		=> 'pengaturan.user.edit', //get
-			'update' 	=> 'pengaturan.user.update', //patch
-			'destroy' 	=> 'pengaturan.user.destroy' //post 
-		]]);
-
-		//7. Kantor
-		Route::get('/pengaturan/kantor',		['uses' => 'kantorController@edit', 	'as' => 'pengaturan.kantor.edit']);
-		Route::patch('/pengaturan/kantor',		['uses' => 'kantorController@update', 	'as' => 'pengaturan.kantor.update']);
-
-		//8. Akun
-		Route::get('/pengaturan/akun',			['uses' => 'akunController@edit', 		'as' => 'pengaturan.akun.edit']);
-		Route::patch('/pengaturan/akun',		['uses' => 'akunController@update', 	'as' => 'pengaturan.akun.update']);
-
-		//8b. Developer
-		Route::get('/pengaturan/developer',		['uses' => 'developerController@edit', 	'as' => 'pengaturan.developer.edit']);
-		Route::patch('/pengaturan/developer',	['uses' => 'developerController@update','as' => 'pengaturan.developer.update']);
-	});
 
 	//AREA DASHBOARD//
 	Route::group(['namespace' => 'Dashboard\\', 'prefix' => 'dashboard'], function(){
 		//13. DASHBOARD
 		Route::get('/',					['uses' => 'dashboardController@home',	'as' => 'dashboard.home.index']);
-	});
-});
-
-// AREA UAC //
-Route::group(['namespace' => 'UAC\\'], function(){
-	// 9. Login
-	Route::get('/login',		['uses' => 'loginController@create', 	'as' => 'uac.login.create']);
-	Route::post('/login',		['uses' => 'loginController@store', 	'as' => 'uac.login.store']);
-	Route::get('/logout',		['uses' => 'loginController@destroy', 	'as' => 'uac.login.destroy']);
-
-	//10. Reset Pass
-	Route::get('/reset/password',			['uses' => 'passwordController@create', 	'as' => 'uac.reset.create']);
-	Route::any('/reset/password/store',		['uses' => 'passwordController@store',	 	'as' => 'uac.reset.store']);
-	// Route::get('/reset/password/success',	['uses' => 'passwordController@show',	 	'as' => 'uac.reset.show']);
-	Route::get('/change/password/{rtoken}',		['uses' => 'passwordController@edit', 	'as' => 'uac.reset.edit']);
-	Route::post('/change/password/{rtoken}',	['uses' => 'passwordController@update', 'as' => 'uac.reset.update']);
-
-	// 11. Register free trial
-	Route::group(['prefix' => 'trial'], function(){
-		Route::get('/signup',		['uses' => 'signupController@trialCreate', 	'as' => 'uac.tsignup.create']);
-		Route::post('/signup',		['uses' => 'signupController@trialStore', 	'as' => 'uac.tsignup.store']);
-		Route::get('/edit',			['uses' => 'signupController@trialEdit', 	'as' => 'uac.tsignup.edit']);
-		Route::post('/update',		['uses' => 'signupController@trialUpdate', 	'as' => 'uac.tsignup.update']);
-	});
-
-	//12. Register with plan
-	Route::group(['prefix' => 'subscription'], function(){
-		Route::get('/signup',		['uses' => 'signupController@create', 	'as' => 'uac.signup.create']);
-		Route::post('/signup',		['uses' => 'signupController@store', 	'as' => 'uac.signup.store']);
 	});
 });
 

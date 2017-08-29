@@ -41,7 +41,7 @@
 	<div class="collapse navbar-collapse justify-content-end" id="navbarNavbarAccount">
 		<ul class="navbar-nav">
 			<li class="nav-item">
-				<a class="nav-link" href="{{route('pengaturan.kantor.edit')}}">
+				<a class="nav-link" href="{{route('administrative.kantor.edit')}}">
 					<i class="fa fa-cog" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
 					<span class="hidden-md-up">Pengaturan</span>	
 					<span class="hidden-md-down">Pengaturan</span>

@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Domain\Admin\Models\Pengguna;
+use App\Domain\Administrative\Models\Pengguna;
 
 class SendResetPasswordToken extends Mailable
 {

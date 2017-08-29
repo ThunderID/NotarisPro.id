@@ -2,11 +2,11 @@
 
 namespace App\Service\Subscription;
 
-use App\Domain\Admin\Models\Kantor;
-use App\Domain\Admin\Models\Pengguna;
+use App\Domain\Administrative\Models\Kantor;
+use App\Domain\Administrative\Models\Pengguna;
 
-use App\Domain\Order\Models\HeaderTransaksi;
-use App\Domain\Order\Models\DetailTransaksi;
+use App\Domain\Invoice\Models\HeaderTransaksi;
+use App\Domain\Invoice\Models\DetailTransaksi;
 
 use Exception, TAuth, Carbon\Carbon;
 

@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
 
-use App\Domain\Order\Models\HeaderTransaksi;
-use App\Domain\Order\Models\DetailTransaksi;
-use App\Domain\Order\Models\Arsip;
+use App\Domain\Invoice\Models\HeaderTransaksi;
+use App\Domain\Invoice\Models\DetailTransaksi;
+use App\Domain\Invoice\Models\Arsip;
 use App\Domain\Admin\Models\Pengguna;
 use App\Infrastructure\Traits\IDRTrait;
 

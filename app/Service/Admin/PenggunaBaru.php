@@ -2,7 +2,7 @@
 
 namespace App\Service\Admin;
 
-use App\Domain\Admin\Models\Pengguna as Model;
+use App\Domain\Administrative\Models\Pengguna as Model;
 
 use Exception;
 use App\Infrastructure\Traits\GuidTrait;

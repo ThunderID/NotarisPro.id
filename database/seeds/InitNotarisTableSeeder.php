@@ -22,7 +22,7 @@ class InitNotarisTableSeeder extends Seeder
 		$usa 		= new App\Service\Admin\PenggunaBaru($pengguna['nama'],$pengguna['email'],$pengguna['password']);
 		$usa 		= $usa->handle();
 		
-		$pengguna 	= App\Domain\Admin\Models\Pengguna::first();
+		$pengguna 	= App\Domain\Administrative\Models\Pengguna::first();
 
 		$visa_1 		= [
 			'role'		=> 'notaris',
@@ -93,11 +93,11 @@ class InitNotarisTableSeeder extends Seeder
 			]
 		];
 
-		$simpan_notaris_1 	= new App\Domain\Admin\Models\Kantor;
+		$simpan_notaris_1 	= new App\Domain\Administrative\Models\Kantor;
 		$simpan_notaris_1->fill($notaris_1);
 		$simpan_notaris_1->save();
 
-		$simpan_notaris_2 	= new App\Domain\Admin\Models\Kantor;
+		$simpan_notaris_2 	= new App\Domain\Administrative\Models\Kantor;
 		$simpan_notaris_2->fill($notaris_2);
 		$simpan_notaris_2->save();
 	}

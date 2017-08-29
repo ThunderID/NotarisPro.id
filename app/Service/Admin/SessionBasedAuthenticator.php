@@ -5,8 +5,8 @@ namespace App\Service\Admin;
 ///////////////
 //   Models  //
 ///////////////
-use App\Domain\Admin\Models\Pengguna;
-use App\Domain\Admin\Models\Kantor;
+use App\Domain\Administrative\Models\Pengguna;
+use App\Domain\Administrative\Models\Kantor;
 
 use Hash, Exception, Session, TAuth;
 

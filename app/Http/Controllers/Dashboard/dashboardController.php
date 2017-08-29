@@ -11,10 +11,10 @@ use App\Http\Controllers\Controller;
 
 use App\Domain\Akta\Models\Dokumen;
 
-use App\Domain\Order\Models\Arsip;
-use App\Domain\Order\Models\Jadwal;
-use App\Domain\Admin\Models\Pengguna;
-use App\Domain\Order\Models\HeaderTransaksi;
+use App\Domain\Invoice\Models\Arsip;
+use App\Domain\Invoice\Models\Jadwal;
+use App\Domain\Administrative\Models\Pengguna;
+use App\Domain\Invoice\Models\HeaderTransaksi;
 
 use App\Domain\Stat\Models\UserAttendance;
 

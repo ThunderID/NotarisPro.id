@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Jadwal;
 
 use Illuminate\Http\Request;
-use App\Domain\Order\Models\Jadwal as Query;
+use App\Domain\Invoice\Models\Jadwal as Query;
 use App\Domain\Akta\Models\Dokumen;
 
 use App\Http\Controllers\Controller;

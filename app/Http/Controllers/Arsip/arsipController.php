@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Arsip;
 
 use Illuminate\Http\Request;
-use App\Domain\Order\Models\Arsip as Query;
+use App\Domain\Invoice\Models\Arsip as Query;
 
 use App\Http\Controllers\Controller;
 
@@ -81,7 +81,7 @@ class arsipController extends Controller
 
 		//2e. get show document
 		$this->page_datas->arsip 		= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
-
+dd($this->page_datas->arsip);
 		//3.initialize view
 		$this->view						= view('notaris.pages.arsip.arsip.show');
 		

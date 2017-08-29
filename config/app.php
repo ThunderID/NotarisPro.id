@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        App\Providers\TrialServiceProvider::class,
 
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Collective\Html\HtmlServiceProvider::class,

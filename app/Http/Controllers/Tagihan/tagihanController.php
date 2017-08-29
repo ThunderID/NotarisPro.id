@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Tagihan;
 
 use App\Http\Controllers\Controller;
 
-use App\Domain\Order\Models\Arsip;
-use App\Domain\Order\Models\HeaderTransaksi as Query;
-use App\Domain\Order\Models\DetailTransaksi;
+use App\Domain\Invoice\Models\Arsip;
+use App\Domain\Invoice\Models\HeaderTransaksi as Query;
+use App\Domain\Invoice\Models\DetailTransaksi;
 
 use App\Domain\Akta\Models\Dokumen;
 
@@ -54,7 +54,7 @@ class tagihanController extends Controller
 		$this->page_datas->urutkan 			= $this->retrieveTagihanUrutkan();
 
 		//3.initialize view
-		$this->view							= view('pages.pos.billing.index');
+		$this->view							= view('notaris.pages.tagihan.tagihan.index');
 
 		return $this->generateView();  
 	}
@@ -93,7 +93,7 @@ class tagihanController extends Controller
 		$this->page_datas->active_office	= $this->active_office;
 		
 		//3.initialize view
-		$this->view							= view('pages.pos.billing.show');
+		$this->view							= view('notaris.pages.tagihan.tagihan.show');
 		
 		return $this->generateView();  
 	}
@@ -164,7 +164,7 @@ class tagihanController extends Controller
 		$this->page_attributes->title		= 'Tagihan';
 
 		//3.initialize view
-		$this->view							= view('pages.pos.billing.create');
+		$this->view							= view('notaris.pages.tagihan.tagihan.create');
 
 		return $this->generateView();  
 	}
@@ -274,7 +274,7 @@ class tagihanController extends Controller
 		$this->page_datas->active_office	= $this->active_office;
 		
 		//3.initialize view
-		$this->view							= view('pages.pos.billing.print');
+		$this->view							= view('notaris.pages.tagihan.tagihan.print');
 		
 		return $this->generateView();  
 	}

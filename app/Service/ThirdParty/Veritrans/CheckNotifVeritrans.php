@@ -2,7 +2,7 @@
 
 namespace App\Service\ThirdParty\Veritrans;
 
-use App\Domain\Order\Models\HeaderTransaksi;
+use App\Domain\Invoice\Models\HeaderTransaksi;
 
 use Exception, TAuth, Carbon\Carbon;
 
