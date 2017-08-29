@@ -98,6 +98,15 @@ class userController extends Controller
 
 			//2. get store document
 			$user				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+
+			if(is_null($id))
+			{
+				$check_mail 	= $this->query->email($request->get('user_email'))->first();
+				if($check_mail)
+				{
+					throw new Exception("Email sudah terdaftar", 1);
+				}
+			}
 			
 			if(!$user || is_null($id))
 			{
@@ -147,7 +156,7 @@ class userController extends Controller
 
 	public function update(Request $request, $id = null)
 	{
-		return $this->create($request, $id);
+		return $this->store($request, $id);
 	}
 
 	private function retrieveUser($query)

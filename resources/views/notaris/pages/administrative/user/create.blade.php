@@ -19,11 +19,7 @@
 					</a>
 				</div>
 			</div>	
-			<div class="row">
-				<div class="col-12">
-					@include('components.alertbox')
-				</div>
-			</div>
+
 			<div class="row">
 				<div class="col-12 col-lg-10 col-xl-8">
 					@component('components.form', [ 

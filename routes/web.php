@@ -107,6 +107,12 @@ Route::group(['namespace' => 'Jadwal\\', 'middleware' => ['whitelists_notaris']]
 	]]);
 });
 
+//AREA DASHBOARD//
+Route::group(['namespace' => 'Dashboard\\', 'prefix' => 'dashboard', 'middleware' => ['whitelists_notaris']], function(){
+	//D1. DASHBOARD
+	Route::get('/',		['uses' => 'dashboardController@home',	'as' => 'dashboard.home.index']);
+});
+
 
 Route::group(['middleware' => 'trial'], function(){
 
@@ -144,9 +150,7 @@ Route::group(['middleware' => 'trial'], function(){
 		Route::get('/akta/ajax/{id}', 							['uses' => 'aktaController@ajaxShow', 		'as' => 'akta.ajax.show']);
 	});
 
-
-
-	// 3. KLIEN
+	// 3. ARSIP
 	Route::group(['namespace' => 'Arsip\\'], function(){
 		//arsip
 		Route::resource('/arsip/arsip', 'arsipController', ['names' => [
@@ -178,5 +182,3 @@ Route::group(['namespace' => 'Web\\', 'prefix' => 'market/web'], function(){
 	Route::get('/tutorial',			['uses' => 'webController@tutorial', 	'as' => 'web.tutorial.index']);
 	Route::get('/notaris',			['uses' => 'notarisController@index', 	'as' => 'web.notaris.index']);
 });
-
-// Route::get('/market/web', function () { return view('market_web.pages.home'); });
