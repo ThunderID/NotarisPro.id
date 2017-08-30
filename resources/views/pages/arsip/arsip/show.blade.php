@@ -186,70 +186,61 @@
 		ajax_arsip.defineOnSuccess(function(resp){
 			console.log(resp);
 			// declare
-			const icon_tipe_arsip = {
-										'ktp' :  "<i class='fa fa-id-card' aria-hidden='true'></i>&nbsp;&nbsp;",
-										'lainnya' :  "<i class='fa fa-file' aria-hidden='true'></i>&nbsp;&nbsp;",
-									};
+			const icon_tipe_arsip = "<i class='fa fa-file-o' aria-hidden='true'></i>&nbsp;&nbsp;";
 
-				var target = $(document.getElementById('arsip_show'));
+			var target = $(document.getElementById('arsip_show'));
 
-				// arsip
-				var arsip = target.find('#arsip');
-				try{
-					arsip.find('#title').html(icon_tipe_arsip[resp.jenis] + window.stringManipulator.toSpace(resp.jenis));
-				}catch(err){
-					arsip.find('#title').html(icon_tipe_arsip['lainnya'] + window.stringManipulator.toSpace(resp.jenis));
-				}
-				var tmplt = arsip.find('#template');
-				arsip.find('#content').empty();
-				$.map(resp.isi, function(value, index) {
-					var rslt = tmplt.clone().appendTo(arsip.find('#content'));
-					rslt.find('#field').text(window.stringManipulator.toSpace(index));
-					rslt.find('#value').text((value == '' || value == null ? '_' :  window.stringManipulator.toSpace(value)));
-					rslt.removeAttr('hidden');
-					rslt.addClass('arsip');
+			// arsip
+			var arsip = target.find('#arsip');
+			arsip.find('#title').html(icon_tipe_arsip + window.stringManipulator.toSpace(resp.jenis));
+			var tmplt = arsip.find('#template');
+			arsip.find('#content').empty();
+			$.map(resp.isi, function(value, index) {
+				var rslt = tmplt.clone().appendTo(arsip.find('#content'));
+				rslt.find('#field').text(window.stringManipulator.toSpace(index));
+				rslt.find('#value').text((value == '' || value == null ? '_' :  window.stringManipulator.toSpace(value)));
+				rslt.removeAttr('hidden');
+				rslt.addClass('arsip');
+			});
+
+			// arsip terkait
+			var terkait = target.find('#terkait-arsip');
+			terkait.find('#content').empty();
+			if(resp.relasi && resp.relasi.dokumen){
+				$.map(resp.relasi.dokumen, function(value, index) {
+					var rslt = terkait.find('#template').find('#data').clone().appendTo(terkait.find('#content'));
+					rslt.find('#link').attr('href' ,  '{{route('arsip.arsip.index')}}/' + value.id.$oid);
+					rslt.removeAttr('id');
+					rslt.find('#jenis').text(value.jenis);
+					rslt.find('#relasi').text(value.relasi);
 				});
+			}else{
+				terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
+			}
 
-				// arsip terkait
-				var terkait = target.find('#terkait-arsip');
-				terkait.find('#content').empty();
-				if(resp.relasi && resp.relasi.dokumen){
-					$.map(resp.relasi.dokumen, function(value, index) {
-						var rslt = terkait.find('#template').find('#data').clone().appendTo(terkait.find('#content'));
-						rslt.find('#link').attr('href' ,  '{{route('arsip.arsip.index')}}/' + value.id.$oid);
-						rslt.removeAttr('id');
-						rslt.find('#jenis').text(value.jenis);
-						rslt.find('#relasi').text(value.relasi);
-					});
-				}else{
-					terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
-				}
-
-				// akta terkait
-				var terkait = target.find('#terkait-akta');
-				terkait.find('#content').empty();
-				if(resp.relasi && resp.relasi.akta){
-					$.map(resp.relasi.akta, function(value, index) {
-						var rslt = terkait.find('#template').find('#data').clone().appendTo(terkait.find('#content'));
-						rslt.find('#link').attr('href' ,  '{{route('akta.akta.index')}}/' + value.id.$oid);
-						rslt.removeAttr('id');
-						rslt.find('#jenis').text(value.jenis);
-						rslt.find('#judul').text(value.judul);
-					});
-				}else{
-					terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
-				}
-
-
-				// ui on complete
-				$('.disabled-before-load').removeClass("disabled");
-				$('.loader').fadeOut('fast', function(){
-
+			// akta terkait
+			var terkait = target.find('#terkait-akta');
+			terkait.find('#content').empty();
+			if(resp.relasi && resp.relasi.akta){
+				$.map(resp.relasi.akta, function(value, index) {
+					var rslt = terkait.find('#template').find('#data').clone().appendTo(terkait.find('#content'));
+					rslt.find('#link').attr('href' ,  '{{route('akta.akta.index')}}/' + value.id.$oid);
+					rslt.removeAttr('id');
+					rslt.find('#jenis').text(value.jenis);
+					rslt.find('#judul').text(value.judul);
 				});
+			}else{
+				terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
+			}
+
+
+			// ui on complete
+			$('.disabled-before-load').removeClass("disabled");
+			$('.loader').fadeOut('fast', function(){
+
+			});
 
 									
-
-
 		});
 		ajax_arsip.defineOnError(function(resp){
 			// $('.show-before-load').hide();

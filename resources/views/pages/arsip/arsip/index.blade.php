@@ -29,18 +29,18 @@
 
 					<div class="panel">
 						@include('components.search',[
-							'title' => 'Cari Akta',
-							'qs'	=> [ 'status','urutkan' ],
-							'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
+							'title' => 'Cari Dokumen',
+							'qs'	=> [ 'jenis','urutkan' ],
+							'action_url' => route(Route::currentRouteName(), Request::only('jenis','sort'))
 						])
 					</div>
 
 					@foreach($page_datas->filters as $key => $filter)
 					<div class="panel">
 						@include('components.filter',[
-							'title' => 'Filter ' . ucWords($key) . ' Arsip',
+							'title' => ucWords($key) . ' Dokumen',
 							'alias' => $key,
-							'qs'	=> [ 'cari','status' ],
+							'qs'	=> [ 'cari','urutkan' ],
 							'lists' => $filter
 						])
 					</div>
@@ -50,7 +50,7 @@
 						@include('components.filter',[
 							'title'	=> 'Urutkan',
 							'alias' => 'urutkan',
-							'qs'	=> [ 'cari','status' ],
+							'qs'	=> [ 'cari','jenis' ],
 							'lists' => [
 								'nama a - z' 	=> null,
 								'nama z - a' 	=> 'nama-desc'
@@ -83,6 +83,17 @@
 					</a>
 				</div>
 			</div>
+			<div class="row pb-2">
+				<div class="col-12 mb-2">
+					@include('components.filterIndicator',[
+						'lists' => 	[
+							'cari' 		=> 'Cari Akta',
+							'status' 	=> 'Status Akta',
+							'jenis' 	=> 'Jenis Akta'
+						]
+					])
+				</div>
+			</div>			
 
 			<div class="row">
 				<div class="col-12">
@@ -95,19 +106,21 @@
 						</thead>
 						<tbody>
 							@forelse($page_datas->arsips as $key => $value)
+									<?php
+										// dd($value);
+									?>
 							<tr onclick="showArsip(this);" data_id_arsip="{{ $value['id'] }}" style="cursor: pointer;">
 								<td id="judul">
-									@if(strtoupper($value['jenis']) == 'KTP')
-										<i class="fa fa-id-card" aria-hidden="true"></i>
-									@else
-										<i class="fa fa-file" aria-hidden="true"></i>
-									@endif
+									<i class="fa fa-file-o" aria-hidden="true"></i>
 									&nbsp;
 									{{ strtoupper($value['jenis']) }}
 								</td>
 								<td class="pb-1">
-									<p class="mb-1">Field 1 : Dummy 1</p>
-									<p class="mb-1">Field 2 : Dummy 2</p>
+									@forelse (array_slice($value['isi'], 0, 2) as $idx => $dokumen)
+										<p class="mb-1 text-capitalize">{{  str_replace('_', ' ', $idx ) }} : {{ $dokumen }}</p>
+									@empty
+										<p class="mb-1">_</p>
+									@endforelse
 								</td>				
 							</tr>
 			                @empty

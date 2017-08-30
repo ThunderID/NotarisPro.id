@@ -37,7 +37,7 @@ class arsipController extends Controller
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
-		$query							= $request->only('cari', 'filter', 'urutkan', 'page');
+		$query							= $request->only('cari', 'jenis', 'urutkan', 'page');
 
 		//2b. retrieve all Arsip
 		$this->retrieveArsip($query);
@@ -52,8 +52,6 @@ class arsipController extends Controller
 
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.index');
-
-		// dd($this->page_datas);
 
 		return $this->generateView();
 	}
@@ -150,14 +148,12 @@ class arsipController extends Controller
 			$data			= $data->where(function($q)use($query){$q->where('isi.nama', 'like', '%'.$query['cari'].'%');});
 		}
 
-		//3. filter 
-		foreach ((array)$query['filter'] as $key => $value) 
-		{
-			if(in_array($key, ['jenis']))
-			{
-				$data   	= $data->where('tipe', $value);               
-			}
+
+		//3. filter jenis
+		if(isset($query['jenis'])){
+			$data 	= $data->where('tipe', $query['jenis']);
 		}
+
 
 		//4. urutkan
 		if(isset($query['urutkan']))
