@@ -106,9 +106,6 @@
 						</thead>
 						<tbody>
 							@forelse($page_datas->arsips as $key => $value)
-									<?php
-										// dd($value);
-									?>
 							<tr onclick="showArsip(this);" data_id_arsip="{{ $value['id'] }}" style="cursor: pointer;">
 								<td id="judul">
 									<i class="fa fa-file-o" aria-hidden="true"></i>
@@ -116,10 +113,10 @@
 									{{ strtoupper($value['jenis']) }}
 								</td>
 								<td class="pb-1">
-									@forelse (array_slice($value['isi'], 0, 2) as $idx => $dokumen)
-										<p class="mb-1 text-capitalize">{{  str_replace('_', ' ', $idx ) }} : {{ $dokumen }}</p>
+									@forelse($page_datas->config[$value['jenis']] as $keyc => $valuec)
+										<p class="mb-1 text-capitalize">{{  str_replace('_', ' ', $valuec ) }} : {{ $value['isi'][$valuec] ? $value['isi'][$valuec] : '_'}}</p>
 									@empty
-										<p class="mb-1">_</p>
+										<p class="mb-1">Tidak Ada</p>
 									@endforelse
 								</td>				
 							</tr>
