@@ -104,7 +104,7 @@ class arsipController extends Controller
 	private function retrieveArsipConfig()
 	{
 		$tipe							= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
- 		$this->page_datas->config 		= null;
+		$this->page_datas->config 		= null;
 		foreach ($tipe as $key => $value) 
 		{
 			$this->page_datas->config[$value['jenis_dokumen']]	= [(isset($value['isi'][0]) ? $value['isi'][0] : null ), (isset($value['isi'][1]) ? $value['isi'][1] : null )];
@@ -120,20 +120,34 @@ class arsipController extends Controller
 	{	
 		$this->middleware('scope:read_archive');
 		$this->active_office = TAuth::activeOffice();
-        //1. get show document
-        $arsip                   = $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+		//1. get show document
+		$arsip				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 
-        if($arsip)
-        {
-            $arsip               = $arsip->toArray();
-            // returning arsip data
-	        return Response::json($arsip);
-        }
-        else
-        {
-            //return 404
+		if($arsip)
+		{
+			$arsip			= $arsip->toArray();
+			// $ids 			= [];
+
+			if(isset($arsip['relasi']['dokumen']))
+			{
+				foreach ($arsip['relasi']['dokumen'] as $key => $value) 
+				{
+					$arsip['relasi']['dokumen'][$key]['isi']	= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()['isi'];
+				}
+			}
+			
+			// $this->per_page = count($ids);
+			// $relasi_d 		= $this->retrieveArsip(['relasi_ids' => $ids]);
+			// $arsip['relasi']['dokumen']	= $relasi_d;
+
+			// returning arsip data
+			return Response::json($arsip);
+		}
+		else
+		{
+			//return 404
 			return App::abort(404);
-        }
+		}
 	}
 
 
@@ -151,9 +165,14 @@ class arsipController extends Controller
 
 		//3. filter jenis
 		if(isset($query['jenis'])){
-			$data 	= $data->where('tipe', $query['jenis']);
+			$data 	= $data->where('jenis_dokumen', $query['jenis']);
 		}
 
+
+		//3. filter relasi
+		if(isset($query['relasi_ids'])){
+			$data 	= $data->id($query['relasi_ids']);
+		}
 
 		//4. urutkan
 		if(isset($query['urutkan']))
