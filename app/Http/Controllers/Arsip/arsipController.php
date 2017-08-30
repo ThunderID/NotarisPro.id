@@ -24,7 +24,7 @@ class arsipController extends Controller
 		$this->per_page 		= 36;
 	}    
 
-	public function index(Request $request)
+	public function index(Request $request, $id = null)
 	{
 		$this->middleware('scope:read_archive');
 
@@ -33,11 +33,11 @@ class arsipController extends Controller
 
 		// 1. set page attributes
 		$this->page_attributes->title	= 'Arsip';
-		$this->page_datas->id			= null;
+		$this->page_datas->id			= $id;
 
 		// 2. call all tagihans data needed
 		//2a. parse query searching
-		$query							= $request->only('cari', 'filter', 'urutkan', 'page');
+		$query							= $request->only('cari', 'jenis', 'urutkan', 'page');
 
 		//2b. retrieve all Arsip
 		$this->retrieveArsip($query);
@@ -65,6 +65,7 @@ class arsipController extends Controller
 	{
 		$this->middleware('scope:read_archive');
 		
+		/*
 		$this->active_office 			= TAuth::activeOffice();
 
 		// 1. set page attributes
@@ -94,6 +95,10 @@ class arsipController extends Controller
 		$this->view						= view('pages.arsip.arsip.show');
 		
 		return $this->generateView();  
+		*/
+
+		return $this->index($request, $id);
+
 	}
 
 	private function retrieveArsipConfig()
@@ -143,14 +148,12 @@ class arsipController extends Controller
 			$data			= $data->where(function($q)use($query){$q->where('isi.nama', 'like', '%'.$query['cari'].'%');});
 		}
 
-		//3. filter 
-		foreach ((array)$query['filter'] as $key => $value) 
-		{
-			if(in_array($key, ['jenis']))
-			{
-				$data   	= $data->where('tipe', $value);               
-			}
+
+		//3. filter jenis
+		if(isset($query['jenis'])){
+			$data 	= $data->where('tipe', $query['jenis']);
 		}
+
 
 		//4. urutkan
 		if(isset($query['urutkan']))

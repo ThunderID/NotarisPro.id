@@ -406,7 +406,7 @@
 
 					// re-set judul
 					$(document.getElementById('sidebar-header')).find('#title').text(resp.judul);
-					$(document.getElementById('akta_show')).find('#judul_akta').text(resp.judul);
+					$(document.getElementById('akta_show')).find('#title').text(resp.judul);
 				}
 
 
