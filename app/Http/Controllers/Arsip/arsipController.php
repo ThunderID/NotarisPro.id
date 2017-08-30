@@ -48,7 +48,7 @@ class arsipController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan		= $this->retrieveArsipUrutkan();
 
-		$$this->page_datas->config 		= $this->retrieveArsipConfig();
+		$this->page_datas->config 		= $this->retrieveArsipConfig();
 
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.index');
@@ -125,7 +125,7 @@ class arsipController extends Controller
 		//1. get show document
 		$arsip							= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
 		
-		$$this->page_datas->config 		= $this->retrieveArsipConfig();
+		$this->page_datas->config 		= $this->retrieveArsipConfig();
 
 		if($arsip)
 		{
