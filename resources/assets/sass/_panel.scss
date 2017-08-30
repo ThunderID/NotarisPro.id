@@ -126,3 +126,13 @@
 		display: block !important;
 	}
 }
+
+.right-panel-responsive{
+	height: 100%; 
+	border-left: 1px solid #F7F7F7;
+
+	@media screen and (max-width: 575px) {
+		border-left: none;
+		min-height: 350px;
+	}
+}

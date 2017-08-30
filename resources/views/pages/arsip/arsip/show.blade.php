@@ -49,7 +49,7 @@
 			<div class="col-12 hidden-md-up pt-3 pb-4">
 				<div class="row clearfix"></div>
 			</div>
-			<div id="terkait" class="col-12 col-sm-12 col-md-7 col-lg-8 pt-2 pl-3 pr-3" style="height: 100%; border-left: 1px solid #F7F7F7;">
+			<div id="terkait" class="col-12 col-sm-12 col-md-7 col-lg-8 pt-2 pl-3 pr-3 right-panel-responsive">
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs flat-tabs" role="tablist">
 					<li class="nav-item">
@@ -222,6 +222,12 @@
 					rslt.removeAttr('id');
 					rslt.find('#jenis').text(value.jenis);
 					rslt.find('#relasi').text(value.relasi);
+
+					/*
+					$.map(value.isi, function(value_isi, key_isi) {
+						console.log(value_isi)
+					});
+					*/
 				});
 			}else{
 				terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
