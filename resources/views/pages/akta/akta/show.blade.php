@@ -276,8 +276,14 @@
 
 @push('scripts')
 
+	// history url
+	var UrlHistory = null;
+
 	/* Start UI page */
 	function showAkta(e){
+		// sets history
+		UrlHistory = window.location.href;
+
 		// init template
 		//sidebar
 		if($( window ).width() > '793'){
@@ -329,7 +335,7 @@
 			var target = $(document.getElementById('text-editor'));
 			target.find('#reader').empty();
 			target.find('#content').empty();
-			window.history.pushState(null, null, '/akta/akta');
+			window.history.pushState(null, null,  UrlHistory == null ? '/akta/akta' : UrlHistory);
 		});		
 	}
 
