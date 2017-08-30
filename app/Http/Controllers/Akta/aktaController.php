@@ -19,7 +19,7 @@ use PulkitJalan\Google\Client;
 
 use Illuminate\Http\Request;
 
-use TAuth, Response, App;
+use TAuth, Response, App, Session;
 
 class aktaController extends Controller
 {
@@ -313,6 +313,13 @@ class aktaController extends Controller
 	
 		$tipe					= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
 
+		if(Session::has('tipe_doc'))
+		{
+			foreach ((array)Session::get('tipe_doc') as $key => $value) 
+			{
+				$tipe[count($tipe)]	= $value;
+			}
+		}
 		return $tipe;
 	}
 
@@ -325,13 +332,63 @@ class aktaController extends Controller
 
 		//jika hanya diisi 2
 		$tipe 					= TipeDokumen::/*where('kategori', $exploded[0])->*/where('jenis_dokumen', $exploded[0])->kantor($this->active_office['kantor']['id'])->first();
-		
-		if(count($exploded)==2)
+
+		if(count($exploded)==1)
 		{
-			$kepemilikan 		= $tipe->kepemilikan;
-			$kepemilikan		= array_unique(array_merge($kepemilikan, [$exploded[1]]));
-			$tipe->kepemilikan 	= $kepemilikan;
-			$tipe->save();
+			if(!$tipe)
+			{
+				$prev 				= [];
+				if(Session::has('tipe_doc'))
+				{
+					$prev 			= Session::get('tipe_doc');
+				}
+				$prev 				= collect($prev);
+
+				if(!$prev->where('jenis_dokumen', $exploded[0])->first())
+				{
+					$prev->push(['jenis_dokumen' => $exploded[0], 'isi' => [], 'kepemilikan' => []]);
+				}
+				Session::put('tipe_doc', $prev);		
+			}
+		}
+		elseif(count($exploded)==2)
+		{
+			if(!$tipe)
+			{
+				$prev 				= [];
+				if(Session::has('tipe_doc'))
+				{
+					$prev 			= Session::get('tipe_doc');
+				}
+				$prev 				= collect($prev);
+
+				if(!$prev->where('jenis_dokumen', $exploded[0])->first())
+				{
+					$prev->push(['jenis_dokumen' => $exploded[0], 'isi' => [], 'kepemilikan' => [$exploded[1]]]);
+				}
+				else
+				{
+					$prev->transform(function ($item, $key) use($exploded){
+						if($item['jenis_dokumen']==$exploded[0])
+						{
+							$item['kepemilikan']= array_merge($item['kepemilikan'], [$exploded[1]]);
+						}
+
+						return $item;
+					});
+				}
+
+				Session::put('tipe_doc', $prev);
+			}
+			else
+			{
+				$kepemilikan 		= $tipe->kepemilikan;
+				$kepemilikan		= array_unique(array_merge($kepemilikan, [$exploded[1]]));
+				$tipe->kepemilikan 	= $kepemilikan;
+				$tipe->save();
+
+				$this->removeDiffSession($exploded[0]);
+			}
 		}
 		else
 		{
@@ -354,10 +411,31 @@ class aktaController extends Controller
 			$tipe->isi 			= $isi;
 			$tipe->kantor 		= $this->active_office['kantor'];
 			$tipe->save();
+
+			$this->removeDiffSession($exploded[0]);
 		}
 
 		return JSend::success(['tersimpan']);
+	}
 
+	private function removeDiffSession($jenis)
+	{
+		if(Session::has('tipe_doc'))
+		{
+			$prev 	= Session::get('tipe_doc');
+
+			foreach ((array)$prev as $key => $value) 
+			{
+				if($value['jenis_dokumen']==$jenis)
+				{
+					unset($prev[$key]);
+				}
+			}
+			
+			Session::put('tipe_doc', $prev);
+		}
+
+		return true;
 	}
 	
 	public function versionIndex(Request $request, $id)
