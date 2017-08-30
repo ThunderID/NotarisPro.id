@@ -400,7 +400,20 @@ class aktaController extends Controller
 				$tipe 					= new TipeDokumen;
 				// $tipe->kategori 		= $exploded[0];
 				$tipe->jenis_dokumen 	= $exploded[0];
-				$tipe->kepemilikan 		= $exploded[1];
+				$tipe->kepemilikan 		= [$exploded[1]];
+
+				if(Session::has('tipe_doc'))
+				{
+					$prev 	= Session::get('tipe_doc');
+
+					foreach ((array)$prev as $key => $value) 
+					{
+						if($value['jenis_dokumen']==$jenis)
+						{
+							$tipe->kepemilikan 	= $value['kepemilikan'];
+						}
+					}
+				}
 			}
 
 			$isi 				= $tipe->isi;

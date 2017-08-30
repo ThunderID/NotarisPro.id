@@ -145,7 +145,7 @@ class arsipController extends Controller
 			{
 				foreach ($arsip['relasi']['dokumen'] as $key => $value) 
 				{
-					$arsip['relasi']['dokumen'][$key]['isi']	= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first()['isi'];
+					$arsip['relasi']['dokumen'][$key]['isi']	= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first(['isi.'.$this->page_datas->config[$value['jenis']][0], 'isi.'.$this->page_datas->config[$value['jenis']][1]])['isi'];
 				}
 			}
 			
