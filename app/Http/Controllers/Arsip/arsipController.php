@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 use App\Infrastructure\Traits\GuidTrait;
 
-use TAuth, Response, Exception;
+use TAuth, Response, Exception, App;
 
 class arsipController extends Controller
 {
@@ -120,6 +120,8 @@ class arsipController extends Controller
 	 */
 	public function ajaxShow(Request $request, $id)
 	{	
+		return App::abort(404);
+
 		$this->middleware('scope:read_archive');
 		$this->active_office = TAuth::activeOffice();
 		//1. get show document
