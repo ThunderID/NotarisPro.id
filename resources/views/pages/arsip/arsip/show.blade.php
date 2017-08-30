@@ -78,7 +78,7 @@
 
 					<table id="template" hidden>
 						<tr id="data" class="pb-0">
-							<td id="jenis" class="text-uppercase">
+							<td id="jenis" class="text-capitalize">
 							</td>
 							<td id="relasi" class="text-capitalize">
 							</td>							
@@ -144,9 +144,14 @@
 </div>
 
 @push('scripts')
+	// histoyy url
+	var UrlHistory = null;
 
 	/* Start UI page */
 	function showArsip(e){
+		// sets history
+		UrlHistory = window.location.href;
+
 		// global vars
 		var element_source = $(e);
 		var id = element_source.attr('data_id_arsip');
@@ -157,12 +162,11 @@
 	function hideArsip(e){
 		$(document.getElementById('arsip_show')).fadeOut('fast', function(){
 			var target = $(document.getElementById('text-editor'));
-			window.history.pushState(null, null, '/arsip/arsip');
+			window.history.pushState(null, null,  UrlHistory == null ? '/arsip/arsip' : UrlHistory);
 		});		
 	}	
 
 	function modulShowArsip(id, judul){
-		console.log('triggered');
 
 		// reset state
 		$('.loader').show();
