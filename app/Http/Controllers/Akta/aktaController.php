@@ -320,6 +320,7 @@ class aktaController extends Controller
 				$tipe[count($tipe)]	= $value;
 			}
 		}
+
 		return $tipe;
 	}
 
@@ -348,7 +349,7 @@ class aktaController extends Controller
 				{
 					$prev->push(['jenis_dokumen' => $exploded[0], 'isi' => [], 'kepemilikan' => []]);
 				}
-				Session::put('tipe_doc', $prev);		
+				Session::put('tipe_doc', $prev->toArray());		
 			}
 		}
 		elseif(count($exploded)==2)
@@ -378,7 +379,7 @@ class aktaController extends Controller
 					});
 				}
 
-				Session::put('tipe_doc', $prev);
+				Session::put('tipe_doc', $prev->toArray());
 			}
 			else
 			{
