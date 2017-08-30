@@ -34,6 +34,11 @@ trait TextParseTrait
 	{
 		$text 				= $this->getParagrafParameter();
 
+		//initiate paragraph's value
+		$new_paragraph['tipe_dokumen']	= [];
+		$new_paragraph['mentionable']	= [];
+		$new_paragraph['dokumen']		= [];
+
 		//1. pattern content
 		$pattern_c			= "/\/t.*?<h.*?>(.*?)<\/h.*?>|\/t.*?<p.*?>(.*?)<\/p>|\/t.*?(<(ol|ul).*?><li>(.*?)<\/li>)|\/t.*?(<li>(.*?)<\/li><\/(ol|ul)>)|<h.*?>(.*?)<\/h.*?>|<p.*?>(.*?)<\/p>|(<(ol|ul).*?><li>(.*?)<\/li>)|(<li>(.*?)<\/li><\/(ol|ul)>)/i";
 

@@ -305,6 +305,60 @@ class aktaController extends Controller
 		}
 	}
 
+	public function mentionPrefixIndex(Request $request)
+	{
+		if(Session::has('mention_prefix'))
+		{
+			$prefix 	= Session::get('mention_prefix');
+		}
+		else
+		{
+			$prefix 	= [
+				'pihak'	=> 	['current' 	=> [1,2], 'next' => 3],
+				'saksi'	=> 	['current' 	=> [1,2], 'next' => 3],
+				'objek'	=> 	['current' 	=> [1,2], 'next' => 3],
+			];
+
+			Session::put('mention_prefix', $prefix);
+		}
+
+		return Response::json($prefix);
+	}
+
+	public function mentionPrefixStore(Request $request)
+	{
+		$exploded		= explode('.', str_replace('@', '', $request->get('mention')));
+
+		if(Session::has('mention_prefix'))
+		{
+			$prefix 	= Session::get('mention_prefix');
+		}
+		else
+		{
+			$prefix 	= [
+				'pihak'	=> 	['current' 	=> [1,2], 'next' => 3],
+				'saksi'	=> 	['current' 	=> [1,2], 'next' => 3],
+				'objek'	=> 	['current' 	=> [1,2], 'next' => 3],
+			];
+		}
+
+		if(isset($prefix[$exploded[0]]))
+		{
+			$prefix[$exploded[0]]['current'] 		= [];
+
+			foreach (range(1, $exploded[1]) as $value) 
+			{
+				$prefix[$exploded[0]]['current'][]	= $value * 1;
+			}
+
+			$prefix[$exploded[0]]['next']			= ($exploded[1] * 1) + 1;
+		}
+
+		Session::put('mention_prefix', $prefix);
+
+		return Response::json($prefix);
+	}
+
 	public function mentionIndex(Request $request)
 	{
 		$this->middleware('scope:draft_akta');
@@ -400,7 +454,20 @@ class aktaController extends Controller
 				$tipe 					= new TipeDokumen;
 				// $tipe->kategori 		= $exploded[0];
 				$tipe->jenis_dokumen 	= $exploded[0];
-				$tipe->kepemilikan 		= $exploded[1];
+				$tipe->kepemilikan 		= [$exploded[1]];
+
+				if(Session::has('tipe_doc'))
+				{
+					$prev 	= Session::get('tipe_doc');
+
+					foreach ((array)$prev as $key => $value) 
+					{
+						if($value['jenis_dokumen']==$jenis)
+						{
+							$tipe->kepemilikan 	= $value['kepemilikan'];
+						}
+					}
+				}
 			}
 
 			$isi 				= $tipe->isi;

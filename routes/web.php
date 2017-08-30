@@ -133,6 +133,10 @@ Route::group(['middleware' => 'trial'], function(){
 
 		Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);
 		
+		Route::any('/akta/mention/prefix', 						['uses' => 'aktaController@mentionPrefixIndex', 	'as' => 'akta.mention_prefix.index']);
+
+		Route::any('/akta/mention/prefix/store', 				['uses' => 'aktaController@mentionPrefixStore', 	'as' => 'akta.mention_prefix.store']);
+
 		Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);
 		Route::any('/akta/versi/{akta_id}/compare/{version_id}',['uses' => 'aktaController@versionShow', 	'as' => 'akta.version.show']);
 		Route::any('/akta/print/{akta_id}',	 					['uses' => 'aktaController@print', 			'as' => 'akta.akta.print']);
