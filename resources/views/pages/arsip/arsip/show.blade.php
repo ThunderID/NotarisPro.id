@@ -87,8 +87,11 @@
 								<td id="relasi" class="text-capitalize">
 								</td>							
 								<td id="deskripsi">
-									<p id="content1" class="mb-1">Field 1 : Dummy 1</p>
-									<p id="content2" class="mb-1">Field 2 : Dummy 2</p>
+									<div id='deskripsi-template' hidden>
+										<p class="mb-1 text-capitalize"><span id="field"></span>&nbsp;:&nbsp;<span id="value"></span></p>
+									</div>
+									<div id="deskripsi-content">
+									</div>
 								</td>
 								<td>
 									<a id="link" href="#" target="blank" class="pr-2" style="float: right;">
@@ -97,7 +100,7 @@
 								</td>
 							</tr>						
 			                <tr id="no-data">
-			                    <td colspan="3" class="text-center">
+			                    <td colspan="4" class="text-center">
 			                    	Tidak ada data
 			                    </td>
 			                </tr>					
@@ -193,7 +196,6 @@
 		var ajax_arsip = window.ajax;
 
 		ajax_arsip.defineOnSuccess(function(resp){
-			console.log(resp);
 			// declare
 			const icon_tipe_arsip = "<i class='fa fa-file-o' aria-hidden='true'></i>&nbsp;&nbsp;";
 
@@ -223,12 +225,20 @@
 					rslt.find('#jenis').text(value.jenis);
 					rslt.find('#relasi').text(value.relasi);
 
-					/*
-					$.map(value.isi, function(value_isi, key_isi) {
-						console.log(value_isi)
-					});
-					*/
+					drawDetail(rslt, value.isi);
 				});
+
+				function drawDetail(target, datas){
+					var tmp = target.find('#deskripsi').find('#deskripsi-template');
+
+					Object.keys(datas).forEach(function(element) {
+						var rslt = tmp.clone().appendTo(target.find('#deskripsi-content'));
+						rslt.removeAttr('id');
+						rslt.removeAttr('hidden');
+						rslt.find('#field').text(window.stringManipulator.toSpace(element));
+						rslt.find('#value').text(datas[element]);
+					});
+				}
 			}else{
 				terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
 			}
