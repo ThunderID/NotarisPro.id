@@ -48,7 +48,7 @@ class arsipController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan		= $this->retrieveArsipUrutkan();
 
-		$this->retrieveArsipConfig();
+		$$this->page_datas->config 		= $this->retrieveArsipConfig();
 
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.index');
@@ -103,12 +103,14 @@ class arsipController extends Controller
 
 	private function retrieveArsipConfig()
 	{
-		$tipe							= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
-		$this->page_datas->config 		= null;
+		$tipe			= TipeDokumen::kantor($this->active_office['kantor']['id'])->get()->toArray();
+		$config 		= null;
 		foreach ($tipe as $key => $value) 
 		{
-			$this->page_datas->config[$value['jenis_dokumen']]	= [(isset($value['isi'][0]) ? $value['isi'][0] : null ), (isset($value['isi'][1]) ? $value['isi'][1] : null )];
+			$config[$value['jenis_dokumen']]	= [(isset($value['isi'][0]) ? $value['isi'][0] : null ), (isset($value['isi'][1]) ? $value['isi'][1] : null )];
 		}
+
+		return $config;
 	}
 
 	/**
@@ -121,7 +123,9 @@ class arsipController extends Controller
 		$this->middleware('scope:read_archive');
 		$this->active_office = TAuth::activeOffice();
 		//1. get show document
-		$arsip				= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+		$arsip							= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+		
+		$$this->page_datas->config 		= $this->retrieveArsipConfig();
 
 		if($arsip)
 		{
