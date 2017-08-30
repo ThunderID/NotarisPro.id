@@ -48,7 +48,7 @@ class arsipController extends Controller
 		//2d. get all urutan 
 		$this->page_datas->urutkan		= $this->retrieveArsipUrutkan();
 
-		$$this->page_datas->config 		= $this->retrieveArsipConfig();
+		$this->page_datas->config 		= $this->retrieveArsipConfig();
 
 		//3.initialize view
 		$this->view						= view('pages.arsip.arsip.index');
@@ -124,12 +124,20 @@ class arsipController extends Controller
 		$this->active_office = TAuth::activeOffice();
 		//1. get show document
 		$arsip							= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
-		
-		$$this->page_datas->config 		= $this->retrieveArsipConfig();
+		$jenis_dokumen 					= TipeDokumen::where('jenis_dokumen', $arsip['jenis'])->kantor($this->active_office['kantor']['id'])->first();
+
+		$this->page_datas->config 		= $this->retrieveArsipConfig();
 
 		if($arsip)
 		{
 			$arsip			= $arsip->toArray();
+			$urut_isi 		= [];
+
+			foreach ($jenis_dokumen['isi'] as $key => $value) 
+			{
+				$urut_isi[$value]		= $arsip['isi'][$value];
+			}
+			$arsip['isi']	= $urut_isi;
 			// $ids 			= [];
 
 			if(isset($arsip['relasi']['dokumen']))
