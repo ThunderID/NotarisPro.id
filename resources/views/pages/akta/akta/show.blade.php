@@ -504,6 +504,9 @@
 				let feature_lockDisplayRevision = defaultDisplayRevision(resp.status);
 
 				resp.paragraf.forEach(function(element) {
+
+					console.log(element);
+
 					// reader mode
 					$(document.getElementById('text-editor')).find('#reader').append(element.konten);
 					
@@ -525,15 +528,16 @@
 						lock.find('.fa').removeClass('fa-unlock');
 						lock.find('.fa').addClass('fa-lock');
 						lock.attr('unlocked', 'false');
-						lock.attr('id', element.lock);
 					}else{
 						wrapper.removeClass('locked');
 						wrapper.addClass('unlocked');
 						lock.find('.fa').addClass('fa-unlock');
 						lock.find('.fa').removeClass('fa-lock');
 						lock.attr('unlocked', 'true');
-						lock.attr('id', null);
 					}
+
+					lock.attr('key', element.key);
+					lock.attr('lock', element.lock);
 
 					lock.addClass(feature_lockUnlock);
 
@@ -604,24 +608,48 @@
 	$(document).on('click', 'a.lock', function(){
 		// do ajax save
 		console.log($(this));
-		handleState($(this));
+		manageStatus($(this));
 
 		function handleState(e){
 			if(e.attr('unlocked') == 'true'){
-				console.log(1);
 				e.closest('a.lock').attr('unlocked','false');
 				e.closest('.wrapper').removeClass('unlocked');
 				e.closest('.wrapper').addClass('locked');
 				e.find('i').removeClass('fa-unlock');
 				e.find('i').addClass('fa-lock');
 			}else{
-				console.log(2);
 				e.closest('a.lock').attr('unlocked','true');
 				e.closest('.wrapper').removeClass('locked');
 				e.closest('.wrapper').addClass('unlocked');
 				e.find('i').removeClass('fa-lock');
 				e.find('i').addClass('fa-unlock');
 			}
+		}
+
+		function lockDocument(e){
+
+		}
+
+		function unlockDocument(e){
+
+		}
+
+		function manageStatus(e){
+			// define ajax
+			var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'edit']) }}";
+			url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('lock'));
+
+			var ajax_status = window.ajax;
+
+			ajax_status.defineOnSuccess(function(resp){
+				console.log(resp);
+			});
+
+			ajax_status.defineOnError(function(resp){
+				console.log(resp);
+			});
+
+			ajax_status.get(url);
 		}
 	})
 	/* End Get Akta Feature */

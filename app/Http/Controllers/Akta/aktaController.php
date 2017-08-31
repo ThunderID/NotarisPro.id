@@ -19,7 +19,7 @@ use PulkitJalan\Google\Client;
 
 use Illuminate\Http\Request;
 
-use TAuth, Response, App, Session;
+use TAuth, Response, App, Session, Exception;
 
 class aktaController extends Controller
 {
@@ -566,10 +566,12 @@ class aktaController extends Controller
 					break;
 			}
 		} catch (Exception $e) {
-			return JSend::error($akta, $e->getMessage());
+			// 202
+			return App::abort(202, $e->getMessage());			
+			// return JSend::error($akta, $e->getMessage());
 		}
-
-		return JSend::success($akta);
+		$ptr = array_search($key, array_column($akta['paragraf'], 'key'));
+		return response::json($akta['paragraf'][$ptr]);
 	}
 
 	public function status(Request $request, $akta_id, $status)
