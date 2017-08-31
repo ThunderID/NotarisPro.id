@@ -8,7 +8,7 @@
 						"title" 			=> "",		
 						"route" 			=> "javascript:sidebarManagement();",
 						"class" 			=> "akta_close mr-2 show-smaller-paper disabled",
-						"icon"				=> "fa-info",
+						"icon"				=> "fa-info-circle",
 						"id" 				=> "trigger-info-sidebar"
 					],			
 					[
@@ -43,12 +43,17 @@
 						<div id="template" hidden>
 							<div class="wrapper unlocked">
 								<div class="control">
-									<a href="javascript:void(0);" class="lock" id="lock">
-										<i class="fa fa-unlock" aria-hidden="true"></i>
+									<a href="javascript:void(0);" class="lock hold-on-load" id="lock">
+										<i class="fa fa-fw fa-unlock" aria-hidden="true"></i>
 									</a>
-									&nbsp;|&nbsp;
+									<a href="javascript:void(0);" class="newline hold-on-load" id="newline">
+										<i class="fa fa-fw fa-plus" aria-hidden="true"></i>
+									</a>
+									<a href="javascript:void(0);" class="remove text-danger hold-on-load" id="remove">
+										<i class="fa fa-fw fa-times" aria-hidden="true"></i>
+									</a>									
 									<a href="javascript:void(0);" id="revise" class="" data-toggle="modal" data-target="">
-										<i class="fa fa-history" aria-hidden="true"></i>1
+										<i class="fa fa-fw fa-history" aria-hidden="true"></i><span id="ctr">0</span>
 									</a>
 								</div>
 								<div id="narasi" class="content">
@@ -504,11 +509,13 @@
 				let feature_lockDisplayRevision = defaultDisplayRevision(resp.status);
 
 				resp.paragraf.forEach(function(element) {
-
-					console.log(element);
-
 					// reader mode
-					$(document.getElementById('text-editor')).find('#reader').append(element.konten);
+					if(element.konten){
+						var rslt = $(element.konten).appendTo($(document.getElementById('text-editor')).find('#reader'));
+					}else{
+						var rslt = $('<p>&nbsp;</p>').appendTo($(document.getElementById('text-editor')).find('#reader'));
+					}
+					rslt.attr('id', element.key);
 					
 					// display + feature bundle
 					var editor = $(document.getElementById('page')).find('#text-editor');
@@ -541,8 +548,17 @@
 
 					lock.addClass(feature_lockUnlock);
 
-					// set status displayRevision
+					// set add paragraph
+					newline = target.find('#newline');
+					newline.attr('key', element.key);
+					newline.addClass(feature_lockUnlock);
 
+					// set remove element
+					remove = target.find('#remove');
+					remove.attr('key', element.key);
+					remove.addClass(feature_lockUnlock);
+
+					// set status displayRevision
 					target.find('#revise').addClass(feature_lockDisplayRevision);
 
 				});
@@ -607,51 +623,154 @@
 	// manage lock unlock
 	$(document).on('click', 'a.lock', function(){
 		// do ajax save
-		console.log($(this));
 		manageStatus($(this));
 
-		function handleState(e){
-			if(e.attr('unlocked') == 'true'){
-				e.closest('a.lock').attr('unlocked','false');
-				e.closest('.wrapper').removeClass('unlocked');
-				e.closest('.wrapper').addClass('locked');
-				e.find('i').removeClass('fa-unlock');
-				e.find('i').addClass('fa-lock');
-			}else{
-				e.closest('a.lock').attr('unlocked','true');
-				e.closest('.wrapper').removeClass('locked');
-				e.closest('.wrapper').addClass('unlocked');
-				e.find('i').removeClass('fa-lock');
-				e.find('i').addClass('fa-unlock');
-			}
+		function lockedDocument(e){
+			e.removeClass('unlocked');
+			e.addClass('locked');
+			e.find('#lock').find('i').removeClass('fa-unlock fa-circle-o-notch fa-spin');
+			e.find('#lock').find('i').addClass('fa-lock');
 		}
 
-		function lockDocument(e){
-
-		}
-
-		function unlockDocument(e){
-
+		function unlockedDocument(e){
+			e.removeClass('locked');
+			e.addClass('unlocked');
+			e.find('#lock').find('i').removeClass('fa-lock fa-circle-o-notch fa-spin');
+			e.find('#lock').find('i').addClass('fa-unlock');
 		}
 
 		function manageStatus(e){
+
+			// ui
+			e.closest('.wrapper').find('.hold-on-load').addClass('disabled');
+			e.find('i').removeClass('fa-lock fa-unlock');
+			e.find('i').addClass('fa-circle-o-notch fa-spin');
+
 			// define ajax
 			var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'edit']) }}";
-			url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('lock'));
+			url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('key'));
 
+			// do ajax change status
 			var ajax_status = window.ajax;
 
 			ajax_status.defineOnSuccess(function(resp){
-				console.log(resp);
+				// init
+				var target = e.closest('.wrapper');
+
+				// ui manage status 
+				if(resp.lock == null){
+					// unlocked
+					unlockedDocument(target);
+				}else{
+					// locked
+					lockedDocument(target);
+				}
+				e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');
 			});
 
 			ajax_status.defineOnError(function(resp){
-				console.log(resp);
+				// init
+				var target = e.closest('.wrapper');
+
+				// ui manage status 
+				if(e.attr('lock') == null){
+					// unlocked
+					unlockedDocument(target);
+				}else{
+					// locked
+					lockedDocument(target);
+				}
+				e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');
 			});
 
 			ajax_status.get(url);
 		}
-	})
+	});
+
+	// manage remove
+	$(document).on('click', 'a.remove', function(){
+
+		var e  = $(this);
+
+		// ui
+		e.closest('.wrapper').find('.hold-on-load').addClass('disabled');
+		e.find('i').removeClass('fa-times');
+		e.find('i').addClass('fa-circle-o-notch fa-spin');
+
+		// do ajax remove
+		var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'delete']) }}";
+		url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('key'));
+	
+		var ajax_remove = window.ajax;
+
+		ajax_remove.defineOnSuccess(function(resp){
+			e.closest('.wrapper').fadeOut('fast', function(e){
+				$(this).parent().remove();
+				$(document.getElementById('page-content')).find('#reader').find('#' + resp.key).remove();
+			});
+		});
+
+		ajax_remove.defineOnError(function(resp){
+			e.find('i').removeClass('fa-circle-o-notch fa-spin');
+			e.find('i').addClass('fa-times');
+			e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');	
+		});		
+
+		ajax_remove.get(url);
+	});
+
+	// manage add paragraph
+	$(document).on('click', 'a.newline', function(){
+
+		var e  = $(this);
+
+		// ui
+		e.closest('.wrapper').find('.hold-on-load').addClass('disabled');
+		e.find('i').removeClass('fa-plus');
+		e.find('i').addClass('fa-circle-o-notch fa-spin');
+
+		// do ajax newline
+		var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'add']) }}";
+		url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('key'));
+	
+		var ajax_newline = window.ajax;
+
+		ajax_newline.defineOnSuccess(function(resp){
+			// add new line
+			$("<p id=" + resp.key + ">&nbsp;</p>").insertAfter($(document.getElementById('page-content')).find('#reader').find('#' + e.attr('key')));
+			var rslt = e.closest('#text-editor').find('#template').insertAfter(e.closest('.wrapper').parent());
+			rslt.removeAttr('hidden id');
+			rslt.find('.wrapper').attr('id', resp.key);
+
+			// set features
+			rslt.find('#lock').attr('key', resp.key);
+			rslt.find('#lock').addClass('active');
+			
+			rslt.find('#remove').attr('key', resp.key);
+			rslt.find('#remove').addClass('active');
+
+			rslt.find('#newline').attr('key', resp.key);
+			rslt.find('#newline').addClass('active');
+
+			rslt.find('#revise').attr('key', resp.key);
+			rslt.find('#revise').addClass('disabled');
+
+			// ui
+			e.find('i').removeClass('fa-circle-o-notch fa-spin');
+			e.find('i').addClass('fa-plus');
+			e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');
+		});
+
+		ajax_newline.defineOnError(function(resp){
+			e.find('i').removeClass('fa-circle-o-notch fa-spin');
+			e.find('i').addClass('fa-plus');
+			e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');	
+		});		
+
+		ajax_newline.get(url);
+	});
+
+
 	/* End Get Akta Feature */
 
 
