@@ -247,11 +247,18 @@ class aktaController extends Controller
 			$akta 		= $akta->save();
 
 			$this->page_attributes->msg['success']		= ['Akta Berhasil di Simpan'];
-			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+			$message['success'] = $this->page_attributes->msg['success'];
+			$message['url'] = route('akta.akta.show', $akta['id']);
+
+			return Response::json($message);
 		} 
 		catch (Exception $e) {
 			$this->page_attributes->msg['error']       = $e->getMessage();
-			return $this->generateRedirect(route('akta.akta.create'));
+			$message['error'] = $e->getMessage();
+			$message['url'] = route('akta.akta.create');
+
+			return Response::json($message);
+			// return $this->generateRedirect(route('akta.akta.create'));
 		}
 	}
 
@@ -462,7 +469,7 @@ class aktaController extends Controller
 
 					foreach ((array)$prev as $key => $value) 
 					{
-						if($value['jenis_dokumen']==$jenis)
+						if($value['jenis_dokumen']==$exploded[0])
 						{
 							$tipe->kepemilikan 	= $value['kepemilikan'];
 						}

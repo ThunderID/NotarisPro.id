@@ -106,7 +106,7 @@ window.ajax = new function(){
   		send(url, null, 'GET');
   	}
   	this.post = function(url, data){
-  		send(url, null, 'GET');
+  		send(url, data, 'POST');
   	}  	
 
   	// ajax engine
