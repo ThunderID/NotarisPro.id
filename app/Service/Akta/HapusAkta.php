@@ -46,7 +46,7 @@ class HapusAkta
 			}
 			
 			//1d. pastikan akta tersebut milik kantor notaris yang sedang aktif 
-			if(!in_array(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']))
+			if(!str_is(TAuth::activeOffice()['kantor']['id'], $akta->pemilik['kantor']['id']))
 			{
 				throw new Exception("Anda tidak memiliki akses untuk akta ini", 1);
 			}
