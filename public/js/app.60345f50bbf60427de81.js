@@ -22689,95 +22689,125 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 window.editorUI = {
-	renderListMention: function renderListMention(data, callBack) {
-		list = '';
-
-		var count = 1;
-		for (var i in data) {
-			link = "<a href='#' class='dropdown-item link-mention' role='option'>" + data[i] + "</a>";
-			list += link;
-			if (count < Object.keys(data).length) {
-				list += "<div class='dropdown-divider m-0'></div>";
+	autoSave: function autoSave(editor, textChange) {
+		setInterval(function () {
+			if (textChange.length() > 0) {
+				window.editorUI.postSave(editor);
+				return new Delta();
 			}
-			count++;
-		}
-		return list;
-	},
-	searchMention: function searchMention(param) {
-		var search = param.toLowerCase().substr(1);
-		var result = {};
-
-		try {
-			for (var i in dataListWidgets) {
-				if (dataListWidgets[i].toLowerCase().substr(1).indexOf(search) > -1) {
-					result[i] = dataListWidgets[i];
-				}
-			}
-		} catch (err) {
-			result['no_result'] = 'No Result';
-		}
-
-		return result;
-	},
-	autoSave: function autoSave(el, url, form) {
-		var triggerAutoSave = function triggerAutoSave(event, editable) {
-			loadingAnimation.changeColor('#ddd');
-			loadingAnimation.loadingStart();
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.save-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.save-as-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
-			/* function ajax required url, type method, data */
-			window.ajaxCall.withoutSuccess(url, 'POST', form.serialize());
-			setTimeout(function () {
-				loadingAnimation.loadingStop();
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.save-content').html('<i class="fa fa-save"></i> Simpan').removeClass('disabled');
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.save-as-content').html('<i class="fa fa-save"></i> Simpan Sebagai').removeClass('disabled');
-			}, 2000);
-		};
-
-		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
-		el.subscribe('editableInput', throttledAutoSave);
+		}, 5 * 1000);
 	},
 	postSave: function postSave(editor) {
 		var judulAkta = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.form-judul-akta').val();
 		var paragrafAkta = editor.root.innerHTML;
 		var urlStore = editor.container.dataset.url;
 		var ajaxAkta = window.ajax;
+		var formData = new FormData();
 
-		ajax_akta.defineOnSuccess(function (respon) {
+		ajaxAkta.defineOnSuccess(function (respon) {
+			console.log('success');
 			console.log(respon);
 		});
 
-		// $.ajax({
-		// 	method: 'POST',
-		// 	url: urlStore,
-		// 	data: { judul: judulAkta, paragraf: paragrafAkta },
-		// 	beforeSend: function () {
-		// 		$('.loading-save').css('display', 'inline');
-		// 	},
-		// 	success: function (data) {
-		// 		$('.loading-save').html('Saved');
-		// 		$('.loading-save').css('display', 'none');
-		// 		$('.loading-save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Menyimpan');
-		// 	}
-		// });
+		ajaxAkta.defineOnError(function (respon) {
+			console.log('gagal');
+			console.log(respon);
+		});
 
-		// let method = "POST";
-		// let form = document.createElement("form");
-		// let hiddenField = document.createElement("input");
+		formData.append('judul', judulAkta);
+		formData.append('jenis', '');
+		formData.append('paragraf', paragrafAkta);
 
-		// form.setAttribute("method", method);
-		// form.setAttribute("action", "/test");
+		ajaxAkta.post(urlStore, formData);
+	},
+	parsingArsipMention: function parsingArsipMention(editor, element) {
+		var textValue = element.attr('data-value');
+		var textItem = element.attr('data-item');
+		var newTextValue = '@' + textValue + textItem + '@';
+		var textObj = { text: newTextValue, value: newTextValue };
 
-		// hiddenField.setAttribute("type", "hidden");
-		// hiddenField.setAttribute("name", "contents");
+		// set selection
+		var range = editor.getSelection();
+		var text = editor.getText(range.index, range.length);
+		var newIndex = parseInt(range.index + newTextValue.length);
 
-		// hiddenField.setAttribute("value", JSON.stringify(editor.root.innerHTML));
+		if (range) {
+			if (range.length == 0) {
+				editor.insertEmbed(range.index, 'data-link', textObj);
+			} else {
+				editor.deleteText(range.index, range.length);
+				editor.insertEmbed(range.index, 'data-link', textObj);
+			}
+		} else {
+			editor.insertEmbed(editor.getLength() - 1, 'data-link', textObj);
+		}
+		editor.setSelection(newIndex, 0);
 
-		// form.appendChild(hiddenField);
-		// document.body.appendChild(form);
-		// form.submit();
+		// set item show to arsip
+		// back to previous item
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--two')).removeClass('active');
+		setTimeout(function () {
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--one')).addClass('active');
+		}, 200);
 
-		// $(form).serialize();
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('sidebar-header')).find('#sub-arsip').removeClass('d-flex').hide();
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('sidebar-header')).find('#arsip').addClass('d-flex').show();
+	},
+	panelArsip: function panelArsip() {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.btn-arsip-previous', function (e) {
+			e.preventDefault();
+
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--two')).removeClass('active');
+			setTimeout(function () {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--one')).addClass('active');
+			}, 200);
+
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('sidebar-header')).find('#sub-arsip').removeClass('d-flex').hide();
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('sidebar-header')).find('#arsip').addClass('d-flex').show();
+		});
+
+		// event click for arsip dokumen item
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.dokumen-item', function (e) {
+			e.preventDefault();
+			var item = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-item');
+
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--one')).removeClass('active');
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--two')).find('.arsip-mention').attr('data-item', item);
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--two')).find('.add-arsip-prefix').attr('data-item', item);
+
+			// set timeout effect 
+			// show arsip child
+			setTimeout(function () {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('arsip-item--two')).addClass('active');
+			}, 200);
+
+			// toggle sidebar header
+			// from arsip to arsip child
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('sidebar-header')).find('#arsip').removeClass('d-flex').hide();
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.getElementById('sidebar-header')).find('#sub-arsip').addClass('d-flex').show();
+		});
+	},
+	openPanelArsip: function openPanelArsip() {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.ql-open-arsip', function (e) {
+			var flag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-flag');
+
+			if (flag == 'close') {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#DataList').addClass('open');
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-flag', 'open').addClass('ql-active');
+			} else {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#DataList').removeClass('open');
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-flag', 'close').removeClass('ql-active');
+			}
+		});
+	},
+	closePanelArsip: function closePanelArsip() {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.btn-close-arsip', function () {
+			var buttonOpenArsip = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document.querySelector('.ql-open-arsip'));
+
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#DataList').removeClass('open');
+			buttonOpenArsip.attr('data-flag', 'close');
+			buttonOpenArsip.removeClass('ql-active');
+		});
 	},
 	quill: function quill() {
 		var currentCursor, newIndex, suffix, textSearch;
@@ -22852,7 +22882,6 @@ window.editorUI = {
 								if (nextLeaf === null || currentLeaf.parent !== nextLeaf.parent) {
 									this.quill.insertEmbed(range.index, 'break', true, 'user');
 								}
-
 								// Now that we've inserted a line break, move the cursor forward
 								this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
 							}
@@ -22865,7 +22894,7 @@ window.editorUI = {
 		var changeText = new Delta();
 		var editor = new window.Quill('#editor', options);
 		var toolbar = editor.getModule('toolbar');
-		var buttonOpenArsip = document.querySelector('.ql-open-arsip');
+
 		var buttonNewDocument = document.querySelector('.ql-new');
 		var buttonSaveDocument = document.querySelector('.ql-save');
 
@@ -22910,74 +22939,28 @@ window.editorUI = {
 			'formats/data-link': dataMention
 		});
 
-		// function on click button new document
-		buttonNewDocument.addEventListener('click', function () {
+		// function on click button new 
+		// editor
+		buttonNewDocument.addEventListener('click', function (e) {
 			console.log('new document');
 		});
 
 		// function on click button save
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.form-editor-akta-save').on('click', function (e) {
+		// from editor
+		buttonSaveDocument.addEventListener('click', function (e) {
 			e.preventDefault();
-
 			window.editorUI.postSave(editor);
 		});
 
-		// 
 		// module quill autosave
-		// 
-		// setInterval( function() {
-		// 	if (changeText.length() > 0) {
-		// 		window.editorUI.postSave(editor);
+		// and return value changeText
+		changeText = window.editorUI.autoSave(editor, changeText, Delta);
 
-		// 		changeText = new Delta();
-		// 	}
-		// }, 5*1000);
-
-
-		// 
-		// function on click button open arsip
-		// 
-		buttonOpenArsip.addEventListener('click', function () {
-			var flag = buttonOpenArsip.getAttribute('data-flag');
-			if (flag == 'close') {
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#DataList').addClass('open');
-				buttonOpenArsip.setAttribute('data-flag', 'open');
-				buttonOpenArsip.classList.add('ql-active');
-			} else {
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()('#DataList').removeClass('open');
-				buttonOpenArsip.setAttribute('data-flag', 'close');
-				buttonOpenArsip.classList.remove('ql-active');
-			}
-		});
-
-		// 
-		// get data mention from panel sidebar
-		// 
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.data-mention').on('click', function (e) {
+		// get data arsip 
+		// from panel sidebar
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.arsip-mention', function (e) {
 			e.preventDefault();
-
-			var textValue = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-value');
-			var textItem = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-item');
-			var newTextValue = '@' + textValue + textItem + '@';
-			var textObj = { text: newTextValue, value: newTextValue };
-
-			// set selection
-			var range = editor.getSelection();
-			var text = editor.getText(range.index, range.length);
-			var newIndex = parseInt(range.index + newTextValue.length);
-
-			if (range) {
-				if (range.length == 0) {
-					editor.insertEmbed(range.index, 'data-link', textObj);
-				} else {
-					editor.deleteText(range.index, range.length);
-					editor.insertEmbed(range.index, 'data-link', textObj);
-				}
-			} else {
-				editor.insertEmbed(editor.getLength() - 1, 'data-link', textObj);
-			}
-
-			editor.setSelection(newIndex, 0);
+			window.editorUI.parsingArsipMention(editor, __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this));
 		});
 
 		window.onbeforunload = function () {
@@ -23078,6 +23061,9 @@ window.editorUI = {
 		// 	console.log('data tidak tersimpan secara otomatis');
 		// }
 		window.editorUI.quill();
+		window.editorUI.openPanelArsip();
+		window.editorUI.closePanelArsip();
+		window.editorUI.panelArsip();
 	}
 };
 
@@ -23440,7 +23426,7 @@ window.ajax = new function () {
 		send(url, null, 'GET');
 	};
 	this.post = function (url, data) {
-		send(url, null, 'GET');
+		send(url, data, 'POST');
 	};
 
 	// ajax engine

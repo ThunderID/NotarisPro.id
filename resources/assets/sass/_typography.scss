@@ -30,6 +30,10 @@ h7{
 }
 
 a.disabled {
-  color: gray !important;
-  pointer-events: none;
+    color: gray !important;
+    pointer-events: none;
+
+    &:hover, &:focus {
+        color: gray !important;
+    }
 }
