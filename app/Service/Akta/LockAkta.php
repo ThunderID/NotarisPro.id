@@ -52,7 +52,8 @@ class LockAkta
 
 		foreach ($this->akta->paragraf as $key => $value) 
 		{
-			if($value['key'] == $key)
+
+			if(str_is($value['key'], $key_lock))
 			{
 				if(is_null($value['lock']))
 				{
