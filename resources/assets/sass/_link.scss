@@ -4,5 +4,11 @@ a {
 	}
 	&:hover {
 		text-decoration: none;
+	}
+	&.text-default {
+		color: #292b2c !important;
+		&:hover {
+			color: #0275d8 !important;
+		}
 	}	
 }
