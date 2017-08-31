@@ -561,15 +561,15 @@ class aktaController extends Controller
 			{
 				case 'add':
 				$akta 	= $akta->addParagrafAfter($key);
+				$ptr = array_search($key, array_column($akta['paragraf'], 'key')) + 1;
 					break;
 				case 'delete':
 				$akta 	= $akta->removeParagrafBefore($key);
+				$ptr = array_search($key, array_column($akta['paragraf'], 'key'));
 					break;
 				case 'edit':
 				$akta 	= $akta->editable($key);
-					break;
-				default :
-					throw new Exception("Not listed ", 1);
+				$ptr = array_search($key, array_column($akta['paragraf'], 'key'));
 					break;
 			}
 		} catch (Exception $e) {
