@@ -94,7 +94,7 @@ class LockAkta
 			{
 				if(str_is($value['key'], $key_lock))
 				{
-					$idx 				= $key;
+					$idx 				= $key+1;
 				}
 
 				if($idx > 0)
@@ -122,7 +122,7 @@ class LockAkta
 		$paragraf						= $this->akta->paragraf;
 
 		//jika penghapusan pada paragraf terakhir
-		if(is_null($key_lock))
+		if(is_null($key_lock) && count($paragraf)>0)
 		{
 			unset($paragraf[count($paragraf)-1]);
 		}
@@ -137,13 +137,13 @@ class LockAkta
 					unset($paragraf[$key]);
 				}
 
-				if($flag)
+				if($flag && $key > 0)
 				{
 					$paragraf[$key - 1]	= $value;
 				}
 			}
 			
-			if($flag)
+			if($flag && count($paragraf) > 0)
 			{
 				unset($paragraf[count($paragraf)-1]);
 			}
