@@ -121,6 +121,7 @@ trait TextParseTrait
 		//need sort
 		$saved_data 		= [];
 		$saved_data['pihak']= [];
+		$saved_data['root']	= [];
 		$root 				= [];
 
 		foreach ($array_of_docs as $key => $value) 
