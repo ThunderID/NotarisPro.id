@@ -142,8 +142,12 @@ class UpdateStatusAkta
 		$this->active_office 	= TAuth::activeOffice();
 		$this->logged_user 		= TAuth::loggedUser();
 
+		if($this->active_office['kantor']['id']!=$this->akta['pemilik']['kantor']['id'])
+		{
+			throw new Exception("Tidak ditemukan", 1);
+		}
 		return true;
-	
+		
 		//MELALUI CONSOLE
 	}
 }

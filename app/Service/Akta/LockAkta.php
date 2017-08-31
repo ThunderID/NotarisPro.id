@@ -52,7 +52,8 @@ class LockAkta
 
 		foreach ($this->akta->paragraf as $key => $value) 
 		{
-			if($value['key'] == $key)
+
+			if(str_is($value['key'], $key_lock))
 			{
 				if(is_null($value['lock']))
 				{
@@ -74,6 +75,7 @@ class LockAkta
 	//check perlu versioning
 	public function addParagrafAfter($key_lock)
 	{
+		$this->authorize();
 		$paragraf						= $this->akta->paragraf;
 
 		//jika penambahan pada awal paragraf
@@ -116,6 +118,7 @@ class LockAkta
 	//check perlu versioning
 	public function removeParagrafBefore($key_lock)
 	{
+		$this->authorize();
 		$paragraf						= $this->akta->paragraf;
 
 		//jika penghapusan pada paragraf terakhir
@@ -174,6 +177,11 @@ class LockAkta
 		//demi menghemat resource
 		$this->active_office 	= TAuth::activeOffice();
 		$this->logged_user 		= TAuth::loggedUser();
+
+		if($this->active_office['kantor']['id']!=$this->akta['pemilik']['kantor']['id'])
+		{
+			throw new Exception("Tidak ditemukan", 1);
+		}
 
 		return true;
 	
