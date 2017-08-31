@@ -20,11 +20,19 @@
 				<h4 class="show-before-load">
 					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memuat
 				</h4>
-				<h4 class="show-on-error" style="display: none;">
-					<a href="javascript:void(0);" onClick="retrySetAktaShow();">
-						<i class="fa fa-refresh" aria-hidden="true"></i> Coba Lagi
-					</a>
-				</h4>
+				<div class="show-on-error pl-3 pt-3 col-12 col-md-6" style="display: none;">
+					<h5 class="mb-0 show-on-error" style="display: none;">
+						Tidak dapat mengambil data!<br><br><small>Pastikan Anda dapat terhubung dengan internet dan cobalah beberapa saat lagi. Bila masalah ini terus berlanjut, silahkan hubungi Costumer Service kami untuk mendapatkan bantuan.</small>
+					</h5>
+					<h5 class="pt-2 show-on-error" style="display: none;">
+						<small>Kode Error: <span id="loader-error-code">500</span></small>
+					</h5>
+					<h5 class="pt-4">
+						<a href="javascript:void(0);" onClick="retrySetArsipShow();">
+							<i class="fa fa-refresh" aria-hidden="true"></i> Coba Lagi
+						</a>
+					</h5>
+				</div>
 			</div>
 			<div id="arsip" class="col-12 col-sm-12 col-md-5 col-lg-4 pl-3">
 				<div class="row pt-4 pb-3">
@@ -49,7 +57,7 @@
 			<div class="col-12 hidden-md-up pt-3 pb-4">
 				<div class="row clearfix"></div>
 			</div>
-			<div id="terkait" class="col-12 col-sm-12 col-md-7 col-lg-8 pt-2 pl-3 pr-3" style="height: 100%; border-left: 1px solid #F7F7F7;">
+			<div id="terkait" class="col-12 col-sm-12 col-md-7 col-lg-8 pt-2 pl-3 pr-3 right-panel-responsive">
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs flat-tabs" role="tablist">
 					<li class="nav-item">
@@ -87,8 +95,11 @@
 								<td id="relasi" class="text-capitalize">
 								</td>							
 								<td id="deskripsi">
-									<p id="content1" class="mb-1">Field 1 : Dummy 1</p>
-									<p id="content2" class="mb-1">Field 2 : Dummy 2</p>
+									<div id='deskripsi-template' hidden>
+										<p class="mb-1 text-capitalize"><span id="field"></span>&nbsp;:&nbsp;<span id="value"></span></p>
+									</div>
+									<div id="deskripsi-content">
+									</div>
 								</td>
 								<td>
 									<a id="link" href="#" target="blank" class="pr-2" style="float: right;">
@@ -97,7 +108,7 @@
 								</td>
 							</tr>						
 			                <tr id="no-data">
-			                    <td colspan="3" class="text-center">
+			                    <td colspan="4" class="text-center">
 			                    	Tidak ada data
 			                    </td>
 			                </tr>					
@@ -176,6 +187,10 @@
 		// reset state
 		$('.loader').show();
 		$('.tab-init').click();
+		$('.disabled-before-load').addClass("disabled");
+		$('.hide-before-load').hide();
+		$('.show-before-load').show();
+		$('.show-on-error').hide();		
 
 		// sets url
 		window.history.pushState(null, null, '/arsip/arsip/' + id);
@@ -193,7 +208,6 @@
 		var ajax_arsip = window.ajax;
 
 		ajax_arsip.defineOnSuccess(function(resp){
-			console.log(resp);
 			// declare
 			const icon_tipe_arsip = "<i class='fa fa-file-o' aria-hidden='true'></i>&nbsp;&nbsp;";
 
@@ -222,7 +236,21 @@
 					rslt.removeAttr('id');
 					rslt.find('#jenis').text(value.jenis);
 					rslt.find('#relasi').text(value.relasi);
+
+					drawDetail(rslt, value.isi);
 				});
+
+				function drawDetail(target, datas){
+					var tmp = target.find('#deskripsi').find('#deskripsi-template');
+
+					Object.keys(datas).forEach(function(element) {
+						var rslt = tmp.clone().appendTo(target.find('#deskripsi-content'));
+						rslt.removeAttr('id');
+						rslt.removeAttr('hidden');
+						rslt.find('#field').text(window.stringManipulator.toSpace(element));
+						rslt.find('#value').text(datas[element]);
+					});
+				}
 			}else{
 				terkait.find('#template').find('#no-data').clone().appendTo(terkait.find('#content'));
 			}
@@ -252,13 +280,30 @@
 									
 		});
 		ajax_arsip.defineOnError(function(resp){
-			// $('.show-before-load').hide();
-			// $('.show-on-error').show();
-			// $(document.getElementById('loader-error-code')).text(resp.status);
+			$('.show-before-load').hide();
+			$('.show-on-error').show();
+			$(document.getElementById('loader-error-code')).text(resp.status);
 		});
 
 		ajax_arsip.get(url);		
 	}
+	function retrySetArsipShow(){
+		// sets arsip
+		$('.loader').show();
+		$('.disabled-before-load').addClass("disabled");
+		$('.hide-before-load').hide();
+		$('.show-before-load').show();
+		$('.show-on-error').hide();
+
+		// get id_akta
+		var id = window.location.pathname.replace('/arsip/arsip', '');
+		id_akta = id.replace('/', '');
+
+		// retry get akta
+		setArsipShow(id_akta);
+	}	
+	/* End Set Arsip Show */
+
 
 	/* Start URL Page Manager */
 	$(window).on('popstate', function() {

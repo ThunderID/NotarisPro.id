@@ -57,7 +57,7 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		margin: -28px -20px 0 -5px;
+		margin: -7vh 0 0 -5px;
 		transform:translateX(-20%);
 	}
 }
@@ -124,5 +124,15 @@
 @media print {
 	.show-print{
 		display: block !important;
+	}
+}
+
+.right-panel-responsive{
+	height: 100%; 
+	border-left: 1px solid #F7F7F7;
+
+	@media screen and (max-width: 575px) {
+		border-left: none;
+		min-height: 350px;
 	}
 }
