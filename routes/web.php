@@ -129,12 +129,12 @@ Route::group(['middleware' => 'trial'], function(){
 			'destroy' 	=> 'akta.akta.destroy' //post 
 		]]);
 
-		Route::any('/akta/mention/all', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
+		Route::any('/akta/akta/store', 							['uses' => 'aktaController@store', 			'as' => 'akta.akta.store.test']);
 
+		Route::any('/akta/mention/all', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 		Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);
 		
 		Route::any('/akta/mention/prefix', 						['uses' => 'aktaController@mentionPrefixIndex', 	'as' => 'akta.mention_prefix.index']);
-
 		Route::any('/akta/mention/prefix/store', 				['uses' => 'aktaController@mentionPrefixStore', 	'as' => 'akta.mention_prefix.store']);
 
 		Route::any('/akta/versi/{akta_id}', 					['uses' => 'aktaController@versionIndex', 	'as' => 'akta.version.index']);

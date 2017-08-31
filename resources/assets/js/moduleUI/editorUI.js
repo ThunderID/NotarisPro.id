@@ -3,95 +3,142 @@ import 'jquery.caret';
 import 'at.js';
 
 window.editorUI = {
-	renderListMention: function (data, callBack) {
-		list = '';
-
-		var count = 1;
-		for (var i in data) {
-			link = "<a href='#' class='dropdown-item link-mention' role='option'>" +data[i]+ "</a>";
-			list += link;
-			if (count < Object.keys(data).length) {
-				list += "<div class='dropdown-divider m-0'></div>"; 
+	autoSave: function (editor, textChange) {
+		setInterval( function() {
+			if (textChange.length() > 0) {
+				window.editorUI.postSave(editor);
+				return new Delta();
 			}
-			count++;
-		}
-		return list;
-	},
-	searchMention: function (param) {
-		var search = param.toLowerCase().substr(1);
-		var result = {};
-
-		try {
-			for (var i in dataListWidgets) {
-				if (dataListWidgets[i].toLowerCase().substr(1).indexOf(search) > -1) {
-					result[i] = dataListWidgets[i];
-				}
-			}
-		} catch (err) {
-			result['no_result'] = 'No Result';
-		}
-
-		return result;
-	},
-	autoSave: function (el, url, form) {
-		var triggerAutoSave = function (event, editable) {
-			loadingAnimation.changeColor('#ddd');
-			loadingAnimation.loadingStart();
-			$('.save-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
-			$('.save-as-content').html('<i class="fa fa-circle-o-notch fa-spin"></i> Auto Simpan..').addClass('disabled');
-			/* function ajax required url, type method, data */
-			window.ajaxCall.withoutSuccess(url, 'POST', form.serialize());
-			setTimeout( function (){
-				loadingAnimation.loadingStop();
-				$('.save-content').html('<i class="fa fa-save"></i> Simpan').removeClass('disabled');
-				$('.save-as-content').html('<i class="fa fa-save"></i> Simpan Sebagai').removeClass('disabled');
-			}, 2000);
-		};
-
-		var throttledAutoSave = window.Editor.util.throttle(triggerAutoSave, 5000);
-		el.subscribe('editableInput', throttledAutoSave);
+		}, 5*1000);
 	},
 	postSave: function(editor) {
 		let judulAkta 		= $('.form-judul-akta').val();
 		let paragrafAkta 	= editor.root.innerHTML;
 		let urlStore 		= editor.container.dataset.url;
 		let ajaxAkta 		= window.ajax;
+		let formData 		= new FormData();
 		
-		ajax_akta.defineOnSuccess( function(respon){
-			console.log(respon);
+		ajaxAkta.defineOnSuccess( function(respon) {
+			console.log('success');
+			console.log(respon)
 		});
 
-		// $.ajax({
-		// 	method: 'POST',
-		// 	url: urlStore,
-		// 	data: { judul: judulAkta, paragraf: paragrafAkta },
-		// 	beforeSend: function () {
-		// 		$('.loading-save').css('display', 'inline');
-		// 	},
-		// 	success: function (data) {
-		// 		$('.loading-save').html('Saved');
-		// 		$('.loading-save').css('display', 'none');
-		// 		$('.loading-save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Menyimpan');
-		// 	}
-		// });
+		ajaxAkta.defineOnError( function(respon) {
+			console.log('gagal');
+			console.log(respon)
+		});
 
-		// let method = "POST";
-		// let form = document.createElement("form");
-		// let hiddenField = document.createElement("input");
+		formData.append('judul', judulAkta);
+		formData.append('jenis', '');
+		formData.append('paragraf', paragrafAkta);
 
-		// form.setAttribute("method", method);
-		// form.setAttribute("action", "/test");
+		ajaxAkta.post(urlStore, formData);
+	},
+	parsingArsipMention: function (editor, element) {
+		let textValue = element.attr('data-value');
+		let textItem = element.attr('data-item');
+		let newTextValue = '@' + textValue + textItem + '@';
+		let textObj = {text: newTextValue, value: newTextValue};
 
-		// hiddenField.setAttribute("type", "hidden");
-		// hiddenField.setAttribute("name", "contents");
+		// set selection
+		var range = editor.getSelection();
+		var text = editor.getText(range.index, range.length);
+		var newIndex = parseInt(range.index + newTextValue.length);
 
-		// hiddenField.setAttribute("value", JSON.stringify(editor.root.innerHTML));
-		
-		// form.appendChild(hiddenField);
-		// document.body.appendChild(form);
-		// form.submit();
+		if (range) {
+			if (range.length == 0) {
+				editor.insertEmbed(range.index, 'data-link', textObj);
+			} else {
+				editor.deleteText(range.index, range.length);
+				editor.insertEmbed(range.index, 'data-link', textObj);
+			}
+		} else {
+			editor.insertEmbed(editor.getLength() - 1, 'data-link', textObj);
+		}
+		editor.setSelection(newIndex, 0)
 
-		// $(form).serialize();
+		// set item show to arsip
+		// back to previous item
+		$(document.getElementById('arsip-item--two')).removeClass('active');
+		setTimeout(function() {
+			$(document.getElementById('arsip-item--one')).addClass('active');
+		}, 200);
+
+		$(document.getElementById('sidebar-header')).find('#sub-arsip')
+			.removeClass('d-flex')
+			.hide();
+		$(document.getElementById('sidebar-header')).find('#arsip')
+			.addClass('d-flex')
+			.show();
+	},
+	panelArsip: function () {
+		$(document).on('click', '.btn-arsip-previous', function(e) {
+			e.preventDefault();
+
+			$(document.getElementById('arsip-item--two')).removeClass('active');
+			setTimeout(function() {
+				$(document.getElementById('arsip-item--one')).addClass('active');
+			}, 200);
+
+			$(document.getElementById('sidebar-header')).find('#sub-arsip')
+				.removeClass('d-flex')
+				.hide();
+			$(document.getElementById('sidebar-header')).find('#arsip')
+				.addClass('d-flex')
+				.show();
+		});
+
+		// event click for arsip dokumen item
+		$(document).on('click', '.dokumen-item', function(e) {
+			e.preventDefault();
+			let item = $(this).attr('data-item');
+			
+			$(document.getElementById('arsip-item--one')).removeClass('active');
+			$(document.getElementById('arsip-item--two')).find('.arsip-mention')
+				.attr('data-item', item);
+			$(document.getElementById('arsip-item--two')).find('.add-arsip-prefix')
+				.attr('data-item', item);
+
+			// set timeout effect 
+			// show arsip child
+			setTimeout(function() {
+				$(document.getElementById('arsip-item--two')).addClass('active');
+			}, 200);
+
+
+			// toggle sidebar header
+			// from arsip to arsip child
+			$(document.getElementById('sidebar-header')).find('#arsip')
+				.removeClass('d-flex')
+				.hide();
+			$(document.getElementById('sidebar-header')).find('#sub-arsip')
+				.addClass('d-flex')
+				.show();
+		});
+	},
+	openPanelArsip: function() {
+		$(document).on('click', '.ql-open-arsip', function(e) {
+			let flag = $(this).attr('data-flag');
+
+			if (flag == 'close') {
+				$('#DataList').addClass('open');
+				$(this).attr('data-flag', 'open')
+					.addClass('ql-active');
+			} else {
+				$('#DataList').removeClass('open');
+				$(this).attr('data-flag', 'close')
+					.removeClass('ql-active');
+			}
+		});
+	},
+	closePanelArsip: function () {
+		$(document).on('click', '.btn-close-arsip', function() {
+			let buttonOpenArsip = $(document.querySelector('.ql-open-arsip'));
+
+			$('#DataList').removeClass('open');
+			buttonOpenArsip.attr('data-flag', 'close');
+			buttonOpenArsip.removeClass('ql-active');
+		});
 	},
 	quill: function () {
 		var currentCursor, newIndex, suffix, textSearch;
@@ -115,12 +162,10 @@ window.editorUI = {
 			value () {
 				return '\n';
 			}
-		  
 			insertInto(parent, ref) {
 				Embed.prototype.insertInto.call(this, parent, ref);
 			}
 		}
-
 		SmartBreak.blotName = 'break';
 		SmartBreak.tagName = 'BR';
 
@@ -152,7 +197,6 @@ window.editorUI = {
 								if (nextLeaf === null || (currentLeaf.parent !== nextLeaf.parent)) {
 									this.quill.insertEmbed(range.index, 'break', true, 'user');
 								}
-
 								// Now that we've inserted a line break, move the cursor forward
 								this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
 							}
@@ -165,7 +209,7 @@ window.editorUI = {
 		var changeText = new Delta();
 		var editor = new window.Quill('#editor', options);
 		var toolbar = editor.getModule('toolbar');
-		var buttonOpenArsip = document.querySelector('.ql-open-arsip');
+		
 		var buttonNewDocument = document.querySelector('.ql-new');
 		var buttonSaveDocument = document.querySelector('.ql-save');
 
@@ -197,76 +241,31 @@ window.editorUI = {
 			'formats/data-link': dataMention
 		});
 
-		// function on click button new document
-		buttonNewDocument.addEventListener('click', function() {
+		// function on click button new 
+		// editor
+		buttonNewDocument.addEventListener('click', function(e) {
 			console.log('new document');
 		});
 
 		// function on click button save
-		$('.form-editor-akta-save').on('click', function(e) {
+		// from editor
+		buttonSaveDocument.addEventListener('click', function(e) {
 			e.preventDefault();
-
 			window.editorUI.postSave(editor);
 		});
+		
 
-		// 
 		// module quill autosave
-		// 
-		// setInterval( function() {
-		// 	if (changeText.length() > 0) {
-		// 		window.editorUI.postSave(editor);
-				
-		// 		changeText = new Delta();
-		// 	}
-		// }, 5*1000);
+		// and return value changeText
+		changeText = window.editorUI.autoSave(editor, changeText, Delta);
+		
 
-
-		// 
-		// function on click button open arsip
-		// 
-		buttonOpenArsip.addEventListener('click', function() {
-			var flag = buttonOpenArsip.getAttribute('data-flag');
-			if (flag == 'close') {
-				$('#DataList').addClass('open');
-				buttonOpenArsip.setAttribute('data-flag', 'open');
-				buttonOpenArsip.classList.add('ql-active');
-			} else {
-				$('#DataList').removeClass('open');
-				buttonOpenArsip.setAttribute('data-flag', 'close');
-				buttonOpenArsip.classList.remove('ql-active');
-			}
-		});
-
-		// 
-		// get data mention from panel sidebar
-		// 
-		$('.data-mention').on('click', function(e) {
+		// get data arsip 
+		// from panel sidebar
+		$(document).on('click', '.arsip-mention', function(e) {
 			e.preventDefault();
-
-			let textValue = $(this).attr('data-value');
-			let textItem = $(this).attr('data-item');
-			let newTextValue = '@' + textValue + textItem + '@';
-			let textObj = {text: newTextValue, value: newTextValue};
-
-			// set selection
-			var range = editor.getSelection();
-			var text = editor.getText(range.index, range.length);
-			var newIndex = parseInt(range.index + newTextValue.length);
-
-			if (range) {
-				if (range.length == 0) {
-					editor.insertEmbed(range.index, 'data-link', textObj);
-				} else {
-					editor.deleteText(range.index, range.length);
-					editor.insertEmbed(range.index, 'data-link', textObj);
-				}
-			} else {
-				editor.insertEmbed(editor.getLength() - 1, 'data-link', textObj);
-			}
-
-			editor.setSelection(newIndex, 0)
+			window.editorUI.parsingArsipMention(editor, $(this));
 		});
-
 
 		window.onbeforunload = function() {
 			if (changeText.length() > 0) {
@@ -366,5 +365,8 @@ window.editorUI = {
 		// 	console.log('data tidak tersimpan secara otomatis');
 		// }
 		window.editorUI.quill();
+		window.editorUI.openPanelArsip();
+		window.editorUI.closePanelArsip();
+		window.editorUI.panelArsip();
 	}
 }
