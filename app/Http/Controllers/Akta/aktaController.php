@@ -564,7 +564,7 @@ class aktaController extends Controller
 				$ptr = array_search($key, array_column($akta['paragraf'], 'key')) + 1;
 					break;
 				case 'delete':
-				$akta 	= $akta->removeParagrafBefore($key);
+				$akta 	= $akta->removeCurrentParagraf($key);
 				$ptr = array_search($key, array_column($akta['paragraf'], 'key'));
 					break;
 				case 'edit':
@@ -577,7 +577,7 @@ class aktaController extends Controller
 			return App::abort(202, $e->getMessage());			
 			// return JSend::error($akta, $e->getMessage());
 		}
-		$ptr = array_search($key, array_column($akta['paragraf'], 'key'));
+		//$ptr = array_search($key, array_column($akta['paragraf'], 'key'));
 		return response::json($akta['paragraf'][$ptr]);
 	}
 

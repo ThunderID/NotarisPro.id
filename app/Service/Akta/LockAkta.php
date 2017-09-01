@@ -158,6 +158,25 @@ class LockAkta
 		return $this->akta;
 	}
 
+	public function removeCurrentParagraf($key)
+	{
+		$this->authorize();
+		$paragraf						= $this->akta->paragraf;
+
+
+		// delete target
+		$ptr = array_search($key, array_column($paragraf, 'key'));
+		unset($paragraf[$ptr]);
+
+
+		// ksort($paragraf);
+
+		$this->akta->paragraf 			= array_values($paragraf);
+		$this->akta->save();
+
+		return $this->akta;		
+	}
+
 	/**
 	 * Authorization user
 	 *

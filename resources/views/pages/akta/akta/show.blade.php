@@ -381,7 +381,7 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			//console.log(resp);
+			console.log(resp);
 			try {
 
 				// reloaded or from index
@@ -701,12 +701,13 @@
 		var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'delete']) }}";
 		url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('key'));
 	
+		var el_key = e.attr('key');
 		var ajax_remove = window.ajax;
 
 		ajax_remove.defineOnSuccess(function(resp){
 			e.closest('.wrapper').fadeOut('fast', function(e){
 				$(this).parent().remove();
-				$(document.getElementById('page-content')).find('#reader').find('#' + resp.key).remove();
+				$(document.getElementById('page-content')).find('#reader').find('#' + $(this).attr('id')).remove();
 			});
 		});
 
@@ -738,7 +739,7 @@
 		ajax_newline.defineOnSuccess(function(resp){
 			// add new line
 			$("<p id=" + resp.key + ">&nbsp;</p>").insertAfter($(document.getElementById('page-content')).find('#reader').find('#' + e.attr('key')));
-			var rslt = e.closest('#text-editor').find('#template').insertAfter(e.closest('.wrapper').parent());
+			var rslt = e.closest('#text-editor').find('#template').clone().insertAfter(e.closest('.wrapper').parent());
 			rslt.removeAttr('hidden id');
 			rslt.find('.wrapper').attr('id', resp.key);
 
