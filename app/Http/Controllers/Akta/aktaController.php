@@ -738,6 +738,10 @@ class aktaController extends Controller
 				$data 		= $data->orderby($explode[0], $explode[1]);
 			}
 		}
+		else
+		{
+			$data 	= $data->orderby('updated_at', 'desc');
+		}
 
 		//5. page
 		$skip 		= 0;
