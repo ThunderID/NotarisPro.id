@@ -72,7 +72,7 @@ class InitNewArchTableSeeder extends Seeder
 			{
 				$update_isi 	= '<h4 class="text-center"><b style="color: rgb(41, 43, 44); font-size: 1rem;">PEJABAT PEMBUAT AKTA TANAH</b></h4><h4 class="text-center"><span class="medium-editor-mention-at" data-mention="@notaris.nama@">'.$notaris_aktif['notaris']['nama'].'</span>&nbsp;</h4><h4 class="text-center">DAERAH KERJA <span class="medium-editor-mention-at" data-mention="@notaris.daerah_kerja@">'.$notaris_aktif['notaris']['daerah_kerja'].'</span>&nbsp;</h4><h4 class="text-center">SK. Kepala Badan Pertanahan Nasional Nomor : <span class="medium-editor-mention-at" data-mention="@notaris.nomor_sk@">'.$notaris_aktif['notaris']['nomor_sk'].'</span>&nbsp;</h4><h4 class="text-center">Tanggal <span class="medium-editor-mention-at" data-mention="@notaris.tanggal_pengangkatan@">'.$notaris_aktif['notaris']['tanggal_pengangkatan'].'</span>&nbsp;</h4><h4 class="text-center"><span class="medium-editor-mention-at" data-mention="@notaris.alamat@">'.$notaris_aktif['notaris']['alamat'].'</span>&nbsp;<span class="medium-editor-mention-at" data-mention="@notaris.telepon@">'.$notaris_aktif['notaris']['telepon'].'</span>&nbsp;</h4><p class="text-center">------------------------------------------------------------------</p><h5 class="text-center"><b>AKTA JUAL BELI</b></h5><h5 class="text-center">Nomor <span class="medium-editor-mention-at" data-mention="@akta.nomor@"></span>&nbsp;</h5><h5 class="text-center"><i>Lembar Pertama / Kedua</i></h5><p style="text-align: left;">Pada hari ini <span class="medium-editor-mention-at" data-mention="@akta.tanggal@"></span>&nbsp;hadir dihadapan saya <span class="medium-editor-mention-at" data-mention="@notaris.nama@">'.$notaris_aktif['notaris']['nama'].'</span>&nbsp;yang berdasarkan surat keputusan menteri Agraria / Kepala Badan Pertanahan Nasional tanggal <span class="medium-editor-mention-at" data-mention="@notaris.tanggal_pengangkatan@">'.$notaris_aktif['notaris']['tanggal_pengangkatan'].'</span>&nbsp;nomor <span class="medium-editor-mention-at" data-mention="@notaris.nomor_sk@">'.$notaris_aktif['notaris']['nomor_sk'].'</span>&nbsp;diangkat / ditunjuk sebagai Pejabat Pembuat Akta Tanah&nbsp;, yang selanjutnya disebut PPAT, yang dimaksud dalam pasal 7 Peraturan Pemerintah Nomor 24 Tahun 1997 tentang pendaftaran tanah, dengan daerah kerja <span class="medium-editor-mention-at" data-mention="@notaris.daerah_kerja@">'.$notaris_aktif['notaris']['daerah_kerja'].'</span>&nbsp;dengan dihadiri oleh saksi - saksi yang saya kenal dan akan disebut pada bagian akhir akta ini :</p><ol><li><span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.nama@">'.$faker->name.'</span>&nbsp;lahir di <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.tempat_lahir@">'.$klien_1['tempat_lahir'].'</span>&nbsp;pada tanggal <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.tanggal_lahir@">'.$klien_1['tanggal_lahir'].'</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.pekerjaan@">'.$klien_1['pekerjaan'].'</span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.alamat@"></span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.nik@">'.$klien_1['nik'].'</span>&nbsp;<br> <span class="medium-editor-mention-at" data-mention="@pihak.1.ktp.pribadi.deskripsi@"></span>&nbsp;<br>Selaku penjual, yang selanjutnya disebut sebagai<br>PIHAK PERTAMA</li><li><span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.nama@">'.$klien_2['nama'].'</span>&nbsp;lahir di <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.tempat_lahir@">'.$klien_2['tempat_lahir'].',</span>&nbsp;pada tanggal <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.tanggal_lahir@">'.$klien_2['tanggal_lahir'].'</span>&nbsp;Warga Negara Indonesia, <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.pekerjaan@"></span>&nbsp;bertempat tinggal di <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.alamat@"></span>&nbsp;pemegang kartu tanda penduduk nomor <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.nik@">'.$klien_2['nik'].'<br></span> <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.pribadi.deskripsi@"></span><br>Selaku pembeli, yang selanjutnya disebut sebagai<br>PIHAK KEDUA, dalam hal ini bertindak sebagai istri dari saudara <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.suami.nama@">'.$klien_1['nama'].'</span>pemilik nomor kartu tanda penduduk <span class="medium-editor-mention-at" data-mention="@pihak.2.ktp.suami.nik@">'.$klien_1['nik'].'</span><br></li></ol>';
 
-				$update_akta 	= new App\Service\Akta\UpdateAkta($akta->id);
+				$update_akta 	= new App\Service\Akta\UpdateAkta($akta->id, $active_office['kantor']['id']);
 				$update_akta->setParagraf($update_isi);
 				$update 		= $update_akta->save();
 			}
@@ -105,7 +105,7 @@ class InitNewArchTableSeeder extends Seeder
 							$edited_things	= $edited_things.$value['konten'];
 						}
 
-						$renvoi_akta 	= new App\Service\Akta\UpdateAkta($akta->id);
+						$renvoi_akta 	= new App\Service\Akta\UpdateAkta($akta->id, $active_office['kantor']['id']);
 						$renvoi_akta->setParagraf($edited_things);
 						$renvoi 		= $renvoi_akta->save();
 					
@@ -131,14 +131,14 @@ class InitNewArchTableSeeder extends Seeder
 
 						foreach ($minuta->paragraf as $key => $value) 
 						{
-							if($add_pos==$key)
+							if($add_pos+1==$key)
 							{
 								$edited_things 	= $edited_things.'<p>EDITINGADDED</p>';
 							}
 							$edited_things		= $edited_things.$value['konten'];
 						}
 
-						$renvoi_akta 	= new App\Service\Akta\UpdateAkta($akta->id);
+						$renvoi_akta 	= new App\Service\Akta\UpdateAkta($akta->id, $active_office['kantor']['id']);
 						$renvoi_akta->setParagraf($edited_things);
 						$renvoi 		= $renvoi_akta->save();
 
