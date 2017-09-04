@@ -68,3 +68,6 @@ require('./plugins/stringManipulator');
 
 // print any element
 require('./plugins/printElement');
+
+// print any element
+require('./plugins/dataBox');
