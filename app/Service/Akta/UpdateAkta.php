@@ -5,7 +5,7 @@ namespace App\Service\Akta;
 use App\Domain\Akta\Models\Dokumen;
 use App\Domain\Admin\Models\Kantor;
 
-use App\Service\Akta\Traits\TextParseTrait;
+use App\Service\Akta\Traits\TextParseV2Trait;
 
 use Exception, TAuth, Carbon\Carbon;
 
@@ -27,7 +27,7 @@ use Exception, TAuth, Carbon\Carbon;
  */
 class UpdateAkta
 {
-	use TextParseTrait;
+	use TextParseV2Trait;
 
 	protected $id;
 	protected $akta;
@@ -47,7 +47,28 @@ class UpdateAkta
 		$this->variable				= [];
 	}
 
-	//need enhance
+	//simpan perubahan data variable
+	public function setData(array $datas)
+	{
+		$mentionable 	= [];
+
+		foreach ($this->akta->mentionable as $key => $value) 
+		{
+			if(isset($datas['@'.$key.'@']))
+			{
+				$mentionable[str_replace('.','[dot]', $key)]	= $datas['@'.$key.'@'];
+			}
+			else
+			{
+				$mentionable[str_replace('.','[dot]', $key)]	= $value;
+			}
+
+		}
+
+		$this->akta->mentionable 	= $mentionable;
+	}
+
+	//paused
 	public function setParagraf($paragraf_baru)
 	{
 		$this->setParagrafParameter($paragraf_baru);
@@ -78,6 +99,25 @@ class UpdateAkta
 		elseif(in_array($this->akta->status, ['minuta', 'salinan']) && count($this->variable['paragraf']) != count($this->akta->paragraf))
 		{
 			throw new Exception("Ada kesalahan dalam perubahan!", 1);
+		}
+		else
+		{
+			//simpan paragraf dalam proses
+			$mentionable 				= [];
+
+			foreach ($this->variable['mentionable'] as $key => $value) 
+			{
+				if(array_key_exists($key, $this->akta->mentionable))
+				{
+					$mentionable[$key]	= $this->akta->mentionable[$key];
+				}
+				else
+				{
+					$mentionable[$key]	= $value;
+				}
+			}
+
+			$this->variable['mentionable'] 		= $mentionable;
 		}
 	}
 
@@ -160,7 +200,8 @@ class UpdateAkta
 	
 			$this->akta->save();
 
-			$sync 							= $this->syncRelatedDoc($this->akta, $potential_owner);
+			//temporary disable
+			// $sync 							= $this->syncRelatedDoc($this->akta, $potential_owner);
 
 			return $this->akta;
 		}

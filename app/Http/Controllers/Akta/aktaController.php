@@ -19,7 +19,7 @@ use PulkitJalan\Google\Client;
 
 use Illuminate\Http\Request;
 
-use TAuth, Response, App, Session, Exception;
+use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
 class aktaController extends Controller
 {
@@ -283,6 +283,11 @@ class aktaController extends Controller
 			if($request->has('paragraf'))
 			{
 				$akta->setParagraf($request->get('paragraf'));
+			}
+
+			if($request->has('mentionable'))
+			{
+				$akta->setData($request->get('mentionable'));
 			}
 
 			$akta 		= $akta->save();
@@ -648,21 +653,31 @@ class aktaController extends Controller
 	{	
 		$this->middleware('scope:read_akta');
 		$this->active_office = TAuth::activeOffice();
-        //1. get show document
-        $akta                   = $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
-        if($akta)
-        {
-            $akta               = $akta->toArray();
-            //1f. generate checker
-            $akta['incomplete']     = $this->checkInclompeteData($akta['dokumen']);
-            // returning akta data
-	        return Response::json($akta);
-        }
-        else
-        {
-            //return 404
+		//1. get show document
+		$akta                   = $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first();
+		if($akta)
+		{
+			$akta               = $akta->toArray();
+
+			//1f. generate checker
+			$akta['incomplete']	= $this->checkInclompeteData($akta['dokumen']);
+
+			$paragraf 			= collect($akta['paragraf']);
+			$akta['paragraf'] 	= $paragraf->map(function ($single_p) 
+			{
+				$single_p['revisi'][]	= ['tanggal' => Carbon::now()->format('d/m/Y'), 'isi' => $single_p['konten']];
+
+			    return $single_p;
+			});
+
+			// returning akta data
+			return Response::json($akta);
+		}
+		else
+		{
+			//return 404
 			return App::abort(404);
-        }
+		}
 	}
 
 	//!UNFINISHED! Using an Example

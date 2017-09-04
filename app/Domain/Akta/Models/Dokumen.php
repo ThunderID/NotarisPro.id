@@ -134,6 +134,16 @@ class Dokumen extends BaseModel
 		}
 	}
 
+	public function setMentionableAttribute($variable)
+	{
+		$mentionable 						= [];
+		foreach ($variable as $key => $value) 
+		{
+			$mentionable[str_replace('@', '[at]', str_replace('.', '[dot]', $key))] = $value;
+		}
+
+		$this->attributes['mentionable'] 	= $mentionable;
+	}
 	/* ---------------------------------------------------------------------------- FUNCTIONS ----------------------------------------------------------------------------*/
 
 	/**

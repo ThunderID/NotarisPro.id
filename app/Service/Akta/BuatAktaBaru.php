@@ -9,7 +9,7 @@ use App\Domain\Akta\Models\TipeDokumen;
 use App\Domain\Invoice\Models\Klien;
 use App\Domain\Invoice\Models\Objek;
 
-use App\Service\Akta\Traits\TextParseTrait;
+use App\Service\Akta\Traits\TextParseV2Trait;
 use App\Service\Akta\Traits\AssignAktaTrait;
 
 use App\Events\AktaUpdated;
@@ -36,7 +36,7 @@ use Exception, TAuth, Carbon\Carbon;
  */
 class BuatAktaBaru
 {
-	use TextParseTrait;
+	use TextParseV2Trait;
 	use AssignAktaTrait;
 
 	protected $judul;
@@ -95,10 +95,12 @@ class BuatAktaBaru
 			$this->simpanTipeDokumen($variable['tipe_dokumen'], $this->active_office);
 
 			//2. simpan new detected klien/objek/saksi
-			$potential_owner 			= $this->updateDataDokumen($variable['dokumen']);
+			//not exists yet
+			// $potential_owner 			= $this->updateDataDokumen($variable['dokumen']);
 
 		 	//3. Sisipan Assign Owner @assignOwner
-			$variable['pemilik'] 		= $this->assignOwner($potential_owner['pihak']);
+			// $variable['pemilik'] 		= $this->assignOwner($potential_owner['pihak']);
+			$variable['pemilik'] 		= $this->assignOwner(null);
 
 			//3. init akta
 			$akta 						= new Dokumen;
@@ -109,7 +111,8 @@ class BuatAktaBaru
 			//5. simpan akta
 			$akta->save();
 
-			$sync 						= $this->syncRelatedDoc($akta, $potential_owner);
+			//not needed yet
+			// $sync 						= $this->syncRelatedDoc($akta, $potential_owner);
 
 			return $akta;
 		}
