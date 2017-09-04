@@ -81,15 +81,14 @@
 				<i class="fa fa-file-text-o mr-3"></i> 
 				<span class="label-judul-akta" data-flag="show" style="display: inline;">
 					{{ (isset($page_datas->akta['id'])) ? $page_datas->akta['judul'] : $page_datas->judul_akta }}
+					<a href="#" class="btn btn-default btn-sm text-faded">Ubah</a>
 				</span>
 				<form action="#" class="form-inline form-judul-akta" data-flag="hide" style="display: none;">	
 					<input type="text" class="form-control input-judul-akta pl-0" style="border: 0px; padding: 0.28em 0.75em;" value="{{ (isset($page_datas->akta['id'])) ? $page_datas->akta['judul'] : $page_datas->judul_akta }}">
 					<a href="#" class="btn btn-default btn-sm text-faded form-judul-akta-cancel">Batal</a>
-					<a href="#" class="btn btn-default btn-sm form-judul-akta-save">Simpan</a>
+					<a href="#" class="btn btn-default btn-sm form-judul-akta-ubah">Ubah</a>
 				</form>
-				<div class="loading-save ml-2" style="display: none; font-size: 12px; color: #999;">
-					<i class="fa fa-circle-o-notch fa-spin"></i> Menyimpan
-				</div>
+				<div class="loading-save alert p-1 text-center" style="display: none; font-size: 12px; position: absolute !important; top: 5px; right: 50% !important; left: 50% !important; width: 180px !important; "></div>
 			</div>
 		</div>
 		<div class="col-md-3 col-lg-3 text-right">
@@ -104,7 +103,7 @@
 				{{-- button file --}}
 				<span class="ql-formats">
 					<button class="ql-new ml-1" style="margin-top: -2px;" data-toggle="modal" data-target="#SimpanDokumen" data-url="" data-tooltip="tooltip" title="Buat Baru" data-animation="false"><i class="fa fa-file-o"></i></button>
-					<button class="ql-save form-editor-akta-save" style="margin-top: -2px; outline: none;" data-tooltip="tooltip" data-url="{{ route('akta.akta.store') }}" title="Save" data-animation="false"><i class="fa fa-save"></i></button>
+					<button class="ql-save form-editor-akta-save" style="margin-top: -2px; outline: none;" data-tooltip="tooltip" data-url="{{ (Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update', $page_datas->akta['id'])) }}" title="Save" data-animation="false"><i class="fa fa-save"></i></button>
 				</span>
 				<span class="ql-formats">
 					<button class="ql-bold" data-tooltip="tooltip" title="Bold" data-animation="false"></button>
@@ -132,7 +131,12 @@
 					<button class="ql-indent mr-2" value="+1" data-tooltip="tooltip" title="Increase Indent" data-animation="false"></button>
 				</span>
 				<span class="ql-formats">
-					<button class="ql-open-arsip" data-flag="close" style="margin-top: -3px; outline: none;" data-tooltip="tooltip" title="Open Arsip" data-animation="false"><i class="fa fa-archive"></i></button>
+					<button class="ql-list-arsip" data-flag="close" style="margin-top: -3px; outline: none;" data-tooltip="tooltip" title="Daftar Arsip" data-animation="false"><i class="fa fa-archive"></i></button>
+					@if (Route::is('akta.akta.edit'))
+						<button class="ql-input-arsip" data-flag="close" style="margin-top: -3px; outline: none;" data-tooltip="tooltip" title="Isi Arsip" data-animation="false" data-toggle="modal" data-target="#isiDokumen">
+							<i class="fa fa-file-text-o"></i>
+						</button>
+					@endif
 				</span>
 			</div>
 		</div>
@@ -222,11 +226,42 @@
 				<button type="submit" class="btn btn-primary" data-save="true">Simpan</button>
 			</fieldset>
 		</form>	
-	@endcomponent	
+	@endcomponent
+
+	@component('components.modal', [
+		'id' 		=> 'isiDokumen',
+		'title'		=> 'Isi Dokumen',
+		'large'		=> 'true',
+		'settings'	=> [
+			'modal_class'	=> '',
+			'hide_buttons'	=> 'true',
+			'hide_title'	=> 'false',
+		]
+	])
+		<form id="save_dokumen" class="form-widgets form" action="{{ route('akta.akta.store') }}" onSubmit="showLoader();" method="GET">
+			<fieldset class="from-group pb-2 pt-3">
+				@if (Route::is('akta.akta.edit'))
+					@forelse ($page_datas->akta['mentionable'] as $k => $v)
+						<div class="form-group row">
+							<label class="col-sm-5 col-form-label">{{ $k }}</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" name="{{ $k }}" value="{{ $v }}">
+							</div>
+						</div>
+					@empty
+					@endforelse
+				@endif
+			</fieldset>
+			<fieldset class="from-group pb-2 pt-3 text-right">
+				<button type="button" class="btn btn-secondary btn-discard" data-dismiss="modal">Batal</button>
+				<button type="button" class="btn btn-primary" data-save="true">Simpan</button>
+			</fieldset>
+		</form>		
+	@endcomponent()
 @stop
 
 @push('scripts')  
-	var dataDokumen = {!! (isset($page_datas->akta['dokumen'])) ? json_encode($page_datas->akta['dokumen']) : 'null' !!};
+	var arsipDokumen = {!! (isset($page_datas->dokumen_notaris)) ? json_encode($page_datas->dokumen_notaris) : '' !!}
 	window.editorUI.init();
 	modulShowArsipDokumen();
 
@@ -336,6 +371,52 @@
 			let templateForm = $(document.getElementById('add-arsip'));
 
 			var temp = [];
+			
+			if (typeof (arsipDokumen) != 'undefined') {
+				tmpCollapseDefault = templateCollapse.clone(); 
+
+				tmpCollapseDefault.attr('id', templateCollapse.attr('id') + '-default')
+					.addClass('pl-3 mt-2 mb-2')
+					.show();
+
+				tmpCollapseDefault.find('a#parent-link')
+					.attr('href', '#' + templateCollapse.attr('id') + '-notaris')
+					.attr('data-toggle', 'collapse')
+					.attr('data-animation', 'false')
+					.attr('aria-expanded', 'false')
+					.attr('aria-controls', templateCollapse.attr('id') + '-notaris')
+					.append('<i class="fa fa-plus-square-o"></i> Notaris');
+
+				var i = 0;
+				tmpCollapseDefaultChild = templateCollapse.clone();
+				tmpCollapseDefaultChild.attr('id', templateCollapse.attr('id') + '-notaris')
+					.addClass('pl-3 mb-0')
+					.show();
+				$.map(arsipDokumen, function(value, index) {
+
+					if (i < 1) {
+						link = tmpCollapseDefaultChild.find('a#parent-link');
+						link.removeClass('text-default');
+					} else {
+						link = $('<a class="text-capitalize"></a>');
+					}
+
+					link.attr('id', 'parent-link--default-' + index)
+						.attr('href', '#')
+						.attr('data-value', 'notaris.')
+						.attr('data-item', index)
+						.addClass('d-block arsip-mention')
+						.append(index);
+
+					tmpCollapseDefaultChild.append(link);
+					tmpCollapseDefaultChild.addClass('collapse');
+					tmpCollapseDefault.append(tmpCollapseDefaultChild);
+					itemOne.append(tmpCollapseDefault);
+					i++;
+				});
+				itemOne.append('<hr class="mt-1 mb-1">');
+			}
+
 			$.map(respon, function (value, index) {
 				if (temp.indexOf(value.jenis_dokumen) == -1) {
 					tmpForm = templateForm.clone();
@@ -370,6 +451,7 @@
 					// set form add arsip child
 					setFormArsip(tmpFormChild, templateForm.attr('id') + '-' + value.jenis_dokumen)
 					tmpFormChild.show();
+
 					tmpFormChild.find('input[name="arsip_dokumen"]')
 						.attr('data-prefix', value.jenis_dokumen + '.');
 					tmpFormChild.find('a#btn-add')
@@ -389,6 +471,7 @@
 							} else {
 								link = $('<a class="text-default text-capitalize"></a>');
 							}
+
 							link.attr('id', 'parent-link--one-' + value2)
 								.attr('href', '#' + templateCollapse.attr('id') + '-' + value2)
 								.attr('data-toggle', 'collapse')
@@ -563,7 +646,7 @@
 
 	$(function() {
 		$('[data-tooltip="tooltip"]').tooltip();
-
+		$('button[disabled]').tooltip();
 		$('.input-judul-akta').css('width', $('.label-judul-akta').width() + 25);
 	});
 
@@ -587,6 +670,15 @@
 		toggle_visibility( $('.form-judul-akta') )
 		toggle_visibility( $('.label-judul-akta') )
 	});
+
+	$(document).on('click', '.form-judul-akta-ubah', function(e) {
+		e.preventDefault();
+		let title = $('.input-judul-akta').val();
+
+		$('.label-judul-akta').html(title);
+		toggle_visibility( $('.form-judul-akta') )
+		toggle_visibility( $('.label-judul-akta') )
+	})
 	
 	function toggle_visibility (elem, properties) {
 		if (elem.css('display') == 'none') {
@@ -594,9 +686,5 @@
 		} else {
 			elem.css('display', 'none');
 		}
-	}
-
-	window.onbeforeunload = function() {
-		return "Dude, are you sure you want to refresh? Think of the kittens!";
 	}
 @endpush 

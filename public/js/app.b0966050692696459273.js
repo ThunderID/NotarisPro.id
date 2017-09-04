@@ -1322,22 +1322,22 @@ function placeHoldersCount (b64) {
 
 function byteLength (b64) {
   // base64 is 4/3 + up to two characters of the original data
-  return b64.length * 3 / 4 - placeHoldersCount(b64)
+  return (b64.length * 3 / 4) - placeHoldersCount(b64)
 }
 
 function toByteArray (b64) {
-  var i, j, l, tmp, placeHolders, arr
+  var i, l, tmp, placeHolders, arr
   var len = b64.length
   placeHolders = placeHoldersCount(b64)
 
-  arr = new Arr(len * 3 / 4 - placeHolders)
+  arr = new Arr((len * 3 / 4) - placeHolders)
 
   // if there are placeholders, only get up to the last complete 4 chars
   l = placeHolders > 0 ? len - 4 : len
 
   var L = 0
 
-  for (i = 0, j = 0; i < l; i += 4, j += 3) {
+  for (i = 0; i < l; i += 4) {
     tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)]
     arr[L++] = (tmp >> 16) & 0xFF
     arr[L++] = (tmp >> 8) & 0xFF
@@ -14961,6 +14961,9 @@ MediumEditor.extensions = {};
             Util.moveTextRangeIntoElement(textNodes[0], textNodes[textNodes.length - 1], anchor);
             anchor.setAttribute('href', href);
             if (target) {
+                if (target === '_blank') {
+                    anchor.setAttribute('rel', 'noopener noreferrer');
+                }
                 anchor.setAttribute('target', target);
             }
             return anchor;
@@ -15406,12 +15409,14 @@ MediumEditor.extensions = {};
             var i, url = anchorUrl || false;
             if (el.nodeName.toLowerCase() === 'a') {
                 el.target = '_blank';
+                el.rel = 'noopener noreferrer';
             } else {
                 el = el.getElementsByTagName('a');
 
                 for (i = 0; i < el.length; i += 1) {
                     if (false === url || url === el[i].attributes.href.value) {
                         el[i].target = '_blank';
+                        el[i].rel = 'noopener noreferrer';
                     }
                 }
             }
@@ -15425,12 +15430,14 @@ MediumEditor.extensions = {};
             var i;
             if (el.nodeName.toLowerCase() === 'a') {
                 el.removeAttribute('target');
+                el.removeAttribute('rel');
             } else {
                 el = el.getElementsByTagName('a');
 
                 for (i = 0; i < el.length; i += 1) {
                     if (anchorUrl === el[i].attributes.href.value) {
                         el[i].removeAttribute('target');
+                        el[i].removeAttribute('rel');
                     }
                 }
             }
@@ -18181,8 +18188,8 @@ MediumEditor.extensions = {};
                 // figure out how to deprecate? also consider `fa-` icon default implcations.
                 template.push(
                     '<div class="medium-editor-toolbar-form-row">',
-                    '<input type="checkbox" class="medium-editor-toolbar-anchor-target">',
-                    '<label>',
+                    '<input type="checkbox" class="medium-editor-toolbar-anchor-target" id="medium-editor-toolbar-anchor-target-field-' + this.getEditorId() + '">',
+                    '<label for="medium-editor-toolbar-anchor-target-field-' + this.getEditorId() + '">',
                     this.targetCheckboxText,
                     '</label>',
                     '</div>'
@@ -19847,8 +19854,10 @@ MediumEditor.extensions = {};
                 // on empty line, rects is empty so we grab information from the first container of the range
                 if (rects.length) {
                     top += rects[0].top;
-                } else {
+                } else if (range.startContainer.getBoundingClientRect !== undefined) {
                     top += range.startContainer.getBoundingClientRect().top;
+                } else {
+                    top += range.getBoundingClientRect().top;
                 }
             }
 
@@ -22286,7 +22295,7 @@ MediumEditor.parseVersionString = function (release) {
 
 MediumEditor.version = MediumEditor.parseVersionString.call(this, ({
     // grunt-bump looks for this:
-    'version': '5.23.0'
+    'version': '5.23.2'
 }).version);
 
     return MediumEditor;
@@ -22469,6 +22478,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -22689,6 +22702,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 window.editorUI = {
+	loadingAnimation: function loadingAnimation(flag, msg) {
+		var loading = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loading-save');
+		console.log(loading);
+		if (typeof msg !== 'undefined') {
+			if (msg == 'loading') {
+				loading.html('Menyimpan..').removeClass('alert-danger alert-success').addClass('alert-info').prepend('<i class="fa fa-circle-o-notch fa-spin"></i> ');
+			} else {
+				loading.html(msg).removeClass('alert-danger alert-info').addClass('alert-danger').prepend('<i class="fa fa-exclamation-cirlce');
+			}
+		} else {
+			loading.html('Tersimpan').removeClass('alert-danger alert-info').addClass('alert-success');
+		}
+
+		loading.fadeIn();
+		setTimeout(function () {
+			loading.fadeOut();
+		}, 2500);
+	},
 	autoSave: function autoSave(editor, textChange) {
 		setInterval(function () {
 			if (textChange.length() > 0) {
@@ -22698,24 +22729,26 @@ window.editorUI = {
 		}, 5 * 1000);
 	},
 	postSave: function postSave(editor) {
-		var judulAkta = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.form-judul-akta').val();
+		var judulAkta = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.input-judul-akta').val();
 		var paragrafAkta = editor.root.innerHTML;
 		var urlStore = editor.container.dataset.url;
 		var ajaxAkta = window.ajax;
 		var formData = new FormData();
 
+		window.editorUI.loadingAnimation('show', 'loading');
+
 		ajaxAkta.defineOnSuccess(function (respon) {
-			console.log('success');
-			console.log(respon);
+			window.editorUI.loadingAnimation('hide');
+			window.editorUI.loadingAnimation('show');
 		});
 
 		ajaxAkta.defineOnError(function (respon) {
-			console.log('gagal');
-			console.log(respon);
+			window.editorUI.loadingAnimation('hide');
+			window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan akta!');
 		});
 
 		formData.append('judul', judulAkta);
-		formData.append('jenis', '');
+		formData.append('jenis', 'test');
 		formData.append('paragraf', paragrafAkta);
 
 		ajaxAkta.post(urlStore, formData);
@@ -22788,7 +22821,7 @@ window.editorUI = {
 		});
 	},
 	openPanelArsip: function openPanelArsip() {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.ql-open-arsip', function (e) {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on('click', '.ql-list-arsip', function (e) {
 			var flag = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('data-flag');
 
 			if (flag == 'close') {
@@ -48365,7 +48398,8 @@ window.printElement = new function () {
       module.exports = __webpack_require__(63);
 
       /***/
-    }])
+    }]
+    /******/)
   );
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/buffer/index.js").Buffer, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))

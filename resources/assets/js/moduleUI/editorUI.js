@@ -3,6 +3,32 @@ import 'jquery.caret';
 import 'at.js';
 
 window.editorUI = {
+	loadingAnimation: function (flag, msg) {
+		let loading = $('.loading-save');
+		console.log(loading);
+		if (typeof msg !== 'undefined') {
+			if (msg == 'loading') {
+				loading.html('Menyimpan..')
+					.removeClass('alert-danger alert-success')
+					.addClass('alert-info')
+					.prepend('<i class="fa fa-circle-o-notch fa-spin"></i> ');
+			} else {
+				loading.html(msg)
+					.removeClass('alert-danger alert-info')
+					.addClass('alert-danger')
+					.prepend('<i class="fa fa-exclamation-cirlce');
+			}
+		} else {
+			loading.html('Tersimpan')
+				.removeClass('alert-danger alert-info')
+				.addClass('alert-success');
+		}
+
+		loading.fadeIn();
+		setTimeout( function() {
+			loading.fadeOut();
+		}, 2500);
+	},
 	autoSave: function (editor, textChange) {
 		setInterval( function() {
 			if (textChange.length() > 0) {
@@ -12,24 +38,26 @@ window.editorUI = {
 		}, 5*1000);
 	},
 	postSave: function(editor) {
-		let judulAkta 		= $('.form-judul-akta').val();
+		let judulAkta 		= $('.input-judul-akta').val();
 		let paragrafAkta 	= editor.root.innerHTML;
 		let urlStore 		= editor.container.dataset.url;
 		let ajaxAkta 		= window.ajax;
 		let formData 		= new FormData();
 		
+		window.editorUI.loadingAnimation('show', 'loading');
+
 		ajaxAkta.defineOnSuccess( function(respon) {
-			console.log('success');
-			console.log(respon)
+			window.editorUI.loadingAnimation('hide');
+			window.editorUI.loadingAnimation('show');
 		});
 
 		ajaxAkta.defineOnError( function(respon) {
-			console.log('gagal');
-			console.log(respon)
+			window.editorUI.loadingAnimation('hide');
+			window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan akta!');
 		});
 
-		formData.append('judul', judulAkta);
-		formData.append('jenis', '');
+		formData.append('judul', judulAkta)
+		formData.append('jenis', 'test')
 		formData.append('paragraf', paragrafAkta);
 
 		ajaxAkta.post(urlStore, formData);
@@ -117,7 +145,7 @@ window.editorUI = {
 		});
 	},
 	openPanelArsip: function() {
-		$(document).on('click', '.ql-open-arsip', function(e) {
+		$(document).on('click', '.ql-list-arsip', function(e) {
 			let flag = $(this).attr('data-flag');
 
 			if (flag == 'close') {
