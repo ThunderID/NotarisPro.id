@@ -285,9 +285,9 @@ class aktaController extends Controller
 				$akta->setParagraf($request->get('paragraf'));
 			}
 
-			if($request->has('data_mention'))
+			if($request->has('mentionable'))
 			{
-				$akta->setData($request->get('data_mention'));
+				$akta->setData($request->get('mentionable'));
 			}
 
 			$akta 		= $akta->save();
