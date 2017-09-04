@@ -22612,6 +22612,9 @@ __webpack_require__("./resources/assets/js/plugins/stringManipulator.js");
 // print any element
 __webpack_require__("./resources/assets/js/plugins/printElement.js");
 
+// print any element
+__webpack_require__("./resources/assets/js/plugins/dataBox.js");
+
 /***/ }),
 
 /***/ "./resources/assets/js/appUI.js":
@@ -23570,6 +23573,63 @@ function _classCallCheck(instance, Constructor) {
 $('.clickable-row').click(function () {
 	window.location = $(this).data('href');
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/plugins/dataBox.js":
+/***/ (function(module, exports) {
+
+/*
+	dataBox
+	Author: Budi
+	Version: 0.1
+
+	Contents
+	-------------
+	1. set
+		set data to dataBox.
+		usage : dataBox.set(INDEX, YOUR DATA)
+	2. unset
+		unset data from dataBox.
+		dataBox.unset(INDEX)
+	3. get
+		get data from dataBox.
+		dataBox.get(INDEX)		
+*/
+
+// Ucwords
+// var dataBox = function(){
+window.dataBox = new function () {
+
+	var data = [];
+
+	this.set = function (index, value) {
+		try {
+			data[index] = value;
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	this.unset = function (index) {
+		try {
+			var i = data.indexOf(index);
+			if (i != -1) {
+				array.splice(i, 1);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	this.get = function (index) {
+		try {
+			return data[index];
+		} catch (e) {
+			console.log(e);
+		}
+	};
+}();
 
 /***/ }),
 
