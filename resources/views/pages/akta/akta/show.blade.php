@@ -36,6 +36,42 @@
 					</a>
 				</h4>
 			</div>
+			<div id="editor-disabled" class="editor-disabled" style="display: none;">
+				<div id="modal-confirm">
+				</div>
+				<div id="modal-history" style="height: 100vh;">
+					<div class="col-11 col-sm-10 col-md-10 col-lg-10 col-xl-10" style="background: white; left: 50%; top: 50px; transform: translateX(-50%);">
+						<div class="row mb-2">
+							<div class="col-12 pt-3 pb-1">
+								<h5 class="text-primary">
+									<i class="fa fa-fw fa-history" aria-hidden="true"></i>
+									<b>Riwayat Revisi</b>
+									<span style="float: right;">
+										<a href="javascript:void(0);" onclick="hideModal(this)">
+											<i class="fa fa-times" aria-hidden="true"></i>
+										</a>
+									</span>
+								</h5>
+							</div>
+						</div>
+						<div class="row pb-3">
+							<div class="col-12 pt-4">
+								<div id="template-history" hidden>
+									<h6 class="mb-0" id="tanggal"></h6>
+									<h7>
+										<i class="fa fa-user" aria-hidden="true"></i>
+										<span id="oleh">Mr. Notary</span>
+									</h7>
+									<p class="pt-3" id="riwayat"></p>
+									<hr>
+								</div>
+								<div id="content-history">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="d-flex justify-content-center mx-auto page-frame">
 				<div id="page-content" class="form mt-3 mb-3 font-editor page-editor" style="width: 21cm; min-height: 29.7cm; background-color: #fff; padding-top: 2cm; padding-bottom: 3cm; padding-left: 5cm; padding-right: 1cm;">
 					<div id="text-editor" class="form-group editor">
@@ -52,7 +88,7 @@
 									<a href="javascript:void(0);" class="remove text-danger hold-on-load" id="remove">
 										<i class="fa fa-fw fa-times" aria-hidden="true"></i>
 									</a>									
-									<a href="javascript:void(0);" id="revise" class="" data-toggle="modal" data-target="">
+									<a href="javascript:void(0);" id="revise" class="" data-toggle="modal" data-target="" onClick="javascript:showModal(this);">
 										<i class="fa fa-fw fa-history" aria-hidden="true"></i><span id="ctr">0</span>
 									</a>
 								</div>
@@ -102,7 +138,7 @@
 								<span class="fa-stack">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 								</span>
-								Sunting
+								Edit
 							</a>
 						</h6>
 						<h6>
@@ -110,7 +146,7 @@
 								<span class="fa-stack">
 									<i class="fa fa-copy"></i>
 								</span>
-								Salin & Sunting
+								Salin & Edit
 							</a>
 						</h6>
 						<h6>
@@ -283,6 +319,7 @@
 
 	// history url
 	var UrlHistory = null;
+	var paragraph = null;
 
 	/* Start UI page */
 	function showAkta(e){
@@ -371,6 +408,7 @@
 		// ui display
 		$(document.getElementById('akta_show')).fadeIn('fast');
 		$(document.getElementById('akta_show')).find('#title').text(judul);
+		hideModal();
 	}
 	/* End UI page */
 
@@ -508,7 +546,8 @@
 				let feature_lockUnlock = defaultLockUnlock(resp.status);
 				let feature_lockDisplayRevision = defaultDisplayRevision(resp.status);
 
-				resp.paragraf.forEach(function(element) {
+				paragraph = resp.paragraf;
+				resp.paragraf.forEach(function(element, idx) {
 					// reader mode
 					if(element.konten){
 						var rslt = $(element.konten).appendTo($(document.getElementById('text-editor')).find('#reader'));
@@ -559,7 +598,14 @@
 					remove.addClass(feature_lockUnlock);
 
 					// set status displayRevision
-					target.find('#revise').addClass(feature_lockDisplayRevision);
+					if(element.revisi){
+						// target.find('#revise').addClass(feature_lockDisplayRevision);
+						target.find('#revise').addClass('active');
+						target.find('#revise').attr('data-idx', idx);
+						target.find('#revise').find('#ctr').text(element.revisi.length);
+					}else{
+						target.find('#revise').addClass('disabled');
+					}
 
 				});
 				$(document.getElementById('page')).scrollTop(0);
@@ -798,20 +844,31 @@
 
 	/* Set Action Links */
 	function  triggerReaderMode(e){
+
 		var target = $(document.getElementById('page')).find('#text-editor');
 
 		if($(e).find('#status').text() == 'Tidak Aktif'){
 			$(e).find('#status').text('Aktif');
-			target.find('#content').fadeOut('fast', function(){
-				target.find('#reader').fadeIn('fast');
-				$(document.getElementById('page')).scrollTop(0);
-			});
+			if($(document.getElementById('editor-disabled')).css('display') == 'none'){
+				target.find('#content').fadeOut('fast', function(){
+					target.find('#reader').fadeIn('fast');		
+					$(document.getElementById('page')).scrollTop(0);
+				});
+			}else{
+				target.find('#content').css('display','none');
+				target.find('#reader').css('display','block');
+			}
 		}else{
 			$(e).find('#status').text('Tidak Aktif');
-			target.find('#reader').fadeOut('fast', function(){
-				target.find('#content').fadeIn('fast');
-				$(document.getElementById('page')).scrollTop(0);
-			});
+			if($(document.getElementById('editor-disabled')).css('display') == 'none'){
+				target.find('#reader').fadeOut('fast', function(){
+					target.find('#content').fadeIn('fast');
+					$(document.getElementById('page')).scrollTop(0);
+				});
+			}else{
+				target.find('#content').css('display','block');
+				target.find('#reader').css('display','none');
+			}
 		}
 	}
 	function setEdit(id_akta){
@@ -883,5 +940,27 @@
 	}
 
 	/* End Sidebar Function */
+
+
+	/* editor modals */
+	function showModal(e){
+		var e = $(e);
+		$(document.getElementById('editor-disabled')).fadeIn('fast');
+
+		// show modal history
+		$.map(paragraph[e.attr('data-idx')].revisi, function(value, index) {
+			console.log(value);
+			var content_history = $(document.getElementById('modal-history')).find('#content-history');
+			content_history.empty();
+			var rslt = $(document.getElementById('modal-history')).find('#template-history').clone().appendTo(content_history);
+			rslt.find('#tanggal').text(value.tanggal);
+			rslt.find('#riwayat').text(value.isi == null ? " " : value.isi);
+			rslt.removeAttr('id hidden');
+		});
+		// e.addClass('disabled');
+	}
+	function hideModal(e){
+		$(document.getElementById('editor-disabled')).fadeOut('fast');
+	}
 
 @endpush
