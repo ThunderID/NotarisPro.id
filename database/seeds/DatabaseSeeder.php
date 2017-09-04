@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
 	{
 		$this->call(InitNotarisTableSeeder::class);
 		$this->call(InitNewArchTableSeeder::class);
-		$this->call(InitTagihanTableSeeder::class);
+		$this->call(InitNewArchV2TableSeeder::class);
+		// $this->call(InitTagihanTableSeeder::class);
 		// $this->call(InitTipeDokumenTableSeeder::class);
 		// $this->call(InitTemplateTableSeeder::class);
 		// $this->call(InitAktaTableSeeder::class);
