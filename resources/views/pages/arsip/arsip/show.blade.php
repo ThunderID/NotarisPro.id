@@ -160,13 +160,10 @@
 </div>
 
 @push('scripts')
-	// histoyy url
-	var UrlHistory = null;
-
 	/* Start UI page */
 	function showArsip(e){
 		// sets history
-		UrlHistory = window.location.href;
+		window.dataBox.set('url-history', window.location.href);
 
 		// global vars
 		var element_source = $(e);
@@ -178,7 +175,8 @@
 	function hideArsip(e){
 		$(document.getElementById('arsip_show')).fadeOut('fast', function(){
 			var target = $(document.getElementById('text-editor'));
-			window.history.pushState(null, null,  UrlHistory == null ? '/arsip/arsip' : UrlHistory);
+			window.history.pushState(null, null,  window.dataBox.get('url-history') == null ? '/arsip/arsip' : window.dataBox.get('url-history'));
+			console.log(window.dataBox.get('url-history'));
 		});		
 	}	
 
