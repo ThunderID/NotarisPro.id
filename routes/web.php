@@ -30,6 +30,7 @@ Route::group(['namespace' => 'Administrative\\'], function(){
 		});
 
 		//A3. LOGIN
+		Route::get('/',				['uses' => 'loginController@create',	'as' => 'uac.login.create']);
 		Route::get('/login',		['uses' => 'loginController@create', 	'as' => 'uac.login.create']);
 		Route::post('/login',		['uses' => 'loginController@store', 	'as' => 'uac.login.store']);
 		Route::get('/logout',		['uses' => 'loginController@destroy', 	'as' => 'uac.login.destroy']);
@@ -130,6 +131,7 @@ Route::group(['middleware' => 'trial'], function(){
 		]]);
 
 		Route::any('/akta/akta/store', 							['uses' => 'aktaController@store', 			'as' => 'akta.akta.store.test']);
+		Route::any('/akta/akta/{id}',							['uses' => 'aktaController@update',			'as' => 'akta.akta.update.ajax']);
 
 		Route::any('/akta/mention/all', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 		Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);

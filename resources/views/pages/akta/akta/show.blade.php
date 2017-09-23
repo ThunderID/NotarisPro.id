@@ -436,7 +436,6 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			console.log(resp);
 			try {
 
 				// reloaded or from index
@@ -921,7 +920,7 @@
 		$(document.getElementById('link-edit-as-copy')).attr('data-url', url);
 	}
 	function triggerOpenWindow(e){
-		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
+		window.open( $(e).attr('data-url') , 'newwindow', 'width='+ screen.width +',height=768');
 	}
 	function triggerPrint(){
 		window.printElement.setElementPrint(document.getElementById('page-content'));

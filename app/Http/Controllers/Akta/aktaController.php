@@ -246,16 +246,16 @@ class aktaController extends Controller
 			$akta 		= new BuatAktaBaru($request->get('judul'), $request->get('jenis'), $request->get('paragraf'));
 			$akta 		= $akta->save();
 
-			$this->page_attributes->msg['success']		= ['Akta Berhasil di Simpan'];
-			$message['success'] = $this->page_attributes->msg['success'];
-			$message['url'] = route('akta.akta.show', $akta['id']);
+			$this->page_attributes->msg['success']	= ['Akta Berhasil di Simpan'];
+			$message['success'] 					= $this->page_attributes->msg['success'];
+			$message['url'] 						= route('akta.akta.show', $akta['id']);
 
 			return Response::json($message);
 		} 
 		catch (Exception $e) {
-			$this->page_attributes->msg['error']       = $e->getMessage();
-			$message['error'] = $e->getMessage();
-			$message['url'] = route('akta.akta.create');
+			$this->page_attributes->msg['error']	= $e->getMessage();
+			$message['error'] 						= $e->getMessage();
+			$message['url'] 						= route('akta.akta.create');
 
 			return Response::json($message);
 			// return $this->generateRedirect(route('akta.akta.create'));
@@ -293,11 +293,19 @@ class aktaController extends Controller
 			$akta 		= $akta->save();
 
 			$this->page_attributes->msg['success']		= ['Akta Berhasil di Ubah'];
-			return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+			$message['success']							= $this->page_attributes->msg['success'];
+			$message['url']								= route('akta.akta.show', $akta['id']);
+			// return $this->generateRedirect(route('akta.akta.show', $akta['id']));
+			
+			return Response::json($message);
 		} 
 		catch (Exception $e) {
 			$this->page_attributes->msg['error']		= $e->getMessage();
-			return $this->generateRedirect(route('akta.akta.edit', $id));
+			$message['error']							= $this->page_attributes->msg['error'];
+			$message['url']								= route('akta.akta.edit', $id);
+			// return $this->generateRedirect(route('akta.akta.edit', $id));
+			// 
+			return Response::json($message);
 		}
 	}
 

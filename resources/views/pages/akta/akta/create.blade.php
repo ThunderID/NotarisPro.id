@@ -1,3 +1,6 @@
+@php
+	// dd(count($page_datas->akta));
+@endphp
 @extends('templates.blank')
 
 @push('fonts')
@@ -92,7 +95,7 @@
 			</div>
 		</div>
 		<div class="col-md-3 col-lg-3 text-right">
-			<a href="javascript:void(0);" data-toggle="modal" data-target="#SimpanDokumen" class="btn btn-default text-faded">
+			<a href="javascript:void(0);" data-toggle="modal" data-target="#SimpanDokumen" class="btn btn-default text-faded" data-action-button="close">
 				<span aria-hidden="true" style="font-size: 20px;">&times;</span>
 			</a>
 		</div>
@@ -102,7 +105,7 @@
 			<div id="toolbarPane" class="text-center">
 				{{-- button file --}}
 				<span class="ql-formats">
-					<button class="ql-new ml-1" style="margin-top: -2px;" data-toggle="modal" data-target="#SimpanDokumen" data-url="" data-tooltip="tooltip" title="Buat Baru" data-animation="false"><i class="fa fa-file-o"></i></button>
+					<button class="ql-new ml-1" style="margin-top: -2px;" data-toggle="modal" data-target="#SimpanDokumen" data-tooltip="tooltip" title="Buat Baru" data-animation="false" data-action-button="new" data-url="{{ route('akta.akta.choooseTemplate') }}"><i class="fa fa-file-o"></i></button>
 					<button class="ql-save form-editor-akta-save" style="margin-top: -2px; outline: none;" data-tooltip="tooltip" data-url="{{ (Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update', $page_datas->akta['id'])) }}" title="Save" data-animation="false"><i class="fa fa-save"></i></button>
 				</span>
 				<span class="ql-formats">
@@ -198,17 +201,13 @@
 	</div>
 	<div class="row justify-content-center mt-5" style="min-height: 146mm;">
 		<div class="col">
-			<div id="editor" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 120mm; margin: 0 auto; " data-url="{{ route('akta.akta.store.test') }}">
-				@if (isset($page_datas->akta))
-					@forelse ($page_datas->akta['paragraf'] as $k => $v)
-						{!! $v['konten'] !!}
-					@empty
-					@endforelse
-				@endif
+			<div id="editor" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 120mm; margin: 0 auto; " data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}" 
+			data-paragraf="{{ (isset($page_datas->akta) ? json_encode($page_datas->akta['paragraf']) : '') }}">
 			</div>
 		</div>
 	</div>
-
+	
+	{{-- modal dialog for save dokumen --}}
 	@component('components.modal', [
 		'id'		=> 'SimpanDokumen',
 		'title'		=> 'Simpan Dokumen',
@@ -218,20 +217,20 @@
 			'hide_title'	=> 'false',
 		]
 	])
-		<form id="save_dokumen" class="form-widgets text-right form" action="{{ route('akta.akta.store') }}" onSubmit="showLoader();" method="GET">
+		<form id="save_dokumen" class="form-widgets text-right form">
 			<input type="hidden" id="id_akta" name="id_akta" value="null"/>
 			<p>Apakah ingin menyimpan Akta Dokumen ini?</p>
 			<fieldset class="from-group pb-2 pt-3">
 				<button type="button" class="btn btn-secondary btn-discard" data-dismiss="modal">Tidak</button>
-				<button type="submit" class="btn btn-primary" data-save="true">Simpan</button>
+				<a href="#" class="btn btn-primary btn-save-dokumen" data-dismiss="modal" data-action-button="">Simpan</a>
 			</fieldset>
 		</form>	
 	@endcomponent
-
+	
+	{{-- modal for isi data dokumen --}}
 	@component('components.modal', [
 		'id' 		=> 'isiDokumen',
 		'title'		=> 'Isi Dokumen',
-		'large'		=> 'true',
 		'settings'	=> [
 			'modal_class'	=> '',
 			'hide_buttons'	=> 'true',
@@ -239,17 +238,34 @@
 		]
 	])
 		<form id="save_dokumen" class="form-widgets form" action="{{ route('akta.akta.store') }}" onSubmit="showLoader();" method="GET">
-			<fieldset class="from-group pb-2 pt-3">
+			<fieldset class="pb-2 pt-3">
 				@if (Route::is('akta.akta.edit'))
-					@forelse ($page_datas->akta['mentionable'] as $k => $v)
-						<div class="form-group row">
-							<label class="col-sm-5 col-form-label">{{ $k }}</label>
-							<div class="col-sm-7">
-								<input type="text" class="form-control" name="{{ $k }}" value="{{ $v }}">
-							</div>
-						</div>
-					@empty
-					@endforelse
+					@isset($page_datas->akta['mentionable'])
+						@forelse ($page_datas->akta['mentionable'] as $k => $v)
+							@php
+								$explode_title = explode('.', $k);
+								$tmp['kategori'] = array_shift($explode_title);
+								$tmp['iteration'] = array_shift($explode_title);
+							@endphp
+							
+							<h5>{{ $tmp['kategori'] . ' ' . $tmp['iteration'] }}</h5>
+							@foreach ($explode_title as $k2 => $v2)
+
+								@if ($v2 == array_last($explode_title))
+									<div class="form-group row">
+										<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="{{ $k }}" value="{{ $v }}">
+										</div>
+									</div>
+								@else
+									<a class="d-block" href="#" href="#{{ $tmp['kategori'].$tmp['iteration'].'-'.$v }}" data-toggle="collapse" aria-expanded="false">{{ $v }}</a>
+								@endif
+							@endforeach
+
+						@empty
+						@endforelse
+					@endif
 				@endif
 			</fieldset>
 			<fieldset class="from-group pb-2 pt-3 text-right">
@@ -264,6 +280,17 @@
 	var arsipDokumen = {!! (isset($page_datas->dokumen_notaris)) ? json_encode($page_datas->dokumen_notaris) : '' !!}
 	window.editorUI.init();
 	modulShowArsipDokumen();
+
+	$('#SimpanDokumen').on('show.bs.modal', function(e) {
+		actButton = $(e.relatedTarget).attr('data-action-button');
+		linkUrl = $(e.relatedTarget).attr('data-url');
+		if (actButton == 'new') {
+			$('.btn-save-dokumen').attr('data-action-button', actButton)
+				.attr('data-url', linkUrl);
+		} else {
+			$('.btn-save-dokumen').attr('data-action-button', actButton);
+		}
+	});
 
 	$(document).on('click', '.btn-add', function(e) {
 		e.preventDefault();
