@@ -1,5 +1,5 @@
 @php
-	// dd(count($page_datas->akta));
+	// dd($page_datas->akta);
 @endphp
 @extends('templates.blank')
 
@@ -201,9 +201,11 @@
 	</div>
 	<div class="row justify-content-center mt-5" style="min-height: 146mm;">
 		<div class="col">
-			<div id="editor" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 120mm; margin: 0 auto; " data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}" 
-			data-paragraf="{{ (isset($page_datas->akta) ? json_encode($page_datas->akta['paragraf']) : '') }}">
-			</div>
+			@foreach ($page_datas->akta['paragraf'] as $k => $v)
+				<div id="editor" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 0mm; margin: 0 auto; " data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}" data-paragraf="{{ (isset($page_datas->akta) ? json_encode($page_datas->akta['paragraf']) : '') }}">
+					{!! $v['konten'] !!}
+				</div>
+			@endforeach
 		</div>
 	</div>
 	
@@ -231,46 +233,113 @@
 	@component('components.modal', [
 		'id' 		=> 'isiDokumen',
 		'title'		=> 'Isi Dokumen',
+		'large'		=> 'false',
 		'settings'	=> [
 			'modal_class'	=> '',
 			'hide_buttons'	=> 'true',
 			'hide_title'	=> 'false',
 		]
 	])
-		<form id="save_dokumen" class="form-widgets form" action="{{ route('akta.akta.store') }}" onSubmit="showLoader();" method="GET">
+		<form id="save_dokumen" class="form-widgets form" action="{{ route('akta.akta.update', ['id' => $page_datas->akta['id']]) }}" onSubmit="showLoader();" method="GET">
 			<fieldset class="pb-2 pt-3">
 				@if (Route::is('akta.akta.edit'))
+					{{-- if mention for default --}}
 					@isset($page_datas->akta['mentionable'])
+						@php $title_temp = ''; @endphp
 						@forelse ($page_datas->akta['mentionable'] as $k => $v)
-							@php
-								$explode_title = explode('.', $k);
-								$tmp['kategori'] = array_shift($explode_title);
-								$tmp['iteration'] = array_shift($explode_title);
+							@php 
+								$explode_title = explode('.', $k); 
 							@endphp
-							
-							<h5>{{ $tmp['kategori'] . ' ' . $tmp['iteration'] }}</h5>
-							@foreach ($explode_title as $k2 => $v2)
 
-								@if ($v2 == array_last($explode_title))
-									<div class="form-group row">
-										<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" name="{{ $k }}" value="{{ $v }}">
-										</div>
-									</div>
-								@else
-									<a class="d-block" href="#" href="#{{ $tmp['kategori'].$tmp['iteration'].'-'.$v }}" data-toggle="collapse" aria-expanded="false">{{ $v }}</a>
+							@if (count($explode_title) == 2)
+								@php
+									$tmp['mention_prefix_first'] = array_shift($explode_title);
+								@endphp
+
+								@if ($title_temp != $tmp['mention_prefix_first'])
+									<h5>{{ $tmp['mention_prefix_first'] }}</h5>
 								@endif
-							@endforeach
-
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label text-right">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+									</div>
+								</div>
+{{-- 							@elseif (count($explode_title) == 3)
+								@php
+									$tmp['mention_prefix_first'] = array_shift($explode_title);
+									$tmp['mention_prefix_second'] = array_shift($explode_title);
+								@endphp
+								<h4>{{ $tmp['mention_prefix_first'] }}</h4>
+								<h4>{{ $tmp['mention_prefix_second'] }}</h4>
+								<div class="form-group row">
+									<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+									</div>
+								</div>
+							@elseif (count($explode_title) == 4)
+								@php
+									$tmp['mention_prefix_first'] = array_shift($explode_title);
+									$tmp['mention_prefix_second'] = array_shift($explode_title);
+									$tmp['mention_prefix_third'] = array_shift($explode_title);
+								@endphp
+								<h4>{{ $tmp['mention_prefix_first'] }}</h4>
+								<h4>{{ $tmp['mention_prefix_second'] }}</h4>
+								<p>{{ $tmp['mention_prefix_third'] }}</p>
+								<div class="form-group row">
+									<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+									</div>
+								</div>
+							@elseif (count($explode_title) == 5)
+								@php
+									$tmp['mention_prefix_first'] = array_shift($explode_title);
+									$tmp['mention_prefix_second'] = array_shift($explode_title);
+									$tmp['mention_prefix_third'] = array_shift($explode_title);
+									$tmp['mention_prefix_fourth'] = array_shift($explode_title);
+								@endphp
+								<h4>{{ $tmp['mention_prefix_first'] }}</h4>
+								<h4>{{ $tmp['mention_prefix_second'] }}</h4>
+								<p>{{ $tmp['mention_prefix_third'] }}</p>
+								<p>{{ $tmp['mention_prefix_fourth'] }}</p>
+								<div class="form-group row">
+									<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+									</div>
+								</div> --}}
+								@php $title_temp = $tmp['mention_prefix_first']; @endphp
+							@endif
 						@empty
 						@endforelse
-					@endif
+					@endisset
+
+					{{-- if mention for dokumen input user --}}
+					@isset ($page_datas->akta['dokumen'])
+						@php $title_temp = ''; @endphp
+						@forelse ($page_datas->akta['dokumen'] as $k => $v)
+							<h5>{{ str_replace('[dot]', ' ', $k) }}</h5>
+							@foreach ($v as $k2 => $v2)
+								<p class="ml-3 text-secondary">{{ str_replace('[dot]', ' ', $k2) }}</p>
+								@foreach ($v2 as $k3 => $v3)
+									<div class="form-group row ml-3">
+										<label class="col-sm-3 col-form-label text-right">{{ str_replace('_', ' ', $k3) }}</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="{{ $v3 }}" value="{{ (isset($page_datas->akta['mentionable'][$v3]) && ($page_datas->akta['mentionable'][$v3] !== null)) ? $page_datas->akta['mentionable'][$v3] : '' }}">
+										</div>
+									</div>
+								@endforeach
+							@endforeach
+						@empty
+						@endforelse
+					@endisset
 				@endif
 			</fieldset>
 			<fieldset class="from-group pb-2 pt-3 text-right">
 				<button type="button" class="btn btn-secondary btn-discard" data-dismiss="modal">Batal</button>
-				<button type="button" class="btn btn-primary" data-save="true">Simpan</button>
+				<button type="button" class="btn btn-primary btn-mentionable" data-save="true" data-dismiss="modal">Simpan</button>
 			</fieldset>
 		</form>		
 	@endcomponent()

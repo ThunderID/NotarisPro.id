@@ -287,7 +287,8 @@ class aktaController extends Controller
 
 			if($request->has('mentionable'))
 			{
-				$akta->setData($request->get('mentionable'));
+				$data['mentionable'] = json_decode($request->get('mentionable'), true);
+				$akta->setData($data);
 			}
 
 			$akta 		= $akta->save();

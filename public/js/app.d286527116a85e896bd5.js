@@ -22947,9 +22947,9 @@ window.editorUI = {
 		};
 
 		var changeText = new Delta();
-		var editor = new window.Quill('#editor', options);
+		var editor = new window.Quill('.editor', options);
 		var toolbar = editor.getModule('toolbar');
-		editor.enable('false');
+		// editor.enable('false');
 
 		var buttonNewDocument = document.querySelector('.ql-new');
 		var buttonSaveDocument = document.querySelector('.ql-save');
@@ -23009,6 +23009,43 @@ window.editorUI = {
 			window.editorUI.postSave(editor);
 		});
 
+		// event save isi mention
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.modal .btn-mentionable').on('click', function (e) {
+			e.preventDefault();
+
+			var ajaxAkta = window.ajax;
+			var formData = new FormData();
+			var form = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).closest('form');
+			var actionUrl = form.attr('action');
+			var temp = {};
+
+			form.find('input').each(function () {
+				var fieldInput = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr('name');
+				var valueInput = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val();
+
+				temp[fieldInput] = valueInput;
+				// temp = {fieldInput: valueInput};
+			});
+
+			console.log(JSON.stringify(temp));
+
+			window.editorUI.loadingAnimation('show', 'loading');
+
+			ajaxAkta.defineOnSuccess(function (respon) {
+				window.editorUI.loadingAnimation('hide');
+				window.editorUI.loadingAnimation('show');
+			});
+
+			ajaxAkta.defineOnError(function (respon) {
+				window.editorUI.loadingAnimation('hide');
+				window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan isi dari dokumen!');
+			});
+
+			formData.append('mentionable', JSON.stringify(temp));
+			// console.log(formData);
+			ajaxAkta.post(actionUrl, formData);
+		});
+
 		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.modal .btn-save-dokumen').on('click', function (e) {
 			e.preventDefault();
 
@@ -23045,6 +23082,7 @@ window.editorUI = {
 			editor.root.innerHTML = null;
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.map(JSON.parse(editor.container.dataset.paragraf), function (k, v) {
 				editor.root.innerHTML += k.konten;
+				// window.editorUI.init();
 			});
 		}
 	},

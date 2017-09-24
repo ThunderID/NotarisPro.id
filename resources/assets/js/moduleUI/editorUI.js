@@ -255,9 +255,9 @@ window.editorUI = {
 		};
 
 		var changeText = new Delta();
-		var editor = new window.Quill('#editor', options);
+		var editor = new window.Quill('.editor', options);
 		var toolbar = editor.getModule('toolbar');
-		editor.enable('false');
+		// editor.enable('false');
 		
 		var buttonNewDocument = document.querySelector('.ql-new');
 		var buttonSaveDocument = document.querySelector('.ql-save');
@@ -305,6 +305,45 @@ window.editorUI = {
 			window.editorUI.postSave(editor);
 		});
 
+		// event save isi mention
+		$('.modal .btn-mentionable').on('click', function(e) {
+			e.preventDefault();
+
+			let ajaxAkta = window.ajax;
+			let formData = new FormData();
+			let form = $(this).closest('form');
+			let actionUrl = form.attr('action');
+			let temp = {};
+
+
+			form.find('input').each( function() {
+				let fieldInput = $(this).attr('name');
+				let valueInput = $(this).val();
+
+				temp[fieldInput] = valueInput;
+				// temp = {fieldInput: valueInput};
+			});
+
+			console.log(JSON.stringify(temp));
+
+			window.editorUI.loadingAnimation('show', 'loading');
+
+			ajaxAkta.defineOnSuccess( function(respon) {
+				window.editorUI.loadingAnimation('hide');
+				window.editorUI.loadingAnimation('show');
+			});
+
+			ajaxAkta.defineOnError( function(respon) {
+				window.editorUI.loadingAnimation('hide');
+				window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan isi dari dokumen!');
+			});
+
+			formData.append('mentionable', JSON.stringify(temp));
+			// console.log(formData);
+			ajaxAkta.post(actionUrl, formData);
+
+		});
+
 		$('.modal .btn-save-dokumen').on('click', function (e) {
 			e.preventDefault();
 
@@ -343,6 +382,7 @@ window.editorUI = {
 			editor.root.innerHTML = null;
 			$.map(JSON.parse(editor.container.dataset.paragraf), function(k, v) {
 				editor.root.innerHTML += k.konten;
+				// window.editorUI.init();
 			});	
 		}
 	},
