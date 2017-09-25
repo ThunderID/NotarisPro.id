@@ -563,6 +563,7 @@
 				let feature_lockDisplayRevision = defaultDisplayRevision(resp.status);
 
 				window.dataBox.set('paragraf',resp.paragraf);
+				var tmp_ctr = [];
 				resp.paragraf.forEach(function(element, idx) {
 					// reader mode
 					if(element.konten){
@@ -578,7 +579,40 @@
 					var target = tmp.clone().appendTo(editor.find('#content'));
 					target.removeAttr('hidden');
 					target.removeAttr('id');
-					target.find('#narasi').append(element.konten);
+
+
+					// list or paragraph
+					var open_tag = element.konten.substring(0, 4);
+					if(open_tag == '<ol>' || open_tag == '<ul>'){
+						// open
+						target.wrap(open_tag + open_tag.substring(0,1) + '/' + open_tag.substring(1,4));
+						var parent = target.closest(element.konten.substring(1,3));
+						parent.attr('id', 'list-' + tmp_ctr.length);
+						parent.attr('list-type', open_tag);
+						target.attr('data-index', '1');
+						target.addClass('list-data');
+						target.find('#narasi').append(element.konten.substring(4));
+
+						tmp_ctr.push('list-' + tmp_ctr.length);
+					}else if(open_tag == '<li>'){
+						// list
+						list_target = $('#' + tmp_ctr[tmp_ctr.length - 1]);
+						target.find('#narasi').append(element.konten);
+						target.attr('data-index', list_target.children.length);
+						target.addClass('list-data');
+
+						// move to parent wrapper
+						var tmp_element = target.detach();
+						list_target.append(tmp_element);
+
+						//close
+						var closing_tag = element.konten.substr(element.konten.length - 5); 
+						if(closing_tag == "</ol>" || closing_tag == "</ul>"){
+							tmp_ctr.pop();
+						}
+					}else{
+						target.find('#narasi').append(element.konten);
+					}
 
 					// set status lock/unlock
 					wrapper = target.find('.wrapper');
@@ -635,6 +669,7 @@
 
 			}
 			catch(err){
+			console.log(err);
 				$('.show-before-load').hide();
 				$('.show-on-error').show();
 				$(document.getElementById('loader-error-code')).text('422');
@@ -755,6 +790,7 @@
 	});
 	function removeParagraph(){
 		var e = window.dataBox.get('target-remove-paragraph');
+
 		hideModal(null);
 
 		if(e){
@@ -852,7 +888,19 @@
 			if(value.isi == null){
 				rslt.find('#riwayat').text('[Penambahan Paragraf]');
 			}else{
-				rslt.find('#riwayat').text(value.isi);
+				// list or parapgraph
+				if(value.isi.substring(0,4) == '<li>'){
+					var number = e.closest('.list-data').attr('data-index');
+					var open_tag = e.closest('.list-data').parent().attr('list-type');
+					var content = rslt.find('#riwayat').append(value.isi);
+					var new_content = content.wrap(open_tag.substring(0,3) + " start=" + number + ">" + open_tag.substring(0,1) + "/" + open_tag.substring(2,4));
+					console.log(open_tag.substring(0,3) + " start=" + number + ">" + open_tag.substring(0,1) + "/" + open_tag.substring(1,4));
+					var parent =  content.parent()
+					parent.attr('start', number);
+					content.parent().attr('data-numb', number);
+				}else{
+					rslt.find('#riwayat').append(value.isi);
+				}
 			}
 			rslt.removeAttr('id hidden');
 		});
