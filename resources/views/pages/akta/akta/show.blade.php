@@ -37,14 +37,36 @@
 				</h4>
 			</div>
 			<div id="editor-disabled" class="editor-disabled" style="display: none;">
-				<div id="modal-confirm">
+				<div id="modal-remove" class="editor-modal-content">
+					<div class="col-9 col-sm-6" style="background: white; left: 50%; top: 50px; transform: translateX(-50%);">
+						<div class="row mb-2">
+							<div class="col-12 pt-3 pb-1">
+								<h5 class="text-danger">
+									<b>Menghapus Paragraf</b>
+									<span style="float: right;">
+										<a href="javascript:void(0);" onclick="hideModal(this)">
+											<i class="fa fa-times" aria-hidden="true"></i>
+										</a>
+									</span>
+								</h5>
+							</div>
+						</div>
+						<div class="row pb-3">
+							<div class="col-12 pt-3">
+								<h6>Paragraf yang telah dihapus tidak dapat dikembalikan. Lanjutkan? </h6>
+							</div>
+							<div class="col-12 pt-2 text-right">
+								<a class="btn" href="javascript:void(0);" onclick="hideModal(this)">Batal</a>
+								<a id="delete" class="btn btn-danger btn-sm" href="javascript:void(0);" onclick="removeParagraph();">Hapus</a>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div id="modal-history" style="height: 100vh;">
+				<div id="modal-history" class="editor-modal-content" style="height: 100vh;">
 					<div class="col-11 col-sm-10 col-md-10 col-lg-10 col-xl-10" style="background: white; left: 50%; top: 50px; transform: translateX(-50%);">
 						<div class="row mb-2">
 							<div class="col-12 pt-3 pb-1">
 								<h5 class="text-primary">
-									<i class="fa fa-fw fa-history" aria-hidden="true"></i>
 									<b>Riwayat Revisi</b>
 									<span style="float: right;">
 										<a href="javascript:void(0);" onclick="hideModal(this)">
@@ -60,10 +82,9 @@
 									<h6 class="mb-0" id="tanggal"></h6>
 									<h7>
 										<i class="fa fa-user" aria-hidden="true"></i>
-										<span id="oleh">Mr. Notary</span>
+										<span id="oleh">Mr Notary</span>
 									</h7>
-									<p class="pt-3" id="riwayat"></p>
-									<hr>
+									<p class="pt-2" id="riwayat"></p>
 								</div>
 								<div id="content-history">
 								</div>
@@ -88,7 +109,7 @@
 									<a href="javascript:void(0);" class="remove text-danger hold-on-load" id="remove">
 										<i class="fa fa-fw fa-times" aria-hidden="true"></i>
 									</a>									
-									<a href="javascript:void(0);" id="revise" class="" data-toggle="modal" data-target="" onClick="javascript:showModal(this);">
+									<a href="javascript:void(0);" id="revise" class="revise" data-toggle="modal" data-target="">
 										<i class="fa fa-fw fa-history" aria-hidden="true"></i><span id="ctr">0</span>
 									</a>
 								</div>
@@ -317,14 +338,10 @@
 
 @push('scripts')
 
-	// history url
-	var UrlHistory = null;
-	var paragraph = null;
-
 	/* Start UI page */
 	function showAkta(e){
 		// sets history
-		UrlHistory = window.location.href;
+		window.dataBox.set('url-history', window.location.href);
 
 		// init template
 		//sidebar
@@ -377,7 +394,7 @@
 			var target = $(document.getElementById('text-editor'));
 			target.find('#reader').empty();
 			target.find('#content').empty();
-			window.history.pushState(null, null,  UrlHistory == null ? '/akta/akta' : UrlHistory);
+			window.history.pushState(null, null,  window.dataBox.get('url-history') == null ? '/akta/akta' : window.dataBox.get('url-history'));
 		});		
 	}
 
@@ -419,7 +436,6 @@
 		var ajax_akta = window.ajax;
 
 		ajax_akta.defineOnSuccess(function(resp){
-			console.log(resp);
 			try {
 
 				// reloaded or from index
@@ -546,7 +562,7 @@
 				let feature_lockUnlock = defaultLockUnlock(resp.status);
 				let feature_lockDisplayRevision = defaultDisplayRevision(resp.status);
 
-				paragraph = resp.paragraf;
+				window.dataBox.set('paragraf',resp.paragraf);
 				resp.paragraf.forEach(function(element, idx) {
 					// reader mode
 					if(element.konten){
@@ -735,36 +751,41 @@
 
 	// manage remove
 	$(document).on('click', 'a.remove', function(){
-
-		var e  = $(this);
-
-		// ui
-		e.closest('.wrapper').find('.hold-on-load').addClass('disabled');
-		e.find('i').removeClass('fa-times');
-		e.find('i').addClass('fa-circle-o-notch fa-spin');
-
-		// do ajax remove
-		var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'delete']) }}";
-		url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('key'));
-	
-		var el_key = e.attr('key');
-		var ajax_remove = window.ajax;
-
-		ajax_remove.defineOnSuccess(function(resp){
-			e.closest('.wrapper').fadeOut('fast', function(e){
-				$(this).parent().remove();
-				$(document.getElementById('page-content')).find('#reader').find('#' + $(this).attr('id')).remove();
-			});
-		});
-
-		ajax_remove.defineOnError(function(resp){
-			e.find('i').removeClass('fa-circle-o-notch fa-spin');
-			e.find('i').addClass('fa-times');
-			e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');	
-		});		
-
-		ajax_remove.get(url);
+		showModal($(this), 'modal-remove');
 	});
+	function removeParagraph(){
+		var e = window.dataBox.get('target-remove-paragraph');
+		hideModal(null);
+
+		if(e){
+			// ui
+			e.closest('.wrapper').find('.hold-on-load').addClass('disabled');
+			e.find('i').removeClass('fa-times');
+			e.find('i').addClass('fa-circle-o-notch fa-spin');
+
+			// do ajax remove
+			var url = "{{ route('akta.renvoi.mark', ['akta_id' => '@akta_id@', 'key' => '@key@', 'mode' => 'delete']) }}";
+			url = url.replace("@akta_id@", window.location.pathname.replace('/akta/akta', '').replace('/', '')).replace("@key@", e.attr('key'));
+		
+			var el_key = e.attr('key');
+			var ajax_remove = window.ajax;
+
+			ajax_remove.defineOnSuccess(function(resp){
+				e.closest('.wrapper').fadeOut('fast', function(e){
+					$(document.getElementById('page-content')).find('#reader').find($(document.getElementById('page-content')).find('#reader').find('#' + $(this).find('#remove').attr('key'))).remove();
+					$(this).parent().remove();
+				});
+			});
+
+			ajax_remove.defineOnError(function(resp){
+				e.find('i').removeClass('fa-circle-o-notch fa-spin');
+				e.find('i').addClass('fa-times');
+				e.closest('.wrapper').find('.hold-on-load').removeClass('disabled');	
+			});		
+
+			ajax_remove.get(url);
+		}
+	}
 
 	// manage add paragraph
 	$(document).on('click', 'a.newline', function(){
@@ -817,6 +838,25 @@
 		ajax_newline.get(url);
 	});
 
+	// history
+	$(document).on('click', 'a.revise', function(){
+		showModal($(this), 'modal-history');
+	});
+	function showRevise(e){
+		var dt = window.dataBox.get('paragraf');
+		$.map(dt[e.attr('data-idx')].revisi, function(value, index) {
+			var content_history = $(document.getElementById('modal-history')).find('#content-history');
+			content_history.empty();
+			var rslt = $(document.getElementById('modal-history')).find('#template-history').clone().appendTo(content_history);
+			rslt.find('#tanggal').text(value.tanggal);
+			if(value.isi == null){
+				rslt.find('#riwayat').text('[Penambahan Paragraf]');
+			}else{
+				rslt.find('#riwayat').text(value.isi);
+			}
+			rslt.removeAttr('id hidden');
+		});
+	}
 
 	/* End Get Akta Feature */
 
@@ -843,7 +883,7 @@
 
 
 	/* Set Action Links */
-	function  triggerReaderMode(e){
+	function triggerReaderMode(e){
 
 		var target = $(document.getElementById('page')).find('#text-editor');
 
@@ -880,7 +920,7 @@
 		$(document.getElementById('link-edit-as-copy')).attr('data-url', url);
 	}
 	function triggerOpenWindow(e){
-		window.open( $(e).attr('data-url') , 'newwindow', 'width=1024,height=768');
+		window.open( $(e).attr('data-url') , 'newwindow', 'width='+ screen.width +',height=768');
 	}
 	function triggerPrint(){
 		window.printElement.setElementPrint(document.getElementById('page-content'));
@@ -943,24 +983,26 @@
 
 
 	/* editor modals */
-	function showModal(e){
+	function showModal(e, id){
 		var e = $(e);
-		$(document.getElementById('editor-disabled')).fadeIn('fast');
+		var modal = $(document.getElementById('editor-disabled'))
+		modal.find('.editor-modal-content').attr('hidden','hidden');
+		var modal_content = modal.find('#' + id).removeAttr('hidden');
 
-		// show modal history
-		$.map(paragraph[e.attr('data-idx')].revisi, function(value, index) {
-			console.log(value);
-			var content_history = $(document.getElementById('modal-history')).find('#content-history');
-			content_history.empty();
-			var rslt = $(document.getElementById('modal-history')).find('#template-history').clone().appendTo(content_history);
-			rslt.find('#tanggal').text(value.tanggal);
-			rslt.find('#riwayat').text(value.isi == null ? " " : value.isi);
-			rslt.removeAttr('id hidden');
-		});
+		if(id == "modal-history"){
+			// show modal history
+			showRevise(e);
+		}else{
+			// confirm remove paragraph
+			window.dataBox.set('target-remove-paragraph', e);
+		}
+
+		modal.fadeIn('fast');
 		// e.addClass('disabled');
 	}
 	function hideModal(e){
 		$(document.getElementById('editor-disabled')).fadeOut('fast');
+		window.dataBox.unset('target-remove-paragraph');
 	}
 
 @endpush

@@ -74,6 +74,7 @@
 			</div>
 		</div>
 
+		{{--
 		<div class="row hidden-sm" style="height: 39px;">
 			<div class="col-md-12 pl-0 pr-0">
 				<!-- <h5>Keranjang Sampah</h5> -->
@@ -91,6 +92,7 @@
 				</div>
 			</div>
 		</div>	
+		--}}
 
 	</div>
 <!-- 	<div class="col-12 sidebar-togler">
@@ -144,7 +146,7 @@
 		@if(!isset($page_attributes->hide['create']))
 		<div class="row mt-2 mb-3">
 			<div class="col-12">
-				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.choooseTemplate') }}', 'newwindow', 'width=' +screen.width+ ',height=768'); return false;" class="btn btn-primary btn-sm">Buat Akta</a>
+				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.choooseTemplate') }}', 'newwindow', 'width=' +screen.width+ ',height=768'); return false;" class="btn btn-primary btn-sm btn-new-akta">Buat Akta</a>
 				<!-- <a href="javascript:void(0);" onclick="showAkta(this);" data_judul_akta="testing" data_id_akta="111" class="btn btn-primary btn-sm">Buat Akta</a> -->
 			</div>
 		</div>
