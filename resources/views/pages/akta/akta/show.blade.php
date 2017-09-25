@@ -565,13 +565,30 @@
 				window.dataBox.set('paragraf',resp.paragraf);
 				var tmp_ctr = [];
 				resp.paragraf.forEach(function(element, idx) {
+					// list or paragraph
+					var open_tag = element.konten.substring(0, 4);
+
+
 					// reader mode
 					if(element.konten){
 						var rslt = $(element.konten).appendTo($(document.getElementById('text-editor')).find('#reader'));
+
+						if(open_tag == '<ol>' || open_tag == '<ul>'){
+							tmp_ctr.push('list-' + tmp_ctr.length);
+							rslt.attr('id', 'reader-' + tmp_ctr[tmp_ctr.length - 1]);
+							rslt.children().attr('id', element.key);;
+						}else if(open_tag == '<li>'){
+							// move to proper place
+							var list_target = $('#reader-' + tmp_ctr[tmp_ctr.length - 1]);
+							var tmp_element = rslt.detach();
+							list_target.append(tmp_element);
+							rslt.attr('id', element.key);
+						}else{
+						}
 					}else{
 						var rslt = $('<p>&nbsp;</p>').appendTo($(document.getElementById('text-editor')).find('#reader'));
+						rslt.attr('id', element.key);
 					}
-					rslt.attr('id', element.key);
 					
 					// display + feature bundle
 					var editor = $(document.getElementById('page')).find('#text-editor');
@@ -582,18 +599,15 @@
 
 
 					// list or paragraph
-					var open_tag = element.konten.substring(0, 4);
 					if(open_tag == '<ol>' || open_tag == '<ul>'){
 						// open
 						target.wrap(open_tag + open_tag.substring(0,1) + '/' + open_tag.substring(1,4));
 						var parent = target.closest(element.konten.substring(1,3));
-						parent.attr('id', 'list-' + tmp_ctr.length);
+						parent.attr('id', 'list-' + (tmp_ctr.length - 1));
 						parent.attr('list-type', open_tag);
 						target.attr('data-index', '1');
 						target.addClass('list-data');
 						target.find('#narasi').append(element.konten.substring(4));
-
-						tmp_ctr.push('list-' + tmp_ctr.length);
 					}else if(open_tag == '<li>'){
 						// list
 						list_target = $('#' + tmp_ctr[tmp_ctr.length - 1]);
