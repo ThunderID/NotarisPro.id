@@ -982,7 +982,13 @@
 		$(document.getElementById('link-edit-as-copy')).attr('data-url', url);
 	}
 	function triggerOpenWindow(e){
-		window.open( $(e).attr('data-url') , 'newwindow', 'width='+ screen.width +',height=768');
+		var win = window.open($(e).attr('data-url'), 'newwindow', 'width=' +screen.width+ ',height=768');
+		var pollTimer = window.setInterval(function() {
+			if (win.closed !== false) { // !== is required for compatibility with Opera
+				window.clearInterval(pollTimer);
+				location.reload();
+			}
+		}, 200);	
 	}
 	function triggerPrint(){
 		window.printElement.setElementPrint(document.getElementById('page-content'));

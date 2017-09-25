@@ -144,7 +144,7 @@
 		@if(!isset($page_attributes->hide['create']))
 		<div class="row mt-2 mb-3">
 			<div class="col-12">
-				<a href="javascript:void(0);" onclick="window.open('{{ route('akta.akta.choooseTemplate') }}', 'newwindow', 'width=' +screen.width+ ',height=768'); return false;" class="btn btn-primary btn-sm btn-new-akta">Buat Akta</a>
+				<a href="javascript:void(0);" onclick="openEditor('{{ route('akta.akta.choooseTemplate') }}');" class="btn btn-primary btn-sm btn-new-akta">Buat Akta</a>
 				<!-- <a href="javascript:void(0);" onclick="showAkta(this);" data_judul_akta="testing" data_id_akta="111" class="btn btn-primary btn-sm">Buat Akta</a> -->
 			</div>
 		</div>
@@ -198,3 +198,14 @@
 </div>
 @yield('modal')
 @stop
+@push('scripts')
+	function openEditor(url){
+		var win = window.open(url, 'newwindow', 'width=' +screen.width+ ',height=768');
+		var pollTimer = window.setInterval(function() {
+			if (win.closed !== false) { // !== is required for compatibility with Opera
+				window.clearInterval(pollTimer);
+				location.reload();
+			}
+		}, 200);
+	} 
+@endpush
