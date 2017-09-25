@@ -363,6 +363,10 @@
 		//}
 	{{-- @endif --}}
 
+	$('#SimpanDokumen').find('.btn-discard').on('click', function(e) {
+		e.preventDefault();
+		window.close();
+	});
 	$('#SimpanDokumen').on('show.bs.modal', function(e) {
 		actButton = $(e.relatedTarget).attr('data-action-button');
 		linkUrl = $(e.relatedTarget).attr('data-url');
