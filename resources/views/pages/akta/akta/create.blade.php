@@ -232,119 +232,121 @@
 	@endcomponent
 	
 	{{-- modal for isi data dokumen --}}
-	@component('components.modal', [
-		'id' 		=> 'isiDokumen',
-		'title'		=> 'Isi Dokumen',
-		'large'		=> 'false',
-		'settings'	=> [
-			'modal_class'	=> '',
-			'hide_buttons'	=> 'true',
-			'hide_title'	=> 'false',
-		]
-	])
-		<form id="save_dokumen" class="form-widgets form" action="{{ route('akta.akta.update', ['id' => $page_datas->akta['id']]) }}" onSubmit="showLoader();" method="GET">
-			<fieldset class="pb-2 pt-3">
-				@if (Route::is('akta.akta.edit'))
-					{{-- if mention for default --}}
-					@isset($page_datas->akta['mentionable'])
-						@php $title_temp = ''; @endphp
-						@forelse ($page_datas->akta['mentionable'] as $k => $v)
-							@php 
-								$explode_title = explode('.', $k); 
-							@endphp
-
-							@if (count($explode_title) == 2)
-								@php
-									$tmp['mention_prefix_first'] = array_shift($explode_title);
+	@if (Route::is('akta.akta.edit'))
+		@component('components.modal', [
+			'id' 		=> 'isiDokumen',
+			'title'		=> 'Isi Dokumen',
+			'large'		=> 'false',
+			'settings'	=> [
+				'modal_class'	=> '',
+				'hide_buttons'	=> 'true',
+				'hide_title'	=> 'false',
+			]
+		])
+			<form id="save_dokumen" class="form-widgets form" action="{{ route('akta.akta.update', ['id' => $page_datas->akta['id']]) }}" onSubmit="showLoader();" method="GET">
+				<fieldset class="pb-2 pt-3">
+					@if (Route::is('akta.akta.edit'))
+						{{-- if mention for default --}}
+						@isset($page_datas->akta['mentionable'])
+							@php $title_temp = ''; @endphp
+							@forelse ($page_datas->akta['mentionable'] as $k => $v)
+								@php 
+									$explode_title = explode('.', $k); 
 								@endphp
 
-								@if ($title_temp != $tmp['mention_prefix_first'])
-									<h5>{{ $tmp['mention_prefix_first'] }}</h5>
-								@endif
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label text-right">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
-									</div>
-								</div>
-{{-- 							@elseif (count($explode_title) == 3)
-								@php
-									$tmp['mention_prefix_first'] = array_shift($explode_title);
-									$tmp['mention_prefix_second'] = array_shift($explode_title);
-								@endphp
-								<h4>{{ $tmp['mention_prefix_first'] }}</h4>
-								<h4>{{ $tmp['mention_prefix_second'] }}</h4>
-								<div class="form-group row">
-									<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
-									</div>
-								</div>
-							@elseif (count($explode_title) == 4)
-								@php
-									$tmp['mention_prefix_first'] = array_shift($explode_title);
-									$tmp['mention_prefix_second'] = array_shift($explode_title);
-									$tmp['mention_prefix_third'] = array_shift($explode_title);
-								@endphp
-								<h4>{{ $tmp['mention_prefix_first'] }}</h4>
-								<h4>{{ $tmp['mention_prefix_second'] }}</h4>
-								<p>{{ $tmp['mention_prefix_third'] }}</p>
-								<div class="form-group row">
-									<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
-									</div>
-								</div>
-							@elseif (count($explode_title) == 5)
-								@php
-									$tmp['mention_prefix_first'] = array_shift($explode_title);
-									$tmp['mention_prefix_second'] = array_shift($explode_title);
-									$tmp['mention_prefix_third'] = array_shift($explode_title);
-									$tmp['mention_prefix_fourth'] = array_shift($explode_title);
-								@endphp
-								<h4>{{ $tmp['mention_prefix_first'] }}</h4>
-								<h4>{{ $tmp['mention_prefix_second'] }}</h4>
-								<p>{{ $tmp['mention_prefix_third'] }}</p>
-								<p>{{ $tmp['mention_prefix_fourth'] }}</p>
-								<div class="form-group row">
-									<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
-									<div class="col-sm-8">
-										<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
-									</div>
-								</div> --}}
-								@php $title_temp = $tmp['mention_prefix_first']; @endphp
-							@endif
-						@empty
-						@endforelse
-					@endisset
+								@if (count($explode_title) == 2)
+									@php
+										$tmp['mention_prefix_first'] = array_shift($explode_title);
+									@endphp
 
-					{{-- if mention for dokumen input user --}}
-					@isset ($page_datas->akta['dokumen'])
-						@php $title_temp = ''; @endphp
-						@forelse ($page_datas->akta['dokumen'] as $k => $v)
-							<h5>{{ str_replace('[dot]', ' ', $k) }}</h5>
-							@foreach ($v as $k2 => $v2)
-								<p class="ml-3 text-secondary">{{ str_replace('[dot]', ' ', $k2) }}</p>
-								@foreach ($v2 as $k3 => $v3)
-									<div class="form-group row ml-3">
-										<label class="col-sm-3 col-form-label text-right">{{ str_replace('_', ' ', $k3) }}</label>
+									@if ($title_temp != $tmp['mention_prefix_first'])
+										<h5>{{ $tmp['mention_prefix_first'] }}</h5>
+									@endif
+									<div class="form-group row">
+										<label class="col-sm-3 col-form-label text-right">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
 										<div class="col-sm-8">
-											<input type="text" class="form-control" name="{{ $v3 }}" value="{{ (isset($page_datas->akta['mentionable'][$v3]) && ($page_datas->akta['mentionable'][$v3] !== null)) ? $page_datas->akta['mentionable'][$v3] : '' }}">
+											<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
 										</div>
 									</div>
+	{{-- 							@elseif (count($explode_title) == 3)
+									@php
+										$tmp['mention_prefix_first'] = array_shift($explode_title);
+										$tmp['mention_prefix_second'] = array_shift($explode_title);
+									@endphp
+									<h4>{{ $tmp['mention_prefix_first'] }}</h4>
+									<h4>{{ $tmp['mention_prefix_second'] }}</h4>
+									<div class="form-group row">
+										<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+										</div>
+									</div>
+								@elseif (count($explode_title) == 4)
+									@php
+										$tmp['mention_prefix_first'] = array_shift($explode_title);
+										$tmp['mention_prefix_second'] = array_shift($explode_title);
+										$tmp['mention_prefix_third'] = array_shift($explode_title);
+									@endphp
+									<h4>{{ $tmp['mention_prefix_first'] }}</h4>
+									<h4>{{ $tmp['mention_prefix_second'] }}</h4>
+									<p>{{ $tmp['mention_prefix_third'] }}</p>
+									<div class="form-group row">
+										<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+										</div>
+									</div>
+								@elseif (count($explode_title) == 5)
+									@php
+										$tmp['mention_prefix_first'] = array_shift($explode_title);
+										$tmp['mention_prefix_second'] = array_shift($explode_title);
+										$tmp['mention_prefix_third'] = array_shift($explode_title);
+										$tmp['mention_prefix_fourth'] = array_shift($explode_title);
+									@endphp
+									<h4>{{ $tmp['mention_prefix_first'] }}</h4>
+									<h4>{{ $tmp['mention_prefix_second'] }}</h4>
+									<p>{{ $tmp['mention_prefix_third'] }}</p>
+									<p>{{ $tmp['mention_prefix_fourth'] }}</p>
+									<div class="form-group row">
+										<label class="col-sm-4 col-form-label">{{ array_last(str_replace('_', ' ', $explode_title)) }}</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="{{ $k }}" value="{{ isset($v) ? $v : '' }}">
+										</div>
+									</div> --}}
+									@php $title_temp = $tmp['mention_prefix_first']; @endphp
+								@endif
+							@empty
+							@endforelse
+						@endisset
+
+						{{-- if mention for dokumen input user --}}
+						@isset ($page_datas->akta['dokumen'])
+							@php $title_temp = ''; @endphp
+							@forelse ($page_datas->akta['dokumen'] as $k => $v)
+								<h5>{{ str_replace('[dot]', ' ', $k) }}</h5>
+								@foreach ($v as $k2 => $v2)
+									<p class="ml-3 text-secondary">{{ str_replace('[dot]', ' ', $k2) }}</p>
+									@foreach ($v2 as $k3 => $v3)
+										<div class="form-group row ml-3">
+											<label class="col-sm-3 col-form-label text-right">{{ str_replace('_', ' ', $k3) }}</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="{{ $v3 }}" value="{{ (isset($page_datas->akta['mentionable'][$v3]) && ($page_datas->akta['mentionable'][$v3] !== null)) ? $page_datas->akta['mentionable'][$v3] : '' }}">
+											</div>
+										</div>
+									@endforeach
 								@endforeach
-							@endforeach
-						@empty
-						@endforelse
-					@endisset
-				@endif
-			</fieldset>
-			<fieldset class="from-group pb-2 pt-3 text-right">
-				<button type="button" class="btn btn-secondary btn-discard" data-dismiss="modal">Batal</button>
-				<button type="button" class="btn btn-primary btn-mentionable" data-save="true" data-dismiss="modal">Simpan</button>
-			</fieldset>
-		</form>		
-	@endcomponent()
+							@empty
+							@endforelse
+						@endisset
+					@endif
+				</fieldset>
+				<fieldset class="from-group pb-2 pt-3 text-right">
+					<button type="button" class="btn btn-secondary btn-discard" data-dismiss="modal">Batal</button>
+					<button type="button" class="btn btn-primary btn-mentionable" data-save="true" data-dismiss="modal">Simpan</button>
+				</fieldset>
+			</form>		
+		@endcomponent()
+	@endif
 @stop
 
 @push('scripts')  
@@ -353,7 +355,7 @@
 	modulShowArsipDokumen();
 
 	{{-- @if (Route::is('akta.akta.edit')) --}}
-		//countParagraf = {{ count($page_datas->akta['paragraf']) }}
+		//countParagraf = {{-- {{ count($page_datas->akta['paragraf']) }} --}}
 		
 		//for (var x=0; x <= countParagraf; x++) {
 		//	el = '#editor-' + x;
@@ -446,7 +448,10 @@
 	});
 
 	function modulShowArsipDokumen () {
-		setArsipDokumen();
+		setArsipDokumenDefault();
+		setTimeout(function(){
+			setArsipDokumen();
+		}, 300);
 		setArsipPrefixDokumen();
 	}
 
@@ -460,6 +465,64 @@
 			.attr('data-parent', '#' + parent)
 		element.find('.btn-save')
 			.attr('data-parent', '#' + parent)
+	}
+
+	// function set arsip dokumen default
+	// get data from ajax
+	function setArsipDokumenDefault () {
+		let urlArsipDefault = "{{ route('akta.mention.default.ajax') }}";
+		let ajaxArsipDefault = window.ajax;
+
+		// ajax respon
+		// status success dari server
+		ajaxArsipDefault.defineOnSuccess( function (respon) {
+			let sidebarContent = $(document.getElementById('sidebar-content'));
+			let itemOne = $(document.getElementById('arsip-item--one'));
+			let templateCollapse = $(document.getElementById('list-arsip'));
+			let templateForm = $(document.getElementById('add-arsip'));
+			let temp = [];
+
+			itemOne.append('<p class="pl-3 mt-2 mb-1"><u><strong>Arsip Dokumen Default</strong></u></p>');
+
+			$.map(respon, function (value, index) {
+				var tmpCollapse = templateCollapse.clone();
+				tmpCollapse.attr('id', templateCollapse.attr('id') + '-parent')
+					.addClass('pl-3 mt-1 mb-0')
+					.show();
+
+				tmpCollapse.find('a#parent-link')
+					.attr('href', '#' + templateCollapse.attr('id') + '-default-' + index)
+					.attr('data-toggle', 'collapse')
+					.attr('data-animation', 'false')
+					.attr('aria-expanded', 'false')
+					.addClass('d-block')
+					.attr('aria-controls', templateCollapse.attr('id') + '-' + index)
+					.append('<i class="fa fa-plus-square-o"></i> ' + index);
+
+				// tmpFormChild = templateForm.clone();
+				tmpCollapseChild = $('<ul class="list-unstyled collapse"></ul>');
+				tmpCollapseChild.attr('id', templateCollapse.attr('id') + '-default-' + index)
+					.addClass('pl-3 mb-0 collapse');
+
+				$.map(value, function (value2, index2) {
+					$.map(value2, function (value3, index3) {
+						tmpCollapseChild.append('<li><a href="#" class="arsip-default-mention" data-item="' +index3+ '" data-value="' +index+ '.">' +index3+ '</a></li>');
+					});
+					tmpCollapse.append(tmpCollapseChild);
+				});
+				itemOne.append(tmpCollapse);
+			});
+		});
+
+		// ajax respon
+		// status error dari serve
+		ajaxArsipDefault.defineOnError( function (respon) {
+			$('.show-before-load').hide();
+			$('.show-on-error').show();
+			$(document.getElementById('loader-error-code')).text(respon.status);
+		});
+
+		ajaxArsipDefault.get(urlArsipDefault);
 	}
 
 	// function set arsip dokumen
@@ -478,51 +541,6 @@
 			let templateForm = $(document.getElementById('add-arsip'));
 
 			var temp = [];
-			
-			if (typeof (arsipDokumen) != 'undefined') {
-				tmpCollapseDefault = templateCollapse.clone(); 
-
-				tmpCollapseDefault.attr('id', templateCollapse.attr('id') + '-default')
-					.addClass('pl-3 mt-2 mb-2')
-					.show();
-
-				tmpCollapseDefault.find('a#parent-link')
-					.attr('href', '#' + templateCollapse.attr('id') + '-notaris')
-					.attr('data-toggle', 'collapse')
-					.attr('data-animation', 'false')
-					.attr('aria-expanded', 'false')
-					.attr('aria-controls', templateCollapse.attr('id') + '-notaris')
-					.append('<i class="fa fa-plus-square-o"></i> Notaris');
-
-				var i = 0;
-				tmpCollapseDefaultChild = templateCollapse.clone();
-				tmpCollapseDefaultChild.attr('id', templateCollapse.attr('id') + '-notaris')
-					.addClass('pl-3 mb-0')
-					.show();
-				$.map(arsipDokumen, function(value, index) {
-
-					if (i < 1) {
-						link = tmpCollapseDefaultChild.find('a#parent-link');
-						link.removeClass('text-default');
-					} else {
-						link = $('<a class="text-capitalize"></a>');
-					}
-
-					link.attr('id', 'parent-link--default-' + index)
-						.attr('href', '#')
-						.attr('data-value', 'notaris.')
-						.attr('data-item', index)
-						.addClass('d-block arsip-mention')
-						.append(index);
-
-					tmpCollapseDefaultChild.append(link);
-					tmpCollapseDefaultChild.addClass('collapse');
-					tmpCollapseDefault.append(tmpCollapseDefaultChild);
-					itemOne.append(tmpCollapseDefault);
-					i++;
-				});
-				itemOne.append('<hr class="mt-1 mb-1">');
-			}
 
 			$.map(respon, function (value, index) {
 				if (temp.indexOf(value.jenis_dokumen) == -1) {
@@ -549,6 +567,7 @@
 						tmpForm.find('input[name="arsip_dokumen"]')
 							.attr('data-prefix', '');
 						tmpCollapse.prepend(tmpForm);
+						tmpCollapse.prepend('<p class="mt-3 mb-1"><u><strong>Arsip Dokumen</strong></u></p>');
 					}
 
 					// get data list from data json 
