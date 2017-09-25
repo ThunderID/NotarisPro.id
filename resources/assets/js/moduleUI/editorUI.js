@@ -188,7 +188,8 @@ window.editorUI = {
 			buttonOpenArsip.removeClass('ql-active');
 		});
 	},
-	quill: function () {
+	quill: function (el) {
+		console.log(selector);
 		var currentCursor, newIndex, suffix, textSearch;
 		var selector = document.getElementById('editor');
 		var Parchment = Quill.import('parchment');
@@ -255,7 +256,7 @@ window.editorUI = {
 		};
 
 		var changeText = new Delta();
-		var editor = new window.Quill('.editor', options);
+		var editor = new window.Quill(el, options);
 		var toolbar = editor.getModule('toolbar');
 		// editor.enable('false');
 		
@@ -386,8 +387,8 @@ window.editorUI = {
 			});	
 		}
 	},
-	init: function () {
-		window.editorUI.quill();
+	init: function (parameter) {
+		window.editorUI.quill(parameter);
 		window.editorUI.openPanelArsip();
 		window.editorUI.closePanelArsip();
 		window.editorUI.panelArsip();

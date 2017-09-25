@@ -1,6 +1,3 @@
-@php
-	// dd($page_datas->akta);
-@endphp
 @extends('templates.blank')
 
 @push('fonts')
@@ -201,11 +198,16 @@
 	</div>
 	<div class="row justify-content-center mt-5" style="min-height: 146mm;">
 		<div class="col">
-			@foreach ($page_datas->akta['paragraf'] as $k => $v)
-				<div id="editor" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 0mm; margin: 0 auto; " data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}" data-paragraf="{{ (isset($page_datas->akta) ? json_encode($page_datas->akta['paragraf']) : '') }}">
-					{!! $v['konten'] !!}
-				</div>
-			@endforeach
+			<div id="editor" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 0mm; margin: 0 auto; " data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}" data-paragraf="{{ (isset($page_datas->akta) ? json_encode($page_datas->akta['paragraf']) : '') }}">
+				{{-- {!! $v['konten'] !!} --}}
+			</div>
+			{{-- @if (Route::is('akta.akta.edit'))
+				@foreach ($page_datas->akta['paragraf'] as $k => $v)
+					<div id="editor-{{ $k }}" class="editor form-paragraf-akta" style="background-color: #fff; width: 210mm; min-height: 0mm; margin: 0 auto; " data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}" data-paragraf="">
+						{!! $v['konten'] !!}
+					</div>
+				@endforeach
+			@endif --}}
 		</div>
 	</div>
 	
@@ -347,8 +349,17 @@
 
 @push('scripts')  
 	var arsipDokumen = {!! (isset($page_datas->dokumen_notaris)) ? json_encode($page_datas->dokumen_notaris) : '' !!}
-	window.editorUI.init();
+	window.editorUI.init('#editor');
 	modulShowArsipDokumen();
+
+	{{-- @if (Route::is('akta.akta.edit')) --}}
+		//countParagraf = {{ count($page_datas->akta['paragraf']) }}
+		
+		//for (var x=0; x <= countParagraf; x++) {
+		//	el = '#editor-' + x;
+		//	window.editorUI.init('#editor-0');
+		//}
+	{{-- @endif --}}
 
 	$('#SimpanDokumen').on('show.bs.modal', function(e) {
 		actButton = $(e.relatedTarget).attr('data-action-button');
