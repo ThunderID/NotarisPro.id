@@ -132,6 +132,8 @@ Route::group(['middleware' => 'trial'], function(){
 
 		Route::any('/akta/akta/store', 							['uses' => 'aktaController@store', 			'as' => 'akta.akta.store.test']);
 		Route::any('/akta/akta/{id}',							['uses' => 'aktaController@update',			'as' => 'akta.akta.update.ajax']);
+	
+		Route::any('/akta/mention/default',						['uses' => 'aktaController@mentionDefault',	'as' => 'akta.mention.default.ajax']);
 
 		Route::any('/akta/mention/all', 						['uses' => 'aktaController@mentionIndex', 	'as' => 'akta.mention.index']);
 		Route::any('/akta/mention/all/store', 					['uses' => 'aktaController@mentionStore', 	'as' => 'akta.mention.store']);

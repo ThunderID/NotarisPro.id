@@ -314,7 +314,7 @@ class tagihanController extends Controller
 		//2. cari sesuai query
 		if(isset($query['cari']))
 		{
-			$data 	= $data->where(function($q)use($query){$q->where('klien', 'like', '%'.$query['cari'].'%')->orwhere('nomor_transaksi', 'like', '%'.$query['cari'].'%');});
+			$data 	= $data->where(function($q)use($query){$q->where('klien', 'like', '%'.$query['cari'].'%')->orwhere('nomor', 'like', '%'.$query['cari'].'%');});
 		}
 
 		//3. filter 

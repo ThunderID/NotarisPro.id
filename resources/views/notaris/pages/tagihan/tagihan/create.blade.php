@@ -24,7 +24,9 @@
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
 					<div class="col-12 text-right">
-						<a href="{{route('tagihan.tagihan.print', ['tagihan_id' => $page_datas->id])}}" class="btn btn-secondary" target="__blank"> <i class="fa fa-print"></i> Print </a>
+						@if(!is_null($page_datas->id))
+							<a href="{{route('tagihan.tagihan.print', ['tagihan_id' => $page_datas->id])}}" class="btn btn-secondary" target="__blank"> <i class="fa fa-print"></i> Print </a>
+						@endif
 						@if(str_is($page_datas->tagihan['status'], 'pending') && !is_null($page_datas->id))
 							<a href="{{route('tagihan.tagihan.status', ['tagihan_id' => $page_datas->id, 'status' => 'lunas'])}}" class="btn btn-primary"> {{ucwords($page_datas->tagihan['status'])}} </a>
 						@else

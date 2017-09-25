@@ -175,12 +175,10 @@ class arsipController extends Controller
 			$data			= $data->where(function($q)use($query){$q->where('isi.nama', 'like', '%'.$query['cari'].'%');});
 		}
 
-
 		//3. filter jenis
 		if(isset($query['jenis'])){
-			$data 	= $data->where('jenis_dokumen', $query['jenis']);
+			$data 	= $data->where('jenis', $query['jenis']);
 		}
-
 
 		//3. filter relasi
 		if(isset($query['relasi_ids'])){
@@ -218,7 +216,7 @@ class arsipController extends Controller
 		{
 			foreach ($value['attributes'] as $k => $v) 
 			{
-				$filter['jenis'][$v]	= $v;
+				$filter['jenis'][strtoupper($v)]	= $v;
 			}
 		}
 

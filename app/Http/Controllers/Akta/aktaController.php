@@ -506,6 +506,38 @@ class aktaController extends Controller
 		return JSend::success(['tersimpan']);
 	}
 
+	public function mentionDefault()
+	{
+		$data['notaris']	= [
+			['nama' 				=> 'notaris.nama'], 
+			['daerah_kerja'			=> 'notaris.daerah_kerja'], 
+			['nomor_sk'				=> 'notaris.nomor_sk'], 
+			['tanggal_pengangkatan'	=> 'notaris.tanggal_pengangkatan'], 
+			['email'				=> 'notaris.email'],
+			['telepon'				=> 'notaris.telepon'],
+			['alamat'				=> 'alamat']];
+
+		$data['akta']		= [
+			['tanggal'		=> 'akta.tanggal'], 
+			['nomor'		=> 'akta.nomor']];
+
+		return $data;
+		//
+		$this->active_office	= TAuth::activeOffice();
+
+		$mention['@notaris.nama@']			= $this->active_office['kantor']['notaris']['nama'];
+		$mention['@notaris.daerah_kerja@']	= $this->active_office['kantor']['notaris']['daerah_kerja'];
+		$mention['@notaris.nomor_sk@']		= $this->active_office['kantor']['notaris']['nomor_sk'];
+		$mention['@notaris.tanggal_pengangkatan@']	= $this->active_office['kantor']['notaris']['tanggal_pengangkatan'];
+		$mention['@notaris.email@']		= $this->active_office['kantor']['notaris']['email'];
+		$mention['@notaris.alamat@']	= $this->active_office['kantor']['notaris']['alamat'];
+		$mention['@notaris.telepon@']	= $this->active_office['kantor']['notaris']['telepon'];
+		$mention['@akta.nomor@']		= null;
+		$mention['@akta.tanggal@']		= null;
+
+		return array_keys($mention);
+	}
+
 	private function removeDiffSession($jenis)
 	{
 		if(Session::has('tipe_doc'))

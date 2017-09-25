@@ -26,7 +26,7 @@
 
 				<div class="panel">
 					@include('components.search',[
-						'title' => 'Cari Klien',
+						'title' => 'Cari Nomor Tagihan',
 						'qs'	=> [ 'status','urutkan' ],
 						'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
 					])
