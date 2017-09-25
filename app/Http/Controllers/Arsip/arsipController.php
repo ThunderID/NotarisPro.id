@@ -64,7 +64,6 @@ class arsipController extends Controller
 	public function show(Request $request, $id)
 	{
 		$this->middleware('scope:read_archive');
-		
 		/*
 		$this->active_office 			= TAuth::activeOffice();
 
@@ -145,10 +144,10 @@ class arsipController extends Controller
 			{
 				foreach ($arsip['relasi']['dokumen'] as $key => $value) 
 				{
-					$arsip['relasi']['dokumen'][$key]['isi']	= $this->query->id($id)->kantor($this->active_office['kantor']['id'])->first(['isi.'.$this->page_datas->config[$value['jenis']][0], 'isi.'.$this->page_datas->config[$value['jenis']][1]])['isi'];
+					$arsip['relasi']['dokumen'][$key]['isi']	= $this->query->id($value['id'])->kantor($this->active_office['kantor']['id'])->first(['isi.'.$this->page_datas->config[$value['jenis']][0], 'isi.'.$this->page_datas->config[$value['jenis']][1]])['isi'];
 				}
 			}
-			
+
 			// $this->per_page = count($ids);
 			// $relasi_d 		= $this->retrieveArsip(['relasi_ids' => $ids]);
 			// $arsip['relasi']['dokumen']	= $relasi_d;

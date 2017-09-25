@@ -55,6 +55,16 @@ class InitNewArchV2TableSeeder extends Seeder
 				'deskripsi' 		=> 'lorep ipsum',
 			];
 
+			$klien_2_s 			= [
+				'nama' 				=> $faker->name($gender='male'),
+				'tempat_lahir' 		=> $kab[rand(0,28)],
+				'tanggal_lahir' 	=> Carbon::parse(' - '.rand(17,71).' years')->format('d/m/Y'),
+				'pekerjaan' 		=> $pekerjaan[rand(0,3)],
+				'alamat' 			=> $faker->address,
+				'nik' 			=> $faker->ean13,
+				'deskripsi' 		=> 'lorep ipsum',
+			];
+
 			$nomor_akta 		= $faker->ean13;
 			$tgl 				= rand(1,28).'/'.rand(1,12).'/2016';
 			$tlg_hadap 			= DeskripsiTanggalService::displayHariIni($tgl);
@@ -77,7 +87,9 @@ class InitNewArchV2TableSeeder extends Seeder
 					'@pihak.2.ktp.pribadi.tempat_lahir@'	=> $klien_2['tempat_lahir'],
 					'@pihak.2.ktp.pribadi.tanggal_lahir@'	=> $klien_2['tanggal_lahir'],
 					'@pihak.2.ktp.pribadi.pekerjaan@'		=> $klien_2['pekerjaan'],
-					'@pihak.2.ktp.pribadi.nik@'				=> $klien_2['nik']
+					'@pihak.2.ktp.pribadi.nik@'				=> $klien_2['nik'],
+					'@pihak.2.ktp.suami.nik@'				=> $klien_2_s['nik'],
+					'@pihak.2.ktp.suami.nama@'				=> $klien_2_s['nama'],
 				];
 
 			$update_akta 	= new App\Service\Akta\UpdateAkta($akta->id, $active_office['kantor']['id']);
