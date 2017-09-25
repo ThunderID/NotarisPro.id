@@ -517,23 +517,23 @@ class aktaController extends Controller
 			['telepon'				=> 'notaris.telepon'],
 			['alamat'				=> 'alamat']];
 
-		$data['akta']		= [
+		$data['akta'] = [
 			['tanggal'		=> 'akta.tanggal'], 
 			['nomor'		=> 'akta.nomor']];
 
 		return $data;
 		//
-		$this->active_office	= TAuth::activeOffice();
+		$this->active_office = TAuth::activeOffice();
 
-		$mention['@notaris.nama@']			= $this->active_office['kantor']['notaris']['nama'];
-		$mention['@notaris.daerah_kerja@']	= $this->active_office['kantor']['notaris']['daerah_kerja'];
-		$mention['@notaris.nomor_sk@']		= $this->active_office['kantor']['notaris']['nomor_sk'];
+		$mention['@notaris.nama@']					= $this->active_office['kantor']['notaris']['nama'];
+		$mention['@notaris.daerah_kerja@']			= $this->active_office['kantor']['notaris']['daerah_kerja'];
+		$mention['@notaris.nomor_sk@']				= $this->active_office['kantor']['notaris']['nomor_sk'];
 		$mention['@notaris.tanggal_pengangkatan@']	= $this->active_office['kantor']['notaris']['tanggal_pengangkatan'];
-		$mention['@notaris.email@']		= $this->active_office['kantor']['notaris']['email'];
-		$mention['@notaris.alamat@']	= $this->active_office['kantor']['notaris']['alamat'];
-		$mention['@notaris.telepon@']	= $this->active_office['kantor']['notaris']['telepon'];
-		$mention['@akta.nomor@']		= null;
-		$mention['@akta.tanggal@']		= null;
+		$mention['@notaris.email@']					= $this->active_office['kantor']['notaris']['email'];
+		$mention['@notaris.alamat@']				= $this->active_office['kantor']['notaris']['alamat'];
+		$mention['@notaris.telepon@']				= $this->active_office['kantor']['notaris']['telepon'];
+		$mention['@akta.nomor@']					= null;
+		$mention['@akta.tanggal@']					= null;
 
 		return array_keys($mention);
 	}

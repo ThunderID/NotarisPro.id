@@ -119,6 +119,29 @@ window.editorUI = {
 			.addClass('d-flex')
 			.show();
 	},
+	parsingArsipDefaultMention: function (editor, element) {
+		let textValue = element.attr('data-value');
+		let textItem = element.attr('data-item');
+		let newTextValue = '@' + textValue + textItem + '@';
+		let textObj = {text: newTextValue, value: newTextValue};
+
+		// set selection
+		var range = editor.getSelection();
+		var text = editor.getText(range.index, range.length);
+		var newIndex = parseInt(range.index + newTextValue.length);
+
+		if (range) {
+			if (range.length == 0) {
+				editor.insertEmbed(range.index, 'medium-editor-mention-at', textObj);
+			} else {
+				editor.deleteText(range.index, range.length);
+				editor.insertEmbed(range.index, 'medium-editor-mention-at', textObj);
+			}
+		} else {
+			editor.insertEmbed(editor.getLength() - 1, 'medium-editor-mention-at', textObj);
+		}
+		editor.setSelection(newIndex, 0)
+	},
 	panelArsip: function () {
 		$(document).on('click', '.btn-arsip-previous', function(e) {
 			e.preventDefault();
@@ -189,7 +212,6 @@ window.editorUI = {
 		});
 	},
 	quill: function (el) {
-		console.log(selector);
 		var currentCursor, newIndex, suffix, textSearch;
 		var selector = document.getElementById('editor');
 		var Parchment = Quill.import('parchment');
@@ -259,9 +281,6 @@ window.editorUI = {
 		var editor = new window.Quill(el, options);
 		var toolbar = editor.getModule('toolbar');
 		// editor.enable('false');
-		
-		var buttonNewDocument = document.querySelector('.ql-new');
-		var buttonSaveDocument = document.querySelector('.ql-save');
 
 		var length = editor.getLength();
 		var text = editor.getText(length - 2, 2);
@@ -292,85 +311,13 @@ window.editorUI = {
 			'formats/medium-editor-mention-at': dataMention
 		});
 
-
-		// function on click button new 
-		// editor
-		buttonNewDocument.addEventListener('click', function(e) {
-			// console.log('new document');
-		});
-
-		// function on click button save
-		// from editor
-		buttonSaveDocument.addEventListener('click', function(e) {
-			e.preventDefault();
-			window.editorUI.postSave(editor);
-		});
-
-		// event save isi mention
-		$('.modal .btn-mentionable').on('click', function(e) {
-			e.preventDefault();
-
-			let ajaxAkta = window.ajax;
-			let formData = new FormData();
-			let form = $(this).closest('form');
-			let actionUrl = form.attr('action');
-			let temp = {};
-
-
-			form.find('input').each( function() {
-				let fieldInput = $(this).attr('name');
-				let valueInput = $(this).val();
-
-				temp[fieldInput] = valueInput;
-				// temp = {fieldInput: valueInput};
-			});
-
-			console.log(JSON.stringify(temp));
-
-			window.editorUI.loadingAnimation('show', 'loading');
-
-			ajaxAkta.defineOnSuccess( function(respon) {
-				window.editorUI.loadingAnimation('hide');
-				window.editorUI.loadingAnimation('show');
-			});
-
-			ajaxAkta.defineOnError( function(respon) {
-				window.editorUI.loadingAnimation('hide');
-				window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan isi dari dokumen!');
-			});
-
-			formData.append('mentionable', JSON.stringify(temp));
-			// console.log(formData);
-			ajaxAkta.post(actionUrl, formData);
-
-		});
-
-		$('.modal .btn-save-dokumen').on('click', function (e) {
-			e.preventDefault();
-
-			let actionButton = $(this).attr('data-action-button');
-			let actionUrl = $(this).attr('data-url');
-
-			if ((typeof (actionUrl) != 'undefined') && (actionUrl != null)) {
-				window.editorUI.postSave(editor, 'modal', actionButton, actionUrl);
-			} else {
-				window.editorUI.postSave(editor, 'modal', actionButton);
-			}
-		});
-		
-
+		// module element helper
+		// in editor
+		window.editorUI.helperElement(editor);
+	
 		// module quill autosave
 		// and return value changeText
 		changeText = window.editorUI.autoSave(editor, changeText, Delta);
-		
-
-		// get data arsip 
-		// from panel sidebar
-		$(document).on('click', '.arsip-mention', function(e) {
-			e.preventDefault();
-			window.editorUI.parsingArsipMention(editor, $(this));
-		});
-
 		window.onbeforunload = function() {
 			if (changeText.length() > 0) {
 				return 'There are unsaved changes. Are you sure you want to leave?';
@@ -387,8 +334,193 @@ window.editorUI = {
 			});	
 		}
 	},
+	quillMultiple: function (el) {
+		var currentCursor, newIndex, suffix, textSearch;
+		var selector = document.getElementById('editor');
+		var Parchment = Quill.import('parchment');
+		var Delta = Quill.import('delta');
+		var Embed = Quill.import('blots/embed');
+		var Break = Quill.import('blots/break');
+		var Block = Quill.import('blots/block');
+
+		// function untuk line break for plugin Quill
+		function lineBreakMatcher() {
+			let newDelta = new Delta();
+			newDelta.insert({'break': ''});
+			return newDelta;
+		}
+
+		// class untuk line break for plugin Quill
+		class SmartBreak extends Break {
+			length () {
+				return 1;
+			}
+			value () {
+				return '\n';
+			}
+			insertInto(parent, ref) {
+				Embed.prototype.insertInto.call(this, parent, ref);
+			}
+		}
+
+		SmartBreak.blotName = 'break';
+		SmartBreak.tagName = 'BR';
+
+		Quill.register(SmartBreak);
+
+		var options = {
+			placeholder: 'Tulis disini',
+			theme: 'snow',
+			modules: {
+				// toolbar: toolbarOptions
+				// toolbar: '#toolbarPane',
+				clipboard: {
+					matchers: [
+						['BR', lineBreakMatcher] 
+					]
+				},
+				keyboard: {
+					bindings: {
+						linebreak: {
+							key: 13,
+							shiftKey: true,
+							handler: function (range) {
+								let currentLeaf = this.quill.getLeaf(range.index)[0];
+								let nextLeaf = this.quill.getLeaf(range.index + 1)[0];
+
+								this.quill.insertEmbed(range.index, 'break', true, 'user');
+								// Insert a second break if:
+								// At the end of the editor, OR next leaf has a different parent (<p>)
+								if (nextLeaf === null || (currentLeaf.parent !== nextLeaf.parent)) {
+									this.quill.insertEmbed(range.index, 'break', true, 'user');
+								}
+								// Now that we've inserted a line break, move the cursor forward
+								this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+							}
+						}
+					}
+				}
+			}
+		};
+
+		var changeText = new Delta();
+		var editor = new window.Quill(el, options);
+		var toolbar = editor.getModule('toolbar');
+
+		var length = editor.getLength();
+		var text = editor.getText(length - 2, 2);
+
+		// Remove extraneous new lines
+		if (text === '\n\n') {
+			editor.deleteText(editor.getLength() - 2, 2);
+		}
+
+		class dataMention extends Embed {
+			static create (value) {
+				let node = super.create(value);
+
+				node.innerHTML = value.text;
+				node.classList.add('text-primary');
+				node.setAttribute('data-mention', value.value);
+				node.setAttribute('data-value', value.text);
+		        node.setAttribute('contenteditable', false);
+				return node;
+			}
+		}
+
+		dataMention.blotName = 'medium-editor-mention-at';
+		dataMention.className = 'medium-editor-mention-at';
+		dataMention.tagName = 'span';
+
+		Quill.register({
+			'formats/medium-editor-mention-at': dataMention
+		});
+
+		// module quill autosave
+		// and return value changeText
+		changeText = window.editorUI.autoSave(editor, changeText, Delta);
+
+	},
+	helperElement: function (elementEditor) {
+		let buttonNewDocument = document.querySelector('.ql-new');
+		let buttonSaveDocument = document.querySelector('.ql-save');
+
+		// function on click button save
+		// from editor
+		buttonSaveDocument.addEventListener('click', function(e) {
+			e.preventDefault();
+			window.editorUI.postSave(elementEditor);
+		});
+
+		// event save on 
+		// modal isi mention
+		$('.modal .btn-mentionable').on('click', function(e) {
+			e.preventDefault();
+
+			let ajaxAkta = window.ajax;
+			let formData = new FormData();
+			let form = $(this).closest('form');
+			let actionUrl = form.attr('action');
+			let temp = {};
+
+
+			form.find('input').each( function() {
+				let fieldInput = $(this).attr('name');
+				let valueInput = $(this).val();
+
+				temp[fieldInput] = valueInput;
+			});
+
+			window.editorUI.loadingAnimation('show', 'loading');
+
+			ajaxAkta.defineOnSuccess( function(respon) {
+				window.editorUI.loadingAnimation('hide');
+				window.editorUI.loadingAnimation('show');
+			});
+
+			ajaxAkta.defineOnError( function(respon) {
+				window.editorUI.loadingAnimation('hide');
+				window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan isi dari dokumen!');
+			});
+
+			formData.append('mentionable', JSON.stringify(temp));
+			ajaxAkta.post(actionUrl, formData);
+		});
+
+		// event modal on 
+		// save dokumen
+		$('.modal .btn-save-dokumen').on('click', function (e) {
+			e.preventDefault();
+
+			let actionButton = $(this).attr('data-action-button');
+			let actionUrl = $(this).attr('data-url');
+
+			if ((typeof (actionUrl) != 'undefined') && (actionUrl != null)) {
+				window.editorUI.postSave(elementEditor, 'modal', actionButton, actionUrl);
+			} else {
+				window.editorUI.postSave(elementEditor, 'modal', actionButton);
+			}
+		});
+
+		// get data arsip 
+		// from panel sidebar
+		$(document).on('click', '.arsip-mention', function(e) {
+			e.preventDefault();
+			window.editorUI.parsingArsipMention(elementEditor, $(this));
+		});
+
+		$(document).on('click', '.arsip-default-mention', function(e) {
+			e.preventDefault();
+			window.editorUI.parsingArsipMention(elementEditor, $(this));
+		});
+	},
 	init: function (parameter) {
-		window.editorUI.quill(parameter);
+		if (parameter == '#editor') {
+			window.editorUI.quill(parameter);
+		} else {
+			window.editorUI.quillMultiple(parameter);
+		}
+
 		window.editorUI.openPanelArsip();
 		window.editorUI.closePanelArsip();
 		window.editorUI.panelArsip();
