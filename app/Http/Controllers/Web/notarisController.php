@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
-use App\Domain\Admin\Models\Kantor as Query;
+use App\Domain\Administrative\Models\Kantor as Query;
 
 use App\Http\Controllers\Controller;
 

@@ -114,7 +114,7 @@
 								</td>
 								<td class="pb-1">
 									@forelse($page_datas->config[$value['jenis']] as $keyc => $valuec)
-										<p class="mb-1 text-capitalize">{{  str_replace('_', ' ', $valuec ) }} : {{ $value['isi'][$valuec] ? $value['isi'][$valuec] : '_'}}</p>
+										<p class="mb-1 text-capitalize">{{  str_replace('_', ' ', $valuec ) }} : {{ isset($value['isi'][$valuec]) ? $value['isi'][$valuec] : '_'}}</p>
 									@empty
 										<p class="mb-1">Tidak Ada</p>
 									@endforelse
