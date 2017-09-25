@@ -53,24 +53,6 @@
 			</div>
 		</div>
 
-		<div class="row hidden-sm" style="height: 39px;">
-			<div class="col-md-12 pl-0 pr-0">
-				<!-- <h5>Keranjang Sampah</h5> -->
-				<div class="filter">
-					<ul class="mb-0">
-						<a href="{{ route('akta.akta.trash') }}">
-							<li>
-								Keranjang Sampah
-								<span class="indicator float-right">
-									<i class="fa fa-trash"></i>
-								</span>
-							</li>
-						</a>	
-					</ul>
-				</div>
-			</div>
-		</div>	
-
 	</div>
 <!-- 	<div class="col-12 sidebar-togler">
 		<h4> Filter & Pencarian<span class="text-right">v</span></h4>

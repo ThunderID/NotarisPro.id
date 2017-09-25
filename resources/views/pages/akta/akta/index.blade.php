@@ -74,7 +74,6 @@
 			</div>
 		</div>
 
-		{{--
 		<div class="row hidden-sm" style="height: 39px;">
 			<div class="col-md-12 pl-0 pr-0">
 				<!-- <h5>Keranjang Sampah</h5> -->
@@ -82,7 +81,7 @@
 					<ul class="mb-0">
 						<a href="{{ route('akta.akta.trash') }}">
 							<li>
-								Keranjang Sampah
+								Akta Terhapus
 								<span class="indicator float-right">
 									<i class="fa fa-trash"></i>
 								</span>
@@ -92,7 +91,6 @@
 				</div>
 			</div>
 		</div>	
-		--}}
 
 	</div>
 <!-- 	<div class="col-12 sidebar-togler">
