@@ -62,7 +62,6 @@ class UpdateAkta
 			{
 				$mentionable[str_replace('.','[dot]', $key)]	= $value;
 			}
-
 		}
 
 		$this->akta->mentionable 	= $mentionable;
@@ -104,7 +103,6 @@ class UpdateAkta
 		{
 			//simpan paragraf dalam proses
 			$mentionable 				= [];
-
 			foreach ($this->variable['mentionable'] as $key => $value) 
 			{
 				if(array_key_exists($key, $this->akta->mentionable))
@@ -188,20 +186,35 @@ class UpdateAkta
 			{
 				$this->akta->paragraf 		= $this->variable['paragraf'];
 				$this->akta->dokumen 		= $this->variable['dokumen'];
-				$this->akta->mentionable 	= $this->variable['mentionable'];
-	
+
+				if(is_null($this->akta->mentionable))
+				{
+					$this->akta->mentionable 	= $this->variable['mentionable'];
+				}
+				else
+				{
+					foreach ($this->akta->mentionable as $key => $value) {
+						if(!str_is('notaris.*', $key) && !str_is('akta.*', $key))
+						{
+							$exploded 	= explode('.', str_replace('@', '', $key));
+							$this->variable['dokumen'][$exploded[0].'[dot]'.$exploded[1]][$exploded[2].'[dot]'.$exploded[3]][$exploded[4]] = $value;
+						}
+						//
+					}
+				}
+
 				//4. simpan new detected doc type
 				$this->simpanTipeDokumen($this->variable['tipe_dokumen'], $this->active_office);
 
 				//5. simpan new detected klien/objek/saksi
 				$potential_owner 			= $this->updateDataDokumen($this->variable['dokumen']);
 				// $this->updateDataDokumen($this->variable['dokumen']);
+				$sync						= $this->syncRelatedDoc($this->akta, $potential_owner);
 			}
 	
 			$this->akta->save();
 
 			//temporary disable
-			// $sync 							= $this->syncRelatedDoc($this->akta, $potential_owner);
 
 			return $this->akta;
 		}

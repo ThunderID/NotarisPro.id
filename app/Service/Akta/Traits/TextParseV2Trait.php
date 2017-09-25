@@ -160,7 +160,7 @@ trait TextParseV2Trait
 				$arsip->isi 				= $value2;
 				$arsip->kantor 				= $this->active_office['kantor'];
 				$arsip->save();
-		
+
 				if(str_is('pribadi', $kepemilikan))
 				{
 					$saved_data['root'][$key]		= $arsip;
