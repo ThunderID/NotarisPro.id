@@ -1,53 +1,9 @@
-// Theme
-@import "variable";
-@import "navbar";
-@import "general";
-@import "login";
-@import "search";
-@import "sidebar";
-@import "input";
-@import "button";
-@import "panel";
-@import "typography";
-@import "filter";
-@import "pagination";
-@import "dropdown";
-@import "sort";
-@import "table";
-@import "alertbox";
-@import "list";
-@import "badge";
-@import "mobile";
-@import "editor";
-@import "colors";
-@import "link";
-@import "progress";
-@import "tabs";
 
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
-//Plugins
-@import "plugins/clickableTableRow";
-// @import "plugins/marginDrawer";
-// @import "plugins/editorAutoPage";
+// Variables
+@import "variables";
 
-// plugin Medium-Editor
-@import "plugins/medium-editor/themes/bootstrap.scss";
-@import "plugins/medium-editor/medium-editor";
-// plugin TCMention using extension for plugin Medium-Editor
-@import "plugins/tcmention/mention-panel";
-// plugin loading animation like youtube
-@import "plugins/app-loading.css";
-
-// plugins select2
-@import "plugins/select2/core.scss";
-
-// plugins timeline
-@import "plugins/timeline.scss";
-
-// Themes
-@import "themes/githubVersioning";
-
-// editor quill (text editor)
-@import "plugins/quill/quill.snow.css";
-// mention At.js
-@import "../../../node_modules/at.js/dist/css/jquery.atwho.css";
+// Bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";

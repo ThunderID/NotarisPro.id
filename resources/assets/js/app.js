@@ -1,73 +1,22 @@
-// PLUGINS
-// medium-editor
-window.Editor = require ('./plugins/medium-editor/medium-editor.js');
-// tcmention
-window.Mention = require("medium-editor-tc-mention").TCMention;
 
-// plugin search list
-window.list = require('./plugins/list-js/list.js');
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
 
-// app animation loading like youtube
-window.appLoading = require('./plugins/app-loading.js');
+require('./bootstrap');
 
-// plugin select2
-require('./plugins/select2.js');
+window.Vue = require('vue');
 
-// plugin inputmask RobinHerbots/inputmask documention: https://github.com/RobinHerbots/Inputmask
-var Inputmask = require ('./plugins/jquery.inputmask.bundle.js');
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the page. Then, you may begin adding components to this application
+ * or customize the JavaScript scaffolding to fit your unique needs.
+ */
 
+Vue.component('example', require('./components/Example.vue'));
 
-// app UI
-require ('./appUI');
-;window.listSearchUI.init();
-
-
-//requirements
-
-// clickable table row
-require('./plugins/clickableTableRow');
-
-// margin editor drawer
-// require('./plugins/marginDrawer');
-
-// editor auto page break
-// require('./plugins/editorAutoPage');
-
-// plugin equal height
-require('./plugins/equalHeight.js');
-
-//toggle menu
-require('./plugins/toggleMenu.js');
-
-//searchList
-require('./plugins/searchList.js');
-
-//stripeGenerator
-require('./plugins/stripeGenerator.js');
-
-// shortcuts
-require('./plugins/hotkey/hotkey.js');
-
-// footer
-require('./plugins/footerGenerator.js');
-
-// quill (text editor)
-window.Quill = require('./plugins/quill/quill.js');
-
-// require('./plugins/atjs/jquery.caret.js');
-// window.atwho = require('./plugins/atjs/jquery.atwho.js');
-
-// laoder ui
-require('./plugins/loader');
-
-// ajax
-require('./plugins/ajax');
-
-// stringManipulator
-require('./plugins/stringManipulator');
-
-// print any element
-require('./plugins/printElement');
-
-// print any element
-require('./plugins/dataBox');
+const app = new Vue({
+    el: '#app'
+});
