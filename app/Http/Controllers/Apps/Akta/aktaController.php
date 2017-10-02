@@ -17,8 +17,7 @@ class aktaController extends Controller
 
 		view()->share('active_menu', 'akta');
 		
-		$this->view 		= view ($this->base_view . 'templates.basic');
-		$this->base_view 	= $this->base_view . 'pages.akta.';
+		$this->view 		= view ($this->base_view . 'templates.basic'); 
 	}
 
 	public function index ($id = null)
@@ -45,7 +44,9 @@ class aktaController extends Controller
 		// $this->page_datas->urutkan 			= $this->retrieveAktaUrutkan();
 
 		//3.initialize view
-		$this->view->pages					= view ($this->base_view . 'index');
+		$this->view->page 					= view ($this->base_view . 'templates.pages.page_sidebar_left');
+		$this->view->page->sidebar 			= view ($this->base_view . 'pages.akta.components.search_filter');
+		$this->view->page->main				= view ($this->base_view . 'pages.akta.index');
 
 		return $this->generateView();  
 	}
