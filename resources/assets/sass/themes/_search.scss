@@ -1,0 +1,15 @@
+.search {
+	margin-top: 0px;
+}
+.search-akta {
+	.btn {
+		background-color: $white !important;
+		color: $gray-300 !important;
+		border-color: $gray-500 !important;
+		&:hover {
+			background-color: $blue !important;
+			color: $white !important;
+			border-color: $blue !important;
+		}
+	}
+}

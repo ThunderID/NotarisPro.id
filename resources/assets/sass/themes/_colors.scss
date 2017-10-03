@@ -1,0 +1,16 @@
+// background
+.bg-unlocked {
+	background-color: $gray-600;
+}
+.bg-white {
+	background-color: $white;
+}
+
+// text
+.text-faded {
+	color: darken($white, 15%);
+}
+
+.text-default {
+	color: #292b2c !important;
+}

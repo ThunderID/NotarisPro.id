@@ -1,0 +1,13 @@
+.form-control {
+	border-radius: 0 !important;
+	font-size: 1rem;
+	font-weight: 300;
+	&::placeholder{
+		color: #bbb !important;
+	}
+}
+input, select, textarea {
+	&::placeholder {
+		color: #bbb !important;	
+	}
+}

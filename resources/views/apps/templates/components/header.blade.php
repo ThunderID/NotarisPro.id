@@ -1,4 +1,4 @@
-<nav class="navbar navbar-toggleable-sm navbar-inverse bg-primary text sticky-top">
+<nav class="navbar navbar-dark navbar-expand-md bg-primary text sticky-top">
 
 	<button id="togleCollapseNavbarAccount" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavbarAccount" aria-controls="navbarNavbarAccount" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fa fa-user-o"></i>
@@ -33,15 +33,15 @@
 			<li class="nav-item">
 				<a class="nav-link" href="">
 					<i class="fa fa-cog" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
-					<span class="hidden-md-up">Pengaturan</span>	
-					<span class="hidden-md-down">Pengaturan</span>
+					{{--  <span class="hidden-md-up">Pengaturan</span>	  --}}
+					<span class="">Pengaturan</span>
 				</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="">
 					<i class="fa fa-power-off" aria-hidden="true" style="font-size: 15px;"></i>&nbsp;
-					<span class="hidden-lg-down">Logout</span>
-					<span class="hidden-md-up">Logout</span>	
+					{{--  <span class="hidden-lg-down">Logout</span>  --}}
+					<span class="">Logout</span>	
 				</a>
 			</li>			
 		</ul>
