@@ -178,6 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class, 
+        Thunderlabid\Manajemen\ManajemenServiceProvider::class,
+        Thunderlabid\Akta\AktaServiceProvider::class,
 
     ],
 

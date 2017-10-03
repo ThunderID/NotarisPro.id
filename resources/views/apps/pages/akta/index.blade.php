@@ -1,3 +1,5 @@
 @push ('main')
-	tes
+	@foreach($akta as $k => $v)
+		{{$v['judul']}}
+	@endforeach
 @endpush
