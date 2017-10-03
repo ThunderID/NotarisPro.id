@@ -61,7 +61,9 @@ Route::namespace('Apps')->group( function (){
                 'update' 	=> 'akta.akta.update', //patch
                 'destroy' 	=> 'akta.akta.destroy' //post 
             ]]);
-    
+            
+            Route::any('akta/choose/template',                         ['uses' => 'aktaController@choose_akta',             'as' => 'akta.akta.choose.template']);
+            Route::any('akta/choose/data/dokumen',                     ['uses' => 'aktaController@choose_data_dokumen',     'as' => 'akta.akta.choose.data.dokumen']);
             // Route::any('/akta/akta/store', 							['uses' => 'aktaController@store', 			'as' => 'akta.akta.store.test']);
             // Route::any('/akta/akta/{id}',							['uses' => 'aktaController@update',			'as' => 'akta.akta.update.ajax']);
         

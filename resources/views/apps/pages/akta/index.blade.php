@@ -1,9 +1,9 @@
 @push ('page_content')
-	<div class="row mt-3">
-		<div class="col-6">
-			<h5>{{ $page_attributes->title }}</h5>
+	<div class="row mt-4">
+		<div class="col-12 col-sm-12 col-md-6 d-flex align-items-center">
+			<h4 class="mb-0">{{ $page_attributes->title }}</h4>
 		</div>
-		<div class="col-6 text-right">
+		<div class="col-12 col-sm-12 col-md-6 text-right d-flex align-items-center justify-content-end">
 			@include ('apps.pages.akta.components.sort', [
 				'alias' => 'urutkan',
 				'qs'	=> [ 'cari','status','jenis' ],
@@ -22,6 +22,7 @@
 	</div>
 	<div class="row mt-3">
 		<div class="col-12">
+			<a href="#" class="btn btn-primary btn-sm mb-3">Buat Akta Baru</a>
 			@include ('apps.pages.akta.components.table')
 		</div>
 	</div>

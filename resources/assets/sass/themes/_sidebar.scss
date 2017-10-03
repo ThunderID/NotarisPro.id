@@ -1,0 +1,69 @@
+.sidebar{
+	height: calc(100vh - 56px); 
+	background-color: $gray-300; 
+	padding-top: 1.2rem;
+	overflow-y: hidden;	
+	
+	@media screen and (min-width: 767px) {
+		margin-left: -15px; 
+		padding-left: 30px;
+	}
+	
+	h5 {
+		padding-top: 0.5rem; 
+		padding-bottom: 0.5rem;
+	}
+}
+
+.sidebar-right {
+	position: absolute;
+	right: 0px;
+	padding: 0px;
+
+	@media screen and (min-width: 767px) {
+		margin-left: 0px; 
+	}
+
+	.nav-tabs .nav-link{
+		border: none;
+		border-top-right-radius: 0px;
+		border-top-left-radius: 0px;
+	}
+
+	.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+	    border-color: transperant;
+    }
+
+    .nav-tabs .nav-link.active{
+	    color: $white;
+	    background-color: $blue;
+	    border-color: transperant;
+    }
+
+	.sidebar p{
+	    font-size: 0.8rem;
+	}
+
+	.sidebar h4{
+	    font-size: 1rem;
+	}	
+
+	.sidebar-right {
+	    padding: 0vw;
+	    overflow-x: hidden;
+	    width: 350px;
+	}
+	.sidebar ul {
+		border-bottom: $blue;
+	}
+
+	.sidebar ul li{
+	    width: 33vw;
+	    text-align: center;
+	    font-size: 0.8rem;
+	}
+
+	.fa-stack{
+		width: 20px;
+	}
+}

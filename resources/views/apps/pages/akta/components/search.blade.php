@@ -41,7 +41,8 @@
 	===================================================================
 	*/
 
-	if(!isset($qs)){
+	if (!isset($qs)) 
+	{
 		$qs = [];
 	}
 
@@ -51,17 +52,19 @@
 <h5>{{ isset($title) ? $title : 'Cari Data' }}</h5>
 
 
-{!! Form::open(['url' => $action_url, 'class' => 'form-inline', 'method' => 'get']) !!}
-	{!! Form::text('cari', null, ['class' => 'form-control search pr-5', 'placeholder' => isset($placehlder) ? $placehlder : 'Cari']) !!}
+{!! Form::open(['url' => $action_url, 'class' => 'form-inline search-akta', 'method' => 'get']) !!}
+	<div class="input-group">
+		{!! Form::text('cari', null, ['class' => 'form-control search pr-5', 'placeholder' => isset($placehlder) ? $placehlder : 'Cari']) !!}
 
-	@foreach ($data_qs as $key => $value )
-		@if(in_array($key, $qs))
-			{!! Form::hidden($key, $value) !!}
-		@endif
-	@endforeach
-	<span class="input-group-btn">
-		<button class="btn btn-secondary" type="submit">
-			<i class="fa fa-search" aria-hidden="true"></i>
-		</button>
-	</span>
+		@foreach ($data_qs as $key => $value )
+			@if(in_array($key, $qs))
+				{!! Form::hidden($key, $value) !!}
+			@endif
+		@endforeach
+		<span class="input-group-btn">
+			<button class="btn" type="submit">
+				<i class="fa fa-search" aria-hidden="true"></i>
+			</button>
+		</span>
+	</div>
 {!! Form::close() !!}

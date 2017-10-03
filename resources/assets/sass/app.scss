@@ -1,13 +1,16 @@
 
-// Fonts
-// @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
-// Variables
-// @import "variables";
-
-// Bootstrap
-// @import "~bootstrap-sass/assets/stylesheets/bootstrap";
-
-body{
-    font-family: 'Muli', sans-serif !important;
-}
+// theme
+@import "themes/variables";
+@import "themes/navbar";
+@import "themes/general";
+@import "themes/search";
+@import "themes/sidebar";
+@import "themes/input";
+@import "themes/button";
+@import "themes/typhography";
+@import "themes/filters";
+@import "themes/pagination";
+@import "themes/dropdown";
+@import "themes/sort";
+@import "themes/table";
+@import "themes/colors";

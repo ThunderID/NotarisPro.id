@@ -1,11 +1,11 @@
 <div class="modal fade" id="{{ $id }}">
-	<div class="modal-dialog " role="document">
+	<div class="modal-dialog {{ isset($size) ? $size : '' }}" role="document">
 		<div class="modal-content">
 			@isset ($form)
 				{!! Form::open(['method' => $method ? $method : 'post']) !!}
 			@endisset
 
-			@if ($title || $body || $footer)
+			@if (!is_null($title) || !is_null($body) || !is_null($footer))
 				@if ($title)
 					<div class="modal-header">
 						<h4 class="modal-title">{!! $title !!}</h4>
