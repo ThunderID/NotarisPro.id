@@ -132,4 +132,8 @@ class Arsip extends Model
 	{
 		return $this->errors;
 	}
+
+	static function generateDokumenID(){
+		return rand(1000000000000,9999999999999);
+	}
 }

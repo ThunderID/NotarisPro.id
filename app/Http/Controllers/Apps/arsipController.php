@@ -45,8 +45,24 @@ class arsipController extends Controller
 		return $this->generateView();  
 	}
 
-	public function store($id = null){
-		$arsip 		= Arsip::findornew($id);
+	//data input
+	//pemilik[nama] = 'chelsy'
+	//ktp[nama] = 'chelsy'
+	//ktp[nik] = '3573016108930001'
+	//ktp[jenis] = 'KTP'
+	public function store(){
+		$arsip 				= new Arsip;
+		$arsip->pemilik 	= request()->get('pemilik');
+		$arsip->dokumen 	= [request()->get('ktp')];
+		$arsip->save();
+	}
+
+	//data input
+	//dokumen[nama] = 'chelsy'
+	//dokumen[nik] = '3573016108930001'
+	//dokumen[jenis] = 'KTP'
+	public function update($id){
+		$arsip 		= Arsip::findorfail($id);
 		$dokumens 	= $arsip->dokumen;
 
 		//JIKA ADA DATA DOKUMEN
