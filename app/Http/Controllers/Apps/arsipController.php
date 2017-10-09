@@ -9,16 +9,14 @@ use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
 class arsipController extends Controller
 {
-	function __construct ()
-	{
+	function __construct (){
 		parent::__construct();
 		
 		$this->view 		= view ($this->base_view . 'templates.basic');
 		$this->base_view 	= $this->base_view . 'pages.arsip.';
 	}
 
-	public function index ()
-	{
+	public function index (){
 		$arsip 					= Arsip::select(['pemilik', 'lists'])->paginate();
 
 		//1.initialize view
@@ -27,8 +25,7 @@ class arsipController extends Controller
 		return $this->generateView();  
 	}
 
-	public function show ($id)
-	{
+	public function show ($id){
 		$arsip 		= Arsip::findorfail($id);
 		$data 		= [];
 		if(request()->has('jenis') && $arsip){
@@ -46,5 +43,34 @@ class arsipController extends Controller
 		$this->view->pages		= view ($this->base_view . 'show', compact('arsip', 'data'));
 
 		return $this->generateView();  
+	}
+
+	public function store($id = null){
+		$arsip 		= Arsip::findornew($id);
+		$dokumens 	= $arsip->dokumen;
+
+		//JIKA ADA DATA DOKUMEN
+		if(request()->has('dokumen')){
+			$dok  	= request()->get('dokumen');
+			
+			//JIKA TIDAK ADA DATA DOKUMEN ID
+			if(!isset($dok['id'])){
+				$dok['id']	= Arsip::generateDokumenID();
+			}
+
+			$key 			= array_search($dok['id'], array_column($dokumens, 'id'));
+
+			$dokumen 			= array_merge($dokumens[$key], $dok);
+			$dokumens[$key]		= $dokumen;
+			$arsip->dokumen 	= $dokumens;
+		}
+
+		if(request()->has('pemilik')){
+			$arsip->pemilik 	= request()->get('pemilik');
+		}
+
+		$arsip->save();
+
+		//RETURN DEWE
 	}
 }
