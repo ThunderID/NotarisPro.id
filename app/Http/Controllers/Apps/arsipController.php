@@ -29,10 +29,21 @@ class arsipController extends Controller
 
 	public function show ($id)
 	{
-		$arsip 					= Arsip::findorfail($id);
+		$arsip 		= Arsip::findorfail($id);
+		$data 		= [];
+		if(request()->has('jenis') && $arsip){
+			$dokumen	= collect($arsip['dokumen'])->where('jenis', request()->get('jenis'))->first();
+
+			foreach ($dokumen as $k => $v) {
+				if(!in_array($k, ['id', 'jenis'])){
+
+					$data['@'.$dokumen['id'].'.'.$dokumen['jenis'].'.'.$k.'@']	= $v;
+				}
+			}
+		}
 
 		//1.initialize view
-		$this->view->pages		= view ($this->base_view . 'show', compact('arsip'));
+		$this->view->pages		= view ($this->base_view . 'show', compact('arsip', 'data'));
 
 		return $this->generateView();  
 	}
