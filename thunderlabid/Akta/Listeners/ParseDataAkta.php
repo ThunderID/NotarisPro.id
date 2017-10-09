@@ -39,6 +39,7 @@ class ParseDataAkta
 			{
 				$new_data 	= [];
 				foreach ($span[1] as $key => $value) {
+					$value 	= str_replace('.', '[dot]', $value);
 					$new_data[$value] 	= $span[2][$key];
 				}
 

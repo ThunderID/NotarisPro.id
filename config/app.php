@@ -180,6 +180,7 @@ return [
         Collective\Html\HtmlServiceProvider::class, 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
         Thunderlabid\Akta\AktaServiceProvider::class,
+        Thunderlabid\Arsip\ArsipServiceProvider::class,
 
     ],
 

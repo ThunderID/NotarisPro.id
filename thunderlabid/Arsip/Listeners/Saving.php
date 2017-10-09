@@ -32,6 +32,13 @@ class Saving
 	public function handle($event)
 	{
 		$model = $event->data;
+
+		$lists 			= [];
+		foreach ($model->dokumen as $k => $v) {
+			$lists[] 	= $v['jenis'];
+		}
+		$model->lists 	= $lists;
+
 		if (!$model->is_savable) 
 		{
 			throw new AppException($model->errors, AppException::DATA_VALIDATION);

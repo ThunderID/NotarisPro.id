@@ -19,7 +19,7 @@ class arsipController extends Controller
 
 	public function index ()
 	{
-		$arsip 					= Arsip::select('pemilik')->paginate();
+		$arsip 					= Arsip::select(['pemilik', 'lists'])->paginate();
 
 		//1.initialize view
 		$this->view->pages		= view ($this->base_view . 'index', compact('arsip'));

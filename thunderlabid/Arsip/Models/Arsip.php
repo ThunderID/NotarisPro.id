@@ -34,7 +34,7 @@ use Thunderlabid\Arsip\Events\Arsip\ArsipRestoring;
 class Arsip extends Model
 {
 	protected $table 	= 'ar_arsip';
-	protected $fillable = ['pemilik', 'kantor', 'dokumen'];
+	protected $fillable = ['pemilik', 'kantor', 'dokumen', 'lists'];
 	protected $hidden 	= [];
 	protected $appends	= ['is_savable', 'is_deletable'];
 
