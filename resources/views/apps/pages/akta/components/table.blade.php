@@ -1,4 +1,4 @@
-<table class="table table-responsive">
+<table class="table table-hover table-responsive table-action">
 	<thead>
 		<tr>
 			<th>Dokumen</th>
@@ -6,13 +6,17 @@
 			<th>Pihak</th>
 			<th>Status</th>
 			<th>Tgl Pembuatan</th>
+			@if (isset($mode))
+				<th></th>
+			@endif
 		</tr>
 	</thead>
-	@isset ($page_datas->akta)
+	@isset ($akta)
 		<tbody>
-			@foreach ($page_datas->akta as $k => $v)
-				<tr id="{{ $v['id'] }}">
-					<td><i class="fa fa-file"></i> {{ $v['judul'] }}</td>
+			@foreach ($akta as $k => $v)
+				<tr id="{{ $v['id'] }}" @if (!isset($mode)) style="cursor: pointer" data-url="{{ route('akta.akta.ajax.show', ['id' => $v['id']]) }}" @endif>
+					<td><i class="fa fa-file-o"></i> {{ $v['judul'] }}</td>
+					<td>{{ str_replace('_', ' ', $v['jenis']) }}</td>
 					<td>
 						@isset ($v['pemilik']['klien'])
 							<ol>
@@ -22,15 +26,17 @@
 							</ol>
 						@endisset
 					</td>
-					<td>{{ str_replace('_', ' ', $v['jenis']) }}</td>
 					<td>{{ str_replace('_', ' ', $v['status']) }}</td>
 					<td>{{ $v['tangal_pembuatan'] }}</td>
+					@if (isset($mode))
+						<th><a href="{{ route('akta.akta.data.choose', ['id' => $v['id']]) }}" class="btn btn-sm btn-primary">Pilih</a></th>
+					@endif
 				</tr>
 			@endforeach
 		</tbody>
 	@endisset
 
-	@empty ($page_datas->akta)
+	@empty ($akta)
 		<tbody>
 			<tr>
 				<td class="text-center" colspan="5">tidak ada dokumen</td>

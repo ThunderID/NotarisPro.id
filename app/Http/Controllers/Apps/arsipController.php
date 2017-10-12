@@ -17,32 +17,38 @@ class arsipController extends Controller
 	}
 
 	public function index (){
-		$arsip 					= Arsip::select(['pemilik', 'lists'])->paginate();
+		$arsip 					= Arsip::select(['pemilik', 'lists'])->get();
 
 		//1.initialize view
-		$this->view->pages		= view ($this->base_view . 'index', compact('arsip'));
+		// $this->view->pages		= view ($this->base_view . 'index', compact('arsip'));
 
-		return $this->generateView();  
+		// return $this->generateView();  
+
+		return response()->json($arsip);
 	}
 
 	public function show ($id){
 		$arsip 		= Arsip::findorfail($id);
 		$data 		= [];
-		if(request()->has('jenis') && $arsip){
+
+		if (request()->has('jenis') && $arsip) 
+		{
 			$dokumen	= collect($arsip['dokumen'])->where('jenis', request()->get('jenis'))->first();
 
-			foreach ($dokumen as $k => $v) {
-				if(!in_array($k, ['id', 'jenis'])){
-
+			foreach ($dokumen as $k => $v) 
+			{
+				if (!in_array($k, ['id', 'jenis']))
+				{
 					$data['@'.$dokumen['id'].'.'.$dokumen['jenis'].'.'.$k.'@']	= $v;
 				}
 			}
 		}
 
 		//1.initialize view
-		$this->view->pages		= view ($this->base_view . 'show', compact('arsip', 'data'));
+		// $this->view->pages		= view ($this->base_view . 'show', compact('arsip', 'data'));
 
-		return $this->generateView();  
+		// return $this->generateView();  
+		return response()->json($data);
 	}
 
 	//data input
@@ -64,28 +70,33 @@ class arsipController extends Controller
 	public function update($id){
 		$arsip 		= Arsip::findorfail($id);
 		$dokumens 	= $arsip->dokumen;
+		try {
+			//JIKA ADA DATA DOKUMEN
+			if (request()->has('dokumen')){
+				$dok  	= request()->get('dokumen');
+				
+				//JIKA TIDAK ADA DATA DOKUMEN ID
+				if (!isset($dok['id'])){
+					$dok['id']	= Arsip::generateDokumenID();
+				}
 
-		//JIKA ADA DATA DOKUMEN
-		if(request()->has('dokumen')){
-			$dok  	= request()->get('dokumen');
-			
-			//JIKA TIDAK ADA DATA DOKUMEN ID
-			if(!isset($dok['id'])){
-				$dok['id']	= Arsip::generateDokumenID();
+				$key 				= array_search($dok['id'], array_column($dokumens, 'id'));
+
+				$dokumen 			= array_merge($dokumens[$key], $dok);
+				$dokumens[$key]		= $dokumen;
+				$arsip->dokumen 	= $dokumens;
 			}
 
-			$key 			= array_search($dok['id'], array_column($dokumens, 'id'));
+			if (request()->has('pemilik')){
+				$arsip->pemilik 	= request()->get('pemilik');
+			}
 
-			$dokumen 			= array_merge($dokumens[$key], $dok);
-			$dokumens[$key]		= $dokumen;
-			$arsip->dokumen 	= $dokumens;
+			$arsip->save();
+
+			return response()->json(['msg' => 'data dokumen berhasil disimpan']);
+		} catch (Exception $e) {
+			return response()->json(['msg' => $e->getMessage()]);
 		}
-
-		if(request()->has('pemilik')){
-			$arsip->pemilik 	= request()->get('pemilik');
-		}
-
-		$arsip->save();
 
 		//RETURN DEWE
 	}

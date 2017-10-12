@@ -14,3 +14,12 @@
 @import "themes/sort";
 @import "themes/table";
 @import "themes/colors";
+
+// plugins
+// Quilljs
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+
+// Select2
+@import "~select2/src/scss/core";
+@import "plugins/select2-bootstrap-theme/_select-bootstrap-theme.css";

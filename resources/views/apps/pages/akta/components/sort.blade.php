@@ -21,7 +21,7 @@
 		@isset ($lists)
 			@foreach ($lists as $k => $v)
 				@php 
-					$route = route(Route::currentRouteName(), $data_qs);
+					$route = route('akta.akta.index', $data_qs);
 					$count = (count(request()->all()) && ($v != null) > 0) ? '&' : '';
 					$list = ($v != null) ? $alias . '=' . $v : '';
 				@endphp

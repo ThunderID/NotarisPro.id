@@ -6,7 +6,7 @@
 					@include('apps.pages.akta.components.search',[
 						'title' => 'Cari Akta',
 						'qs'	=> [ 'status','jenis','urutkan' ],
-						'action_url' => route(Route::currentRouteName(), Request::only('status','sort'))
+						'action_url' => route('akta.akta.index', Request::only('status','sort'))
 					])
 				</div>
 			</div>

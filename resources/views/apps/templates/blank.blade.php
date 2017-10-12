@@ -19,19 +19,11 @@
 		<!-- Themes -->
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 		<!-- Custom Css -->
-		<style>
-			@stack('styles')
-		</style>
-
-
+		@stack('styles')
 	</head>
 	<body>
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-12">
-					@stack ('main')
-				</div>
-			</div>
+		<div class="container-fluid" style="height: 100vh;">
+			@stack ('main')
 		</div>
 
 		<!-- Jquery -->
@@ -46,8 +38,6 @@
 		<script src="{{ mix('js/app.js') }}"></script>
 
 		<!-- Custom jQuery -->
-		<script type="text/javascript">
-			@stack('scripts')
-		</script>        
+		@stack('scripts')
 	</body>
 </html>

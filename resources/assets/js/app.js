@@ -15,8 +15,20 @@
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// Vue.component('example', require('./components/Example.vue'));
+// plugins
+// plugin ajax from @budipurnomo
+require ('./plugins/ajax');
+// plugin data to send ajax
+require ('./plugins/dataBox');
+// plugin for editor Quilljs
+require ('./plugins/editorQuill');
+// plugin select2
+require ('./plugins/select2');
 
-// const app = new Vue({
-//     el: '#app'
-// });
+
+
+// ===================================
+
+
+// module init
+require ('./modules/module');

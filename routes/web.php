@@ -25,6 +25,10 @@ Route::namespace('Apps')->group( function (){
 		'destroy' 	=> 'akta.akta.destroy' //post 
 	]]);
 
+	Route::any('akta/ajax/{id}',				['uses' => 'aktaController@ajax_show',				'as' => 'akta.akta.ajax.show']);
+	Route::any('akta/create/choose/',			['uses' => 'aktaController@choose_akta', 			'as' => 'akta.akta.choose']);
+	Route::any('akta/data-dokumen/choose',		['uses' => 'aktaController@choose_data_dokumen',	'as' => 'akta.akta.data.choose']);
+
 	// 2. ARSIP
 	Route::resource('/arsip', 'arsipController', ['names' => [
 		'index' 	=> 'arsip.arsip.index', //get
@@ -35,4 +39,5 @@ Route::namespace('Apps')->group( function (){
 		'update' 	=> 'arsip.arsip.update', //patch
 		'destroy' 	=> 'arsip.arsip.destroy' //post 
 	]]);
+	Route::any('arsip/{id}/dokumen/update',				['uses' => 'arsipController@update',			'as' => 'arsip.arsip.ajax.update']);
 });
