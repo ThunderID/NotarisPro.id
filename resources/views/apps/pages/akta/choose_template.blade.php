@@ -16,7 +16,7 @@
 					<div class="row justify-content-center">
 						<div class="col-6">
 							<p>Berupa draft akta kosong</p>
-							<a href="#" class="btn btn-primary btn-block">Akta Baru</a>
+							<a href="{{ route('akta.akta.data.choose') }}" class="btn btn-primary btn-block">Akta Baru</a>
 						</div>
 					</div>
 				</div>

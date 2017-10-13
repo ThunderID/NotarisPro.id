@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
-use Thunderlabid\Akta\Models\Akta;
-
 use App\Http\Controllers\Apps\ArsipController as Arsip;
+use App\Http\Controllers\Apps\helperController as Helper;
+
+use Thunderlabid\Akta\Models\Akta;
 
 use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
@@ -27,14 +28,16 @@ class aktaController extends Controller
 		$this->page_attributes->title 	= 'Daftar akta dokumen';
 
 		$akta 							= Akta::select(['versi', 'kantor', 'judul', 'jenis', 'status'])->paginate();
+		// set component filter
+		$filter 						= Helper::aktaFilter();
 
 		view()->share('akta', $akta);
+		view()->share('filters', $filter);
 
 		//1.initialize view
 		$this->view 					= view ($this->base_view . 'templates.basic');
-		$this->view->pages 				= view($this->base_view . 'templates.pages.page');
-		$this->view->pages->sidebar 	= view ($this->base_view . 'pages.akta.components.search_filter');
-		$this->view->pages->main		= view ($this->base_view . 'pages.akta.index');
+		$this->view->sidebar 			= view ($this->base_view . 'pages.akta.components.search_filter');
+		$this->view->main				= view ($this->base_view . 'pages.akta.index');
 
 		return $this->generateView();  
 	}
@@ -91,13 +94,26 @@ class aktaController extends Controller
 	public function store ()
 	{
 		$akta 			= new Akta;
-		$akta->pemilik 	= request()->get('pemilik');
-		$akta->judul 	= request()->get('judul');
-		$akta->jenis 	= request()->get('jenis');
-		$akta->status 	= 'draft';
-		$akta->save();
 
-		return redirect()->route('akta.akta.index');
+		try {
+			$akta->pemilik 	= request()->get('pemilik');
+			$akta->judul 	= request()->get('judul');
+			$akta->jenis 	= request()->get('jenis');
+			$akta->paragraf = request()->get('paragraf');
+			$akta->status 	= 'draft';
+
+			$akta->save();
+
+			$message['success'] = ['akta berhasil disimpan'];
+			$message['url'] 	= route ('akta.akta.index');
+
+			return response()->json($message);
+		} catch (Exception $e) {
+			$message['error']	= ['gagal menyimpan akta'];
+			$message['url']		= route ('akta.akta.create');
+
+			return response()->json($message);
+		}
 	}
 
 	public function choose_data_dokumen ()

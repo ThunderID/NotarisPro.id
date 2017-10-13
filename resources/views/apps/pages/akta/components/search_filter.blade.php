@@ -11,8 +11,8 @@
 				</div>
 			</div>
 		</div>
-		@isset ($page_datas->filters)
-			@foreach ($page_datas->filters as $key => $filter)
+		@isset ($filters)
+			@foreach ($filters as $key => $filter)
 				@if ($key == 'jenis')
 					@php $qs_helper = 'status'; @endphp
 				@else
@@ -33,28 +33,6 @@
 				</div>
 			@endforeach	
 		@endisset
-
-		<div class="col-12">
-			<div class="card border-0 mt-1" style="background-color: transparent">
-				<div class="card-body p-0">
-					@include ('apps.pages.akta.components.filter', [
-						'title'	=> 'Urutkan',
-						'alias' => 'urutkan',
-						'qs'	=> [ 'cari','status','jenis' ],
-						'lists' => [
-							'tanggal sunting terbaru' 	=> null,
-							'tanggal sunting terlama' 	=> 'tanggal_sunting-asc', 
-							'tanggal pembuatan terbaru' => 'tanggal_pembuatan-desc',
-							'tanggal pembuatan terlama' => 'tanggal_pembuatan-asc',
-							'judul a - z' 	=> 'judul-asc',
-							'judul z - a' 	=> 'judul-desc',
-							'status a - z'	=> 'status-asc',
-							'status z - a'	=> 'status-desc',
-						]
-					])
-				</div>
-			</div>
-		</div>
 	</div>
 
 	<div class="row">

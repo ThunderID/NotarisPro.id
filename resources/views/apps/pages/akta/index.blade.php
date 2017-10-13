@@ -1,4 +1,4 @@
-@push ('page_content')
+@push ('main')
 	<div id="akta_show" class="row" style="display: none;">
 		@include ('apps.pages.akta.show')
 	</div>
@@ -58,7 +58,7 @@
 			e.preventDefault();
 
 			linkUrl = $(this).attr('data-url');
-			var wEditor = window.open(linkUrl, 'newwindow', 'width=' +screen.width+ ',height=768');
+			var wEditor = window.open(linkUrl, 'new_window', 'width=' +screen.width+ ',height=768');
 			var pollTimer = window.setInterval(function() {
 				if (wEditor.closed !== false) { // !== is required for compatibility with Opera
 					window.clearInterval(pollTimer);

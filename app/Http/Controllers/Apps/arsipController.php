@@ -70,6 +70,7 @@ class arsipController extends Controller
 	public function update($id){
 		$arsip 		= Arsip::findorfail($id);
 		$dokumens 	= $arsip->dokumen;
+
 		try {
 			//JIKA ADA DATA DOKUMEN
 			if (request()->has('dokumen')){
@@ -80,7 +81,7 @@ class arsipController extends Controller
 					$dok['id']	= Arsip::generateDokumenID();
 				}
 
-				$key 				= array_search($dok['id'], array_column($dokumens, 'id'));
+				$key 			= array_search($dok['id'], array_column($dokumens, 'id'));
 
 				$dokumen 			= array_merge($dokumens[$key], $dok);
 				$dokumens[$key]		= $dokumen;

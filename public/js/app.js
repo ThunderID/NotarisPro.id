@@ -29868,7 +29868,12 @@ window.dataBox = new function () {
 /***/ }),
 
 /***/ "./resources/assets/js/plugins/editorQuill.js":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 
 var Quill = __webpack_require__("./node_modules/quill/dist/quill.js");
 
@@ -29879,8 +29884,25 @@ window.editorUI = {
 	selector: {
 		editor: container
 	},
-	init: function init() {
-		var elm = window.editorUI.selector.editor;
+	loadingAnimation: function loadingAnimation(flag, msg) {
+		var loading = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.loading-save');
+
+		if (typeof msg !== 'undefined') {
+			if (msg == 'loading') {
+				loading.html('Menyimpan..').removeClass('alert-danger alert-success').addClass('alert-info').prepend('<i class="fa fa-circle-o-notch fa-spin"></i> ');
+			} else {
+				loading.html(msg).removeClass('alert-danger alert-info').addClass('alert-danger').prepend('<i class="fa fa-exclamation-cirlce');
+			}
+		} else {
+			loading.html('Tersimpan').removeClass('alert-danger alert-info').addClass('alert-success');
+		}
+
+		loading.fadeIn();
+		setTimeout(function () {
+			loading.fadeOut();
+		}, 2500);
+	},
+	editorSingle: function editorSingle(selector) {
 		var options = {
 			debug: 'info',
 			modules: {
@@ -29889,27 +29911,31 @@ window.editorUI = {
 			theme: 'snow'
 		};
 
-		var editor = new Quill(elm, options);
+		var editor = new Quill(selector, options);
 
-		$('.form-editor-akta-save').on('click', function (e) {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()('.form-editor-akta-save').on('click', function (e) {
 			e.preventDefault();
 			window.editorUI.save(editor);
 		});
 	},
+	editorMultiple: function editorMultiple() {},
+	init: function init() {
+		var elm = window.editorUI.selector.editor;
+		this.editorSingle(elm);
+	},
 	save: function save(editor) {
-		var judulAkta = $('.input-judul-akta').val();
-		var jenisAkta = $('.input-jenis-akta').val();
+		var judulAkta = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.input-judul-akta').val();
+		var jenisAkta = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.input-jenis-akta').val();
 		var paragrafAkta = editor.root.innerHTML;
 		var urlStore = editor.container.dataset.url;
 		var ajaxAkta = window.ajax;
 		var formData = new FormData();
 
-		// window.editorUI.loadingAnimation('show', 'loading');
+		window.editorUI.loadingAnimation('show', 'loading');
 
 		ajaxAkta.defineOnSuccess(function (respon) {
-			console.log(respon);
-			// window.editorUI.loadingAnimation('hide');
-			// window.editorUI.loadingAnimation('show');
+			window.editorUI.loadingAnimation('hide');
+			window.editorUI.loadingAnimation('show');
 
 			// if ((typeof (el) !== 'undefined') && (el !== null)) {
 			// setTimeout(function(){
@@ -29930,12 +29956,13 @@ window.editorUI = {
 			// }, 500);
 
 			// }
+			console.log(respon);
 		});
 
 		ajaxAkta.defineOnError(function (respon) {
+			window.editorUI.loadingAnimation('hide');
+			window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan akta!');
 			console.log(respon);
-			// window.editorUI.loadingAnimation('hide');
-			// window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan akta!');
 		});
 
 		formData.append('judul', judulAkta);
@@ -29943,7 +29970,8 @@ window.editorUI = {
 		formData.append('paragraf', paragrafAkta);
 
 		ajaxAkta.post(urlStore, formData);
-	}
+	},
+	helperAction: function helperAction(editor) {}
 
 	// let elementEditor = document.querySelectorAll(container);
 
