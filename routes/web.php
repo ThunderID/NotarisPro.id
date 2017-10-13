@@ -28,6 +28,7 @@ Route::namespace('Apps')->group( function (){
 	Route::any('akta/ajax/{id}',				['uses' => 'aktaController@ajax_show',				'as' => 'akta.akta.ajax.show']);
 	Route::any('akta/create/choose/',			['uses' => 'aktaController@choose_akta', 			'as' => 'akta.akta.choose']);
 	Route::any('akta/data-dokumen/choose',		['uses' => 'aktaController@choose_data_dokumen',	'as' => 'akta.akta.data.choose']);
+	Route::any('akta/akta/store/new',			['uses' => 'aktaController@store',					'as' => 'akta.akta.ajax.store']);
 
 	// 2. ARSIP
 	Route::resource('/arsip', 'arsipController', ['names' => [

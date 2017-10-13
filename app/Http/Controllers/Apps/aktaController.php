@@ -64,7 +64,7 @@ class aktaController extends Controller
 			
 			$akta['pemilik'] = $tmp;
 		}
-		
+
 		view()->share('akta', $akta);
 
 		$this->view 					= view ($this->base_view . 'templates.blank');
@@ -96,6 +96,8 @@ class aktaController extends Controller
 		$akta->jenis 	= request()->get('jenis');
 		$akta->status 	= 'draft';
 		$akta->save();
+
+		return redirect()->route('akta.akta.index');
 	}
 
 	public function choose_data_dokumen ()

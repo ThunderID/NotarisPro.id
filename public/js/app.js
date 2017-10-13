@@ -29890,6 +29890,59 @@ window.editorUI = {
 		};
 
 		var editor = new Quill(elm, options);
+
+		$('.form-editor-akta-save').on('click', function (e) {
+			e.preventDefault();
+			window.editorUI.save(editor);
+		});
+	},
+	save: function save(editor) {
+		var judulAkta = $('.input-judul-akta').val();
+		var jenisAkta = $('.input-jenis-akta').val();
+		var paragrafAkta = editor.root.innerHTML;
+		var urlStore = editor.container.dataset.url;
+		var ajaxAkta = window.ajax;
+		var formData = new FormData();
+
+		// window.editorUI.loadingAnimation('show', 'loading');
+
+		ajaxAkta.defineOnSuccess(function (respon) {
+			console.log(respon);
+			// window.editorUI.loadingAnimation('hide');
+			// window.editorUI.loadingAnimation('show');
+
+			// if ((typeof (el) !== 'undefined') && (el !== null)) {
+			// setTimeout(function(){
+			// if action for button new
+			// if ((typeof (action) !== 'undefined') && (action !== null)) {
+			// if action new file
+			// if (action == 'new') {
+			// if data attribute url
+			// if ((typeof (url) != 'undefined') && (url != null)) {
+			// window redirect to url
+			// window.loader.show('body');
+			// window.location = url;
+			// }
+			// } else {
+			window.close();
+			// }
+			// }
+			// }, 500);
+
+			// }
+		});
+
+		ajaxAkta.defineOnError(function (respon) {
+			console.log(respon);
+			// window.editorUI.loadingAnimation('hide');
+			// window.editorUI.loadingAnimation('show', 'Tidak dapat menyimpan akta!');
+		});
+
+		formData.append('judul', judulAkta);
+		formData.append('jenis', jenisAkta);
+		formData.append('paragraf', paragrafAkta);
+
+		ajaxAkta.post(urlStore, formData);
 	}
 
 	// let elementEditor = document.querySelectorAll(container);
