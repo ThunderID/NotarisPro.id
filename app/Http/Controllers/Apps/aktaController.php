@@ -68,7 +68,13 @@ class aktaController extends Controller
 			$akta['pemilik'] = $tmp;
 		}
 
+		$akta['dokumen']['ktp']	=	['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat'];
+
+		$arsipList = new Arsip;
+		$arsipList = $arsipList->index();
+
 		view()->share('akta', $akta);
+		view()->share('arsip', $arsipList);
 
 		$this->view 					= view ($this->base_view . 'templates.blank');
 		$this->view->pages 				= view ($this->base_view . 'pages.akta.create');
@@ -91,7 +97,7 @@ class aktaController extends Controller
 	//pemilik[0][nama] 	= 'Chelsy'
 	//judul 			= 'Akta Jual Beli Tanah di Mengwi'
 	//jenis 			= 'AJB'
-	public function store ()
+	public function store ($id = null)
 	{
 		$akta 			= new Akta;
 
@@ -116,6 +122,11 @@ class aktaController extends Controller
 		}
 	}
 
+	public function update  ($id)
+	{
+
+	}
+
 	public function choose_data_dokumen ()
 	{
 		$this->page_attributes->title 	= 'Data Dokumen';
@@ -134,6 +145,10 @@ class aktaController extends Controller
 	public function choose_akta () 
 	{
 		$this->page_attributes->title 	= 'Buat Akta Baru';
+
+		$akta 							= Akta::select(['versi', 'kantor', 'judul', 'jenis', 'status'])->paginate();
+
+		view()->share('akta', $akta);
 
 		$this->view 					= view ($this->base_view . 'templates.blank');
 		$this->view->page 				= view ($this->base_view . 'pages.akta.choose_template');

@@ -35,4 +35,9 @@ class helperController extends Controller {
 		return $filter;
 	}
 
+	public static function arsipList ()
+	{
+
+	}
+
 }

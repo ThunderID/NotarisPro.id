@@ -2,7 +2,6 @@ import $ from 'jquery';
 let Quill = require ('../../../../node_modules/quill/dist/quill.js');
 
 var container = document.getElementsByClassName('editor');
-
 var container = '.editor'
 window.editorUI = {
 	selector: {
@@ -36,28 +35,80 @@ window.editorUI = {
 	},
 	editorSingle: function (selector) {
 		let options = {
-			debug: 'info',
+			debug: 'false',
 			modules: {
 				toolbar: '#toolbar-editor'
 			},
 			theme: 'snow'
 		}
 
-		var editor = new Quill(selector, options)
+		var Parchment = Quill.import('parchment');
+		var Embed = Quill.import('blots/embed');
+		var Delta = Quill.import('delta');
+
+		class dataArsip extends Embed {
+			static create (value) {
+				let node = super.create(value);
+				node.innerHTML = value.text;
+				node.classList.add('text-primary');
+				node.setAttribute('data-item', value.value);
+				node.setAttribute('data-value', value.text);
+		        node.setAttribute('contenteditable', false);
+				return node;
+			}
+		}
+		dataArsip.blotName = 'data-arsip';
+		dataArsip.tagName = 'span';
+
+		Quill.register(dataArsip);
+
+		var editor = new Quill(selector, options);
+		var change = new Delta();
+
+		editor.on('text-change', function(delta){
+			change = change.compose(delta);
+		})
 
 		$('.form-editor-akta-save').on('click', function(e){
 			e.preventDefault();
-			window.editorUI.save(editor);
+			console.log(change);
+
+			console.log(editor.getContents());
+			// window.editorUI.save(editor);
 		});
+
+		this.helperAction(editor);
 	},
 	editorMultiple: function () {
 
 
 	},
+	parsingData: function(editor, element) {
+		let textValue = element.html();
+		let textItem = element.attr('data-dokumen-item');
+		let newTextValue = '@' + textValue + textItem + '@';
+		let textObj = {text: textValue, value: textItem};
+
+		// set selection
+		var range = editor.getSelection(true);
+		var text = editor.getText(range.index, range.length);
+		var newIndex = parseInt(range.index + textValue.length);
+
+		if (range) {
+			if (range.length == 0) {
+				editor.insertEmbed(range.index, 'data-arsip', textObj, Quill.sources.USER);
+			} else {
+				editor.deleteText(range.index, range.length);
+				editor.insertEmbed(range.index, 'data-arsip', textObj, QUill.sources.USER);
+			}
+		} else {
+			editor.insertEmbed(editor.getLength() - 1, 'data-arsip', textObj, Quill.sources.USER);
+		}
+		editor.setSelection(newIndex, Quill.sources.SILENT)
+	},
 	init: function () {
 		let elm = window.editorUI.selector.editor;
 		this.editorSingle(elm);
-
 		
 	},
 	save: function (editor) {
@@ -109,7 +160,10 @@ window.editorUI = {
 		ajaxAkta.post(urlStore, formData);
 	},
 	helperAction: function (editor) {
-
+		$(document).on('click', '.data-dokumen', function(e) {
+			e.preventDefault();
+			window.editorUI.parsingData(editor, $(this));
+		});
 	}
 }
 

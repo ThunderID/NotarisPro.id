@@ -40,5 +40,7 @@ Route::namespace('Apps')->group( function (){
 		'update' 	=> 'arsip.arsip.update', //patch
 		'destroy' 	=> 'arsip.arsip.destroy' //post 
 	]]);
+	// Route for ajax
+	Route::any('arsip/dokumen/store',					['uses' => 'arsipController@store',				'as' => 'arsip.arsip.ajax.store']);
 	Route::any('arsip/{id}/dokumen/update',				['uses' => 'arsipController@update',			'as' => 'arsip.arsip.ajax.update']);
 });
