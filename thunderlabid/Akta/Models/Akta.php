@@ -36,7 +36,7 @@ class Akta extends Model
 	protected $table 	= 'a_akta';
 	protected $fillable = ['paragraf', 'versi', 'drafter', 'data', 'kantor', 'judul', 'jenis', 'status'];
 	protected $hidden 	= [];
-	protected $appends	= ['is_savable', 'is_deletable'];
+	// protected $appends	= ['is_savable', 'is_deletable'];
 
 	protected $rules	= [];
 	protected $errors;

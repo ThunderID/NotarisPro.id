@@ -15,7 +15,7 @@ class ArsipTableSeeder extends Seeder
 		$user 	= User::first();
 
 		Arsip::create([
-			'pemilik'   => ['nama' => 'John Doe'], 
+			'pemilik'   => ['nama' => 'John Doe', 'telepon' => '087745664121'], 
 			'kantor'   	=> ['id' => $user['access']['kantor']['id'], 'nama' => $user['access']['kantor']['nama']], 
 			'dokumen' 	=> [[
 								'id' => '00010001',
@@ -42,7 +42,7 @@ class ArsipTableSeeder extends Seeder
 		]);
 
 		Arsip::create([
-			'pemilik'   => ['nama' => 'Jane Doe'], 
+			'pemilik'   => ['nama' => 'Jane Doe', 'telepon' => '087745664122'], 
 			'kantor'   	=> ['id' => $user['access']['kantor']['id'], 'nama' => $user['access']['kantor']['nama']], 
 			'dokumen' 	=> [[
 								'id' => '00020001',
@@ -56,7 +56,7 @@ class ArsipTableSeeder extends Seeder
 		]);
 
 		Arsip::create([
-			'pemilik'   => ['nama' => 'Christian Doe'], 
+			'pemilik'   => ['nama' => 'Christian Doe', 'telepon' => '0341 445200'], 
 			'kantor'   	=> ['id' => $user['access']['kantor']['id'], 'nama' => $user['access']['kantor']['nama']], 
 			'dokumen' 	=> [[
 								'id'	=> '00030001',
@@ -67,7 +67,7 @@ class ArsipTableSeeder extends Seeder
 		]);
 
 		Arsip::create([
-			'pemilik'   => ['nama' => 'Christine Doe'], 
+			'pemilik'   => ['nama' => 'Christine Doe', 'telepon' => '0341 445200'], 
 			'kantor'   	=> ['id' => $user['access']['kantor']['id'], 'nama' => $user['access']['kantor']['nama']], 
 			'dokumen' 	=> [[
 								'id'	=> '00040001',

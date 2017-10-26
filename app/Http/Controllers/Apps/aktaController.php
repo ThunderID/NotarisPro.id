@@ -27,17 +27,25 @@ class aktaController extends Controller
 	{
 		$this->page_attributes->title 	= 'Daftar akta dokumen';
 
-		$akta 							= Akta::select(['versi', 'kantor', 'judul', 'jenis', 'status'])->paginate();
+		$akta		= new Akta;
+		if(request()->has('jenis') && request()->get('jenis')!='all'){
+			$akta 	= $akta->where('jenis', 'like', request()->get('jenis'));
+		}
+
+		if(request()->has('q')){
+			$akta 	= $akta->where('judul', 'like', '%'.request()->get('q').'%');
+		}
+		$akta 		= $akta->select(['versi', 'kantor', 'judul', 'jenis', 'status', 'pihak', 'updated_at'])->paginate();
 		// set component filter
-		$filter 						= Helper::aktaFilter();
+		$filter		= Helper::aktaFilter();
 
 		view()->share('akta', $akta);
 		view()->share('filters', $filter);
 
 		//1.initialize view
-		$this->view 					= view ($this->base_view . 'templates.basic');
-		$this->view->sidebar 			= view ($this->base_view . 'pages.akta.components.search_filter');
-		$this->view->main				= view ($this->base_view . 'pages.akta.index');
+		$this->view				= view ($this->base_view . 'templates.basic');
+		$this->view->sidebar	= view ($this->base_view . 'pages.akta.components.search_filter');
+		$this->view->main		= view ($this->base_view . 'pages.akta.index');
 
 		return $this->generateView();  
 	}

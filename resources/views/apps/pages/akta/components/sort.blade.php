@@ -12,9 +12,9 @@
 ?>
 
 
-<h5 class="d-inline mb-0 pr-2">{{ isset($title) ? $title : 'Urutan' }}</h5>
+<!-- <h5 class="d-inline mb-0 pr-2">{{ isset($title) ? $title : 'Urutan' }}</h5> -->
 <div class="dropdown d-inline">
-	<button id="dropdownMenuSort" class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	<button id="dropdownMenuSort" class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;font-size:10pt;">
 		{{ ucwords(array_search(request()->get($alias), $lists)) }}
 	</button>
 	<div class="dropdown-menu" aria-labelledby="dropdownMenuSort">
@@ -25,7 +25,7 @@
 					$count = (count(request()->all()) && ($v != null) > 0) ? '&' : '';
 					$list = ($v != null) ? $alias . '=' . $v : '';
 				@endphp
-				<a href="{{ $route . $count . $list }}" class="dropdown-item {{ (request()->get($alias) == $v) ? 'active' : ''  }}">{{ ucwords($k) }}</a>
+				<a href="{{ $route . $count . $list }}" class="dropdown-item {{ (request()->get($alias) == $v) ? 'active' : ''  }}" style="font-size:10pt;">{{ ucwords($k) }}</a>
 			@endforeach
 		@endisset
 	</div>

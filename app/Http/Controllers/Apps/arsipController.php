@@ -7,7 +7,7 @@ use Thunderlabid\Arsip\Models\Arsip;
 
 use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
-class arsipController extends Controller
+class ArsipController extends Controller
 {
 	function __construct (){
 		parent::__construct();

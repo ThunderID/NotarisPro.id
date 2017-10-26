@@ -17,6 +17,9 @@ class AktaServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Akta\Events\Akta\AktaCreating', 'Thunderlabid\Akta\Listeners\ParseTextParagraf');
 		Event::listen('Thunderlabid\Akta\Events\Akta\AktaUpdating', 'Thunderlabid\Akta\Listeners\ParseTextParagraf');
 
+		Event::listen('Thunderlabid\Akta\Events\Akta\AktaCreating', 'Thunderlabid\Akta\Listeners\ParseOknumAkta');
+		Event::listen('Thunderlabid\Akta\Events\Akta\AktaUpdating', 'Thunderlabid\Akta\Listeners\ParseOknumAkta');
+
 		////////////////
 		// Validation //
 		////////////////
