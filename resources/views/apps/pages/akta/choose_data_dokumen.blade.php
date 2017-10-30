@@ -2,16 +2,16 @@
 	<div class="row justify-content-center">
 		<div class="col-6">
 			<div class="row">
-				<div class="col-12">
-					<h3 class="text-center">{{ $page_attributes->title }}</h3>
-					<p class="text-center text-secondary">Silahkan isi dan lengkapi data-data dokumen akta</p>
+				<div class="col-12 mt-5">
+					<h3 class="text-center">AKTA BARU</h3>
+					<p class="text-center text-secondary">Silahkan lengkapi data berikut untuk melanjutkan</p>
 				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-12">
 					{!! Form::open(['url' => route('akta.akta.create'), 'method' => 'get']) !!}
-						{!! Form::bsText('judul akta', 'judul', null, ['class' => 'form-control', 'placeholder' => 'masukkan judul akta']) !!}
+						{!! Form::bsText('judul akta', 'judul', null, ['class' => 'form-control', 'placeholder' => 'Akta Jual Beli Tanah di Mengwi']) !!}
 						{!! Form::bsSelect('jenis akta', 'jenis', [
 							'' => 'Pilih', 
 							'akta_fidusia' => 'Akta fidusia', 
