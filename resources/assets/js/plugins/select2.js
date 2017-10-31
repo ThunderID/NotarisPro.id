@@ -13,6 +13,26 @@ window.Select2Input = {
 			tokenSeparator: [',', ' ']
 		});
 	},
+	select2tagDynamic: function () {
+		$('.select-tag-add').select2({
+			tags: true,
+			allowClear: true,
+			tokenSeparator: [',', ' '],
+			createTag: function (params) {
+				let term = $.trim(params.term);
+
+				if (term == '') {
+					return null;
+				}
+
+				return {
+					id: term,
+					text: term,
+					newTag: true
+				}
+			}
+		});	
+	},
 	select2TagCustom: function () {
 		$('.select-tag-custom').select2({
 			tags: true
@@ -45,5 +65,6 @@ window.Select2Input = {
 		this.select2();
 		this.select2tag();
 		this.select2TagCustom();
+		this.select2tagDynamic();
 	}
 }

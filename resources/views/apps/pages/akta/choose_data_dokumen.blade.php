@@ -17,18 +17,13 @@
 							'akta_fidusia' => 'Akta fidusia', 
 							'akta_jual_beli' => 'Akta jual beli', 
 							'akta_pendirian' => 'Akta pendirian'
-						], null, ['class' => 'custom-select form-control']) !!}
+						], null, ['class' => 'custom-select form-control select-tag-add']) !!}
 						{!! Form::bsSelect('pilih pihak', null, [], null, ['class' => 'form-control custom-select select-tag-custom select-pihak', 'multiple' => 'multiple', 'data-container' => '.pihak-selected']) !!}
 						<div class="pihak-selected"></div>
 						<div class="clearfix">&nbsp;</div>
 						<div class="clearfix">&nbsp;</div>
 
-						{!! Form::bsSelect('pilih saksi', 'search_name_saksi', [], null, ['class' => 'form-control custom-select select-tag-custom select-saksi', 'multiple' => 'multiple', 'data-container' => '.saksi-selected']) !!}
-						<div class="saksi-selected"></div>
-						<div class="clearfix">&nbsp;</div>
-						<div class="clearfix">&nbsp;</div>
-						{{-- <h4>Pilih Saksi</h4>
-						{!! Form::select('search_name_saksi', [], null, ['class' => 'form-control custom-select select-tag-custom select-pihak', 'style' => 'width:100%', 'multiple' => 'multiple', 'data-container' => '.saksi-selected']) !!}
+						{{-- {!! Form::bsSelect('pilih saksi', 'search_name_saksi', [], null, ['class' => 'form-control custom-select select-tag-custom select-saksi', 'multiple' => 'multiple', 'data-container' => '.saksi-selected']) !!}
 						<div class="saksi-selected"></div>
 						<div class="clearfix">&nbsp;</div>
 						<div class="clearfix">&nbsp;</div> --}}

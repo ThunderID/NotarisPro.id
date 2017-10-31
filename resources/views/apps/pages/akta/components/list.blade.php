@@ -1,15 +1,15 @@
-<div class="row ml-1 mr-1" style="border-bottom:1px solid #eee">
+<div class="row ml-1 mr-1 border border-top-0 border-left-0 border-right-0">
 	<div class="col-sm-4 mb-2">
-		<strong>DOKUMEN</strong>
+		<h5 class="mb-0"><strong>DOKUMEN</strong></h5>
+	</div>
+	<div class="col-sm-2 mb-2 text-center">
+		<h5 class="mb-0"><strong>JENIS</strong></h5>
+	</div>
+	<div class="col-sm-4 mb-2">
+		<h5 class="mb-0"><strong>PIHAK</strong></h5>
 	</div>
 	<div class="col-sm-2 mb-2">
-		<strong>JENIS</strong>
-	</div>
-	<div class="col-sm-4 mb-2">
-		<strong>PIHAK</strong>
-	</div>
-	<div class="col-sm-2 mb-2">
-		<strong>STATUS</strong>
+		<h5 class="mb-0"><strong>STATUS</strong></h5>
 	</div>
 </div>
 <!-- @foreach ($akta as $k => $v)
@@ -30,25 +30,25 @@
 @endforeach -->
 
 @foreach ($akta as $k => $v)
-<div class="row ml-1 mr-1 mt-2 mb-2 primary-text-color" id="{{ $v['id'] }}" @if (!isset($mode)) style="cursor: pointer; border-bottom:1px solid #eee" data-url="{{ route('akta.akta.ajax.show', ['id' => $v['id']]) }}" @else style="border-bottom:1px solid #eee;" @endif >
+<div class="row ml-1 mr-1 mt-2 mb-3 primary-text-color" id="{{ $v['id'] }}" @if (!isset($mode)) class="border-top-0 border-left-0 border-right-0" style=" cursor: pointer;" data-url="{{ route('akta.akta.ajax.show', ['id' => $v['id']]) }}" @else class="border-top-0 border-left-0 border-right-0" @endif >
 	<div class="col-sm-4 pt-2">
-		<div style="align-items:center;display: flex;">
+		<div class="d-flex align-items-center">
 			<i class="fa fa-file-o fa-3x"></i> &emsp;
-			<h6 class="primary-text-color">{{$v['judul']}} <br/><small><i class="secondary-text-color">Terakhir diubah {{$v['updated_at']->diffForHumans()}}</i></small></h4>
+			<h6 class="text-dark">{{ $v['judul'] }} <br/><small><i class="text-secondary">Terakhir diubah {{ $v['updated_at']->diffForHumans() }}</i></small></h4>
 		</div>
 	</div>
-	<div class="col-sm-2 pt-2">
-		{{$v['jenis']}}
+	<div class="col-sm-2 pt-2 text-center">
+		{{ str_replace('_', ' ', $v['jenis']) }}
 	</div>
 	<div class="col-sm-4">
 		<ol class="pl-2">
-			@foreach($v['pihak'] as $kp => $vp)
-			<li class="pt-2">{{$vp['nama']}} <br/><i class="fa fa-phone"></i> {{$vp['telepon']}}</li>
+			@foreach ($v['pihak'] as $kp => $vp)
+			<li class="pt-2">{{ $vp['nama'] }} <br/><i class="fa fa-phone"></i> {{ $vp['telepon'] }}</li>
 			@endforeach
 		</ol>
 	</div>
 	<div class="col-sm-2 pt-2">
-		{{$v['status']}} <i class="text-danger fa fa-exclamation"></i>
+		{{ $v['status'] }} <i class="text-danger fa fa-exclamation"></i>
 	</div>
 </div>
 @endforeach

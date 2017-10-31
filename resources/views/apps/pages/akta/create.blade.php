@@ -35,7 +35,7 @@
 						<small>Kode Error: <span id="loader-error-code">500</span></small>
 					</h6>
 				</div>
-				<div id="sidebar-content" class="hide-before-load" style="display: none; font-size: 13px !important;">
+				<div id="sidebar-content" class="hide-before-load" style="display: none; font-size: 13px !important; height: calc(100vh - 50px); overflow-y: scroll;">
 					<div id="add-arsip" class="mt-2 mb-1" style="display: none;">
 						<a id="btn-add" class="btn-add text-capitalize" href="#" data-parent="#add-arsip" style="font-size: 13px;">
 							<i class="fa fa-plus"></i> Tambah Arsip
@@ -51,12 +51,12 @@
 								</a>
 						</div>
 					</div>
-					<div id="list-arsip" class="list-unstyled mt-1" style="display: none;">
-						<a id="parent-link" href="#" class="text-default text-capitalize"></a>
+					<div id="list-arsip" class="d-none">
+						<a id="parent-link" href="#" class="text-capitalize"></a>
 					</div>
 					<div id="arsip-item--one" class="active">
-						<div class="list-unstyled pl-3 mt-2 mb-2">
-							<a href="#" class="text-capitalize" data-toggle="modal" data-target="#modal-data-dokumen"><i class="fa fa-plus-circle"></i> Tambah Dokumen</a>
+						<div class="list-unstyled pl-2 mt-2 mb-2">
+							<a href="#" class="text-capitalize btn btn-link btn-sm" data-toggle="modal" data-target="#modal-data-dokumen"><i class="fa fa-plus-circle"></i> Data</a>
 						</div>
 					</div>
 					<div id="arsip-item--two"></div>
@@ -147,7 +147,7 @@
 							@endforeach
 						@endisset
 					</div>
-					<a href="#" class="btn btn-default btn-sm btn-add-isi-dokumen" data-template-clone="#item-dokumen-clone" data-content-clone="#content-dokumen">Tambah isi dokumen</a>
+					<a href="#" class="btn btn-default btn-sm btn-add-isi-dokumen" data-template-clone="#item-dokumen-clone" data-content-clone="#content-dokumen">Tambah dokumen</a>
 					<div class="form-group row mb-1" id="item-dokumen-clone" style="display: none;">
 						<div class="col-4">
 							{!! Form::bsText(null, 'field', null, ['class' => 'form-control', 'placeholder' => 'nama dokumen']) !!}
@@ -206,6 +206,9 @@
 			padding-left: 8px;
 			padding-right: 8px;
 		}
+		.list-group-item:first-child, .list-group-item:last-child {
+			border-radius: 0;
+		}
 		.list-data-dokumen {
 			top: 0;
 			bottom: 0;
@@ -239,10 +242,13 @@
 			visibility: visible;
 			height: 100%;
 		}
-
+		button {
+			outline: none !important;
+		}
 		.modal#modal-data-dokumen .modal-dialog {
 			max-width: 560px !important;
 		}
+
 	</style>
 @endpush
 
@@ -255,66 +261,79 @@
 		arsipAjx = window.ajax;
 
 		arsipAjx.defineOnSuccess(function(respon){
-			let itemOne = $(document.getElementById('arsip-item--one'));
+			let section = $(document.getElementById('arsip-item--one'));
+			let itemOne = $('<div></div>');
 			let itemTwo = $(document.getElementById('arsip-item--two'));
 			let templateCollapse = $(document.getElementById('list-arsip'));
 			let templateForm = $(document.getElementById('add-arsip'));
 			var temp = [];
 
+			itemOne.addClass('list-group');
 			$.map(respon, function (value, index) {
 				tmpForm = templateForm.clone();
 				tmpCollapse = templateCollapse.clone();
 				tmpCollapse.attr('id', templateCollapse.attr('id') + '-parent')
-					.addClass('pl-3 mb-0')
-					.show();
+					.addClass('mb-0 list-group-item border-left-0 border-right-0 border-top-0 pt-2 pb-2')
+					.removeClass('d-none');
+
+
 				tmpCollapse.find('a#parent-link')
 					.attr('href', '#arsip--' + value._id)
 					.attr('data-toggle', 'collapse')
 					.attr('data-animation', 'false')
 					.attr('aria-expanded', 'false')
-					.append('<i class="fa fa-plus-square-o"></i> ' + value.pemilik.nama);
-				tmpCollapse.append('&nbsp;<a href="#" class="text-primary">ubah</a>');
+					.addClass('d-flex d-flex align-items-center border-0 text-secondary')
+					.append('<strong>' + value.pemilik.nama + '</strong>')
+					.append('<i class="fa fa-chevron-circle-right ml-auto"></i>')
+					.css('text-decoration', 'none');
+				// tmpCollapse.append('&nbsp;( <a href="#" class="text-primary"><i class="fa fa-plus-circle"></i> dokumen</a> )');
 
+				if (index == 0) {
+					tmpCollapse.removeClass('border-top-0');
+				}
 				// set list collapse arsip
 				// and link collapse
-				tmpCollapseChild = templateCollapse.clone();
-				tmpCollapseChild.attr('id', 'arsip--' + value._id)
-					.addClass('pl-3 mb-0 collapse')
-					.show();
-				$.map(value.lists, function(value2, index2){
+				collapseChild = $('<div></div>');
+				collapseChild.attr('id', 'arsip--' + value._id)
+					.addClass('collapse mb-2 pt-2')
+					.css('border-top', '4px solid #eee');
+
+				tmpCollapseChild = templateCollapse.children().clone();
+
+				$.map(value.lists, function(value2, index2) {
 					arsipDataAjx = window.ajax;
 
 					if (index2 < 1) {
-						link = tmpCollapseChild.find('a#parent-link');
+						link = tmpCollapseChild;
 					} else {
-						link = $('<a class="text-default text-capitalize"></a>');
+						link = $('<a href="#" id="parent-link" class="text-default text-capitalize"></a>');
 					}
 
-					link.attr('id', 'parent-link--one-' + value2)
-						.addClass('arsip-dokumen-collapse')
-						.attr('href', '#' + templateCollapse.attr('id') + '-' + value._id + '-' + index2)
+					link.append('<i class="fa fa-plus-square-o"></i> ' + value2)
+						.append('<button class="btn-link edit-dokumen" data-toggle="modal" data-target="#modal-data-dokumen" data-id-pemilik="'+ value._id +' data-dokumen-jenis="' + value2 + '">ubah</button>')
+						.attr('id', 'parent-link--one--' + value2)
 						.attr('data-toggle', 'collapse')
-						.attr('data-animation', 'false')
-						.attr('aria-expanded', 'false')
+						.attr('data-expand', 'false')
+						.addClass('d-block pt-1 pb-1 pl-1 arsip-dokumen-collapse text-dark')
+						.attr('href', '#' + templateCollapse.attr('id') + '--' + value._id + '--' + index2)
 						.attr('data-url', arsipUrlIndex + '/' + value._id + '?jenis=' + value2)
-						.append('<i class="fa fa-plus-square-o"></i> ' + value2);
-					tmpCollapseChild.append(link);
-					tmpCollapseChild.append('&nbsp;<a href="#" class="text-primary d-inline">ubah</a>');
-					tmpCollapseChild.append('<div class="d-block"></div>');
-					tmpCollapseGrandChild = $('<ul class="list-unstyled collapse"></ul>');
-					tmpCollapseGrandChild.attr('id', templateCollapse.attr('id') + '-' + value._id + '-' + index2)
+						.css('text-decoration', 'none');
+					collapseChild.append(link);
+
+					tmpCollapseGrandChild = $('<ul class="list-unstyled collapse pl-2 mb-2"></ul>');
+					tmpCollapseGrandChild.attr('id', templateCollapse.attr('id') + '--' + value._id + '--' + index2)
 						.addClass('ml-2');
-					tmpCollapseChild.append(tmpCollapseGrandChild);
-					tmpCollapse.append(tmpCollapseChild);
+
+					collapseChild.append(tmpCollapseGrandChild);
 				});
+				tmpCollapse.append(collapseChild);
 				itemOne.append(tmpCollapse);
 			});
 
+			section.append(itemOne);
+
 			$('.loader').hide('fast');
 			$('.hide-before-load').show();
-			// $('.loader').fadeOut('fast', function(){
-			// 	$('.hide-before-load').fadeIn();
-			// });
 		});
 
 		arsipAjx.defineOnError(function(respon){
@@ -332,14 +351,23 @@
 
 			$(selector).html('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
+			console.log($(this));
+
 			ajxDokumen.defineOnSuccess(function(respon){
-				$(selector).html('');
-				$.map(respon, function(value, index){
-					field = index.split('.');
-					field = field[field.length - 1].replace('@', '').replace('_', ' ');
-					// console.log(field);
-					$(selector).append('<li>' + field + '  <a href="#" class="data-dokumen" data-dokumen-item="' + index + '">' + value + '</a></li>');
-				});
+				setTimeout(function(){
+					$(selector).html('');
+					var iteration = 0;
+					$.map(respon, function(value, index){
+						field = index.split('.');
+						field = field[field.length - 1].replace('@', '').replace('_', ' ');
+						if (iteration == 0) {
+							$(selector).append('<li class="border border-left-0 border-right-0 d-flex ">' + field + '  <a href="#" class="data-dokumen ml-auto" data-dokumen-item="' + index + '">' + value + '</a></li>');
+						} else {
+							$(selector).append('<li class="border border-left-0 border-right-0 border-top-0 d-flex ">' + field + '  <a href="#" class="data-dokumen ml-auto" data-dokumen-item="' + index + '">' + value + '</a></li>');
+						}
+						iteration++;
+					});
+				}, '500');
 			});
 
 			ajxDokumen.defineOnError(function(respon2){
@@ -395,9 +423,14 @@
 			e.stopPropagation();
 			elemId = e.currentTarget.id;
 			// set icon
-			$('a[href="#'+ elemId +'"]').find('i')
-				.removeClass('fa-plus-square-o')
-				.addClass('fa-minus-square-o');
+			// fa fa-plus-square-o
+			if ($('a[href="#'+ elemId +'"] > i').hasClass('fa-chevron-circle-right')) {
+				$('a[href="#'+ elemId +'"] > i').removeClass('fa-chevron-circle-right')
+					.addClass('fa-chevron-circle-down');
+			} else {
+				$('a[href="#'+ elemId +'"] > i').removeClass('fa-plus-square-o')
+					.addClass('fa-minus-square-o');
+			}
 		});
 
 		// event collapse hide
@@ -406,10 +439,19 @@
 			e.stopPropagation();
 			elemId = e.currentTarget.id;
 			// set icon
-			$('a[href="#'+ elemId +'"]').find('i')
-				.removeClass('fa-minus-square-o')
-				.addClass('fa-plus-square-o');
+			if ($('a[href="#'+ elemId +'"] > i').hasClass('fa-chevron-circle-down')) {
+				$('a[href="#'+ elemId +'"] > i').removeClass('fa-chevron-circle-down')
+					.addClass('fa-chevron-circle-right');
+			} else {
+				$('a[href="#'+ elemId +'"] > i').removeClass('fa-minus-square-o')
+					.addClass('fa-plus-square-o');
+			}
 		});
+
+		$(document).on('click', 'button.edit-dokumen', function(e){
+			e.stopPropagation();
+			console.log('tes');
+		})
 
 		$('.btn-add-isi-dokumen').on('click', function(e){
 			e.preventDefault();
