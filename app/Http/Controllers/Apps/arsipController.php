@@ -17,12 +17,12 @@ class ArsipController extends Controller
 	}
 
 	public function index (){
-		$arsip 					= Arsip::select(['pemilik', 'lists'])->get();
+		$arsip		= Arsip::select(['pemilik', 'lists']);
+		if(request()->has('q')){
+			$arsip 	= $arsip->where('pemilik.nama', 'like', '%'.request()->get('q').'%');
+		}
 
-		//1.initialize view
-		// $this->view->pages		= view ($this->base_view . 'index', compact('arsip'));
-
-		// return $this->generateView();  
+		$arsip 		= $arsip->paginate();
 
 		return response()->json($arsip);
 	}
@@ -58,9 +58,11 @@ class ArsipController extends Controller
 	//ktp[jenis] = 'KTP'
 	public function store(){
 		$arsip 				= new Arsip;
-		$arsip->pemilik 	= request()->get('pemilik');
-		$arsip->dokumen 	= [request()->get('ktp')];
+		$arsip->pemilik 	= request()->only('nama', 'telepon');
+		// $arsip->dokumen 	= [request()->get('ktp')];
 		$arsip->save();
+
+		return response()->json($arsip);
 	}
 
 	//data input

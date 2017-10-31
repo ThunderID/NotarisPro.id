@@ -7,6 +7,7 @@ use App\Http\Controllers\Apps\ArsipController as Arsip;
 use App\Http\Controllers\Apps\helperController as Helper;
 
 use Thunderlabid\Akta\Models\Akta;
+use Thunderlabid\Arsip\Models\Arsip as Klien;
 
 use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
@@ -91,11 +92,17 @@ class aktaController extends Controller
 	}	
 
 	public function edit($id){
-		$akta		= Akta::findorfail($id);
-		$pemilik 	= array_column($akta->pemilik, 'id');
-		$arsip 		= Arsip::select(['pemilik', 'lists'])->whereIn('id', $pemilik)->get();
-	
-		$this->view->pages		= view ($this->base_view . 'edit', compact('akta', 'arsip'));
+		$akta				= Akta::findorfail($id);
+		$akta['pemilik'] 	= array_column($akta->klien, 'pemilik');
+
+		$arsip 		= new Arsip;
+		$arsip 		= $arsip->index();
+
+		view()->share('akta', $akta);
+		view()->share('arsip', $arsip);
+
+		$this->view 		= view ($this->base_view . 'templates.blank');
+		$this->view->pages 	= view ($this->base_view . 'pages.akta.create');
 
 		return $this->generateView();
 	}
@@ -107,32 +114,40 @@ class aktaController extends Controller
 	//jenis 			= 'AJB'
 	public function store ($id = null)
 	{
-		$akta 			= new Akta;
+		$akta	= new Akta;
+		$klien 	= [];
+
+		foreach (request()->get('klien') as $k => $v) {
+			$klien[] 	= Klien::where('_id', $v)->first(['_id', 'pemilik'])->toArray();
+		}
 
 		try {
-			$akta->pemilik 	= request()->get('pemilik');
 			$akta->judul 	= request()->get('judul');
 			$akta->jenis 	= request()->get('jenis');
-			$akta->paragraf = request()->get('paragraf');
-			$akta->status 	= 'draft';
+			$akta->klien 	= $klien;
 
+			if(request()->has('paragraf')){
+				$akta->paragraf = request()->get('paragraf');
+			}
+			else
+			{
+				$akta->paragraf = '<p></p>';
+			}
+			$akta->status 	= 'draft';
 			$akta->save();
 
 			$message['success'] = ['akta berhasil disimpan'];
 			$message['url'] 	= route ('akta.akta.index');
 
-			return response()->json($message);
+			return redirect()->route('akta.akta.edit', ['id' => $akta->_id]);
 		} catch (Exception $e) {
-			$message['error']	= ['gagal menyimpan akta'];
-			$message['url']		= route ('akta.akta.create');
-
-			return response()->json($message);
+			return redirect()->back()->withErrors($e->getMessage());
 		}
 	}
 
 	public function update  ($id)
 	{
-
+		return $this->store($id);
 	}
 
 	public function choose_data_dokumen ()
