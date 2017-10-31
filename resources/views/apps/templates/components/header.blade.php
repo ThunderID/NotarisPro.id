@@ -39,7 +39,7 @@
 
 <nav class="navbar navbar-dark navbar-expand-md bg-primary text default-primary-color" style="height: 150px;">
 	<a class="navbar-brand text-center text-lg-left text-xl-left" href="">
-		<h2 class="text-primary-color">AKTA<br/><small><small><small>Semua file akta</small></small></small></h2>
+		<h2 class="text-primary-color">{{ucwords($page_attributes->title)}}<br/><small><small><small>{{$page_attributes->subtitle}}</small></small></small></h2>
 	</a>
 </nav>
 
@@ -58,20 +58,24 @@
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
 					<div class="col-sm-6 text-center">
-						<p>
-							<i class="h1 ion-ios-color-wand-outline"></i>
-						</p>
-						<p>
-							Legal Creator
-						</p>
+						<a href="{{route('akta.akta.index')}}">
+							<p>
+								<i class="h1 ion-ios-color-wand-outline"></i>
+							</p>
+							<p>
+								Legal Creator
+							</p>
+						</a>
 					</div>
 					<div class="col-sm-6 text-center">
-						<p>
-							<i class="h1 ion-ios-folder-outline"></i>
-						</p>
-						<p>
-							Arsip Klien
-						</p>
+						<a href="{{route('arsip.index')}}">
+							<p>
+								<i class="h1 ion-ios-folder-outline"></i>
+							</p>
+							<p>
+								Arsip Klien
+							</p>
+						</a>
 					</div>
 				</div>
 				<div class="clearfix">&nbsp;</div>

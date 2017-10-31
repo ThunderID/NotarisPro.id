@@ -40,7 +40,7 @@
 		@endslot
 
 		@slot ('body')
-			{!! Form::open(['url' => route('arsip.arsip.store'), 'class' => 'form', 'id' => 'form-arsip']) !!}
+			{!! Form::open(['url' => route('arsip.store'), 'class' => 'form', 'id' => 'form-arsip']) !!}
 				<div class="content-data-dokumen"></div>
 				<div class="clearfix">&nbsp;</div>
 				{!! Form::bsText('Nama', 'nama', null, ['class' => 'form-control', 'placeholder' => 'Chelsy Mooy']) !!}
@@ -67,7 +67,7 @@
 
 	$(".select2").select2({
 		ajax: {
-			url: "{{route('arsip.arsip.index')}}",
+			url: "{{route('arsip.index')}}",
 			dataType: 'json',
 			delay: 250,
 			data: function (params) {
@@ -125,7 +125,7 @@
 		if (repo.loading) {
 			return repo.text;
 		}
-		var markup = "<span style='width:80px;'><img src='https://upload.wikimedia.org/wikipedia/commons/a/a0/Tux-Icon.png' style='width:80px;'/></span><span style='width:120px;'>"+repo.text+"  (<i class='fa fa-phone'></i> &nbsp;"+repo.telepon+")</span><span style='width:120px;'></span>";
+		var markup = "<span style='width:80px;'><img src='"+"{{url('/images/me.jpg')}}"+"' style='width:80px;'/></span><span style='width:120px;'>"+repo.text+"  (<i class='fa fa-phone'></i> &nbsp;"+repo.telepon+")</span><span style='width:120px;'></span>";
 		return markup;
 	}
 

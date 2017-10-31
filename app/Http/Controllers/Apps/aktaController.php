@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Apps\ArsipController as Arsip;
 use App\Http\Controllers\Apps\helperController as Helper;
 
 use Thunderlabid\Akta\Models\Akta;
-use Thunderlabid\Arsip\Models\Arsip as Klien;
+use Thunderlabid\Arsip\Models\Arsip;
 
 use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
@@ -26,7 +25,8 @@ class aktaController extends Controller
 
 	public function index ()
 	{
-		$this->page_attributes->title 	= 'Daftar akta dokumen';
+		$this->page_attributes->title 		= 'AKTA';
+		$this->page_attributes->subtitle 	= 'Semua file Akta';
 
 		$akta		= new Akta;
 		if(request()->has('jenis') && request()->get('jenis')!='all'){
@@ -79,11 +79,10 @@ class aktaController extends Controller
 
 		$akta['dokumen']['ktp']	=	['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat'];
 
-		$arsipList = new Arsip;
-		$arsipList = $arsipList->index();
+		$arsip 	= $this->getArsip();
 
 		view()->share('akta', $akta);
-		view()->share('arsip', $arsipList);
+		view()->share('arsip', $arsip);
 
 		$this->view 					= view ($this->base_view . 'templates.blank');
 		$this->view->pages 				= view ($this->base_view . 'pages.akta.create');
@@ -95,8 +94,7 @@ class aktaController extends Controller
 		$akta				= Akta::findorfail($id);
 		$akta['pemilik'] 	= array_column($akta->klien, 'pemilik');
 
-		$arsip 		= new Arsip;
-		$arsip 		= $arsip->index();
+		$arsip 	= $this->getArsip();
 
 		view()->share('akta', $akta);
 		view()->share('arsip', $arsip);
@@ -154,9 +152,7 @@ class aktaController extends Controller
 	{
 		$this->page_attributes->title 	= 'Data Dokumen';
 
-		$arsip 							= new Arsip;
-		$arsip 							= $arsip->index();
-
+		$arsip		= $this->getArsip();
 		view()->share('arsip', $arsip);
 
 		$this->view 					= view ($this->base_view . 'templates.blank');
@@ -177,5 +173,16 @@ class aktaController extends Controller
 		$this->view->page 				= view ($this->base_view . 'pages.akta.choose_template');
 
 		return $this->generateView();
+	}
+
+	private function getArsip(){
+		$arsip		= Arsip::select(['pemilik', 'lists']);
+		if(request()->has('q')){
+			$arsip 	= $arsip->where('pemilik.nama', 'like', '%'.request()->get('q').'%');
+		}
+
+		$arsip 		= $arsip->paginate();
+
+		return response()->json($arsip);
 	}
 }

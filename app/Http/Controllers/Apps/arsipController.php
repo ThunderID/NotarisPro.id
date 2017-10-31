@@ -11,9 +11,6 @@ class ArsipController extends Controller
 {
 	function __construct (){
 		parent::__construct();
-		
-		$this->view 		= view ($this->base_view . 'templates.basic');
-		$this->base_view 	= $this->base_view . 'pages.arsip.';
 	}
 
 	public function index (){
@@ -24,7 +21,19 @@ class ArsipController extends Controller
 
 		$arsip 		= $arsip->paginate();
 
-		return response()->json($arsip);
+		//if request ajax
+		if(request()->ajax()){
+			return response()->json($arsip);
+		}
+
+		$this->page_attributes->title 		= 'ARSIP';
+		$this->page_attributes->subtitle 	= 'Arsip data klien';
+
+		//1.initialize view
+		$this->view				= view ($this->base_view . 'templates.basic');
+		$this->view->main		= view ($this->base_view . 'pages.arsip.index');
+
+		return $this->generateView();  
 	}
 
 	public function show ($id){
