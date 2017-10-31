@@ -6,7 +6,6 @@
 
 	<a class="navbar-brand text-center text-lg-left text-xl-left" href="">
 		{{ str_replace("_", " ", env('APP_NAME')) }}
-		<small><small>AKTA</small></small>
 	</a>
 	<!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<div class="d-inline-block">
@@ -50,7 +49,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="menuModalLabel">MITRA NOTARIS <small>MENU</small></h5>
+				<h5 class="modal-title" id="menuModalLabel">MENU</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				  <span aria-hidden="true">&times;</span>
 				</button>
@@ -60,7 +59,7 @@
 				<div class="row">
 					<div class="col-sm-6 text-center">
 						<p>
-							<i class="fa fa-edit fa-3x"></i>
+							<i class="h1 ion-ios-color-wand-outline"></i>
 						</p>
 						<p>
 							Legal Creator
@@ -68,7 +67,7 @@
 					</div>
 					<div class="col-sm-6 text-center">
 						<p>
-							<i class="fa fa-file-archive-o fa-3x"></i>
+							<i class="h1 ion-ios-folder-outline"></i>
 						</p>
 						<p>
 							Arsip Klien
@@ -79,7 +78,7 @@
 				<div class="row">
 					<div class="col-sm-6 text-center">
 						<p>
-							<i class="fa fa-calendar fa-3x"></i>
+							<i class="h1 ion-ios-calendar-outline"></i>
 						</p>
 						<p>
 							Monitoring BPN
@@ -87,7 +86,7 @@
 					</div>
 					<div class="col-sm-6 text-center">
 						<p>
-							<i class="fa fa-money fa-3x"></i>
+							<i class="h1 ion-ios-calculator-outline"></i>
 						</p>
 						<p>
 							Tagihan Klien
@@ -100,7 +99,7 @@
 				<div class="row">
 					<div class="col-sm-6 text-center">
 						<p>
-							<i class="fa fa-cogs fa-3x"></i>
+							<i class="h1 ion-ios-gear-outline"></i>
 						</p>
 						<p>
 							Pengaturan
@@ -108,7 +107,7 @@
 					</div>
 					<div class="col-sm-6 text-center">
 						<p>
-							<i class="fa fa-user-o fa-3x"></i>
+							<i class="h1 ion-ios-person-outline"></i>
 						</p>
 						<p>
 							Akun Anda
