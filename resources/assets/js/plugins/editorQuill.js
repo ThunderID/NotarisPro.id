@@ -71,10 +71,10 @@ window.editorUI = {
 
 		$('.form-editor-akta-save').on('click', function(e){
 			e.preventDefault();
-			console.log(change);
+			// console.log(change);
 
-			console.log(editor.getContents());
-			// window.editorUI.save(editor);
+			// console.log(editor.getContents());
+			window.editorUI.save(editor);
 		});
 
 		this.helperAction(editor);
@@ -112,7 +112,7 @@ window.editorUI = {
 		
 	},
 	save: function (editor) {
-		let judulAkta 		= $('.input-judul-akta').val();
+		let judulAkta 		= $('.input-judul-akta').find('input').val();
 		let jenisAkta 		= $('.input-jenis-akta').val();
 		let paragrafAkta 	= editor.root.innerHTML;
 		let urlStore 		= editor.container.dataset.url;
@@ -138,7 +138,7 @@ window.editorUI = {
 								// window.location = url;
 							// }
 						// } else {
-							window.close();
+							// window.close();
 						// }
 					// }
 				// }, 500);

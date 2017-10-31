@@ -18,12 +18,7 @@
 							'akta_jual_beli' => 'Akta jual beli', 
 							'akta_pendirian' => 'Akta pendirian'
 						], null, ['class' => 'custom-select form-control']) !!}
-						
 						{!! Form::bsSelect('klien', 'klien[]', [], null, ['class' => 'form-control custom-select select2', 'multiple' => 'multiple', 'data-container' => '.pihak-selected']) !!}
-						<div class="pihak-selected"></div>
-						<div class="clearfix">&nbsp;</div>
-						<div class="clearfix">&nbsp;</div>
-
 						<div class="form-group text-right">
 							<button type="submit" class="btn default-primary-color text-primary-color text-right"><i class="fa fa-gears"></i> Buat akta</button>
 						</div>

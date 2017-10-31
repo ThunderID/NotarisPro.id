@@ -23,5 +23,5 @@
 			</a>
 		</li>
 	</ul>
-	<div class="loading-save alert p-1 text-center" style=" font-size: 12px; position: absolute !important; top: 5px; right: 45vw !important; left: 45vw !important; width: 180px !important; "></div>
+	<div class="loading-save alert p-1 text-center" style=" font-size: 12px; position: absolute !important; top: 5px; left: calc(50vw / 2) !important; width: 180px !important; "></div>
 </nav>

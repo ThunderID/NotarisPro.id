@@ -1946,10 +1946,6 @@
   }
 }
 
-body {
-  font-family: 'Muli', sans-serif;
-}
-
 a,
 button {
   outline: none;
@@ -2081,6 +2077,10 @@ input::placeholder,
 select::placeholder,
 textarea::placeholder {
   color: #bbb !important;
+}
+
+button {
+  outline: none;
 }
 
 .btn {
