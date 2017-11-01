@@ -21,7 +21,7 @@ class ArsipController extends Controller
 		if(request()->has('q')){
 			$arsip 	= $arsip->where('pemilik.nama', 'like', '%'.request()->get('q').'%');
 		}
-
+		
 		$arsip 		= $arsip->paginate();
 
 		return response()->json($arsip);

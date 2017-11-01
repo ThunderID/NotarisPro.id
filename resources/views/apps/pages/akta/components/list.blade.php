@@ -30,7 +30,7 @@
 @endforeach -->
 
 @foreach ($akta as $k => $v)
-<div class="row ml-1 mr-1 mt-2 mb-3 primary-text-color" id="{{ $v['id'] }}" @if (!isset($mode)) class="border-top-0 border-left-0 border-right-0" style=" cursor: pointer;" data-url="{{ route('akta.akta.ajax.show', ['id' => $v['id']]) }}" @else class="border-top-0 border-left-0 border-right-0" @endif >
+<div class="row ml-2 mr-2 pt-2 pb-2 primary-text-color border border-top-0 border-left-0 border-right-0 d-flex align-items-start item-click" id="{{ $v['id'] }}" @if (!isset($mode)) style=" cursor: pointer;" data-url="{{ route('akta.akta.show', ['id' => $v['id']]) }}" data-id="{{ $v['id'] }}" @endif>
 	<div class="col-sm-4 pt-2">
 		<div class="d-flex align-items-center">
 			<i class="fa fa-file-o fa-3x"></i> &emsp;

@@ -24,7 +24,7 @@ class aktaController extends Controller
 		// $this->base_view 	= $this->base_view . 'pages.akta.';
 	}
 
-	public function index ()
+	public function index ($id = null)
 	{
 		$this->page_attributes->title 	= 'Daftar akta dokumen';
 
@@ -42,6 +42,7 @@ class aktaController extends Controller
 
 		view()->share('akta', $akta);
 		view()->share('filters', $filter);
+		view()->share('id', $id);
 
 		//1.initialize view
 		$this->view				= view ($this->base_view . 'templates.basic');
@@ -53,12 +54,17 @@ class aktaController extends Controller
 
 	public function show ($id)
 	{
-		$akta 					= Akta::findorfail($id);
+		$akta 					= Akta::findorfail($id)->toArray();
+
+		view()->share('akta', $akta);
+		// view()->share('status_akta', $akta['status']);
 
 		//1.initialize view
-		$this->view->pages		= view ($this->base_view . 'show', compact('akta'));
+		$this->view 			= view ($this->base_view . 'templates.basic');
+		$this->view->main		= view ($this->base_view . 'pages.akta.show');
 
-		return $this->generateView();  
+		return $this->generateView();
+		// return $this->index($id);
 	}
 
 	public function create ()
@@ -177,5 +183,31 @@ class aktaController extends Controller
 		$this->view->page 				= view ($this->base_view . 'pages.akta.choose_template');
 
 		return $this->generateView();
+	}
+
+	public function ajax_show ($id)
+	{
+		if ($id)
+		{
+			$akta 				= Akta::findorfail($id);
+
+			//1f. generate checker
+			// $akta['incomplete']	= $this->checkInclompeteData($akta['dokumen']);
+
+			$paragraf 			= collect($akta['paragraf']);
+			$akta['paragraf'] 	= $paragraf->map(function ($single_p) 
+			{
+				$single_p['revisi'][]	= ['tanggal' => Carbon::now()->format('d/m/Y'), 'isi' => $single_p['konten']];
+			    return $single_p;
+			});
+
+			// returning akta data
+			return Response::json($akta);
+		}
+		else
+		{
+			//return 404
+			return App::abort(404);
+		}
 	}
 }

@@ -37,11 +37,6 @@
 	</div>
 </nav>
 
-<nav class="navbar navbar-dark navbar-expand-md bg-primary text default-primary-color" style="height: 150px;">
-	<a class="navbar-brand text-center text-lg-left text-xl-left" href="">
-		<h2 class="text-primary-color">AKTA<br/><small><small><small>Semua file akta</small></small></small></h2>
-	</a>
-</nav>
 
 
 <!-- Modal -->
