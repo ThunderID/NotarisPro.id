@@ -38,7 +38,6 @@
 </nav>
 
 
-
 <!-- Modal -->
 <div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -53,20 +52,24 @@
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
 					<div class="col-sm-6 text-center">
-						<p>
-							<i class="h1 ion-ios-color-wand-outline"></i>
-						</p>
-						<p>
-							Legal Creator
-						</p>
+						<a href="{{route('akta.akta.index')}}">
+							<p>
+								<i class="h1 ion-ios-color-wand-outline"></i>
+							</p>
+							<p>
+								Legal Creator
+							</p>
+						</a>
 					</div>
 					<div class="col-sm-6 text-center">
-						<p>
-							<i class="h1 ion-ios-folder-outline"></i>
-						</p>
-						<p>
-							Arsip Klien
-						</p>
+						<a href="{{route('arsip.index')}}">
+							<p>
+								<i class="h1 ion-ios-folder-outline"></i>
+							</p>
+							<p>
+								Arsip Klien
+							</p>
+						</a>
 					</div>
 				</div>
 				<div class="clearfix">&nbsp;</div>

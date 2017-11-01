@@ -40,13 +40,13 @@
 						<a id="btn-add" class="btn-add text-capitalize" href="#" data-parent="#add-arsip" style="font-size: 13px;">
 							<i class="fa fa-plus"></i> Tambah Arsip
 						</a>
-						<div id="form-add" class="form-add form-inline mb-3" data-url="{{ route('arsip.arsip.ajax.store') }}" style="font-size: 13px !important; display: none;">
+						<div id="form-add" class="form-add form-inline mb-3" data-url="{{ route('arsip.ajax.store') }}" style="font-size: 13px !important; display: none;">
 							<p class="text-muted text-small text-capitalize mb-1">Tambah Arsip</p>
 							<input name="arsip_dokumen" type="text" class="form-control form-control-sm" placeholder="data arsip" data-field="" style="width: 75%; font-size: 13px;">
 								<a id="btn-cancel" href="#" class="btn btn-text btn-sm btn-cancel text-default p-1 ml-2" data-parent="#add-arsip" style="font-size: 13px !important;">
 									<i class="fa fa-times"></i>
 								</a>
-								<a id="btn-save" href="#" class="btn btn-text btn-sm btn-save text-default p-1" style="font-size: 13px !important;" data-parent="#add-arsip" data-url="{{ route('arsip.arsip.ajax.store') }}">
+								<a id="btn-save" href="#" class="btn btn-text btn-sm btn-save text-default p-1" style="font-size: 13px !important;" data-parent="#add-arsip" data-url="{{ route('arsip.ajax.store') }}">
 									<i class="fa fa-save"></i>
 								</a>
 						</div>
@@ -270,7 +270,7 @@
 	<script type="text/javascript">
 		window.editorUI.init();
 
-		arsipUrlIndex = '{{ route('arsip.arsip.index') }}';
+		arsipUrlIndex = '{{ route('arsip.index') }}';
 		arsipAjx = window.ajax;
 
 		arsipAjx.defineOnSuccess(function(respon){

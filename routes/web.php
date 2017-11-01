@@ -33,15 +33,8 @@ Route::namespace('Apps')->group( function (){
 	Route::any('akta/akta/update/{id}',			['uses' => 'aktaController@update',					'as' => 'akta.akta.update.ajax']);
 
 	// 2. ARSIP
-	Route::resource('/arsip', 'arsipController', ['names' => [
-		'index' 	=> 'arsip.arsip.index', //get
-		'create'	=> 'arsip.arsip.create', //get
-		'store' 	=> 'arsip.arsip.store', //post
-		'show' 		=> 'arsip.arsip.show', //get
-		'edit' 		=> 'arsip.arsip.edit', //get
-		'update' 	=> 'arsip.arsip.update', //patch
-		'destroy' 	=> 'arsip.arsip.destroy' //post 
-	]]);
+	Route::resource('/arsip', 'arsipController');
+
 	// Route for ajax
 	Route::any('arsip/dokumen/store',					['uses' => 'arsipController@store',				'as' => 'arsip.arsip.ajax.store']);
 	Route::any('arsip/{id}/dokumen/update',				['uses' => 'arsipController@update',			'as' => 'arsip.arsip.ajax.update']);
