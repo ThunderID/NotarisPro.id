@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use Thunderlabid\Akta\Models\Akta;
 use Thunderlabid\Arsip\Models\Arsip;
 
 use TAuth, Response, App, Session, Exception, Carbon\Carbon;
 
-class ArsipController extends Controller
+class arsipController extends Controller
 {
 	function __construct (){
 		parent::__construct();
@@ -17,6 +18,12 @@ class ArsipController extends Controller
 		$arsip		= Arsip::select(['pemilik', 'lists']);
 		if(request()->has('q')){
 			$arsip 	= $arsip->where('pemilik.nama', 'like', '%'.request()->get('q').'%');
+		}
+
+		if(request()->has('akta_id')){
+			$akta 	= Akta::findorfail(request()->get('akta_id'))->toArray();
+			$ids 	= array_column($akta['klien'], '_id');
+			$arsip 	= $arsip->whereIn('_id', $ids);
 		}
 
 		$arsip 		= $arsip->paginate();
@@ -68,8 +75,25 @@ class ArsipController extends Controller
 	public function store(){
 		$arsip 				= new Arsip;
 		$arsip->pemilik 	= request()->only('nama', 'telepon');
-		// $arsip->dokumen 	= [request()->get('ktp')];
+
+		if(request()->has('jenis')){
+			$dokumen['id']		= str_replace('0.','',str_replace(' ','',microtime().'01'));
+			$dokumen['jenis']	= str_replace(' ', '_', strtolower(request()->get('jenis')));
+			$value 				= request()->get('value');
+			foreach (request()->get('field') as $k => $v) {
+				$dokumen[str_replace(' ', '_', strtolower($v))] = $value[$k];
+			}
+			$arsip->dokumen 	= $dokumen;
+		}
+
 		$arsip->save();
+
+		if(request()->has('akta_id')){
+			$akta 			= Akta::findorfail(request()->get('akta_id'));
+			$klien 			= array_merge($akta->klien, ['_id' => $arsip->id, 'pemilik' => $arsip->pemilik]);
+			$akta->klien 	= $klien;
+			// $ak
+		}
 
 		return response()->json($arsip);
 	}

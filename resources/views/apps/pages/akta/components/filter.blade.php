@@ -21,7 +21,7 @@
 	<ul class="list-unstyled">
 		@foreach ($lists as $key => $list)
 		<a href="
-			{{ route('akta.akta.index', $data_qs) }}
+			{{ route('akta.index', $data_qs) }}
 			{{ count(Request::all()) && $list != null> 0 ? '&' : '' }}
 			{{ $list != null ? $alias . '=' . $list : '' }}">
 			<li class="{{ Request::get($alias) == $list ? 'active' : '' }}">

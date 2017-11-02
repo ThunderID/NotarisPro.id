@@ -5,7 +5,7 @@
 
 	<div class="row">
 		<div class="col-12">
-			<a href="#" data-url="{{ route('akta.akta.choose') }}" class="btn accent-color text-primary-color btn-circle btn-lg btn-new-akta" style="position: absolute; top: -25px;right: 15px;padding: 10px;"><i class="fa fa-plus" style="font-size:12px;"></i> </a>
+			<a href="#" data-url="{{ route('akta.create') }}" class="btn accent-color text-primary-color btn-circle btn-lg btn-new-akta" style="position: absolute; top: -25px;right: 15px;padding: 10px;"><i class="fa fa-plus" style="font-size:12px;"></i> </a>
 		</div>
 	</div>
 	<div class="clearfix">&nbsp;</div>

@@ -36,7 +36,8 @@ class aktaController extends Controller
 		if(request()->has('q')){
 			$akta 	= $akta->where('judul', 'like', '%'.request()->get('q').'%');
 		}
-		$akta 		= $akta->select(['versi', 'kantor', 'judul', 'jenis', 'status', 'pihak', 'updated_at'])->paginate();
+		$akta 		= $akta->select(['versi', 'kantor', 'judul', 'jenis', 'status', 'klien', 'updated_at'])->paginate();
+
 		// set component filter
 		$filter		= Helper::aktaFilter();
 
@@ -51,72 +52,40 @@ class aktaController extends Controller
 		return $this->generateView();  
 	}
 
-	public function show ($id)
-	{
-		$akta 					= Akta::findorfail($id);
-
-		//1.initialize view
-		$this->view->pages		= view ($this->base_view . 'show', compact('akta'));
-
-		return $this->generateView();  
-	}
-
 	public function create ()
 	{
-		$this->page_attributes->title 	= 'Buat Akta';
+		$this->page_attributes->title 	= 'Buat Akta Baru';
 
-		$akta['judul'] 	= request()->get('judul');
-		$akta['jenis']	= request()->get('jenis');
-
-		if (request()->has('pemilik')) {
-			$tmp = [];
-			foreach (request()->get('pemilik') as $k => $v) {
-				$tmp[] = ['id' => $k, 'nama' => $v['nama']];
-			}
-			
-			$akta['pemilik'] = $tmp;
-		}
-
-		$akta['dokumen']['ktp']	=	['nik', 'nama', 'tempat_lahir', 'tanggal_lahir', 'pekerjaan', 'alamat'];
-
-		$arsip 	= $this->getArsip();
+		$akta 							= Akta::select(['versi', 'kantor', 'judul', 'jenis', 'status'])->paginate();
 
 		view()->share('akta', $akta);
-		view()->share('arsip', $arsip);
 
 		$this->view 					= view ($this->base_view . 'templates.blank');
-		$this->view->pages 				= view ($this->base_view . 'pages.akta.create');
+		$this->view->page 				= view ($this->base_view . 'pages.akta.create_option');
 
 		return $this->generateView();
 	}	
 
-	public function edit($id){
-		$akta				= Akta::findorfail($id);
-		$akta['pemilik'] 	= array_column($akta->klien, 'pemilik');
+	public function create_scratch ()
+	{
+		$this->page_attributes->title 	= 'Data Dokumen';
 
-		$arsip 	= $this->getArsip();
-
-		view()->share('akta', $akta);
+		$arsip		= $this->getArsip();
 		view()->share('arsip', $arsip);
 
-		$this->view 		= view ($this->base_view . 'templates.blank');
-		$this->view->pages 	= view ($this->base_view . 'pages.akta.create');
+		$this->view 					= view ($this->base_view . 'templates.blank');
+		$this->view->pages 				= view ($this->base_view . 'pages.akta.create_scratch');
 
 		return $this->generateView();
 	}
 
-	//data input
-	//pemilik[0][id] 	= '23546546s51df23w1frw'
-	//pemilik[0][nama] 	= 'Chelsy'
-	//judul 			= 'Akta Jual Beli Tanah di Mengwi'
-	//jenis 			= 'AJB'
 	public function store ($id = null)
 	{
 		$akta	= new Akta;
 		$klien 	= [];
 
 		foreach (request()->get('klien') as $k => $v) {
-			$klien[] 	= Klien::where('_id', $v)->first(['_id', 'pemilik'])->toArray();
+			$klien[] 	= Arsip::where('_id', $v)->first(['_id', 'pemilik'])->toArray();
 		}
 
 		try {
@@ -131,35 +100,51 @@ class aktaController extends Controller
 			{
 				$akta->paragraf = '<p></p>';
 			}
-			$akta->status 	= 'draft';
+			$akta->status 	= 'drafting';
 			$akta->save();
 
 			$message['success'] = ['akta berhasil disimpan'];
-			$message['url'] 	= route ('akta.akta.index');
+			$message['url'] 	= route ('akta.index');
 
-			return redirect()->route('akta.akta.edit', ['id' => $akta->_id]);
+			return redirect()->route('akta.edit', ['id' => $akta->_id]);
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
 		}
 	}
+
+	public function show ($id)
+	{
+		$akta 					= Akta::findorfail($id);
+
+		//1.initialize view
+		$this->view->pages		= view ($this->base_view . 'show', compact('akta'));
+
+		return $this->generateView();  
+	}
+
+
+	public function edit($id){
+		$akta				= Akta::findorfail($id);
+		$akta['pemilik'] 	= array_column($akta->klien, 'pemilik');
+
+		$arsip 	= $this->getArsip();
+
+		view()->share('akta', $akta);
+		view()->share('arsip', $arsip);
+
+		$this->view 		= view ($this->base_view . 'templates.blank');
+		$this->view->pages 	= view ($this->base_view . 'pages.akta.create', compact('id'));
+
+		return $this->generateView();
+	}
+
+
 
 	public function update  ($id)
 	{
 		return $this->store($id);
 	}
 
-	public function choose_data_dokumen ()
-	{
-		$this->page_attributes->title 	= 'Data Dokumen';
-
-		$arsip		= $this->getArsip();
-		view()->share('arsip', $arsip);
-
-		$this->view 					= view ($this->base_view . 'templates.blank');
-		$this->view->pages 				= view ($this->base_view . 'pages.akta.choose_data_dokumen');
-
-		return $this->generateView();
-	}
 
 	public function choose_akta () 
 	{

@@ -58,7 +58,7 @@
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
 					<div class="col-sm-6 text-center">
-						<a href="{{route('akta.akta.index')}}">
+						<a href="{{route('akta.index')}}">
 							<p>
 								<i class="h1 ion-ios-color-wand-outline"></i>
 							</p>

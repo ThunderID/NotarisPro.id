@@ -2,7 +2,7 @@
 	<div class="modal-dialog {{ isset($size) ? $size : '' }}" role="document">
 		<div class="modal-content">
 			@isset ($form)
-				{!! Form::open(['method' => $method ? $method : 'post']) !!}
+				{!! Form::open(['method' => $method ? $method : 'post', 'url' => $url ? $url : '#']) !!}
 			@endisset
 
 			@if (!is_null($title) || !is_null($body) || !is_null($footer))

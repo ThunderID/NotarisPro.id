@@ -29,21 +29,21 @@ class ParseOknumAkta
 	public function handle($event)
 	{
 		$model 			= $event->data;
-		$model->pihak 	= $this->parse_pihak($model->data);
+		$model->klien 	= $this->parse_klien($model->data);
 	}
 
-	private function parse_pihak($data)
+	private function parse_klien($data)
 	{
 		$new_data 	= [];
-		$pihak 		= [];
+		$klien 		= [];
 
 		foreach ($data as $key => $value) {
 			$key 		= explode('[dot]', $key);
 
 			if(!str_is('notaris', $key[0]) && !str_is('akta', $key[0])){
 				$owner	= Arsip::where('dokumen.id', $key[0])->first();
-				if(!in_array($owner['_id'], $pihak)){
-					$pihak[] 	= $owner['_id'];
+				if(!in_array($owner['_id'], $klien)){
+					$klien[] 	= $owner['_id'];
 					$new_data[]	= $owner['pemilik'];
 				}
 			}

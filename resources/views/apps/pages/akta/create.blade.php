@@ -9,7 +9,7 @@
 			<div class="hidden-sm-down sidebar list-data-dokumen p-0" id="DataList">
 				<div id="sidebar-header" class="pt-3 col-12" style="border-bottom: 1px solid #eee;">
 					<div id="arsip" class="d-flex justify-content-start pr-2"> 
-						<h5 class="pt-1 align-middle">Data Dokumen</h5>
+						<h5 class="pt-1 align-middle">Data Klien</h5>
 						<a href="#" class="close-data-dokumen text-faded ml-auto align-middle" style="z-index: 999;">
 							<span aria-hidden="true" style="font-size: 20px;">&times;</span>
 						</a>
@@ -40,13 +40,13 @@
 						<a id="btn-add" class="btn-add text-capitalize" href="#" data-parent="#add-arsip" style="font-size: 13px;">
 							<i class="fa fa-plus"></i> Tambah Arsip
 						</a>
-						<div id="form-add" class="form-add form-inline mb-3" data-url="{{ route('arsip.ajax.store') }}" style="font-size: 13px !important; display: none;">
+						<div id="form-add" class="form-add form-inline mb-3" data-url="{{ route('arsip.store') }}" style="font-size: 13px !important; display: none;">
 							<p class="text-muted text-small text-capitalize mb-1">Tambah Arsip</p>
 							<input name="arsip_dokumen" type="text" class="form-control form-control-sm" placeholder="data arsip" data-field="" style="width: 75%; font-size: 13px;">
 								<a id="btn-cancel" href="#" class="btn btn-text btn-sm btn-cancel text-default p-1 ml-2" data-parent="#add-arsip" style="font-size: 13px !important;">
 									<i class="fa fa-times"></i>
 								</a>
-								<a id="btn-save" href="#" class="btn btn-text btn-sm btn-save text-default p-1" style="font-size: 13px !important;" data-parent="#add-arsip" data-url="{{ route('arsip.ajax.store') }}">
+								<a id="btn-save" href="#" class="btn btn-text btn-sm btn-save text-default p-1" style="font-size: 13px !important;" data-parent="#add-arsip" data-url="{{ route('arsip.store') }}">
 									<i class="fa fa-save"></i>
 								</a>
 						</div>
@@ -65,7 +65,7 @@
 			<div class="col-12">
 				<div id="toolbar-editor" class="text-center bg-white p-0">
 					<span class="ql-formats">
-						<button class="ql-save form-editor-akta-save" style="margin-top: -2px; outline: none;" data-tooltip="tooltip" data-url="{{ (Route::is('akta.akta.create') ? route('akta.akta.store') : route('akta.akta.update', $page_datas->akta['id'])) }}" title="Save" data-animation="false"><i class="fa fa-save"></i></button>
+						<button class="ql-save form-editor-akta-save" style="margin-top: -2px; outline: none;" data-tooltip="tooltip" data-url="{{ (Route::is('akta.create') ? route('akta.store') : route('akta.update', $page_datas->akta['id'])) }}" title="Save" data-animation="false"><i class="fa fa-save"></i></button>
 					</span>
 					<span class="ql-formats p-2">
 						<button class="ql-bold" data-tooltip="tooltip" title="Bold" data-animation="false"></button>
@@ -102,46 +102,45 @@
 						{!! Form::hidden('pemilik['. $k .'][nama]', $v['nama']) !!}
 					@endforeach
 				@endisset
-				<div id="editor" class="editor bg-white" data-url="{{ Route::is('akta.akta.create') ? route('akta.akta.ajax.store') : route('akta.akta.update.ajax', ['id' => $page_datas->akta['id']]) }}"></div>
+				<div id="editor" class="editor bg-white" data-url="{{ Route::is('akta.create') ? route('akta.store') : route('akta.update', ['id' => $page_datas->akta['id']]) }}"></div>
 			</div>
 		</div>
 	</form>
 
 	@component ('bootstrap.modal', [
 		'id' 	=> 'modal-data-dokumen',
-		'size'	=> 'w-75'
+		'size'	=> 'w-75',
+		'url' 	=> route('arsip.store'),
+		'form'	=> true
 	])
 
 	@slot ('title')
-		tambah dokumen
+		Data Klien <sup><small>Baru</small></sup>
 	@endslot
 
 	@slot ('body')
 		<div class="form">
+			{!! Form::bsText('nama pemilik', 'nama', null, ['class' => 'form-control', 'placeholder' => 'Anitya Lukman']) !!}
+			{!! Form::bsText('nomor telepon', 'telepon', null, ['class' => 'form-control', 'placeholder' => '0877 4517 9344']) !!}
 			<div class="form-group row">
 				<div class="col-12">
-					<label>Nama Pemilik</label>
-					{!! Form::text('nama', null, ['class' => 'form-control mb-2', 'placeholder' => 'nama pemilik']) !!}
+					<label>DOKUMEN</label>
+					{!! Form::bsSelect(null, 'jenis', [], null, ['class' => 'form-control custom-select select2', 'style' => 'width:100%;']) !!}
 				</div>
 			</div>
-			<div class="form-group row">
-				<div class="col-12">
-					<label>Jenis</label>
-					{!! Form::select('jenis', ['ktp' => 'ktp', ], null, ['class' => 'form-control custom-select mb-2']) !!}
-				</div>
-			</div>
+
 			<div class="row mb-2">
 				<div class="col-12">
-					<p class="text-capitalize mb-3">Isi dokumen</p>
+					<p class="text-capitalize mb-3">ISI DOKUMEN</p>
 					<div id="content-dokumen">
 						@isset ($akta['dokumen']['ktp'])
 							@foreach ($akta['dokumen']['ktp'] as $k => $v)
 								<div class="form-group row mb-1">
 									<div class="col-4">
-										{!! Form::bsText(null, 'field['. $v .']', $v, ['class' => 'form-control', 'placeholder' => 'nama dokumen']) !!}
+										{!! Form::bsText(null, 'field['. $v .']', $v, ['class' => 'form-control', 'placeholder' => 'Kewarganegaraan']) !!}
 									</div>
 									<div class="col-8">
-										{!! Form::bsText(null, 'value['. $v .']', null, ['class' => 'form-control', 'placeholder' => 'isi dokumen']) !!}
+										{!! Form::bsText(null, 'value['. $v .']', null, ['class' => 'form-control', 'placeholder' => 'WNI']) !!}
 									</div>
 								</div>
 							@endforeach
@@ -150,10 +149,10 @@
 					<a href="#" class="btn btn-default btn-sm btn-add-isi-dokumen" data-template-clone="#item-dokumen-clone" data-content-clone="#content-dokumen">Tambah dokumen</a>
 					<div class="form-group row mb-1" id="item-dokumen-clone" style="display: none;">
 						<div class="col-4">
-							{!! Form::bsText(null, 'field', null, ['class' => 'form-control', 'placeholder' => 'nama dokumen']) !!}
+							{!! Form::bsText(null, 'field[]', null, ['class' => 'form-control', 'placeholder' => 'Kewarganegaraan']) !!}
 						</div>
 						<div class="col-8">
-							{!! Form::bsText(null, 'value', null, ['class' => 'form-control', 'placeholder' => 'isi dokumen']) !!}
+							{!! Form::bsText(null, 'value[]', null, ['class' => 'form-control', 'placeholder' => 'WNI']) !!}
 						</div>
 					</div>
 				</div>
@@ -163,13 +162,16 @@
 
 	@slot ('footer')
 		<a href="#" class="btn btn-default" data-dismiss="modal">Batal</a>
-		<a href="#" class="btn btn-primary">Simpan</a>
+		<div class="form-group text-right">
+			<button type="submit" class="btn default-primary-color text-primary-color text-right">Simpan</button>
+		</div>
 	@endslot
 	
 	@endcomponent
 @endpush
 
 @push ('styles')
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
 	<style>
 		body {
 			background-color: rgba(0, 0, 0, 0.075) !important;
@@ -254,10 +256,19 @@
 
 {{-- use tag <script></script> --}}
 @push ('scripts')
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
 	<script type="text/javascript">
+		$(".select2").select2({
+			tags: true,
+			tokenSeparators: [","],
+			placeholder: 'KTP'
+		});
+
 		window.editorUI.init();
 
-		arsipUrlIndex = '{{ route('arsip.index') }}';
+		arsipUrlIndex 	= "{{ route('arsip.index', ['akta_id' => $id]) }}";
+		arsipUrlShow 	= "{{ route('arsip.index') }}";
 		arsipAjx = window.ajax;
 
 		arsipAjx.defineOnSuccess(function(respon){
@@ -269,7 +280,7 @@
 			var temp = [];
 
 			itemOne.addClass('list-group');
-			$.map(respon, function (value, index) {
+			$.map(respon.data, function (value, index) {
 				tmpForm = templateForm.clone();
 				tmpCollapse = templateCollapse.clone();
 				tmpCollapse.attr('id', templateCollapse.attr('id') + '-parent')
@@ -316,7 +327,7 @@
 						.attr('data-expand', 'false')
 						.addClass('d-block pt-1 pb-1 pl-1 arsip-dokumen-collapse text-dark')
 						.attr('href', '#' + templateCollapse.attr('id') + '--' + value._id + '--' + index2)
-						.attr('data-url', arsipUrlIndex + '/' + value._id + '?jenis=' + value2)
+						.attr('data-url', arsipUrlShow + '/' + value._id + '?jenis=' + value2)
 						.css('text-decoration', 'none');
 					collapseChild.append(link);
 

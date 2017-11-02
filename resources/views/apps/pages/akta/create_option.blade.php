@@ -15,7 +15,7 @@
 						<img src="https://cfl.dropboxstatic.com/static/images/business/homepage/standard-vflAOtdVl.png" class="img img-fluid">
 						<br/>
 						<br/>
-						<a href="{{ route('akta.akta.data.choose') }}" class="btn default-primary-color text-primary-color btn-block">Dokumen Kosong</a>
+						<a href="{{ route('akta.create.scratch') }}" class="btn default-primary-color text-primary-color btn-block">Dokumen Kosong</a>
 					</div>
 					<div class="second">
 						<img src="https://cfl.dropboxstatic.com/static/images/business/homepage/advanced-vflZIPcG1.png" class="img img-fluid">

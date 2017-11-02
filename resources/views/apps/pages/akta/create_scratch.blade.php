@@ -10,7 +10,7 @@
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-12">
-					{!! Form::open(['url' => route('akta.akta.store'), 'method' => 'POST']) !!}
+					{!! Form::open(['url' => route('akta.store'), 'method' => 'POST']) !!}
 						{!! Form::bsText('judul akta', 'judul', null, ['class' => 'form-control', 'placeholder' => 'Akta Jual Beli Tanah di Mengwi']) !!}
 						{!! Form::bsSelect('jenis akta', 'jenis', [
 							'' => 'Pilih', 

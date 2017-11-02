@@ -14,7 +14,7 @@
 	@isset ($akta)
 		<tbody>
 			@foreach ($akta as $k => $v)
-				<tr id="{{ $v['id'] }}" @if (!isset($mode)) style="cursor: pointer" data-url="{{ route('akta.akta.ajax.show', ['id' => $v['id']]) }}" @endif>
+				<tr id="{{ $v['id'] }}" @if (!isset($mode)) style="cursor: pointer" data-url="{{ route('akta.ajax.show', ['id' => $v['id']]) }}" @endif>
 					<td><i class="fa fa-file-o"></i> {{ $v['judul'] }}</td>
 					<td>{{ str_replace('_', ' ', $v['jenis']) }}</td>
 					<td>
@@ -29,7 +29,7 @@
 					<td>{{ str_replace('_', ' ', $v['status']) }}</td>
 					<td>{{ $v['tangal_pembuatan'] }}</td>
 					@if (isset($mode))
-						<th><a href="{{ route('akta.akta.data.choose', ['id' => $v['id']]) }}" class="btn btn-sm btn-primary">Pilih</a></th>
+						<th><a href="{{ route('akta.create.scratch', ['id' => $v['id']]) }}" class="btn btn-sm btn-primary">Pilih</a></th>
 					@endif
 				</tr>
 			@endforeach
