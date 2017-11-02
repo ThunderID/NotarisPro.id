@@ -128,17 +128,6 @@ class aktaController extends Controller
 		}
 	}
 
-	public function show ($id)
-	{
-		$akta 					= Akta::findorfail($id);
-
-		//1.initialize view
-		$this->view->pages		= view ($this->base_view . 'show', compact('akta'));
-
-		return $this->generateView();  
-	}
-
-
 	public function edit($id){
 		$akta				= Akta::findorfail($id);
 		$akta['pemilik'] 	= array_column($akta->klien, 'pemilik');

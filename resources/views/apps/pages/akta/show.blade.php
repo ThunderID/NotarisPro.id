@@ -3,7 +3,7 @@
 		<a class="navbar-brand text-center text-lg-left text-xl-left" href="">
 			<h2 class="text-primary-color mb-0">{{ $akta['judul'] }}</h2>
 		</a>
-		<a class="btn btn-outline-light ml-auto mr-3 bg" href="{{ route('akta.akta.index') }}" onclick="javascript:sidebarManagement();" style="font-weight: 100; background-color: transparent">
+		<a class="btn btn-outline-light ml-auto mr-3 bg" href="{{ route('akta.index') }}" onclick="javascript:sidebarManagement();" style="font-weight: 100; background-color: transparent">
 			Kembali
 		</a>
 	</nav>
