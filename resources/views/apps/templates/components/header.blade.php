@@ -37,12 +37,6 @@
 	</div>
 </nav>
 
-<nav class="navbar navbar-dark navbar-expand-md bg-primary text default-primary-color" style="height: 150px;">
-	<a class="navbar-brand text-center text-lg-left text-xl-left" href="">
-		<h2 class="text-primary-color">{{ucwords($page_attributes->title)}}<br/><small><small><small>{{$page_attributes->subtitle}}</small></small></small></h2>
-	</a>
-</nav>
-
 
 <!-- Modal -->
 <div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel" aria-hidden="true">

@@ -30,7 +30,7 @@ class ArsipTableSeeder extends Seeder
 								'id' => '00010002',
 						 		'nomor' => '504',
 						 		'alamat' => ['provinsi' => 'Bali', 'kabupaten' => 'Badung', 'kecamatan' => 'Mengwi', 'kelurahan' => 'Gulingan', 'jalan' => 'Sadewo nomor 3'],
-						 		'tanggal' => '10-07-1993 (Sepuluh Juli Seribu Sembilan Ratus Sembilan Puluh Tiga)',
+						 		'tanggal' => '10-07-1993',
 						 		'nomor_gambar' => '660/93',
 						 		'luas' => '400 M2',
 						 		'nib' => '11.10.01.08.049',

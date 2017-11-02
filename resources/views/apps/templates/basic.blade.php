@@ -73,6 +73,8 @@
 	<body>
 		<!-- header -->
 		@include ('apps.templates.components.header')
+		
+		@stack ('header')
 
 		<div class="container-fluid">
 			<div class="row">

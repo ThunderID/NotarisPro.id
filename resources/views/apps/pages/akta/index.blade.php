@@ -1,7 +1,15 @@
+@push ('header')
+	<nav class="navbar navbar-dark navbar-expand-md bg-primary text default-primary-color" style="height: 150px;">
+		<a class="navbar-brand text-center text-lg-left text-xl-left" href="">
+			<h2 class="text-primary-color">AKTA<br/><small><small><small>Semua file akta</small></small></small></h2>
+		</a>
+	</nav>
+@endpush
+
 @push ('main')
-	<div id="akta_show" class="row" style="display: none;">
+	{{-- <div id="akta_show" class="row" style="display: none;">
 		@include ('apps.pages.akta.show')
-	</div>
+	</div> --}}
 
 	<div class="row">
 		<div class="col-12">
@@ -47,15 +55,18 @@
 @push ('scripts')
 	<script type="text/javascript">
 		// table row action
-		$('table.table-action').on('click', 'tr', function(e) {
+		$(document).on('click', '.item-click', function(e) {
 			e.preventDefault();
 
 			var linkUrlShow = $(this).attr('data-url');
 			var linkUrlIndex = '';
 			var dataID = $(this).attr('id');
-
-			window.history.pushState(null, null, '/akta/' + dataID);
-			window.aktaShow.getData(linkUrlShow);
+			// console.log(linkUrlShow);
+			// window.history.pushState(null, null, '/akta/' + dataID);
+			// window.history.pushState(linkUrlShow);
+			// window.aktaShow.getData(linkUrlShow);
+			window.location.href = linkUrlShow;
+			// setAktaShow(dataID);
 		});
 
 		// button create new akta

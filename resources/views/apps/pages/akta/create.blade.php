@@ -55,8 +55,13 @@
 						<a id="parent-link" href="#" class="text-capitalize"></a>
 					</div>
 					<div id="arsip-item--one" class="active">
-						<div class="list-unstyled pl-2 mt-2 mb-2">
-							<a href="#" class="text-capitalize btn btn-link btn-sm" data-toggle="modal" data-target="#modal-data-dokumen"><i class="fa fa-plus-circle"></i> Data</a>
+						<div class="list-unstyled pl-2 pr-2 mt-2 mb-2 d-flex justify-content-between">
+							<a href="#" class="text-capitalize btn btn-link btn-sm btn-add-pemilik" data-toggle="modal" data-target="#modal-data-dokumen"><i class="fa fa-plus-circle"></i> Data</a>
+							<a href="#" class="text-secondary btn btn-link btn-sm btn-search-pemilik"><i class="fa fa-search fa-flip-horizontal"></i></a>
+							<div class="input-group input-search-pemilik d-none">
+								{!! Form::text('search', null, ['class' => 'form-control form-control-sm border-0', 'placeholder' => 'cari nama pemilik']) !!}
+								<span class="input-group-addon bg-white border-0"><i class="fa fa-search fa-flip-horizontal text-secondary"></i></span>
+							</div>
 						</div>
 					</div>
 					<div id="arsip-item--two"></div>
@@ -244,6 +249,14 @@
 			visibility: visible;
 			height: 100%;
 		}
+		div.input-search-pemilik input, div.input-search-pemilik input::placeholder, div.input-search-pemilik input i{
+			font-size: .875rem;
+		}
+
+		.d-none {
+			transition: all 2s ease-in-out;
+		}
+
 		button {
 			outline: none !important;
 		}
@@ -287,7 +300,6 @@
 					.addClass('mb-0 list-group-item border-left-0 border-right-0 border-top-0 pt-2 pb-2')
 					.removeClass('d-none');
 
-
 				tmpCollapse.find('a#parent-link')
 					.attr('href', '#arsip--' + value._id)
 					.attr('data-toggle', 'collapse')
@@ -297,7 +309,6 @@
 					.append('<strong>' + value.pemilik.nama + '</strong>')
 					.append('<i class="fa fa-chevron-circle-right ml-auto"></i>')
 					.css('text-decoration', 'none');
-				// tmpCollapse.append('&nbsp;( <a href="#" class="text-primary"><i class="fa fa-plus-circle"></i> dokumen</a> )');
 
 				if (index == 0) {
 					tmpCollapse.removeClass('border-top-0');
@@ -362,20 +373,21 @@
 
 			$(selector).html('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
-			console.log($(this));
-
 			ajxDokumen.defineOnSuccess(function(respon){
 				setTimeout(function(){
-					$(selector).html('');
 					var iteration = 0;
+					
+					$(selector).html('');
 					$.map(respon, function(value, index){
 						field = index.split('.');
 						field = field[field.length - 1].replace('@', '').replace('_', ' ');
+
 						if (iteration == 0) {
 							$(selector).append('<li class="border border-left-0 border-right-0 d-flex ">' + field + '  <a href="#" class="data-dokumen ml-auto" data-dokumen-item="' + index + '">' + value + '</a></li>');
 						} else {
 							$(selector).append('<li class="border border-left-0 border-right-0 border-top-0 d-flex ">' + field + '  <a href="#" class="data-dokumen ml-auto" data-dokumen-item="' + index + '">' + value + '</a></li>');
 						}
+
 						iteration++;
 					});
 				}, '500');
@@ -462,6 +474,21 @@
 		$(document).on('click', 'button.edit-dokumen', function(e){
 			e.stopPropagation();
 			console.log('tes');
+		})
+
+		$(document).on('click', '.btn-search-pemilik', function(e) {
+			e.preventDefault();
+
+			$('.btn-add-pemilik').addClass('d-none');
+			$('.btn-search-pemilik').addClass('d-none');
+			$('div.input-search-pemilik').removeClass('d-none');
+			$('div.input-search-pemilik').find('input').focus();
+		});
+
+		$('div.input-search-pemilik input').on('blur', function(e) {
+			$('.btn-add-pemilik').removeClass('d-none');
+			$('.btn-search-pemilik').removeClass('d-none');
+			$('div.input-search-pemilik').addClass('d-none');
 		})
 
 		$('.btn-add-isi-dokumen').on('click', function(e){
